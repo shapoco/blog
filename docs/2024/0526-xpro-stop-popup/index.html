@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+    <meta name="description" content="${blog.article_short_description}">
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@shapoco" />
+    <meta property="og:url" content="${blog.article_url_absolute}" />
+    <meta property="og:title" content="${blog.aricle_title} | シャポログ" />
+    <meta property="og:description" content="${blog.article_description}" />
+    <meta property="og:image" content="${blog.article_cover_url}" />
+
+    <link rel="icon" href="https://shapoco.github.io/blog/favicon192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="https://shapoco.github.io/blog/apple-touch-icon180.png" sizes="180x180">
+    <link rel="shortcut icon" href="https://shapoco.github.io/blog/favicon48.ico">
+
+    <link href="/style.css?20241003090000" rel="stylesheet" type="text/css">
+    <script src="/index.js?20241003090000"></script>
+
+    <title>${blog.aricle_title} | シャポログ</title>
+  </head>
+
+  <body>
+    <h1>シャポログ</h1>
+    <h2>【追記あり】X Pro（旧 TweetDeck）でプロフィールなどがポップアップされたまま消えない問題の応急処置</h2>
+    <p><img src="./cover.png" alt=""></p>
+    <ul>
+      <li>2024/6/06追記 : 本問題は修正されたようです。</li>
+      <li>2024/5/29追記 : X Pro に細工をせずに設定でポップアップを非表示にする方法を教えてもらったので末尾に追記しました。</li>
+    </ul>
+    <h3>概要</h3>
+    <p>
+      2024年5月頃から X Pro（旧 TweetDeck）において「プロフィールカードなどの
+      ポップアップ（ホバーカード）やツールチップが表示されたまま消えない」という
+      問題が発生しています。
+    </p>
+    <p>
+      X Pro を利用する上で非常に障害となるため、公式に改修されるまでの応急処置として
+      ポップアップやツールチップの表示そのものを抑制する「ブックマークレット」を
+      作成しました。
+    </p>
+    <p>Firefox、Chrome、Edge で動作確認しました。</p>
+    <h3>インストール手順</h3>
+    <p>
+      <a href="javascript:(function(){document.getElementsByTagName('body')[0].addEventListener('mouseover',function(e){e.stopPropagation();},true);})();">Stop Popup</a> ←このリンクをドラッグして、
+      ブラウザのブックマークバーなどにドロップして追加します。
+    </p>
+    <p><img src="./install.gif" alt=""></p>
+    <p>ブックマークの名前は動作に影響しませんので、好きなように変えて大丈夫です。</p>
+    <p>
+      ドラッグ＆ドロップでなく手動で追加する場合は、上記のリンクを
+      右クリック→リンクアドレスをコピーし、新規ブックマークの URL 欄に
+      貼り付けてください。
+    </p>
+    <h3>利用方法</h3>
+    <p>X Pro を開いた状態で、追加した上記ブックマークをクリックします。</p>
+    <p>
+      これ以降、X Pro をリロードするまでの間、ポップアップとツールチップの表示が
+      抑制されます。
+    </p>
+    <h3>仕組み</h3>
+    <p>
+      body 要素にダミーのイベントリスナーを設定して、mouseover イベントを子要素に
+      伝搬させないことで、ポップアップを表示する処理が起動しないようにしています。
+    </p>
+    <p>
+      mouseover イベントをトリガーとする機能は全て使用不能になりますが、
+      ポップアップが出なくなる以外に特に大きな問題は無いと思います。
+    </p>
+          <hr>
+
+    <h3>【追記】ホバーカードの無効化設定</h3>
+    <p>
+      <a href="https://x.com/furyutei" target="_blank">風柳さん</a> より引用 RP にて
+      <a href="https://x.com/furyutei/status/1795783402534449245" target="_blank">X Pro の設定でポップアップを止める方法</a>
+      を教えて頂きました。ありがとうございます。
+    </p>
+    <p>
+      左下の「･･･」
+      →「設定とプライバシー」
+      →「アクセシビリティ、表示、言語」
+      →「表示」
+      →「ホバーカードを表示する」のチェックを外します。
+    </p>
+    <p><img src="./xpro_disable_hover_card.png" alt=""></p>
+    <p>
+      この方法ではツールチップが表示され続けて消えない問題は残りますが、
+      変な細工をすることなく恒久的にポップアップ（ホバーカード）を無効化できます。
+    </p>
+
+  </body>
+
+</html>

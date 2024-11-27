@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+    <meta name="description" content="${blog.article_short_description}">
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@shapoco" />
+    <meta property="og:url" content="${blog.article_url_absolute}" />
+    <meta property="og:title" content="${blog.aricle_title} | シャポログ" />
+    <meta property="og:description" content="${blog.article_description}" />
+    <meta property="og:image" content="${blog.article_cover_url}" />
+
+    <link rel="icon" href="https://shapoco.github.io/blog/favicon192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="https://shapoco.github.io/blog/apple-touch-icon180.png" sizes="180x180">
+    <link rel="shortcut icon" href="https://shapoco.github.io/blog/favicon48.ico">
+
+    <link href="/style.css?20241003090000" rel="stylesheet" type="text/css">
+    <script src="/index.js?20241003090000"></script>
+
+    <title>${blog.aricle_title} | シャポログ</title>
+  </head>
+
+  <body>
+    <h1>シャポログ</h1>
+    <h2>SkyFeed を使って Bluesky で自作品のフィードを公開する</h2>
+    <p><img src="./cover.png" alt=""></p>
+    <p>※1) 2024年2月 にハッシュタグが使えるようになりました。</p>
+    <h3>はじめに</h3>
+    <p>
+      イラストや写真等を公開するアカウントの場合、それしか投稿してなければ
+      「メディア欄を見て」でいいかと思いますが、それ以外の日常の写真や
+      ゲームのスクリーンショットなども投稿する場合、自作品だけを
+      まとめたページが欲しくなります。~~Bluesky にはいわゆるハッシュタグは
+      ありませんが~~(※1)、「カスタムフィード」を使えば、特定のキーワードを
+      含むポストをまとめることができます。
+    </p>
+    <p>
+      ここでは Bluesky のサードパーティアプリ「SkyFeed」を使って自作品を
+      フィードにまとめる手順を説明します。
+    </p>
+    <p>
+      この記事執筆にあたり、下記の記事を参考にさせて頂きました。
+      本記事では「自作品をまとめたフィード」に的を絞っていますが、
+      より高度な使い方を知りたければ下記の記事を参考にしてみてください。
+    </p>
+    <ul>
+      <li><a href="https://scrapbox.io/Bluesky/SkyFeed%E3%81%AEFeed_Builder%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%83%95%E3%82%A3%E3%83%BC%E3%83%89%E3%82%92%E3%81%A4%E3%81%8F%E3%82%8B" target="_blank">SkyFeedのFeed Builderを使ってカスタムフィードをつくる - Bluesky</a></li>
+    </ul>
+    <p>
+      なお、Bluesky は発展途上のサービスのため、今後短期間のうちに UI が
+      変わる可能性があります。 また SkyFeed という外部サービスに依存するため、
+      SkyFeed のサービス提供が終了するなどして使えなくなってしまう可能性もあります。
+      ご了承ください。
+    </p>
+    <h3>1. SkyFeed にログインする</h3>
+    <p>
+      外部サービスである SkyFeed から自分の Blueskyアカウントに接続するために、
+      そのキーとなるアプリパスワードを取得してログインします。
+    </p>
+    <ol>
+      <li><a href="https://skyfeed.app/" target="_blank">SkyFeed</a> を開きます。</li>
+      <li>
+        <p>
+          App Password の横にあるボタンを押すと Bluesky のアプリパスワードの作成画面に
+          飛びますので、[アプリパスワードを追加] をクリックします。
+        </p>
+        <p><img src="./skyfeed-35-skyfeed-jump.png" alt=""></p>
+      </li>
+      <li>
+        <p>
+          アプリパスワードの名前を指定します。何でもいいですが、
+          SkyFeed に与えるパスワードと分かるようにしておくとよいでしょう。
+        </p>
+        <p><img src="./skyfeed-02-apppass-name.png" alt=""></p>
+      </li>
+      <li>
+        <p>
+          アプリパスワードが表示されるので、控えておきます。
+          下の説明にあるように**この画面以降二度と表示されませんので、
+          無くさないようにメモしておいてください。**また、他の人には見せないでください。
+        </p>
+        <p><img src="./skyfeed-03-apppass-pass.png" alt=""></p>
+      </li>
+      <li>
+        <p>
+          SkyFeed のログイン画面に戻り、ユーザ名と先ほど作成したアプリパスワードを
+          入力してログインします。
+        </p>
+        <p><img src="./skyfeed-04-skyfeed-login.png" alt=""></p>
+      </li>
+    </ol>
+    <h3>2. SkyFeed でカスタムフィードを作成する</h3>
+    <p>
+      SkyFeed では複数の「ブロック」を組み合わせることによってフィードに
+      表示するポストの条件を指定します。
+    </p>
+    <p>
+      ここでは自分 (シャポコ) の投稿のうち、#shapoart というキーワードを
+      含むものを表示するフィードを作成することにします。
+    </p>
+    <ol>
+      <li>
+        左側のメニューから [Feed Builder] → [Create your first feed] をクリックして
+        フィードを作成します。
+      </li>
+      <li>
+        [Feed Name] にフィードの名前を指定します。これが Bluesky上で表示される
+        フィードの名前になります。日本語でもかまいません。
+      </li>
+      <li>
+        <p>
+          Inputブロックは検索対象となるポストを指定します。
+          デフォルト([Entire Network])だと、自分以外の人のポストも含まれます。
+          ここでは自分のポストだけに絞りたいので [Single User] を指定します。
+          ユーザを識別するための「User DID」が必要となりますが、[Select Yourself] を
+          クリックすれば自分の DID が自動的に入力されます。[Include] の横のボタンで、
+          リプライやリポストまで含めるかどうかを指定できます。この時点で条件に
+          ヒットするポストが存在しない場合右のプレビューにエラーメッセージが
+          表示されますが、とりあえず無視します。
+        </p>
+        <p><img src="./skyfeed-50-input-block.png" alt=""></p>
+      </li>
+      <li>
+        Remove ifブロックは除外するポストを指定します。このブロックは
+        今回は必要無いので [×] をクリックして削除します。
+      </li>
+      <li>
+        <p>
+          RegExブロックは絞り込みの条件を「正規表現」で指定します。
+          正規表現とは、文字列のパターンマッチをするための式です。
+          今回は #shapoart を指定します。複数指定したい場合は "|" で区切って、
+          例えば #shapoart|#illustration のようにします。
+          より複雑な条件を指定したい場合は「正規表現」でググってみてください。
+        </p>
+        <p><img src="./skyfeed-60-regex-block.png" alt=""></p>
+      </li>
+      <li>
+        [＋Add Block] をクリックして、Regexブロックの次に Remember Postsブロックを
+        追加します。これは過去の検索結果を記憶してくれるものです。
+        Inputブロックで Single User を指定した場合は過去の投稿も全て対象になるので
+        不要かもしれませんが、もしかすると仕様が変わるかもしれないと思って
+        一応追加しておきました。
+      </li>
+      <li>
+        タグ付けされていない作品をフィードに入れたい場合は [＋Add Block] で
+        Inputブロックを追加し、[Single Post] を選んでポストの URL を入力することで、
+        個別のポストをフィードに追加することができます。
+      </li>
+      <li>
+        Sort byブロックは表示するポストの順序を指定します。
+        デフォルトで日付(Creation Date)の新しい順(descending)になっますので、
+        そのままにしておきます。
+      </li>
+    </ol>
+    <p>最終的に次のようになりました。</p>
+    <p><img src="./skyfeed-60-skyfeed-overview.png" alt=""></p>
+    <p>
+      この時点で既に条件にヒットするポストがあれば右にプレビュー表示されますが、
+      無ければエラーメッセージが表示されます。
+    </p>
+    <p>
+      まだ投稿が無い場合は試しにタグ付けしたポストを投稿してみて、
+      右側に反映されるか試してみるとよいでしょう。
+      プレビューは条件を編集するたびに更新されます。
+      反映には少し時間がかかる場合があります。
+    </p>
+    <h3>3. フィードを公開する</h3>
+    <ol>
+      <li>[Publish Feed] をクリックします。</li>
+      <li>[Upload avatar image] をクリックするとフィードのアイコンを指定できます。</li>
+      <li>[Description] にフィードの説明を入力します。</li>
+      <li>
+        [License] はフィードのライセンスを指定します。
+        フィードを編集したり改善したりする Remix機能のためだそうです。
+        特にこだわりが無ければデフォルトでよいでしょう。
+      </li>
+      <li>
+        <p>[Publish] をクリックしてフィードを公開します。</p>
+        <p><img src="./skyfeed-70-skyfeed-publish.png" alt=""></p>
+      </li>
+    </ol>
+    <p>作成したフィードは自分のプロフィールページに表示されます。</p>
+    <p><img src="./skyfeed-80-published.png" alt=""></p>
+    <p>フィードを開き、URL をコピペして共有することもできます。</p>
+    <p>
+      フィードの検索条件は SkyFeed でいつでも編集でき、
+      [Update Feed]ボタンで更新することができます。
+    </p>
+
+  </body>
+
+</html>
