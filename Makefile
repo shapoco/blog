@@ -1,28 +1,33 @@
 .PHONY: all usage
 
-DIR_SRC = article
-DIR_OUT = ../docs
-DIR_TEPMPLATE = template
+DIR_SRC = src
+DIR_OUT = docs
+DIR_BIN = bin
+
+DIR_ARTICLE = $(DIR_SRC)/article
+DIR_TEPMPLATE = $(DIR_SRC)/template
 DIR_TEPMPLATE_ARTICLE = $(DIR_TEPMPLATE)/yyyy/mmdd-title
 
 ARTICLE_MD = article.md
 TEMPLATE_HTML = $(DIR_TEPMPLATE_ARTICLE)/article.html
 
-MDS = $(wildcard $(DIR_SRC)/*/*/$(ARTICLE_MD))
-HTMLS = $(patsubst $(DIR_SRC)/%,$(DIR_OUT)/%,$(patsubst %/$(ARTICLE_MD),%/index.html,$(MDS)))
+MDS = $(wildcard $(DIR_ARTICLE)/*/*/$(ARTICLE_MD))
+HTMLS = $(patsubst $(DIR_ARTICLE)/%,$(DIR_OUT)/%,$(patsubst %/$(ARTICLE_MD),%/index.html,$(MDS)))
 
 EXTRA_DEPENDENCIES = \
-	$(wildcard *.py) \
+	$(wildcard $(DIR_BIN)/*.py) \
+	$(wildcard $(DIR_OUT)/*.js) \
+	$(wildcard $(DIR_OUT)/*.css) \
 	$(wildcard $(DIR_TEPMPLATE)/*.*) \
 	$(wildcard $(DIR_TEPMPLATE_ARTICLE)/*.*) \
 	Makefile
 
 all: $(HTMLS)
 
-$(DIR_OUT)/%/index.html: $(DIR_SRC)/%/* $(EXTRA_DEPENDENCIES)
+$(DIR_OUT)/%/index.html: $(DIR_ARTICLE)/%/* $(EXTRA_DEPENDENCIES)
 	mkdir -p $(shell dirname $@)
 	rm -rf $(shell dirname $@)/*
-	./build_article.py \
+	$(DIR_BIN)/build_article.py \
 		-i $(shell dirname $<) \
 		-o $(shell dirname $@) \
 		-t $(TEMPLATE_HTML)

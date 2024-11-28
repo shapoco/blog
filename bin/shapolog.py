@@ -1,7 +1,7 @@
 import re
 
 SITE_TITLE = 'シャポログ'
-SITE_URL_ABSOLUTE = 'https://shapoco.github.io/blog'
+SITE_URL_ABSOLUTE = 'https://blog2.shapoco.net'
 
 def get_vars(path: str):
     return {
