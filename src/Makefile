@@ -1,4 +1,4 @@
-.PHONY: all
+.PHONY: all usage
 
 DIR_SRC = article
 DIR_OUT = ../docs
@@ -26,3 +26,7 @@ $(DIR_OUT)/%/index.html: $(DIR_SRC)/%/* $(EXTRA_DEPENDENCIES)
 		-i $(shell dirname $<) \
 		-o $(shell dirname $@) \
 		-t $(TEMPLATE_HTML)
+	du -sh $(shell dirname $@)
+
+usage:
+	du -sh ../docs/*/*

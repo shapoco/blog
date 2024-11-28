@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+    <meta name="description" content="${blog.article_short_description}">
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@shapoco" />
+    <meta property="og:url" content="${blog.article_url_absolute}" />
+    <meta property="og:title" content="${blog.aricle_title} | シャポログ" />
+    <meta property="og:description" content="${blog.article_description}" />
+    <meta property="og:image" content="${blog.article_cover_url}" />
+
+    <link rel="icon" href="https://shapoco.github.io/blog/favicon192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="https://shapoco.github.io/blog/apple-touch-icon180.png" sizes="180x180">
+    <link rel="shortcut icon" href="https://shapoco.github.io/blog/favicon48.ico">
+
+    <link href="/style.css?20241003090000" rel="stylesheet" type="text/css">
+    <script src="/index.js?20241003090000"></script>
+
+    <title>${blog.aricle_title} | シャポログ</title>
+  </head>
+
+  <body>
+    <h1>シャポログ</h1>
+    <h2>18650 2セル駆動の LEDランタンを作った</h2>
+    <p><img src="./cover.jpg" alt=""></p>
+    <p>「<a href="https://www.nicovideo.jp/watch/sm42584102" target="_blank">眩しすぎるX看板のLEDランタンを作った</a>」で買った白色LED が 50個以上余ったのでちゃんとした(?) LEDランタンを作ってみました。</p>
+    <h3>仕様</h3>
+    <ul>
+      <li>3mm の砲弾型白色LED OSW54K3131A を 56個使用</li>
+      <li>18650 2セル、または USB PD (9V) で駆動</li>
+      <li>調光機能</li>
+      <li>バッテリ残量表示</li>
+      <li>
+        安全対策
+        - 2セルの電圧が 6.2V を下回ったら明るさを抑える
+        - 2セルの電圧が 6.0V を下回ったら消灯する
+      </li>
+      <li>実用になるよう、3Dプリンタでしっかりした筐体を作る</li>
+    </ul>
+    <h3>回路</h3>
+    <p>電流制限抵抗を介して直接 LED を駆動することもできますが、電源の状態に関わらず明るさを一定に保つことと、電流制限抵抗の数を抑えたかったので、NJM2360AD を使って DC/DC を構成して昇圧し、直列接続した LED を 20mA で駆動します。</p>
+    <p>調光はボリュームの値を ATtiny85 の ADC で読み取り、PWM で LED の明るさを制御します。電圧は RESETピンの ADC で読み取るので、ボリュームを下げてもリセットがかからないよう電圧範囲が 2.5～5V の間になるようにしています。人間の目の明るさの感じ方は光量に対してリニアではなく対数的なので、ボリュームには Aカーブのものを使用します。</p>
+    <p>バッテリーの電圧を ADC で読み取り、残量を計算して 4個の LED にレベル表示します。ダイナミック点灯により 3つのポートで 4つの LED を制御します。</p>
+    <p>バッテリーは直列で使用するので、<a href="https://ja.aliexpress.com/item/32835055863.html" target="_blank">AliExpress で買った 2セル用の保護モジュール</a> で保護します。</p>
+    <p>USB-PD のトリガにはスイッチサイエンスで買った <a href="https://twitter.com/betaEncoder" target="_blank">べーたさん</a> の <a href="https://www.switch-science.com/products/7237" target="_blank">USB-PD_Adapter PDA-02S</a> を使用しました。</p>
+    <p><img src="./circuit.png" alt=""></p>
+    <h3>プログラム</h3>
+    <p>Arduino ATtiny Core を使用しました。</p>
+    <h4>調光</h4>
+    <p>デフォルトでは PWM周波数が低すぎてカメラで撮るとカメラのフレームレートと干渉してしまうため、TCCR1レジスタを変更して Timer1 のプリスケーラを無効化しています。</p>
+    <p>volume_to_pwm関数でボリュームの状態を読み取り、PWM に反映します。光量に対する明るさの感じ方は Aカーブのボリュームを使用することで考慮済みなので、ADC値をリニアに PWM の Duty比に反映します。バッテリー状態を考慮し、電池切れが近い場合は PWM値を 1/4に、電池切れ状態の場合は 0 にします。</p>
+    <h4>バッテリー監視・レベル表示</h4>
+    <p>battery_to_level関数でバッテリー状態を読み取ります。電流によって入力ダイオード 11EQS04 の電圧降下が変わってしまうため、これを何となく考慮して生のバッテリー電圧を推定します。</p>
+    <p>読み取った電圧からバッテリー状態を 5段階のレベル値にします。ノイズ対策のため ±100mV のヒステリシスを持たせています。</p>
+    <p>電池切れが近くなるとレベル表示を 1秒周期で点滅させます。電池切れ状態になると 0.5秒周期で点滅させます。</p>
+    <p>drive_level_meter関数でダイナミック点灯により電圧レベルを LED に表示します。</p>
+    <p>USB接続時は VBUS の電圧が ADC に入ってくるのでレベル表示はフルになります。</p>
+    <p><script src="https://gist.github.com/shapoco/bd8ae99e2f93c5aba1dedaa17930fa90.js"></script></p>
+    <h3>筐体</h3>
+    <p>Fusion 360 で設計し、FlashForge Adventurer3 でプリントしました。</p>
+    <p>簡単に電池を交換できるよう、リモコンなどの電池の蓋を参考にして開けられるようにしました。</p>
+    <p><img src="./lantern_case.png" alt=""></p>
+    <p>フロントパネルはスナップフィットになっており、簡単に開けてメンテナンスできるようにしました。</p>
+    <p><img src="./box_snapping.png" alt=""></p>
+    <h3>組み上げ・完成</h3>
+    <p><img src="./buildup_0.jpg" alt=""></p>
+    <p><img src="./buildup_1.jpg" alt=""></p>
+    <p><img src="./buildup_2.jpg" alt=""></p>
+    <h3>動作時間</h3>
+    <p>3500mAh のバッテリー 2本で、明るさ最大時で 5時間程度の動作時間と推定しました。</p>
+    <p>実際に試したところ、バッテリ切れ判定で消灯するまで 5.5時間ほど点灯し続けたので、概ねスペック通りになりました。</p>
+    <p>本記事執筆時点でボリューム 50%時の動作時間を確認中ですが、20時間くらいは点灯し続けそうです。</p>
+    <h3>動画</h3>
+    <p><iframe width="560" height="315" src="https://www.youtube.com/embed/ZpbXncW4yrE?si=R0i240itAevQu_FE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></p>
+
+  </body>
+
+</html>
