@@ -12,9 +12,32 @@ main {
     box-sizing: border-box;
 }
 
+h2 {
+    font-size: 160%;
+}
+
+h3 {
+    font-size: 140%;
+    border-bottom: solid 1px #ccc;
+}
+
+h4 {
+    font-size: 120%;
+    border-bottom: solid 1px #eee;
+}
+
 p, ul, ol, blockquote {
     margin: 2ex 0px;
     box-sizing: border-box;
+}
+
+ul, ol {
+    padding: 0px 0px 0px 2em;
+}
+
+li {
+    margin: 1ex 0px;
+    padding: 0px;
 }
 
 li p:first-child, 
@@ -78,6 +101,14 @@ main img {
     border: solid 1px #ccc;
     border-radius: 10px;
     box-sizing: border-box;
+}
+
+main img[src$="cover.jpg"],
+main img[src$="cover.png"],
+main img[src$="cover.gif"],
+main img[src$="cover.svg"] {
+    width: 100%;
+    height: auto;
 }
 
 code {

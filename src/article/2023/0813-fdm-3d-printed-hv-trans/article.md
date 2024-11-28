@@ -1,6 +1,6 @@
 # FDM式3Dプリンタで高圧トランスのボビンを作る
 
-![](./hv-transformer.jpg)
+![](./cover.jpg)
 
 ## はじめに
 

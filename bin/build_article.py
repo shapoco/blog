@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
+import shutil
+import os
 import argparse
+
 import shapolog
 from article_struct import *
 from md_parser import *
-import shutil
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-i', '--input', required=True)
@@ -30,6 +32,14 @@ def main():
 
     for k in vars.keys():
         html = html.replace('${blog.' + k + '}', vars[k])
+
+    script_path = '/index.css'
+    script_mtime = str(int(os.stat(f'docs/{script_path}').st_mtime_ns // 1e9))
+    html = html.replace(f'<link href="{script_path}"', f'<link href="{script_path}?{script_mtime}"')
+
+    script_path = '/index.js'
+    script_mtime = str(int(os.stat(f'docs/{script_path}').st_mtime_ns // 1e9))
+    html = html.replace(f'<script src="{script_path}"', f'<script src="{script_path}?{script_mtime}"')
 
     with open(f'{args.output}/index.html', 'w') as f:
         f.write(html)
