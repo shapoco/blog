@@ -56,10 +56,14 @@ class TaggedElement(Element):
     def __init__(self, tag: str) -> None:
         self.tag = tag
         self.children: list[Element] = []
+        self.classes: list[str] = []
         
     def to_html(self, depth: int = 0) -> str:
         ret: str = ''
-        ret += f'<{self.tag}>'
+        if len(self.classes) > 0:
+            ret += f'<{self.tag} class="{' '.join(self.classes)}">'
+        else:
+            ret += f'<{self.tag}>'
         if self.is_multiline():
             ret += '\n'
         for child in self.children:
@@ -89,12 +93,14 @@ class TaggedElement(Element):
                 return True
         return False
 
-    def get_1st_element_by_class(self, typ: type) -> Element:
+    def get_1st_element_by_class(self, typ: type, depth: int = 9999) -> Element:
         if issubclass(type(self), typ):
             return self
+        if depth <= 0:
+            return None
         for child in self.children:
             if issubclass(type(child), TaggedElement):
-                ret = child.get_1st_element_by_class(typ)
+                ret = child.get_1st_element_by_class(typ, depth - 1)
                 if ret and not ret.text_content().startswith('<img '):
                     return ret
         return None
@@ -113,13 +119,13 @@ class ArticleBody(TaggedElement):
         return True
     
     def first_header_text(self) -> str:
-        h = self.get_1st_element_by_class(Hx)
+        h = self.get_1st_element_by_class(Hx, 1)
         if not h:
             return 'Untitled'
         return re.sub(r'<[^>]+>', '', h.text_content())
 
     def first_paragraph_text(self) -> str:
-        p = self.get_1st_element_by_class(P)
+        p = self.get_1st_element_by_class(P, 1)
         if not p:
             return self.first_header_text()
         return re.sub(r'<[^>]+>', '', p.text_content())
@@ -129,6 +135,10 @@ class Hx(TaggedElement):
         super().__init__('h' + str(level + 1))
         self.level: int = level
         self.children.append(TextElement(text))
+
+class P(TaggedElement):
+    def __init__(self) -> None:
+        super().__init__('p')
 
 class ListBase(TaggedElement):
     def __init__(self, tag: str) -> None:
@@ -152,9 +162,9 @@ class LI(TaggedElement):
     def __init__(self) -> None:
         super().__init__('li')
 
-class P(TaggedElement):
+class BLOCKQUOTE(TaggedElement):
     def __init__(self) -> None:
-        super().__init__('p')
+        super().__init__('blockquote')
 
 class HR(TaggedElement):
     def __init__(self) -> None:

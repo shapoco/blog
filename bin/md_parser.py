@@ -4,19 +4,24 @@ from article_struct import *
 from simple_lexer import *
 
 class MdParser:
-    DEBUG_PRINT=True
+    DEBUG_PRINT=False
     RE_H = r'^(#+)\s*(.*)$'
     RE_UL = r'^([-\*])\s+(.*)$'
     RE_OL = r'^(\d+)\.\s+(.*)$'
+    RE_BLOCKQUOTE = r'^(>\s+)(.*)$'
+    RE_NOTES = r'\[!(note|tip|important|warning|caution)\]'
     RE_HR = r'^---+$'
     
     def __init__(self, lines: list[str]):
         self.lines = lines
-        self.last_indent = ''
+        self.indent_stack: list[str] = []
         self.tab_size = 4
     
+    def joined_indent(self) -> str:
+        return ''.join(self.indent_stack)
+    
     def log(self, msg) -> None:
-        print(f'{self.last_indent}{msg}')
+        print(f'{self.joined_indent()}{msg}')
     
     def warn(self, msg) -> None:
         warnings.warn(f'#{len(self.lines)} *W: {msg}')
@@ -37,11 +42,11 @@ class MdParser:
         if end_with_empty_line and len(line) == 0:
             return True
 
-        return not line.startswith(self.last_indent)
+        return not line.startswith(self.joined_indent())
 
     def skip_white_lines(self) -> int:
         n = 0
-        while not self.eof() and len(self.lines[0]) == 0:
+        while not self.eof() and self.lines[0] == self.joined_indent().rstrip():
             line = self.lines.pop(0)
             n += 1
         if n > 0:
@@ -55,47 +60,41 @@ class MdParser:
         line = self.lines[0]
         while len(line) == 0:
             line = self.lines.pop(0)
-                
+
     def peek_indent(self) -> str:
         if self.eof():
             raise 'Unexpected EOF'
         
-        line = self.lines[0]
-        
-        # インデントの深さ
-        indent_len = 0
-        if len(line) > 0:
-            num_whites = 0
-            for i in range(len(line)):
-                if line[i] == ' ':
-                    num_whites += 1
-                elif line[i] == '　':
-                    num_whites += 1
-                    self.warn('Wide space detected.')
-                elif line[i] == '\t':
-                    num_whites += self.tab_size
-                    self.warn('TAB char detected.')
-                else:
-                    indent_len = i
-                    break
-            return line[:len(indent_len)]
-        else:
+        if len(line) == 0 or line == self.joined_indent().rstrip():
             # 空行の場合は前の行と同じ深さとみなす
-            return self.last_indent
+            return self.joined_indent()
 
-    def on_indented(self, indent_char: str = '') -> None:
-        indent_char += ' ' * (self.tab_size - len(indent_char))
-        self.last_indent += indent_char
+        # インデントの深さ
+        line = self.lines[0]
+        for i in range(len(line)):
+            if line[i] == ' ':
+                pass
+            elif line[i] == '>':
+                pass
+            elif line[i] == '　':
+                self.warn('Wide space detected.')
+            elif line[i] == '\t':
+                self.warn('TAB char detected.')
+            else:
+                return line[:i]
+
+    def on_indented(self, indent: str = None) -> None:
+        if not indent:
+            indent = ' ' * self.tab_size
+        self.indent_stack.append(indent)
 
     def on_unindented(self) -> None:
-        if len(self.last_indent) < self.tab_size:
-            raise 'Indent broken'
-        self.last_indent = self.last_indent[:-self.tab_size]
+        self.indent_stack.pop(-1)
 
     def peek_line_unindent(self, end_with_empty_line: bool) -> str:
         if self.end_of_block(end_with_empty_line):
             raise 'Unexpected end of block'
-        return self.lines[0][len(self.last_indent):]
+        return self.lines[0][len(self.joined_indent()):]
 
     def pop_line_unindent(self, end_with_empty_line: bool) -> str:
         line = self.peek_line_unindent(end_with_empty_line)
@@ -128,13 +127,12 @@ class MdParser:
                 children.append(self.ul(line))
             elif re.match(MdParser.RE_OL, line):
                 children.append(self.ol(line))
+            elif re.match(MdParser.RE_BLOCKQUOTE, line):
+                children.append(self.blockquote(line))
             elif re.match(MdParser.RE_HR, line):
                 children.append(HR())
             else:
-                #if text_as_paragraph:
-                    children.append(self.p(line))
-                #else:
-                #    children.append(self.text(line, end_with_empty_line=text_as_paragraph))
+                children.append(self.p(line))
 
             line = None
         
@@ -202,6 +200,26 @@ class MdParser:
         self.info(f'<-- li()')
         return ret
 
+    def blockquote(self, first_line: str) -> BLOCKQUOTE:
+        self.info(f'--> blockquote("{first_line}")')
+        m = re.match(MdParser.RE_BLOCKQUOTE, first_line)
+        indent = m[1]
+        text = m[2].strip()
+        self.on_indented(indent)
+        ret = BLOCKQUOTE()
+        m_note = re.match(MdParser.RE_NOTES, text.lower())
+        if m_note:
+            text = ''
+            ret.classes.append(m_note[1])
+        ret.children = self.block_children(first_line=text, text_as_paragraph=True)
+        
+        if len(ret.children) == 1 and issubclass(type(ret.children[0]), P):
+            ret.children = ret.children[0].children
+        
+        self.on_unindented()
+        self.info(f'<-- blockquote()')
+        return ret
+
     def text(self, first_line: str, end_with_empty_line: bool) -> TextElement:
         self.info(f'--> text("{first_line}")')
         ret = TextElement(first_line) 
@@ -216,37 +234,6 @@ class MdParser:
         
         self.info(f'<-- text()')
         return ret
-
-    #def markup_inline_text(self, text: str) -> str:
-    #    ret = ''
-    #    while len(text) > 0:
-    #        m_link = re.search(MdParser.RE_LINK, text)
-    #        
-    #        nearest: re.Match = None
-    #        if m_link and (not nearest or m_link.start() < nearest.start()):
-    #           nearest = m_link
-    #        
-    #        if nearest:
-    #            ret += text[:nearest.start()]
-    #            if m_link and m_link.start() == nearest.start():
-    #                prefix = m_link[1]
-    #                link_text = m_link[2]
-    #                url = m_link[3]
-    #                if prefix == '':
-    #                    self.info(f'link: href={url}, text="{link_text}"')
-    #                    ret += f'<a href="{url}" target="_blank">{link_text}</a>'
-    #                elif prefix == '!':
-    #                    self.info(f'image: src={url}, alt="{link_text}"')
-    #                    ret += f'<img src="{url}" alt="{link_text}">'
-    #                else:
-    #                    raise Exception(f'Invalid link prefix: "{prefix}"')
-    #                text = text[nearest.end():]
-    #            else:
-    #                raise Exception('Not implemented.')
-    #        else:
-    #            ret += text
-    #            text = ''
-    #    return ret
 
     def markup_inline_text(self, text: str) -> str:
         return self.inline_text(SimpleLexer(text))
