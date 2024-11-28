@@ -18,81 +18,83 @@
     <link rel="apple-touch-icon" href="https://blog2.shapoco.net/apple-touch-icon180.png" sizes="180x180">
     <link rel="shortcut icon" href="https://blog2.shapoco.net/favicon48.ico">
 
-    <link href="/index.css?20241003090000" rel="stylesheet" type="text/css">
-    <script src="/index.js?20241003090000"></script>
+    <link href="/index.css?20241129021100" rel="stylesheet" type="text/css">
+    <script src="/index.js?20241129021100"></script>
 
     <title>スマホ (USB) で動くプラズマアークライター | シャポログ</title>
   </head>
 
   <body>
     <h1>シャポログ</h1>
-    <h2>スマホ (USB) で動くプラズマアークライター</h2>
-    <p><img src="./cover.jpg" alt=""></p>
-    <h3>概要</h3>
-    <p>
-      スマホの USBポートからの電力供給 (OTG) で動くプラズマアークライターを
-      作ってみました。
-    </p>
-    <p>
-      実用性があるのかというと微妙ですが…普通の着火器具には燃料切れや電池切れが
-      ありますが、毎日充電するスマホの電池を切らすことは滅多にないので、
-      そういう意味では「持ってればいつでも使える」と言えるかもしれません（強引）。
-    </p>
-    <h3>トランス</h3>
-    <p>
-      プラズマアークライターには点火用のトランスが必要ですが、小型のものが
-      AliExpress や Amazon で手に入ります。
-    </p>
-    <ul>
-      <li><a href="https://ja.aliexpress.com/item/32940793737.html" target="_blank">55.0￥ 42% OFF|アーク発生器15kv,高電圧インバーター,ブースター,変圧器,パルス点火1.4x1.4x0.7cm,ライターアクセサリー|回路| - AliExpress</a></li>
-      <li><a href="https://www.amazon.co.jp/dp/B09XR2P1WK" target="_blank">Amazon.co.jp: Hbaebdoo 3-5V DIYキット 高電圧発生器 アークイグナイターライターキット DIY電子生産用スイート: DIY・工具・ガーデン</a></li>
-    </ul>
-    <p><img src="./transformer.jpg" alt=""></p>
-    <p>勝手にピン番号をつけましたが後の回路図と対応づけるためで、正式なものではありません。</p>
-    <ol>
-      <li>(細い線) フィードバック出力</li>
-      <li>(細い線 + 太い線) 電源</li>
-      <li>(太い線) 駆動入力</li>
-      <li>高圧出力</li>
-      <li>高圧出力</li>
-    </ol>
-    <h3>OTGコネクタ</h3>
-    <p>
-      スマホから OTG で DC 5V の供給を受けるには Type-Cコネクタの CC ラインに
-      5.1kΩのプルダウン抵抗が必要です。
-    </p>
-    <p>
-      自分で実装してもいいですが、Amazon に OTGケーブル自作用のキット？が
-      売られているので、それを使うのが簡単です。
-    </p>
-    <p><a href="https://www.amazon.co.jp/dp/B07TCFTNPW/ref=cm_sw_r_tw_dp_rHuOFbE7AP6T7" target="_blank">Amazon.co.jp: Cablecc 5個/ロット DIY 24ピン USB Type C USB-C オス OTG ホストタイプ 5.1k 抵抗器 ブラックハウジングカバー付き : 家電＆カメラ</a></p>
-    <p><img src="./connector.jpg" alt=""></p>
-    <h3>回路</h3>
-    <p>
-      普通のブロッキング発振回路がベースですが、消費電流を USB の 500mA 以内に
-      収めるために R5 で電流検出し、Q2 で発振を制御しています。
-    </p>
-    <p>手元の実験ではこれで 430mA 程度の消費電流になりました。</p>
-    <p><img src="./circuit_diagram.png" alt=""></p>
-    <h3>製作</h3>
-    <p>
-      コンパクトにしたかったので、ちょっと無理矢理ですがユニバーサル基板に
-      両面実装しました。トランスと Type-Cコネクタは後でエポキシ樹脂で固定しました。
-    </p>
-    <p><img src="./pcb0.jpg" alt=""></p>
-    <p><img src="./pcb1.jpg" alt=""></p>
-    <p>
-      電極の先端はニッパーで斜めに切って尖らせておくと放電しやすくなります。
-      放電距離は非常に短い（1～2mm？）ので、ギリギリまで近づけておく必要があります。
-    </p>
-    <p><img src="./electrodes.jpg" alt=""></p>
-    <h3>動作の様子</h3>
-    <p>
-      電流制限しているので市販のプラズマアークライターに比べると非力ですが、
-      ロウソクや紙に火を付けることはできます。
-    </p>
-    <p><blockquote class="twitter-tweet" data-media-max-width="560"><p lang="ja" dir="ltr">スマホの充電端子から電気取って火起こしできるプラズマアークライター<br>2023/08/24 <a href="https://twitter.com/hashtag/shapolab?src=hash&amp;ref_src=twsrc%5Etfw">#shapolab</a> <a href="https://t.co/UCiRiAOr07">pic.twitter.com/UCiRiAOr07</a></p>&mdash; シャポコ🌵 (@shapoco) <a href="https://twitter.com/shapoco/status/1803431941233860956?ref_src=twsrc%5Etfw">June 19, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+    <main>
+      <h2>スマホ (USB) で動くプラズマアークライター</h2>
+      <p><img src="./cover.jpg" alt=""></p>
+      <h3>概要</h3>
+      <p>
+        スマホの USBポートからの電力供給 (OTG) で動くプラズマアークライターを
+        作ってみました。
+      </p>
+      <p>
+        実用性があるのかというと微妙ですが…普通の着火器具には燃料切れや電池切れが
+        ありますが、毎日充電するスマホの電池を切らすことは滅多にないので、
+        そういう意味では「持ってればいつでも使える」と言えるかもしれません（強引）。
+      </p>
+      <h3>トランス</h3>
+      <p>
+        プラズマアークライターには点火用のトランスが必要ですが、小型のものが
+        AliExpress や Amazon で手に入ります。
+      </p>
+      <ul>
+        <li><a href="https://ja.aliexpress.com/item/32940793737.html" target="_blank">55.0￥ 42% OFF|アーク発生器15kv,高電圧インバーター,ブースター,変圧器,パルス点火1.4x1.4x0.7cm,ライターアクセサリー|回路| - AliExpress</a></li>
+        <li><a href="https://www.amazon.co.jp/dp/B09XR2P1WK" target="_blank">Amazon.co.jp: Hbaebdoo 3-5V DIYキット 高電圧発生器 アークイグナイターライターキット DIY電子生産用スイート: DIY・工具・ガーデン</a></li>
+      </ul>
+      <p><img src="./transformer.jpg" alt=""></p>
+      <p>勝手にピン番号をつけましたが後の回路図と対応づけるためで、正式なものではありません。</p>
+      <ol>
+        <li>(細い線) フィードバック出力</li>
+        <li>(細い線 + 太い線) 電源</li>
+        <li>(太い線) 駆動入力</li>
+        <li>高圧出力</li>
+        <li>高圧出力</li>
+      </ol>
+      <h3>OTGコネクタ</h3>
+      <p>
+        スマホから OTG で DC 5V の供給を受けるには Type-Cコネクタの CC ラインに
+        5.1kΩのプルダウン抵抗が必要です。
+      </p>
+      <p>
+        自分で実装してもいいですが、Amazon に OTGケーブル自作用のキット？が
+        売られているので、それを使うのが簡単です。
+      </p>
+      <p><a href="https://www.amazon.co.jp/dp/B07TCFTNPW/ref=cm_sw_r_tw_dp_rHuOFbE7AP6T7" target="_blank">Amazon.co.jp: Cablecc 5個/ロット DIY 24ピン USB Type C USB-C オス OTG ホストタイプ 5.1k 抵抗器 ブラックハウジングカバー付き : 家電＆カメラ</a></p>
+      <p><img src="./connector.jpg" alt=""></p>
+      <h3>回路</h3>
+      <p>
+        普通のブロッキング発振回路がベースですが、消費電流を USB の 500mA 以内に
+        収めるために R5 で電流検出し、Q2 で発振を制御しています。
+      </p>
+      <p>手元の実験ではこれで 430mA 程度の消費電流になりました。</p>
+      <p><img src="./circuit_diagram.png" alt=""></p>
+      <h3>製作</h3>
+      <p>
+        コンパクトにしたかったので、ちょっと無理矢理ですがユニバーサル基板に
+        両面実装しました。トランスと Type-Cコネクタは後でエポキシ樹脂で固定しました。
+      </p>
+      <p><img src="./pcb0.jpg" alt=""></p>
+      <p><img src="./pcb1.jpg" alt=""></p>
+      <p>
+        電極の先端はニッパーで斜めに切って尖らせておくと放電しやすくなります。
+        放電距離は非常に短い（1～2mm？）ので、ギリギリまで近づけておく必要があります。
+      </p>
+      <p><img src="./electrodes.jpg" alt=""></p>
+      <h3>動作の様子</h3>
+      <p>
+        電流制限しているので市販のプラズマアークライターに比べると非力ですが、
+        ロウソクや紙に火を付けることはできます。
+      </p>
+      <p><blockquote class="twitter-tweet" data-media-max-width="560"><p lang="ja" dir="ltr">スマホの充電端子から電気取って火起こしできるプラズマアークライター<br>2023/08/24 <a href="https://twitter.com/hashtag/shapolab?src=hash&amp;ref_src=twsrc%5Etfw">#shapolab</a> <a href="https://t.co/UCiRiAOr07">pic.twitter.com/UCiRiAOr07</a></p>&mdash; シャポコ🌵 (@shapoco) <a href="https://twitter.com/shapoco/status/1803431941233860956?ref_src=twsrc%5Etfw">June 19, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
 
+    </main>
   </body>
 
 </html>

@@ -20,7 +20,7 @@ def main():
     # Markdown の解析
     md = parse_md(f'{args.input}/article.md')
 
-    vars['article_body'] = md.to_html(depth=2)
+    vars['article_body'] = md.to_html(depth=3)
     vars['aricle_title'] = escape_for_attr(md.first_header_text())
     vars['article_description'] = escape_for_attr(md.first_paragraph_text())
     vars['article_url_absolute'] = f'{vars['site_url_absolute']}/{args.output}'

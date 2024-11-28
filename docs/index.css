@@ -1,0 +1,89 @@
+
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+main {
+    max-width: 900px;
+    margin: 0px auto;
+    padding: 20px;
+    position: relative;
+    box-sizing: border-box;
+}
+
+p, ul, ol, blockquote {
+    margin: 2ex 0px;
+    box-sizing: border-box;
+}
+
+li p:first-child, 
+li ul:first-child, 
+li ol:first-child, 
+li blockquote:first-child {
+    margin-top: 0px;
+}
+
+blockquote p:first-child, 
+blockquote ul:first-child, 
+blockquote ol:first-child, 
+blockquote blockquote:first-child {
+    margin-top: 0px;
+}
+
+blockquote p:last-child, 
+blockquote ul:last-child, 
+blockquote ol:last-child, 
+blockquote blockquote:last-child {
+    margin-bottom: 0px;
+}
+
+blockquote {
+    border-left: solid 5px #ccc;
+    padding: 1ex 1em;
+}
+
+blockquote.note {
+    border-left-color: #08f;
+    background: #def;
+}
+
+blockquote.tip {
+    border-left-color: #0c0;
+    background: #ded;
+}
+
+blockquote.important {
+    border-left-color: #80c;
+    background: #edf;
+}
+
+blockquote.warning {
+    border-left-color: #880;
+    background: #ffd;
+}
+
+blockquote.caution {
+    border-left-color: #c00;
+    background: #fdd;
+}
+
+img {
+    vertical-align: middle;
+    max-width: 100%;
+    height: auto;
+}
+
+main img {
+    border: solid 1px #ccc;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+code {
+    border-radius: 5px;
+    background: #ddd;
+    font-family: Consolas, 'Courier New', Courier, monospace;
+    padding: 0px 5px;
+    color: #040;
+}

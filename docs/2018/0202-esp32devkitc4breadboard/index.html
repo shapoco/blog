@@ -18,45 +18,47 @@
     <link rel="apple-touch-icon" href="https://blog2.shapoco.net/apple-touch-icon180.png" sizes="180x180">
     <link rel="shortcut icon" href="https://blog2.shapoco.net/favicon48.ico">
 
-    <link href="/index.css?20241003090000" rel="stylesheet" type="text/css">
-    <script src="/index.js?20241003090000"></script>
+    <link href="/index.css?20241129021100" rel="stylesheet" type="text/css">
+    <script src="/index.js?20241129021100"></script>
 
     <title>ESP32 DevKitCをブレッドボードで扱いやすくする | シャポログ</title>
   </head>
 
   <body>
     <h1>シャポログ</h1>
-    <h2>ESP32 DevKitCをブレッドボードで扱いやすくする</h2>
-    <p>
-      ESP32 DevKitCはボードそのものは使いやすいが、幅が広く、ピンヘッダが太いため
-      ブレッドボードでのプロトタイピングには向かないようだ。
-      そこで、2列のピンソケットを使ってブレッドボードと簡単に接続できるようにしてみた。
-      手順は以下の通り。
-    </p>
-    <ol>
-      <li>
-        <p>2列のピンソケットをESP32 DevKitCのピンヘッダと同じ長さだけ切り出す。</p>
-        <p><img src="./esp32devkitc4breadboard0.jpg" alt=""></p>
-      </li>
-      <li>
-        <p>ピンを短く切る。</p>
-        <p><img src="./esp32devkitc4breadboard1.jpg" alt=""></p>
-      </li>
-      <li>
-        <p>内側に折り曲げてはんだ付けし、2列の隣り合うピンをショートさせる。</p>
-        <p><img src="./esp32devkitc4breadboard2.jpg" alt=""></p>
-      </li>
-      <li>
-        <p>ESP32 DevKitCのピンヘッダに取り付ける。</p>
-        <p><img src="./esp32devkitc4breadboard3.jpg" alt=""></p>
-      </li>
-    </ol>
-    <p>
-      ブレッドボードとジャンパ線を使って繋げられるようになった。
-      ブレッドボードに直接挿した場合と違い、必要なポートのみ引き出せるため、
-      配線自由度が高い。
-    </p>
+    <main>
+      <h2>ESP32 DevKitCをブレッドボードで扱いやすくする</h2>
+      <p>
+        ESP32 DevKitCはボードそのものは使いやすいが、幅が広く、ピンヘッダが太いため
+        ブレッドボードでのプロトタイピングには向かないようだ。
+        そこで、2列のピンソケットを使ってブレッドボードと簡単に接続できるようにしてみた。
+        手順は以下の通り。
+      </p>
+      <ol>
+        <li>
+          <p>2列のピンソケットをESP32 DevKitCのピンヘッダと同じ長さだけ切り出す。</p>
+          <p><img src="./esp32devkitc4breadboard0.jpg" alt=""></p>
+        </li>
+        <li>
+          <p>ピンを短く切る。</p>
+          <p><img src="./esp32devkitc4breadboard1.jpg" alt=""></p>
+        </li>
+        <li>
+          <p>内側に折り曲げてはんだ付けし、2列の隣り合うピンをショートさせる。</p>
+          <p><img src="./esp32devkitc4breadboard2.jpg" alt=""></p>
+        </li>
+        <li>
+          <p>ESP32 DevKitCのピンヘッダに取り付ける。</p>
+          <p><img src="./esp32devkitc4breadboard3.jpg" alt=""></p>
+        </li>
+      </ol>
+      <p>
+        ブレッドボードとジャンパ線を使って繋げられるようになった。
+        ブレッドボードに直接挿した場合と違い、必要なポートのみ引き出せるため、
+        配線自由度が高い。
+      </p>
 
+    </main>
   </body>
 
 </html>
