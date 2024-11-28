@@ -1,16 +1,16 @@
 import re
 import warnings
 from article_struct import *
+from simple_lexer import *
 
 class MdParser:
-    DEBUG_PRINT=False
+    DEBUG_PRINT=True
     RE_H = r'^(#+)\s*(.*)$'
     RE_UL = r'^([-\*])\s+(.*)$'
     RE_OL = r'^(\d+)\.\s+(.*)$'
     RE_HR = r'^---+$'
-    RE_LINK = r'(!|)\[([^\]]*)\]\(([^\)]*)\)'
     
-    def __init__(self, lines: list[str]) -> None:
+    def __init__(self, lines: list[str]):
         self.lines = lines
         self.last_indent = ''
         self.tab_size = 4
@@ -217,34 +217,89 @@ class MdParser:
         self.info(f'<-- text()')
         return ret
 
+    #def markup_inline_text(self, text: str) -> str:
+    #    ret = ''
+    #    while len(text) > 0:
+    #        m_link = re.search(MdParser.RE_LINK, text)
+    #        
+    #        nearest: re.Match = None
+    #        if m_link and (not nearest or m_link.start() < nearest.start()):
+    #           nearest = m_link
+    #        
+    #        if nearest:
+    #            ret += text[:nearest.start()]
+    #            if m_link and m_link.start() == nearest.start():
+    #                prefix = m_link[1]
+    #                link_text = m_link[2]
+    #                url = m_link[3]
+    #                if prefix == '':
+    #                    self.info(f'link: href={url}, text="{link_text}"')
+    #                    ret += f'<a href="{url}" target="_blank">{link_text}</a>'
+    #                elif prefix == '!':
+    #                    self.info(f'image: src={url}, alt="{link_text}"')
+    #                    ret += f'<img src="{url}" alt="{link_text}">'
+    #                else:
+    #                    raise Exception(f'Invalid link prefix: "{prefix}"')
+    #                text = text[nearest.end():]
+    #            else:
+    #                raise Exception('Not implemented.')
+    #        else:
+    #            ret += text
+    #            text = ''
+    #    return ret
+
     def markup_inline_text(self, text: str) -> str:
+        return self.inline_text(SimpleLexer(text))
+        
+    def inline_text(self, lex: SimpleLexer, term: str = None) -> str:
         ret = ''
-        while len(text) > 0:
-            m_link = re.search(MdParser.RE_LINK, text)
+        while True:
+            if term:
+                if lex.eos():
+                    raise Exception(f'{term} is Expected')
+                elif lex.peek(len(term)) == term:
+                    return ret
+            elif lex.eos():
+                return ret
             
-            nearest: re.Match = None
-            if m_link and (not nearest or m_link.start() < nearest.start()):
-               nearest = m_link
-            
-            if nearest:
-                ret += text[:nearest.start()]
-                if m_link and m_link.start() == nearest.start():
-                    prefix = m_link[1]
-                    link_text = m_link[2]
-                    url = m_link[3]
-                    if prefix == '':
-                        self.info(f'link: href={url}, text="{link_text}"')
-                        ret += f'<a href="{url}" target="_blank">{link_text}</a>'
-                    elif prefix == '!':
-                        self.info(f'image: src={url}, alt="{link_text}"')
-                        ret += f'<img src="{url}" alt="{link_text}">'
-                    else:
-                        raise Exception(f'Invalid link prefix: "{prefix}"')
-                    text = text[nearest.end():]
-                else:
-                    raise Exception('Not implemented.')
+            if lex.try_eat('!['):
+                ret += self.inline_link(lex, '![')
+            elif lex.try_eat('['):
+                ret += self.inline_link(lex, '[')
+            elif lex.try_eat('**'):
+                ret += self.decoration(lex, '**', 'strong')
             else:
-                ret += text
-                text = ''
-        return ret
-                
+                ret += lex.eat()
+    
+    def inline_link(self, lex: SimpleLexer, start_key: str) -> str:
+        start_pos = lex.pos
+        try:
+            link_text = self.inline_text(lex, ']')
+            lex.expect('](')
+            url = ''
+            while not lex.try_eat(')'):
+                url += lex.eat()
+            if start_key == '![':
+                self.info(f'image: src="{url}", alt="{link_text}"')
+                return f'<img src="{url}" alt="{link_text}">'
+            else:
+                self.info(f'link: href="{url}", text="{link_text}"')
+                return f'<a href="{url}" target="_blank">{link_text}</a>'
+        except Exception as ex:
+            self.info(f'Link parse failed: {ex}')
+            lex.back_to(start_pos)
+            return start_key
+    
+    def decoration(self, lex: SimpleLexer, key: str, tag: str) -> str:
+        start_pos = lex.pos
+        try:
+            inner_text = self.inline_text(lex, key)
+            lex.expect(key)
+            return f'<{tag}>{inner_text}</{tag}>'
+        except Exception as ex:
+            self.info(f'Decoration parse failed: {ex}')
+            lex.back_to(start_pos)
+            return key
+    
+        
+        
