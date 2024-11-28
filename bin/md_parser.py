@@ -268,6 +268,8 @@ class MdParser:
                 ret += self.inline_link(lex, '[')
             elif lex.try_eat('**'):
                 ret += self.decoration(lex, '**', 'strong')
+            elif lex.try_eat('~~'):
+                ret += self.decoration(lex, '~~', 'del')
             else:
                 ret += lex.eat()
     
