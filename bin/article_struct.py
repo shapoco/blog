@@ -4,6 +4,9 @@ class Element:
     def to_html(self, depth: int = 0) -> str:
         return None
 
+    def text_content(self) -> str:
+        return None
+
     def is_multiline(self) -> bool:
         return None
 
@@ -22,6 +25,9 @@ class TextElement(Element):
         else:
             return self.text
 
+    def text_content(self) -> str:
+        return self.text
+
     def is_multiline(self) -> bool:
         return '\n' in self.text
 
@@ -36,9 +42,6 @@ class CodeBlock(TextElement):
 
     def is_multiline(self) -> bool:
         return True
-
-#class EmptyLine(Element):
-#    pass
 
 class TaggedElement(Element):
     def __init__(self, tag: str) -> None:
@@ -63,6 +66,12 @@ class TaggedElement(Element):
         ret += f'</{self.tag}>'
         return ret
 
+    def text_content(self) -> str:
+        ret = ''
+        for child in self.children:
+            ret += child.text_content()
+        return ret
+
     def is_multiline(self) -> bool:
         if len(self.children) > 1:
             return True
@@ -71,7 +80,20 @@ class TaggedElement(Element):
                 return True
         return False
 
-class ArticleBody(Element):
+    def get_1st_element_by_class(self, typ: type) -> Element:
+        if issubclass(type(self), typ):
+            return self
+        for child in self.children:
+            if issubclass(type(child), TaggedElement):
+                ret = child.get_1st_element_by_class(typ)
+                if ret:
+                    return ret
+        return None
+
+class ArticleBody(TaggedElement):
+    def __init__(self) -> None:
+        super().__init__('')
+        
     def to_html(self, depth: int = 0) -> str:
         ret = ''
         for child in self.children:
@@ -80,6 +102,14 @@ class ArticleBody(Element):
     
     def is_multiline(self) -> bool:
         return True
+    
+    def first_header_text(self) -> str:
+        h = self.get_1st_element_by_class(Hx)
+        return h.text_content() if h else 'Untitled'
+
+    def first_paragraph_text(self) -> str:
+        p = self.get_1st_element_by_class(P)
+        return p.text_content() if p else self.first_header_text()
 
 class Hx(TaggedElement):
     def __init__(self, level: int, text: str) -> None:

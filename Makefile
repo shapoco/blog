@@ -1,4 +1,4 @@
-.PHONY: all usage
+.PHONY: all size
 
 DIR_SRC = src
 DIR_OUT = docs
@@ -25,13 +25,12 @@ EXTRA_DEPENDENCIES = \
 all: $(HTMLS)
 
 $(DIR_OUT)/%/index.html: $(DIR_ARTICLE)/%/* $(EXTRA_DEPENDENCIES)
-	mkdir -p $(shell dirname $@)
-	rm -rf $(shell dirname $@)/*
-	$(DIR_BIN)/build_article.py \
-		-i $(shell dirname $<) \
-		-o $(shell dirname $@) \
-		-t $(TEMPLATE_HTML)
-	du -sh $(shell dirname $@)
+	@mkdir -p $(shell dirname $@)
+	@rm -rf $(shell dirname $@)/*
+	@$(DIR_BIN)/build_article.py -i $(shell dirname $<) -o $(shell dirname $@) -t $(TEMPLATE_HTML)
+	@du -sh $(shell dirname $@)
 
-usage:
-	du -sh ../docs/*/*
+size:
+	@du -sh $(DIR_OUT)/*/*/
+	@du -sh $(DIR_OUT)/*/
+	@du -sh $(DIR_OUT)/

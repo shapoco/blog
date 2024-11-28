@@ -3,7 +3,7 @@ import warnings
 from article_struct import *
 
 class MdParser:
-    DEBUG_PRINT=True
+    DEBUG_PRINT=False
     RE_H = r'^(#+)\s*(.*)$'
     RE_UL = r'^([-\*])\s+(.*)$'
     RE_OL = r'^(\d+)\.\s+(.*)$'

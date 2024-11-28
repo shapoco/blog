@@ -21,6 +21,9 @@ def main():
     md = parse_md(f'{args.input}/article.md')
 
     vars['article_body'] = md.to_html(depth=2)
+    vars['aricle_title'] = md.first_header_text()
+    vars['article_description'] = md.first_paragraph_text()
+    vars['article_url_absolute'] = f'{vars['site_url_absolute']}/{args.output}'
 
     with open(args.template) as f:
         html = f.read()
