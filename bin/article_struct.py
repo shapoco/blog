@@ -1,4 +1,16 @@
 import io
+import re
+
+def get_indent(depth: int) -> str:
+    return '  ' * depth
+
+def escape_for_attr(text: str) -> str:
+    text = re.sub(r'[\r\n]+', ' ', text)
+    text = text.replace('"', '&quot;')
+    text = text.replace("'", '&#39;')
+    text = text.replace('<', '&lt;')
+    text = text.replace('>', '&gt;')
+    return text.strip()
 
 class Element:
     def to_html(self, depth: int = 0) -> str:
@@ -10,9 +22,6 @@ class Element:
     def is_multiline(self) -> bool:
         return None
 
-    def get_indent(depth: int) -> str:
-        return '  ' * depth
-
 class TextElement(Element):
     def __init__(self, text: str = '') -> None:
         super().__init__()
@@ -21,7 +30,7 @@ class TextElement(Element):
     def to_html(self, depth: int = 0) -> str:
         # todo: エスケープ
         if self.is_multiline():
-            return self.text.replace('\n', '\n' + Element.get_indent(depth - 1))
+            return self.text.replace('\n', '\n' + get_indent(depth - 1))
         else:
             return self.text
 
@@ -38,7 +47,7 @@ class CodeBlock(TextElement):
 
     def to_html(self, depth: int = 0) -> str:
         # todo: エスケープ
-        return Element.get_indent(depth) + '<pre>' + self.text + '</pre>\n'
+        return get_indent(depth) + '<pre>' + self.text + '</pre>\n'
 
     def is_multiline(self) -> bool:
         return True
@@ -55,14 +64,14 @@ class TaggedElement(Element):
             ret += '\n'
         for child in self.children:
             if self.is_multiline():
-                ret += Element.get_indent(depth)
+                ret += get_indent(depth)
             ret += child.to_html(depth + 1)
             if self.is_multiline():
                 ret += '\n'
         if self.is_multiline():
             if not ret.endswith('\n'):
                 ret += '\n'                
-            ret += Element.get_indent(depth - 1)
+            ret += get_indent(depth - 1)
         ret += f'</{self.tag}>'
         return ret
 
@@ -86,7 +95,7 @@ class TaggedElement(Element):
         for child in self.children:
             if issubclass(type(child), TaggedElement):
                 ret = child.get_1st_element_by_class(typ)
-                if ret:
+                if ret and not ret.text_content().startswith('<img '):
                     return ret
         return None
 
@@ -97,7 +106,7 @@ class ArticleBody(TaggedElement):
     def to_html(self, depth: int = 0) -> str:
         ret = ''
         for child in self.children:
-            ret += Element.get_indent(depth) + child.to_html(depth + 1) + '\n'
+            ret += get_indent(depth) + child.to_html(depth + 1) + '\n'
         return ret
     
     def is_multiline(self) -> bool:
@@ -105,11 +114,15 @@ class ArticleBody(TaggedElement):
     
     def first_header_text(self) -> str:
         h = self.get_1st_element_by_class(Hx)
-        return h.text_content() if h else 'Untitled'
+        if not h:
+            return 'Untitled'
+        return re.sub(r'<[^>]+>', '', h.text_content())
 
     def first_paragraph_text(self) -> str:
         p = self.get_1st_element_by_class(P)
-        return p.text_content() if p else self.first_header_text()
+        if not p:
+            return self.first_header_text()
+        return re.sub(r'<[^>]+>', '', p.text_content())
 
 class Hx(TaggedElement):
     def __init__(self, level: int, text: str) -> None:
@@ -148,7 +161,7 @@ class HR(TaggedElement):
         super().__init__('hr')
 
     def to_html(self, depth: int = 0) -> str:
-        return f'{Element.get_indent(depth)}<hr>\n'
+        return f'{get_indent(depth)}<hr>\n'
     
     def is_multiline(self) -> bool:
         return True
