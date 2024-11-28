@@ -99,25 +99,25 @@
       表示するポストの条件を指定します。
     </p>
     <p>
-      ここでは自分 (シャポコ) の投稿のうち、#shapoart というキーワードを
+      ここでは自分 (シャポコ) の投稿のうち、<code>#shapoart</code> というキーワードを
       含むものを表示するフィードを作成することにします。
     </p>
     <ol>
       <li>
-        左側のメニューから [Feed Builder] → [Create your first feed] をクリックして
+        左側のメニューから <code>Feed Builder</code> → <code>Create your first feed</code> をクリックして
         フィードを作成します。
       </li>
       <li>
-        [Feed Name] にフィードの名前を指定します。これが Bluesky上で表示される
+        <code>Feed Name</code> にフィードの名前を指定します。これが Bluesky上で表示される
         フィードの名前になります。日本語でもかまいません。
       </li>
       <li>
         <p>
           Inputブロックは検索対象となるポストを指定します。
-          デフォルト([Entire Network])だと、自分以外の人のポストも含まれます。
-          ここでは自分のポストだけに絞りたいので [Single User] を指定します。
-          ユーザを識別するための「User DID」が必要となりますが、[Select Yourself] を
-          クリックすれば自分の DID が自動的に入力されます。[Include] の横のボタンで、
+          デフォルト(<code>Entire Network</code>)だと、自分以外の人のポストも含まれます。
+          ここでは自分のポストだけに絞りたいので <code>Single User</code> を指定します。
+          ユーザを識別するための「User DID」が必要となりますが、<code>Select Yourself</code> を
+          クリックすれば自分の DID が自動的に入力されます。<code>Include</code> の横のボタンで、
           リプライやリポストまで含めるかどうかを指定できます。この時点で条件に
           ヒットするポストが存在しない場合右のプレビューにエラーメッセージが
           表示されますが、とりあえず無視します。
@@ -126,28 +126,28 @@
       </li>
       <li>
         Remove ifブロックは除外するポストを指定します。このブロックは
-        今回は必要無いので [×] をクリックして削除します。
+        今回は必要無いので <code>×</code> をクリックして削除します。
       </li>
       <li>
         <p>
           RegExブロックは絞り込みの条件を「正規表現」で指定します。
           正規表現とは、文字列のパターンマッチをするための式です。
-          今回は #shapoart を指定します。複数指定したい場合は "|" で区切って、
-          例えば #shapoart|#illustration のようにします。
+          今回は <code>#shapoart</code> を指定します。複数指定したい場合は <code>|</code> で区切って、
+          例えば <code>#shapoart|#illustration</code> のようにします。
           より複雑な条件を指定したい場合は「正規表現」でググってみてください。
         </p>
         <p><img src="./skyfeed-60-regex-block.png" alt=""></p>
       </li>
       <li>
-        [＋Add Block] をクリックして、Regexブロックの次に Remember Postsブロックを
+        <code>＋Add Block</code> をクリックして、Regexブロックの次に Remember Postsブロックを
         追加します。これは過去の検索結果を記憶してくれるものです。
         Inputブロックで Single User を指定した場合は過去の投稿も全て対象になるので
         不要かもしれませんが、もしかすると仕様が変わるかもしれないと思って
         一応追加しておきました。
       </li>
       <li>
-        タグ付けされていない作品をフィードに入れたい場合は [＋Add Block] で
-        Inputブロックを追加し、[Single Post] を選んでポストの URL を入力することで、
+        タグ付けされていない作品をフィードに入れたい場合は <code>＋Add Block</code> で
+        Inputブロックを追加し、<code>Single Post</code> を選んでポストの URL を入力することで、
         個別のポストをフィードに追加することができます。
       </li>
       <li>
@@ -170,16 +170,16 @@
     </p>
     <h3>3. フィードを公開する</h3>
     <ol>
-      <li>[Publish Feed] をクリックします。</li>
-      <li>[Upload avatar image] をクリックするとフィードのアイコンを指定できます。</li>
-      <li>[Description] にフィードの説明を入力します。</li>
+      <li><code>Publish Feed</code> をクリックします。</li>
+      <li><code>Upload avatar image</code> をクリックするとフィードのアイコンを指定できます。</li>
+      <li><code>Description</code> にフィードの説明を入力します。</li>
       <li>
-        [License] はフィードのライセンスを指定します。
+        <code>License</code> はフィードのライセンスを指定します。
         フィードを編集したり改善したりする Remix機能のためだそうです。
         特にこだわりが無ければデフォルトでよいでしょう。
       </li>
       <li>
-        <p>[Publish] をクリックしてフィードを公開します。</p>
+        <p><code>Publish</code> をクリックしてフィードを公開します。</p>
         <p><img src="./skyfeed-70-skyfeed-publish.png" alt=""></p>
       </li>
     </ol>
@@ -188,7 +188,7 @@
     <p>フィードを開き、URL をコピペして共有することもできます。</p>
     <p>
       フィードの検索条件は SkyFeed でいつでも編集でき、
-      [Update Feed]ボタンで更新することができます。
+      <code>Update Feed</code> ボタンで更新することができます。
     </p>
 
   </body>

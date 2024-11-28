@@ -267,9 +267,11 @@ class MdParser:
             elif lex.try_eat('['):
                 ret += self.inline_link(lex, '[')
             elif lex.try_eat('**'):
-                ret += self.decoration(lex, '**', 'strong')
+                ret += self.inline_decoration(lex, '**', 'strong')
             elif lex.try_eat('~~'):
-                ret += self.decoration(lex, '~~', 'del')
+                ret += self.inline_decoration(lex, '~~', 'del')
+            elif lex.try_eat('`'):
+                ret += self.inline_code(lex)
             else:
                 ret += lex.eat()
     
@@ -292,7 +294,7 @@ class MdParser:
             lex.back_to(start_pos)
             return start_key
     
-    def decoration(self, lex: SimpleLexer, key: str, tag: str) -> str:
+    def inline_decoration(self, lex: SimpleLexer, key: str, tag: str) -> str:
         start_pos = lex.pos
         try:
             inner_text = self.inline_text(lex, key)
@@ -302,6 +304,18 @@ class MdParser:
             self.info(f'Decoration parse failed: {ex}')
             lex.back_to(start_pos)
             return key
+    
+    def inline_code(self, lex: SimpleLexer) -> str:
+        start_pos = lex.pos
+        try:
+            code = ''
+            while not lex.try_eat('`'):
+                code += lex.eat()
+            return f'<code>{code}</code>'
+        except Exception as ex:
+            self.info(f'Inline code parse failed: {ex}')
+            lex.back_to(start_pos)
+            return '`'
     
         
         
