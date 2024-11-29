@@ -20,7 +20,7 @@
     <link rel="shortcut icon" href="https://shapoco.github.io/blog/favicon48.ico">
     -->
 
-    <link href="/style.css?6a9fb9cc" rel="stylesheet" type="text/css">
+    <link href="/style.css?1af1792d" rel="stylesheet" type="text/css">
     <script src="/style.js?a602576c"></script>
 
     <title>シャポログ</title>
@@ -28,13 +28,13 @@
 
   <body>
     <div id="container">
-      <header>
+      <header class="top_header">
         <h1>シャポログ</h1>
       </header>
       <main>
         <h2>記事一覧</h2>
         <article id="articles" class="article_list">
-          <p>記事を読み込んでいます...</p>
+          <p>記事一覧を読み込んでいます...</p>
         </article>
         <script>
           fetch('/index.json?123456789')
@@ -50,10 +50,10 @@
               document.querySelector('#articles').innerHTML = '<p>⚠ 記事の読み込みに失敗しました。</p>';
             });
         </script>
-        <footer>
-          Copyright &copy; Shapoco 
-        </footer>
       </main>
+      <footer>
+        Copyright &copy; Shapoco 
+      </footer>
     </div>
   </body>
 
