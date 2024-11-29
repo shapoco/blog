@@ -110,8 +110,8 @@ blockquote.important {
 }
 
 blockquote.warning {
-    border-left-color: #880;
-    background: #ffd;
+    border-left-color: #c80;
+    background: #fff8d0;
 }
 
 blockquote.caution {

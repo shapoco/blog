@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+    <meta name="description" content="静電気の極性とレベルを正負それぞれ5段階で表示できる簡易式の静電気メーターです。">
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@shapoco" />
+    <meta property="og:url" content="https://blog.shapoco.net/2023/0223-electrostatic-meter/" />
+    <meta property="og:title" content="簡易静電気メーター | シャポログ" />
+    <meta property="og:description" content="静電気の極性とレベルを正負それぞれ5段階で表示できる簡易式の静電気メーターです。" />
+    <meta property="og:image" content="https://blog.shapoco.net/2023/0223-electrostatic-meter/cover.jpg" />
+
+    <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+    <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+    <link href="/style.css?74a05925" rel="stylesheet" type="text/css">
+    <script src="/style.js?f7ff91b4"></script>
+
+    <title>簡易静電気メーター | シャポログ</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <header class="article_header">
+        <h1><a href="/">シャポログ</a></h1>
+      </header>
+      <main>
+        <h2>簡易静電気メーター</h2>
+
+        <div class="article_info">
+          2023/02/23
+        </div>
+
+        <div id="shpcstamp_wrap" style="text-align: right;"></div>
+        <script async src="/stamp/v1/widget.js?20241129165107"></script>
+        
+        <p><img src="./cover.jpg" alt="カバー画像"></p>
+        <blockquote class="note">
+          <ul>
+            <li>2023/2/13 : SMD版回路図の VR1 と VR2 の定数が逆だったのを修正しました。</li>
+          </ul>
+        </blockquote>
+        <h3>概要</h3>
+        <p>静電気の極性とレベルを正負それぞれ5段階で表示できる簡易式の静電気メーターです。</p>
+        <p>秋月にあるディスクリート部品だけで作ることができ、静電気の実験や教育に使うことができます。</p>
+        <h3>動作の様子</h3>
+        <p>ウィムズハースト起電機の近くに置いて動かした様子です。</p>
+        <p><iframe width="560" height="315" src="https://www.youtube.com/embed/ZZIkuuMb_II?si=R-Kpk1I24lkyIgr1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></p>
+        <h3>回路</h3>
+        <p>スルーホール版と表面実装版をそれぞれ作ってみました。動作原理はどちらも同じです。</p>
+        <ol>
+          <li>アンテナが帯電することで MOS-FET のゲートに電荷が流入し、ドレイン-ソース間が導通する。</li>
+          <li>直列接続されたダイオードの順方向電圧降下により、耐電のレベルに応じてトランジスタがオンになり、LED が光る。</li>
+        </ol>
+        <p>重要なのは MOS-FET の選定で、ゲート漏れ電流が十分小さく、ゲートON電圧などの特性が近いペアを使用する必要があります。漏れ電流が大きいものを使用すると表示が不安定になったり、感度が弱くなったりします。</p>
+        <h4>スルーホール版</h4>
+        <p><img src="./circuit_for_th.png" alt="スルーホール版の回路図"></p>
+        <h4>SMD版</h4>
+        <p><img src="./circuit_for_smd.png" alt="SMD版の回路図"></p>
+        <h3>作例</h3>
+        <p>SMD版はアンテナが裸の銅板になってますが、丸い形状の導体を使用し表面を絶縁した方がいいと思います。</p>
+        <p><img src="./cover.jpg" alt="作例"></p>
+        <h3>使い方</h3>
+        <h4>調整</h4>
+        <ol>
+          <li>リセットスイッチを押したまま以下の操作を行う</li>
+          <li>感度を最大にする</li>
+          <li>正負のバランスを合わせる</li>
+          <li>両方が消えるか消えないかくらいまで感度を下げる</li>
+          <li>リセットスイッチを離す</li>
+        </ol>
+        <h4>測定</h4>
+        <p>帯電した物体にアンテナを近づけます。</p>
+        <blockquote class="warning">アンテナを物体に直接当てないでください。MOS-FET が壊れる可能性があります。</blockquote>
+
+      </main>
+      <footer>
+        Copyright &copy; Shapoco 
+      </footer>
+    </div>
+  </body>
+</html>

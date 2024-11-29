@@ -25,6 +25,14 @@
       "card_image_url": "/image/default_card_summary.png"
     },
     {
+      "title": "簡易静電気メーター",
+      "description": "静電気の極性とレベルを正負それぞれ5段階で表示できる簡易式の静電気メーターです。",
+      "date": "2023/02/23",
+      "url": "/2023/0223-electrostatic-meter",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2023/0223-electrostatic-meter/cover.jpg"
+    },
+    {
       "title": "FDM式3Dプリンタで高圧トランスのボビンを作る",
       "description": "高圧トランスを自作する場合、フェライトコアは Digikey などで入手できますが、それに合ったボビンを手に入れるのは困難です。",
       "date": "2023/08/13",

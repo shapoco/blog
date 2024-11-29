@@ -16,9 +16,11 @@ def main() -> None:
     with open(args.target_file) as f:
         html = f.read()
     
-    html = re.sub(f'<link href="{args.script}\\?\\w+"', f'<link href="{args.script}?{script_postfix}"', html)
-    html = re.sub(f'<script src="{args.script}\\?\\w+"', f'<script src="{args.script}?{script_postfix}"', html)
-    
+    html = re.sub(f'<link href="{args.script}(\\?\\w+)?"', f'<link href="{args.script}?{script_postfix}"', html)
+    html = re.sub(f'<script src="{args.script}(\\?\\w+)?"', f'<script src="{args.script}?{script_postfix}"', html)
+    html = re.sub(f"fetch\\('{args.script}(\\?\\w+)?'", f"fetch('{args.script}?{script_postfix}'", html)
+    html = re.sub(f'fetch\\("{args.script}(\\?\\w+)?"', f'fetch("{args.script}?{script_postfix}"', html)
+
     with open(args.target_file, 'w') as f:
         f.write(html)
 
