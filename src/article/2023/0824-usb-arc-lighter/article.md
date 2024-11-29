@@ -11,6 +11,13 @@
 ありますが、毎日充電するスマホの電池を切らすことは滅多にないので、
 そういう意味では「持ってればいつでも使える」と言えるかもしれません（強引）。
 
+## 動作の様子
+
+電流制限しているので市販のプラズマアークライターに比べると非力ですが、
+ロウソクや紙に火を付けることはできます。
+
+<blockquote class="twitter-tweet" data-media-max-width="560"><p lang="ja" dir="ltr">スマホの充電端子から電気取って火起こしできるプラズマアークライター<br>2023/08/24 <a href="https://twitter.com/hashtag/shapolab?src=hash&amp;ref_src=twsrc%5Etfw">#shapolab</a> <a href="https://t.co/UCiRiAOr07">pic.twitter.com/UCiRiAOr07</a></p>&mdash; シャポコ🌵 (@shapoco) <a href="https://twitter.com/shapoco/status/1803431941233860956?ref_src=twsrc%5Etfw">June 19, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
+
 ## トランス
 
 プラズマアークライターには点火用のトランスが必要ですが、小型のものが
@@ -63,10 +70,3 @@ AliExpress や Amazon で手に入ります。
 放電距離は非常に短い（1～2mm？）ので、ギリギリまで近づけておく必要があります。
 
 ![](./electrodes.jpg)
-
-## 動作の様子
-
-電流制限しているので市販のプラズマアークライターに比べると非力ですが、
-ロウソクや紙に火を付けることはできます。
-
-<blockquote class="twitter-tweet" data-media-max-width="560"><p lang="ja" dir="ltr">スマホの充電端子から電気取って火起こしできるプラズマアークライター<br>2023/08/24 <a href="https://twitter.com/hashtag/shapolab?src=hash&amp;ref_src=twsrc%5Etfw">#shapolab</a> <a href="https://t.co/UCiRiAOr07">pic.twitter.com/UCiRiAOr07</a></p>&mdash; シャポコ🌵 (@shapoco) <a href="https://twitter.com/shapoco/status/1803431941233860956?ref_src=twsrc%5Etfw">June 19, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 

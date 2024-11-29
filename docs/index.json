@@ -26,7 +26,7 @@
     },
     {
       "title": "簡易静電気メーター",
-      "description": "静電気の極性とレベルを正負それぞれ5段階で表示できる簡易式の静電気メーターです。",
+      "description": "静電気の極性とレベルを正負それぞれ5段階で表示できる簡易式の「静電気メーター」を作りました。",
       "date": "2023/02/23",
       "url": "/2023/0223-electrostatic-meter",
       "twitter_card_size": "summary_large_image",

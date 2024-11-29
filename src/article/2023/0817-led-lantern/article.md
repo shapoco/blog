@@ -4,6 +4,10 @@
 
 「[眩しすぎるX看板のLEDランタンを作った](https://www.nicovideo.jp/watch/sm42584102)」で買った白色LED が 50個以上余ったのでちゃんとした(?) LEDランタンを作ってみました。
 
+## 動画
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ZpbXncW4yrE?si=R0i240itAevQu_FE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
 ## 仕様
 
 - 3mm の砲弾型白色LED OSW54K3131A を 56個使用
@@ -80,7 +84,3 @@ Fusion 360 で設計し、FlashForge Adventurer3 でプリントしました。
 実際に試したところ、バッテリ切れ判定で消灯するまで 5.5時間ほど点灯し続けたので、概ねスペック通りになりました。
 
 本記事執筆時点でボリューム 50%時の動作時間を確認中ですが、20時間くらいは点灯し続けそうです。
-
-## 動画
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/ZpbXncW4yrE?si=R0i240itAevQu_FE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>

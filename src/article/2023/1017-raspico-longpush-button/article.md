@@ -19,6 +19,10 @@ RUNピンにリセットスイッチを追加し、BOOTSELボタンと同時押�
 入るようになります。押しやすい大きなボタンを乗せれば指一本で操作できて
 ちょっとした作業効率化になります。
 
+## 動作の様子
+
+<blockquote class="twitter-tweet" data-media-max-width="560"><p lang="ja" dir="ltr">クリックでリセット&#12289;長押しで書き込みモードになるボタン&#12289;ラズピコ2 でも動いた <a href="https://twitter.com/hashtag/shapolab?src=hash&amp;ref_src=twsrc%5Etfw">#shapolab</a> <a href="https://t.co/i9PjJOSfre">pic.twitter.com/i9PjJOSfre</a></p>&mdash; シャポコ🌵 (@shapoco) <a href="https://twitter.com/shapoco/status/1835247604898345384?ref_src=twsrc%5Etfw">September 15, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
 ## 回路
 
 下図のような回路をラズピコに追加します。リード部品でも SMD でも OK です。 Raspberry Pi Pico でも Pico2 でも回路は同じです。
@@ -59,7 +63,3 @@ RUN の立ち上がり時に BOOTSEL がバタついていますが、これは�
 BOOTSEL はだいぶ鈍っていますが、RUN の立ち上がりではしっかり GND に落ちていて、ちゃんと Mass Storage Mode に入れます。
 
 ![](./waveform_long_push.jpg)
-
-## 動作の様子
-
-<blockquote class="twitter-tweet" data-media-max-width="560"><p lang="ja" dir="ltr">クリックでリセット&#12289;長押しで書き込みモードになるボタン&#12289;ラズピコ2 でも動いた <a href="https://twitter.com/hashtag/shapolab?src=hash&amp;ref_src=twsrc%5Etfw">#shapolab</a> <a href="https://t.co/i9PjJOSfre">pic.twitter.com/i9PjJOSfre</a></p>&mdash; シャポコ🌵 (@shapoco) <a href="https://twitter.com/shapoco/status/1835247604898345384?ref_src=twsrc%5Etfw">September 15, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>

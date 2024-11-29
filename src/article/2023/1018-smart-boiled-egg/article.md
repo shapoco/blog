@@ -8,6 +8,10 @@
 景気よく鶏卵でといきたいところですが、乾電池ゆで卵 の例などから難しそうと判断し、
 ウズラの卵で挑戦することにしました。
 
+## 動画
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/XoHzk0J2f0c?si=W5COjgVICNYyLxdS" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
 ## スマホから得られる電力
 
 OTGでどの程度の電力が得られるかはスマホによって異なります。より大きな電力を得るには規格に沿って適切なモードを実装する必要があります。
@@ -86,7 +90,3 @@ OTGアダプタを介してスマホ (Pixel3) に接続します。
 
 Pixel3 のバッテリーは 100%→71% になりました。長く使ったスマホなので、
 新しいスマホならもっと少ない消費でできるかもしれません。
-
-## 動画
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/XoHzk0J2f0c?si=W5COjgVICNYyLxdS" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>

@@ -43,6 +43,8 @@
         <p>WindowsのIMEは半角/全角キーを押すたびにOn/Offがトグルするようになっており、今どちらの状態なのかが分かりにくくなっています。特定のキーでOn/Offする設定にしたり、カーソルの近くにマークを表示してくれるツールを試したりしましたが、どの方法もしっくり来ませんでした。</p>
         <h3>LEDに表示してみる</h3>
         <p>モニタのそばにLEDを置いてその色で状態を表せば、画面を注視していても視界の端にうつるLEDの光で認識できて分かりやすいのではと考えて、試してみることにしました。LEDを点灯/消灯するだけなので今回はRS232CのDTR/RTS信号で制御することにしました。</p>
+        <h3>動作の様子</h3>
+        <p><blockquote class="twitter-tweet" data-media-max-width="560"><p lang="ja" dir="ltr">IMEの状態をLEDに表示するやつ、色が変わるだけだと目が慣れてしまって注視しないと識別できないので、点滅で状態を表せるよう機能をアプリに追加した。画面を注視してても分かりやすい。 <a href="https://twitter.com/hashtag/%E3%81%97%E3%82%83%E3%81%BD%E3%82%89%E3%81%BC?src=hash&amp;ref_src=twsrc%5Etfw">#しゃぽらぼ</a> <a href="https://t.co/MmF04LrOwM">pic.twitter.com/MmF04LrOwM</a></p>&mdash; シャポコ🌵 (@shapoco) <a href="https://twitter.com/shapoco/status/1043778380657618944?ref_src=twsrc%5Etfw">September 23, 2018</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
         <h3>ハードウェア</h3>
         <p>小さなLEDを1個ずつ駆動するだけなら、シリアルモジュール、LED、抵抗を用意して👇のように接続すれば制御できます。ただし、シリアルモジュールはDTRとRTS信号が引き出せるものを用意する必要があります。今回は <a href="http://akizukidenshi.com/catalog/g/gK-01977/" target="_blank">秋月電子さんのFT232RL搭載のモジュール AE-UM232R</a> を使用しました。</p>
         <p><img src="./ime-status-to-led-00a.png" alt=""></p>
@@ -63,9 +65,6 @@
         <p><img src="./ime-status-to-led-04.png" alt=""></p>
         <p>AE-UM232R を使用する場合は必要に応じて <a href="https://ftdichip.com/drivers/" target="_blank">VCPドライバ</a> をインストールしてください。</p>
         <p><img src="./ime-status-to-led-05a.png" alt=""></p>
-        <h3>完成</h3>
-        <p>👇のような動作風景になりました。慣れればなかなか使えるのではないでしょうか。シリアルモジュールとLEDと抵抗があればすぐに作れるので試してみてはどうでしょう。</p>
-        <p><blockquote class="twitter-tweet" data-media-max-width="560"><p lang="ja" dir="ltr">IMEの状態をLEDに表示するやつ、色が変わるだけだと目が慣れてしまって注視しないと識別できないので、点滅で状態を表せるよう機能をアプリに追加した。画面を注視してても分かりやすい。 <a href="https://twitter.com/hashtag/%E3%81%97%E3%82%83%E3%81%BD%E3%82%89%E3%81%BC?src=hash&amp;ref_src=twsrc%5Etfw">#しゃぽらぼ</a> <a href="https://t.co/MmF04LrOwM">pic.twitter.com/MmF04LrOwM</a></p>&mdash; シャポコ🌵 (@shapoco) <a href="https://twitter.com/shapoco/status/1043778380657618944?ref_src=twsrc%5Etfw">September 23, 2018</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
 
       </main>
       <footer>

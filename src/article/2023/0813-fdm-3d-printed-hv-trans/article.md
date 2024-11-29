@@ -12,6 +12,10 @@
 
 ここでは 10kV 程度の電圧を出力するトランスを作ることを考えます。記事中の寸法は出力する電圧に応じて調整してください。
 
+## 動画
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/2JgutgDD-hA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
 ## 使用する 3Dプリンタの種類
 
 3Dプリンタとしては、光造形式のものをお勧めします。内部に隙間が生じないため絶縁性に優れることと、巻線を難しくする糸引きが生じないためです。
@@ -115,5 +119,3 @@ FDM式の場合、モデルの表面に細かい凹凸が発生します。巻�
 クリアカラーのフィラメントで印刷するとよく分かりますが、印刷されたモデルの内部には細かい空隙があります。印刷の条件や運が悪いと空隙が繋がって絶縁が失われるということもあるかもしれません。
 
 少しハードルが高くなりますが、出来上がったトランス全体を油（機械油など）やレジンに沈めて真空脱泡するのが確実です。
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/2JgutgDD-hA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
