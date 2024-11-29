@@ -13,6 +13,10 @@ class MdParser:
     RE_HR = r'^---+$'
     
     def __init__(self, lines: list[str]):
+        # 行末の空白を除去
+        for i in range(len(lines)):
+            lines[i] = lines[i].rstrip(' 　\t\r\n')
+        
         self.lines = lines
         self.indent_stack: list[str] = []
         self.tab_size = 4

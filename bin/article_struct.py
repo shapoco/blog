@@ -4,12 +4,16 @@ import re
 def get_indent(depth: int) -> str:
     return '  ' * depth
 
-def escape_for_attr(text: str) -> str:
-    text = re.sub(r'[\r\n]+', ' ', text)
+def escape_for_html(text: str) -> str:
     text = text.replace('"', '&quot;')
     text = text.replace("'", '&#39;')
     text = text.replace('<', '&lt;')
     text = text.replace('>', '&gt;')
+    return text.strip()
+
+def escape_for_attr(text: str) -> str:
+    text = re.sub(r'[\r\n]+', ' ', text)
+    text = escape_for_html(text)
     return text.strip()
 
 def remove_tags(text: str) -> str:
@@ -26,7 +30,7 @@ class Element:
         return None
 
 class TextElement(Element):
-    def __init__(self, text: str = '') -> None:
+    def __init__(self, text: str = ''):
         super().__init__()
         self.text: str = text
 
@@ -45,14 +49,14 @@ class TextElement(Element):
         return '\n' in self.text
 
 class RawHtml(TextElement):
-    def __init__(self, text: str = '') -> None:
+    def __init__(self, text: str = ''):
         super().__init__(text)
 
     def is_multiline(self) -> bool:
         return True
 
 class CodeBlock(TextElement):
-    def __init__(self, text: str = '', lang: str = '') -> None:
+    def __init__(self, text: str = '', lang: str = ''):
         super().__init__(text)
         self.lang: str = lang
 
@@ -63,7 +67,7 @@ class CodeBlock(TextElement):
         return True
 
 class TaggedElement(Element):
-    def __init__(self, tag: str) -> None:
+    def __init__(self, tag: str):
         self.tag = tag
         self.children: list[Element] = []
         self.classes: list[str] = []
@@ -116,7 +120,7 @@ class TaggedElement(Element):
         return None
 
 class ArticleBody(TaggedElement):
-    def __init__(self) -> None:
+    def __init__(self):
         super().__init__('')
         
     def to_html(self, depth: int = 0) -> str:
@@ -129,43 +133,43 @@ class ArticleBody(TaggedElement):
         return True
 
 class Hx(TaggedElement):
-    def __init__(self, level: int, text: str) -> None:
+    def __init__(self, level: int, text: str):
         super().__init__('h' + str(level + 1))
         self.level: int = level
         self.children.append(TextElement(text))
 
 class P(TaggedElement):
-    def __init__(self) -> None:
+    def __init__(self):
         super().__init__('p')
 
 class ListBase(TaggedElement):
-    def __init__(self, tag: str) -> None:
+    def __init__(self, tag: str):
         super().__init__(tag)
 
 class UL(ListBase):
-    def __init__(self) -> None:
+    def __init__(self):
         super().__init__('ul')
 
     def is_multiline(self) -> bool:
         return True
 
 class OL(ListBase):
-    def __init__(self) -> None:
+    def __init__(self):
         super().__init__('ol')
 
     def is_multiline(self) -> bool:
         return True
 
 class LI(TaggedElement):
-    def __init__(self) -> None:
+    def __init__(self):
         super().__init__('li')
 
 class BLOCKQUOTE(TaggedElement):
-    def __init__(self) -> None:
+    def __init__(self):
         super().__init__('blockquote')
 
 class HR(TaggedElement):
-    def __init__(self) -> None:
+    def __init__(self):
         super().__init__('hr')
 
     def to_html(self, depth: int = 0) -> str:
