@@ -28,7 +28,7 @@ def main() -> None:
     vars['article_description'] = article.description
     vars['date_time'] = article.date
     vars['article_body'] = article.body.to_html(depth=4)    
-    article_url = f'{vars['site_url_absolute']}/{args.output}'
+    article_url = f'{vars['site_url_absolute']}/{re.sub(r'^docs/', '', args.output)}'
     vars['article_url_absolute'] = article_url
     
     if os.path.isfile(f'{args.input}/cover.png'):
