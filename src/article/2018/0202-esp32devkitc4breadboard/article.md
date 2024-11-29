@@ -15,7 +15,7 @@ ESP32 DevKitCはボードそのものは使いやすいが、幅が広く、ピ�
 
 3. 内側に折り曲げてはんだ付けし、2列の隣り合うピンをショートさせる。
 
-    ![](./esp32devkitc4breadboard2.jpg)
+    ![](./cover.jpg)
 
 4. ESP32 DevKitCのピンヘッダに取り付ける。
 

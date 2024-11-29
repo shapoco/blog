@@ -21,13 +21,25 @@ def main() -> None:
     with open(args.template) as f:
         html = f.read()
 
+
     # 変数の値の設定
     vars = shapolog.get_vars(args.output)
     vars['aricle_title'] = article.title
     vars['article_description'] = article.description
     vars['date_time'] = article.date
     vars['article_body'] = article.body.to_html(depth=4)    
-    vars['article_url_absolute'] = f'{vars['site_url_absolute']}/{args.output}'
+    article_url = f'{vars['site_url_absolute']}/{args.output}'
+    vars['article_url_absolute'] = article_url
+    
+    if os.path.isfile(f'{args.input}/cover.png'):
+        vars['article_cover_size'] = 'summary_large_image'
+        vars['article_cover_url'] = f'{article_url}/cover.png'
+    elif os.path.isfile(f'{args.input}/cover.jpg'):
+        vars['article_cover_size'] = 'summary_large_image'
+        vars['article_cover_url'] = f'{article_url}/cover.jpg'
+    else:
+        vars['article_cover_size'] = 'summary'
+        vars['article_cover_url'] = f'{vars['site_url_absolute']}/image/default_card_summary.png'
     
     # 変数適用
     for k in vars.keys():
