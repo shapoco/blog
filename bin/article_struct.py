@@ -12,6 +12,9 @@ def escape_for_attr(text: str) -> str:
     text = text.replace('>', '&gt;')
     return text.strip()
 
+def remove_tags(text: str) -> str:
+    return re.sub(r'<[^>]+>', '', text)
+
 class Element:
     def to_html(self, depth: int = 0) -> str:
         return None
@@ -29,10 +32,11 @@ class TextElement(Element):
 
     def to_html(self, depth: int = 0) -> str:
         # todo: エスケープ
+        html = self.text
         if self.is_multiline():
-            return self.text.replace('\n', '\n' + get_indent(depth - 1))
+            return html.replace('\n', '\n' + get_indent(depth - 1))
         else:
-            return self.text
+            return html
 
     def text_content(self) -> str:
         return self.text
@@ -40,14 +44,20 @@ class TextElement(Element):
     def is_multiline(self) -> bool:
         return '\n' in self.text
 
+class RawHtml(TextElement):
+    def __init__(self, text: str = '') -> None:
+        super().__init__(text)
+
+    def is_multiline(self) -> bool:
+        return True
+
 class CodeBlock(TextElement):
-    def __init__(self, lang: str = '') -> None:
-        super().__init__('')
+    def __init__(self, text: str = '', lang: str = '') -> None:
+        super().__init__(text)
         self.lang: str = lang
 
     def to_html(self, depth: int = 0) -> str:
-        # todo: エスケープ
-        return get_indent(depth) + '<pre>' + self.text + '</pre>\n'
+        return '<pre>' + self.text + '</pre>'
 
     def is_multiline(self) -> bool:
         return True
@@ -117,18 +127,6 @@ class ArticleBody(TaggedElement):
     
     def is_multiline(self) -> bool:
         return True
-    
-    def first_header_text(self) -> str:
-        h = self.get_1st_element_by_class(Hx, 1)
-        if not h:
-            return 'Untitled'
-        return re.sub(r'<[^>]+>', '', h.text_content())
-
-    def first_paragraph_text(self) -> str:
-        p = self.get_1st_element_by_class(P, 1)
-        if not p:
-            return self.first_header_text()
-        return re.sub(r'<[^>]+>', '', p.text_content())
 
 class Hx(TaggedElement):
     def __init__(self, level: int, text: str) -> None:

@@ -4,12 +4,29 @@ body {
     padding: 0px;
 }
 
-main {
+#container {
     max-width: 900px;
     margin: 0px auto;
     padding: 20px;
     position: relative;
     box-sizing: border-box;
+}
+
+.article_info {
+    float: left;
+    font-size: 80%;
+}
+
+footer {
+    border-top: solid 1px #ccc;
+    margin: 1ex 0px;
+    padding: 1ex 0px;
+    text-align: center;
+    color: #888;
+}
+
+h1 {
+    font-size: 180%;
 }
 
 h2 {

@@ -18,17 +18,33 @@
     <link rel="apple-touch-icon" href="${blog.site_url_absolute}/apple-touch-icon180.png" sizes="180x180">
     <link rel="shortcut icon" href="${blog.site_url_absolute}/favicon48.ico">
 
-    <link href="${blog.site_url_relative}/index.css" rel="stylesheet" type="text/css">
-    <script src="${blog.site_url_relative}/index.js"></script>
+    <link href="/index.css" rel="stylesheet" type="text/css">
+    <script src="/index.js"></script>
 
     <title>${blog.aricle_title} | ${blog.site_title}</title>
   </head>
 
   <body>
-    <h1>${blog.site_title}</h1>
-    <main>
+    <div id="container">
+      <header>
+        <h1>${blog.site_title}</h1>
+      </header>
+      <main>
+        <h2>${blog.aricle_title}</h2>
+
+        <div class="article_info">
+          ${blog.date_time}
+        </div>
+
+        <div id="shpcstamp_wrap" style="text-align: right;"></div>
+        <script async src="/stamp/v1/widget.js?20241129114721"></script>
+        
 ${blog.article_body}
-    </main>
+      </main>
+      <footer>
+        Copyright &copy; Shapoco 
+      </footer>
+    </div>
   </body>
 
 </html>

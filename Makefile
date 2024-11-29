@@ -1,4 +1,6 @@
-.PHONY: all size
+.PHONY: all size install-stamp
+
+DIR_REPO = $(shell pwd)
 
 DIR_SRC = src
 DIR_OUT = docs
@@ -34,3 +36,9 @@ size:
 	@du -sh $(DIR_OUT)/*/*/
 	@du -sh $(DIR_OUT)/*/
 	@du -sh $(DIR_OUT)/
+
+install-stamp:
+	cd ../stamps-php/ &&\
+	./install_widget.sh \
+		-t '$(DIR_REPO)/docs/stamp' \
+		-d '$(DIR_REPO)/src/template'
