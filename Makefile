@@ -40,7 +40,13 @@ index: $(INDEX_JSON) $(INDEX_HTML)
 
 $(INDEX_JSON): $(MDS) $(INDEX_EXTRA_DEPENDENCIES)
 	@echo "Updating: $@"
-	@$(DIR_BIN)/gen_index.py -o $@
+	@$(DIR_BIN)/gen_index.py -o $@.tmp
+	@if diff $@ $@.tmp > /dev/null ; then \
+		rm -f $@.tmp ; \
+		echo "*INFO: Index not changed." ; \
+	else \
+		cp -f $@.tmp $@ ; \
+	fi
 
 $(DIR_OUT)/%/index.html: $(DIR_ARTICLE)/%/* $(HTML_EXTRA_DEPENDENCIES)
 	@echo "Generating: $@"
