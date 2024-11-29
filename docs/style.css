@@ -3,6 +3,7 @@ body {
     background: #e8f0f8;
     margin: 0px;
     padding: 0px;
+    font-family: メイリオ, Meiryo, sans-serif;
 }
 
 #container {
@@ -185,6 +186,7 @@ header h1 a {
 
 .link_card {
     display: flex;
+    max-height: 120px;
     border: solid 1px #ccc;
     border-radius: 10px;
     overflow: hidden; /* .link_card の子要素も角丸で切り取る */
