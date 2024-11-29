@@ -1,3 +1,4 @@
+import os
 
 import shapolog
 from md_parser import *
@@ -9,6 +10,8 @@ class Article:
         self.date = ''
         self.body = None
         self.url = dir_path.replace('src/article/', '/')
+        self.twitter_card_size = 'summary'
+        self.card_image_url = '/image/default_card_summary.png'
 
         # 日付
         m = re.search(r'/(\d{4})/?(\d{2})/?(\d{2})-[^/]+$', dir_path)
@@ -34,3 +37,10 @@ class Article:
         else:
             self.description = self.title
 
+        # カード画像
+        if os.path.isfile(f'{dir_path}/cover.png'):
+            self.twitter_card_size = 'summary_large_image'
+            self.card_image_url = f'{self.url}/cover.png'
+        elif os.path.isfile(f'{dir_path}/cover.jpg'):
+            self.twitter_card_size = 'summary_large_image'
+            self.card_image_url = f'{self.url}/cover.jpg'

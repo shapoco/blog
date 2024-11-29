@@ -24,6 +24,8 @@ def main() -> None:
             'description': a.description,
             'date': a.date,
             'url': a.url,
+            'twitter_card_size': a.twitter_card_size,
+            'card_image_url': a.card_image_url,
         })
     
     json_obj['articles'].sort(key = lambda a: a['date'])

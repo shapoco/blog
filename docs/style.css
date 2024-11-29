@@ -178,17 +178,37 @@ code {
     color: #024;
 }
 
+header h1 a {
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
 .link_card {
-    display: block;
+    display: flex;
     border: solid 1px #ccc;
     border-radius: 10px;
-    padding: 1ex 1em;    
+    overflow: hidden; /* .link_card の子要素も角丸で切り取る */
+    padding: 0px;
     text-decoration: none;
     color: #000;
 }
 
 .link_card:hover {
     background: #def;
+}
+
+.link_card .card_image {
+    width: 100px;
+    height: 100%;
+    float: left;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+.link_card .card_body {
+    margin: 0px 0px 0px 100px;
+    padding: 1ex 1em;
 }
 
 .link_card h2,
@@ -201,7 +221,7 @@ code {
 
 .link_card p {
     font-size: 80%;
-    margin: 0.5ex 0px 0px;
+    margin: 0.5ex 0px 0px 0px;
     padding: 0px;
 }
 

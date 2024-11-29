@@ -11,10 +11,13 @@ document.addEventListener('DOMContentLoaded', e => {
   function genenerateArticleLinkCard(article) {
     html = '';
     html += `<a class="link_card" href="${article.url}">`;
-    html += `<article>`;
-    html += `<h3>${article.title} <span class="header_info">(${article.date})<span></h3>`;
-    html += `<p>${article.description}</p>`;
-    html += `</article>`;
+    html += `  <article>`;
+    html += `    <div class="card_image" style="background-image: url(${article.card_image_url});">&nbsp;</div>`;
+    html += `    <div class="card_body">`;
+    html += `      <h3>${article.title} <span class="header_info">(${article.date})<span></h3>`;
+    html += `      <p>${article.description}</p>`;
+    html += `    </div>`;
+    html += `  </article>`;
     html += `</a>`;
     return html;
   }

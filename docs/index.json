@@ -4,67 +4,89 @@
       "title": "ESP32 DevKitCをブレッドボードで扱いやすくする",
       "description": "ESP32 DevKitCはボードそのものは使いやすいが、幅が広く、ピンヘッダが太いため ブレッドボードでのプロトタイピングには向かないようだ。 そこで、2列のピンソケットを使ってブレッドボードと簡単に接続できるようにしてみた。 手順は以下の通り。",
       "date": "2018/02/02",
-      "url": "/2018/0202-esp32devkitc4breadboard"
+      "url": "/2018/0202-esp32devkitc4breadboard",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2018/0202-esp32devkitc4breadboard/cover.jpg"
     },
     {
       "title": "ボリュームの端子を曲げてはならない",
       "description": "ボリュームを狭い空間に押し込むために端子をこのように内側に曲げたところ、真ん中の端子が接触不良を起こして壊れてしまった。2個試したが、全く同じ壊れ方をした。端子の根元に力がかからないように、端子だけをつまんで曲げてみたつもりだったがダメだった。全てのボリュームに該当するのかは分からないが、端子は曲げてはいけないようなので注意されたい。",
       "date": "2018/02/14",
-      "url": "/2018/0214-dont-bend-volume-pin"
+      "url": "/2018/0214-dont-bend-volume-pin",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2018/0214-dont-bend-volume-pin/cover.jpg"
     },
     {
       "title": "WindowsのIMEの状態をLEDで表示するガジェット",
       "description": "WindowsのIMEは半角/全角キーを押すたびにOn/Offがトグルするようになっており、今どちらの状態なのかが分かりにくくなっています。特定のキーでOn/Offする設定にしたり、カーソルの近くにマークを表示してくれるツールを試したりしましたが、どの方法もしっくり来ませんでした。",
       "date": "2018/02/17",
-      "url": "/2018/0217-ime-status-to-led"
+      "url": "/2018/0217-ime-status-to-led",
+      "twitter_card_size": "summary",
+      "card_image_url": "/image/default_card_summary.png"
     },
     {
       "title": "FDM式3Dプリンタで高圧トランスのボビンを作る",
       "description": "高圧トランスを自作する場合、フェライトコアは Digikey などで入手できますが、それに合ったボビンを手に入れるのは困難です。",
       "date": "2023/08/13",
-      "url": "/2023/0813-fdm-3d-printed-hv-trans"
+      "url": "/2023/0813-fdm-3d-printed-hv-trans",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2023/0813-fdm-3d-printed-hv-trans/cover.jpg"
     },
     {
       "title": "18650 2セル駆動の LEDランタンを作った",
       "description": "「眩しすぎるX看板のLEDランタンを作った」で買った白色LED が 50個以上余ったのでちゃんとした(?) LEDランタンを作ってみました。",
       "date": "2023/08/17",
-      "url": "/2023/0817-led-lantern"
+      "url": "/2023/0817-led-lantern",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2023/0817-led-lantern/cover.jpg"
     },
     {
       "title": "スマホ (USB) で動くプラズマアークライター",
       "description": "スマホの USBポートからの電力供給 (OTG) で動くプラズマアークライターを 作ってみました。",
       "date": "2023/08/24",
-      "url": "/2023/0824-usb-arc-lighter"
+      "url": "/2023/0824-usb-arc-lighter",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2023/0824-usb-arc-lighter/cover.jpg"
     },
     {
       "title": "スマホで火花放電を撮るときのブツブツ音対策",
       "description": "スマホで火花放電を撮ると、ブツブツ、ブリブリ、という音が入って耳障りに なってしまいます。",
       "date": "2023/08/26",
-      "url": "/2023/0826-smartphone-puchipuchi-bag"
+      "url": "/2023/0826-smartphone-puchipuchi-bag",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2023/0826-smartphone-puchipuchi-bag/cover.jpg"
     },
     {
       "title": "ラズピコに「長押し書き込みボタン」を追加する (pico2対応)",
       "description": "Raspberry Pi Pico のデバッグには picoprobe が便利ですが、作る物や環境によっては 繋いだままにできない場合もあります。しかしプログラムを書き込むたびに BOOTSELボタンを押しながら USBケーブルを差し込むのはちょっと面倒です。",
       "date": "2023/10/17",
-      "url": "/2023/1017-raspico-longpush-button"
+      "url": "/2023/1017-raspico-longpush-button",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2023/1017-raspico-longpush-button/cover.jpg"
     },
     {
       "title": "スマホの USB でウズラのゆで卵をつくる",
       "description": "スマートフォンのUSBポートはOTGアダプタを使用するとUSB電源として 使用することができます。この電力を使用してゆで卵を作れないか実験してみました。",
       "date": "2023/10/18",
-      "url": "/2023/1018-smart-boiled-egg"
+      "url": "/2023/1018-smart-boiled-egg",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2023/1018-smart-boiled-egg/cover.jpg"
     },
     {
       "title": "SkyFeed を使って Bluesky で自作品のフィードを公開する",
       "description": "イラストや写真等を公開するアカウントの場合、それしか投稿してなければ 「メディア欄を見て」でいいかと思いますが、それ以外の日常の写真や ゲームのスクリーンショットなども投稿する場合、自作品だけを まとめたページが欲しくなります。Bluesky にはいわゆるハッシュタグは ありませんが(※1)、「カスタムフィード」を使えば、特定のキーワードを 含むポストをまとめることができます。",
       "date": "2024/02/06",
-      "url": "/2024/0206-bskycustomfeed"
+      "url": "/2024/0206-bskycustomfeed",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2024/0206-bskycustomfeed/cover.png"
     },
     {
       "title": "【追記あり】X Pro（旧 TweetDeck）でプロフィールなどがポップアップされたまま消えない問題の応急処置",
       "description": "2024年5月頃から X Pro（旧 TweetDeck）において「プロフィールカードなどの ポップアップ（ホバーカード）やツールチップが表示されたまま消えない」という 問題が発生しています。",
       "date": "2024/05/26",
-      "url": "/2024/0526-xpro-stop-popup"
+      "url": "/2024/0526-xpro-stop-popup",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2024/0526-xpro-stop-popup/cover.png"
     }
   ]
 }
