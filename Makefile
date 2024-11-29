@@ -1,4 +1,4 @@
-.PHONY: all size install-stamp
+.PHONY: all index size install-stamp
 
 DIR_REPO = $(shell pwd)
 
@@ -15,18 +15,37 @@ TEMPLATE_HTML = $(DIR_TEPMPLATE_ARTICLE)/article.html
 
 MDS = $(wildcard $(DIR_ARTICLE)/*/*/$(ARTICLE_MD))
 HTMLS = $(patsubst $(DIR_ARTICLE)/%,$(DIR_OUT)/%,$(patsubst %/$(ARTICLE_MD),%/index.html,$(MDS)))
+INDEX_JSON = $(DIR_OUT)/index.json
 
-EXTRA_DEPENDENCIES = \
+INDEX_EXTRA_DEPENDENCIES = \
 	$(wildcard $(DIR_BIN)/*.py) \
-	$(wildcard $(DIR_OUT)/*.js) \
-	$(wildcard $(DIR_OUT)/*.css) \
-	$(wildcard $(DIR_TEPMPLATE)/*.*) \
-	$(wildcard $(DIR_TEPMPLATE_ARTICLE)/*.*) \
 	Makefile
 
-all: $(HTMLS)
+HTML_EXTRA_DEPENDENCIES = \
+	$(INDEX_EXTRA_DEPENDENCIES) \
+	$(wildcard $(DIR_OUT)/*.js) \
+	$(wildcard $(DIR_OUT)/*.json) \
+	$(wildcard $(DIR_OUT)/*.css) \
+	$(wildcard $(DIR_TEPMPLATE)/*.*) \
+	$(wildcard $(DIR_TEPMPLATE_ARTICLE)/*.*)
 
-$(DIR_OUT)/%/index.html: $(DIR_ARTICLE)/%/* $(EXTRA_DEPENDENCIES)
+all: $(INDEX_JSON) $(HTMLS)
+
+index: $(INDEX_JSON)
+
+$(INDEX_JSON): $(MDS) $(INDEX_EXTRA_DEPENDENCIES)
+	@echo "Generating Index: '$@'"
+	@$(DIR_BIN)/gen_index.py -o $@.tmp
+	@if diff $@ $@.tmp > /dev/null ; then \
+		rm -f $@.tmp ; \
+		touch $@ ; \
+		echo "*INFO: Index not updated." ; \
+	else \
+		cp -f $@.tmp $@ ; \
+	fi
+
+$(DIR_OUT)/%/index.html: $(DIR_ARTICLE)/%/* $(HTML_EXTRA_DEPENDENCIES)
+	@echo -n "Generating HTML: "
 	@mkdir -p $(shell dirname $@)
 	@rm -rf $(shell dirname $@)/*
 	@$(DIR_BIN)/build_article.py -i $(shell dirname $<) -o $(shell dirname $@) -t $(TEMPLATE_HTML)
