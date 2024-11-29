@@ -1,4 +1,4 @@
-.PHONY: all index size install-stamp
+.PHONY: all index size install-stamp redirect-pages
 
 DIR_REPO = $(shell pwd)
 
@@ -73,3 +73,8 @@ install-stamp:
 	./install_widget.sh \
 		-t '$(DIR_REPO)/docs/stamp' \
 		-d '$(DIR_REPO)/src/template'
+
+redirect-pages:
+	$(DIR_BIN)/gen_redirect_pages.py \
+		-t '$(DIR_TEPMPLATE)/yyyy/mm/redirect.html' \
+		-o '$(DIR_OUT)'
