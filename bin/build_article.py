@@ -35,21 +35,11 @@ def main() -> None:
     for k in vars.keys():
         html = html.replace('${blog.' + k + '}', vars[k])
 
-    # スクリプト類の URL ポストフィックス更新
-    html = update_script_postfix(html, '/style.css')
-    html = update_script_postfix(html, '/style.js')
-
     # HTML 書き出し
     with open(f'{args.output}/index.html', 'w') as f:
         f.write(html)
 
     # 画像等のコピー
     shutil.copytree(f'{args.input}/', f'{args.output}/', ignore=shutil.ignore_patterns('.*', '*.md'), dirs_exist_ok=True)
-
-def update_script_postfix(html: str, script_path: str) -> str:
-    script_mtime = str(int(os.stat(f'docs/{script_path}').st_mtime_ns // 1e9))
-    html = html.replace(f'<link href="{script_path}"', f'<link href="{script_path}?{script_mtime}"')
-    html = html.replace(f'<script src="{script_path}"', f'<script src="{script_path}?{script_mtime}"')
-    return html
 
 main()

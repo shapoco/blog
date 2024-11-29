@@ -112,7 +112,6 @@ class ShapocoNetStamp {
       params.push(`i=${encodeURIComponent(this.clientId)}`);
     }
     params.push(`s=${encodeURIComponent(this.location)}`);
-    fetch(`${ShapocoNetStamp.API_URL_BASE}/api.php?${params.join('&')}`)
     
     var params = { s: this.location};
     if (this.clientId) params['i'] = this.clientId;

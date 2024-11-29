@@ -20,15 +20,41 @@
     <link rel="shortcut icon" href="https://shapoco.github.io/blog/favicon48.ico">
     -->
 
-    <link href="/style.css?20241003090000" rel="stylesheet" type="text/css">
-    <script src="/index.js?20241003090000"></script>
+    <link href="/style.css?6a9fb9cc" rel="stylesheet" type="text/css">
+    <script src="/style.js?a602576c"></script>
 
     <title>シャポログ</title>
   </head>
 
   <body>
-    <h1>シャポログ</h1>
-    
+    <div id="container">
+      <header>
+        <h1>シャポログ</h1>
+      </header>
+      <main>
+        <h2>記事一覧</h2>
+        <article id="articles" class="article_list">
+          <p>記事を読み込んでいます...</p>
+        </article>
+        <script>
+          fetch('/index.json?123456789')
+            .then(response => response.json())
+            .then(json_obj => { 
+              html = '';
+              json_obj.articles.reverse().forEach(a => {
+                html += genenerateArticleLinkCard(a);
+              });
+              document.querySelector('#articles').innerHTML = html;
+            })
+            .catch(error => {
+              document.querySelector('#articles').innerHTML = '<p>⚠ 記事の読み込みに失敗しました。</p>';
+            });
+        </script>
+        <footer>
+          Copyright &copy; Shapoco 
+        </footer>
+      </main>
+    </div>
   </body>
 
 </html>

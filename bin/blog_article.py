@@ -8,6 +8,7 @@ class Article:
         self.description = ''
         self.date = ''
         self.body = None
+        self.url = dir_path.replace('src/article/', '/')
 
         # 日付
         m = re.search(r'/(\d{4})/?(\d{2})/?(\d{2})-[^/]+$', dir_path)

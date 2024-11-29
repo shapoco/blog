@@ -23,9 +23,12 @@ def main() -> None:
             'title': a.title,
             'description': a.description,
             'date': a.date,
+            'url': a.url,
         })
     
+    json_obj['articles'].sort(key = lambda a: a['date'])
+    
     with open(args.output, 'w') as f:
-        json.dump(json_obj, f, ensure_ascii=False)
+        json.dump(json_obj, f, ensure_ascii=False, indent=2)
 
 main()

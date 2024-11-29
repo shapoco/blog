@@ -12,11 +12,6 @@ body {
     box-sizing: border-box;
 }
 
-.article_info {
-    float: left;
-    font-size: 80%;
-}
-
 footer {
     border-top: solid 1px #ccc;
     margin: 1ex 0px;
@@ -43,7 +38,7 @@ h4 {
     border-bottom: solid 1px #eee;
 }
 
-p, ul, ol, blockquote {
+p, ul, ol, blockquote, .link_card {
     margin: 2ex 0px;
     box-sizing: border-box;
 }
@@ -134,4 +129,44 @@ code {
     font-family: Consolas, 'Courier New', Courier, monospace;
     padding: 0px 5px;
     color: #040;
+}
+
+.link_card {
+    display: block;
+    border: solid 1px #ccc;
+    border-radius: 10px;
+    padding: 1ex 1em;    
+    text-decoration: none;
+    color: #000;
+}
+
+.link_card:hover {
+    background: #def;
+}
+
+.link_card h2,
+.link_card h3,
+.link_card h4 {
+    font-size: 100%;
+    margin: 0px 0px 0.5ex 0px;
+    padding: 0px;
+}
+
+.link_card p {
+    font-size: 80%;
+    margin: 0.5ex 0px 0px;
+    padding: 0px;
+}
+
+.header_info {
+    display: inline-block;
+    vertical-align: middle;    
+    font-size: 80%;
+    font-weight: normal;
+    color: #444;
+}
+
+.article_info {
+    float: left;
+    font-size: 80%;
 }
