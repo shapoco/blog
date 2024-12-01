@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+    <meta name="description" content="2019 年の秋に制作 した、人間の静電気を検知して LED が光る瓶です。MOS-FET のゲートが静電気に晒されるとドレイン-ソース間が導通することを利用します。">
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@shapoco" />
+    <meta property="og:url" content="https://blog.shapoco.net/2024/1130-electrostatic-detector-bottle/" />
+    <meta property="og:title" content="静電気検知瓶 | シャポログ" />
+    <meta property="og:description" content="2019 年の秋に制作 した、人間の静電気を検知して LED が光る瓶です。MOS-FET のゲートが静電気に晒されるとドレイン-ソース間が導通することを利用します。" />
+    <meta property="og:image" content="https://blog.shapoco.net/2024/1130-electrostatic-detector-bottle/cover.jpg" />
+
+    <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+    <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+    <link href="/style.css?d3d71f33" rel="stylesheet" type="text/css">
+    <script src="/style.js?66903117"></script>
+
+    <title>静電気検知瓶 | シャポログ</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <header class="article_header">
+        <h1><a href="/">シャポログ</a></h1>
+      </header>
+      <main>
+        <h2>静電気検知瓶</h2>
+
+        <div class="article_info">
+          2024/11/30
+          <a href="https://github.com/shapoco/blog/commits/main/src/article/2024/1130-electrostatic-detector-bottle/article.md" target="_blank">更新履歴</a>
+        </div>
+
+        <div id="shpcstamp_wrap" style="text-align: right;"></div>
+        <script async src="/stamp/v1/widget.js?20241129165107"></script>
+        
+        <p><img src="./cover.jpg" alt=""></p>
+        <p><a href="https://x.com/shapoco/status/1189239542043332609" target="_blank">2019 年の秋に制作</a> した、人間の静電気を検知して LED が光る瓶です。MOS-FET のゲートが静電気に晒されるとドレイン-ソース間が導通することを利用します。</p>
+        <h3>動作の様子</h3>
+        <p>椅子に座り、靴下を履いた足でカーペットを勢いよくこすり、そのまま足を床から浮かせて体に静電気を溜めた状態で手を瓶にかざしています。</p>
+        <p><video controls><source src="https://shapoco.net/media/2024/20241130_electrostatic_detector_1280x720_1mbps.mp4" type="video/mp4" /></video></p>
+        <h3>仕組み</h3>
+        <p>静電気は異なる材質の物体同士をこすり合わせたり、くっつけて引き剥がしたりするときに発生します。プラス、マイナスどちらに耐電しやすいかは 「<a href="https://www.google.co.jp/search?q=%E5%B8%AF%E9%9B%BB%E5%88%97&udm=2" target="_blank">帯電列</a>」という図で示されます。人体や体毛はプラスに帯電しやすいため、日常生活で人体に溜まる静電気はほとんどの場合プラスです。</p>
+        <p>静電気検知瓶は「静電誘導」と呼ばれる現象を利用して人体に溜まったプラスの静電気を検出します。検知部はアンテナと N チャネル MOS-FET で構成されます。MOS-FET は本来は電気信号のスイッチや増幅のために使われる半導体素子です。</p>
+        <p><img src="./mechanism.drawio.png" alt=""></p>
+        <ol>
+          <li>プラスに帯電した物体（人体）がアンテナに近づくと、静電誘導によりアンテナにはマイナスの電気が集まります。</li>
+          <li>反対に、アンテナに繋がった MOS-FET のゲート入力端子にはプラスの電気が集まります。</li>
+          <li>これにより MOS-FET のドレイン-ソース間が導通し電流が流れます。</li>
+          <li>この電流を NPN トランジスタで増幅し、LED を点灯させます。</li>
+        </ol>
+        <h3>回路</h3>
+        <p>MOS-FET は型番により特性が異なり、それにより感度も変わります。重要なのは「ゲート漏れ電流」で、これが大きすぎると静電気による電荷がすぐに逃げてしまうため感度が悪くなります。秋月電子で手に入る部品をいくつか試した結果、ここでは <a href="https://akizukidenshi.com/catalog/g/g106050/" target="_blank">IRFU120NPbF</a> を採用しました。</p>
+        <p><img src="./circuit.drawio.png" alt=""></p>
+        <p>また、「仕組み」で示した回路にいくつかの素子を追加しています。</p>
+        <ul>
+          <li><code>R1</code>: MOS-FET は静電気で発生するような高電圧に対して弱い素子のため、アンテナとの間に大きな値の抵抗を挿入して電荷が一気に流れ込むのを防止しています (気休め)。</li>
+          <li><code>D1</code>: MOS-FET のゲートに電荷が溜まったままだと、いつまでも LED が点きっぱなしになり無駄に電力を消費してしまいます。ごく僅かに電流を通す素子を介してゲートの電荷を少しずつ GND (電池のマイナス側) に逃がします。ここではごく小さな漏れ電流 (10nA) のあるスイッチングダイオード <a href="https://akizukidenshi.com/catalog/g/g110623/" target="_blank">1SS277</a> を入れました。100MΩ～1GΩ の抵抗でもいいかもしれません。</li>
+          <li><code>R3</code>: トランジスタ <code>Q2</code> の入力を GND へ弱く引っ張ります。静電気を検出していないときに確実に LED を消灯させて待機時の消費電力を抑えます。</li>
+        </ul>
+        <p>LED が点灯していない間の消費電力はほぼゼロなので、電源スイッチは不要です。</p>
+        <h3>部品リスト</h3>
+        <p>瓶はフタが金属でできたダイソーの瓶や薬瓶（『ルル』の大きい方）などを使用します。</p>
+        <p><iframe src="https://aki.prioris.jp/emb/525e0280-46c9-4ac4-82ac-725917959f12/" width=600 height=400 sandbox="allow-popups allow-scripts allow-same-origin allow-forms" frameborder=0></iframe></p>
+        <h3>作りかた</h3>
+        <p>実体配線図を示します。この通りにレイアウトする必要はありませんし、基板を起こしてもかまいません。綺麗に空中配線すると瓶に入れたときの見栄えが良くなります。</p>
+        <p><img src="./how_to_build.svg" alt=""></p>
+        <p>半導体素子（MOS-FET、トランジスタ、ダイオード、LED）と電池は極性があります。違う型番のものを使用する場合はイラストと異なる場合もありますのでデータシート等でよく確認してください。</p>
+        <p>アンテナをフタにネジ止めして瓶に入れたら完成です。フタとの接触はあまり気にしなくてもアンテナとしては機能します。</p>
+        <h3>使い方</h3>
+        <p>机などに置いた状態で使用します。ドアノブなどで「パチッ」と放電が起こるくらい帯電しているときであれば、手をかざしただけで光ります。</p>
+        <blockquote class="warning">強い静電気を帯びているときは瓶のフタに直接触れないでください。MOS-FET やダイオードが壊れる可能性があります。</blockquote>
+        <p>静電気を繰り返し検出すると瓶自体が帯電して一時的に感度が悪くなります。しばらく待つか、片手で瓶のフタに触れた状態でもう片方の手でグラウンド（金属製のドアノブや蛇口などの静電気の逃げ道）に触れてみてください。瓶に溜まった静電気が体を経由して逃げると思います。</p>
+        <blockquote class="warning">瓶が強く帯電している状態で瓶からグラウンドへ直接放電すると MOS-FET やダイオードが壊れるかもしれません。</blockquote>
+        <h3>応用</h3>
+        <p>これと同じ原理でマイナスの静電気にも対応し、静電気の強さをレベル表示できるようにしたのが <a href="https://blog.shapoco.net/2023/0223-electrostatic-meter/" target="_blank">簡易静電気メーター</a><!-- todo: サイト内リンク --> です。</p>
+        <h3>関連ポスト</h3>
+        <ul>
+          <li><a href="https://x.com/shapoco/status/1200458200031432705" target="_blank">自分が静電気帯びてるか教えてくれる魔法の小瓶みたいなのできた (動作は結構不安定だけど…)</a></li>
+          <li><a href="https://x.com/shapoco/status/1603376017162194944" target="_blank">静電気検知瓶、作ってから3年経ったけど電池は3.1Vを保ってた</a></li>
+          <li><a href="https://x.com/shapoco/status/1862758463975334273" target="_blank">5 年前に作った静電気検知瓶、一度も電池換えてないけどまだ動く。電池は 2.97V だった</a></li>
+        </ul>
+
+      </main>
+      <footer>
+        Copyright &copy; Shapoco 
+      </footer>
+    </div>
+  </body>
+</html>

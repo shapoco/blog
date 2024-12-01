@@ -275,8 +275,15 @@ class MdParser:
             while not lex.try_eat(')'):
                 url += lex.eat()
             if start_key == '![':
-                self.info(f'image: src="{url}", alt="{link_text}"')
-                return f'<img src="{url}" alt="{link_text}">'
+                if url.endswith('mp4'):
+                    self.info(f'video: src="{url}", alt="{link_text}"')
+                    return \
+                        f'<video controls>' + \
+                        f'<source src="{url}" type="video/mp4" />' + \
+                        f'</video>'
+                else:
+                    self.info(f'image: src="{url}", alt="{link_text}"')
+                    return f'<img src="{url}" alt="{link_text}">'
             else:
                 self.info(f'link: href="{url}", text="{link_text}"')
                 return f'<a href="{url}" target="_blank">{link_text}</a>'

@@ -95,6 +95,14 @@
       "url": "/2024/0526-xpro-stop-popup",
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2024/0526-xpro-stop-popup/cover.png"
+    },
+    {
+      "title": "静電気検知瓶",
+      "description": "2019 年の秋に制作 した、人間の静電気を検知して LED が光る瓶です。MOS-FET のゲートが静電気に晒されるとドレイン-ソース間が導通することを利用します。",
+      "date": "2024/11/30",
+      "url": "/2024/1130-electrostatic-detector-bottle",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2024/1130-electrostatic-detector-bottle/cover.jpg"
     }
   ]
 }

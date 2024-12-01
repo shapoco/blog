@@ -32,6 +32,7 @@ def main() -> None:
     vars['article_url_absolute'] = article_abs_url
     vars['twitter_card_size'] = article.twitter_card_size
     vars['card_image_url'] = f'{vars['site_url_absolute']}{article.card_image_url}'
+    vars['github_url'] = article.github_url
     
     # 変数適用
     for k in vars.keys():
