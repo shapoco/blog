@@ -268,7 +268,25 @@ header h1 a {
     color: #444;
 }
 
+.article_info_wrap {
+    border-radius: 5px;
+    padding: 1ex 1em;
+    background: #f4f8fc;
+}
+
+.article_info_wrap:after {
+    content: "";
+}
+
 .article_info {
-    float: left;
-    font-size: 80%;
+    display: inline-block;
+    margin: 0px;
+    padding: 0px;
+    white-space: nowrap;
+}
+
+.article_info_wrap #shpcstamp_wrap {
+    display: block;
+    float: right;
+    white-space: nowrap;
 }

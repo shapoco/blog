@@ -39,7 +39,13 @@ class Article:
             self.description = self.title
 
         # カード画像
-        if os.path.isfile(f'{dir_path}/cover.png'):
+        if os.path.isfile(f'{dir_path}/thumbnail.png'):
+            self.twitter_card_size = 'summary'
+            self.card_image_url = f'{self.url}/thumbnail.png'
+        elif os.path.isfile(f'{dir_path}/thumbnail.jpg'):
+            self.twitter_card_size = 'summary'
+            self.card_image_url = f'{self.url}/thumbnail.jpg'
+        elif os.path.isfile(f'{dir_path}/cover.png'):
             self.twitter_card_size = 'summary_large_image'
             self.card_image_url = f'{self.url}/cover.png'
         elif os.path.isfile(f'{dir_path}/cover.jpg'):

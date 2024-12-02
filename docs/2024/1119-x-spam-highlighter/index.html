@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+    <meta name="description" content="PC 版 X のフォロワー覧でスパムの可能性があるアカウントを強調表示する Violentmonkey 用スクリプトを書いてみました。フォロワー欄をパァーっとスクロールしながら怪しいアカウントを素早く見つけることを目的としています。">
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@shapoco" />
+    <meta property="og:url" content="https://blog.shapoco.net/2024/1119-x-spam-highlighter/" />
+    <meta property="og:title" content="𝕏: フォロワー欄でスパムを強調表示する Violentmonkey 用スクリプト | シャポログ" />
+    <meta property="og:description" content="PC 版 X のフォロワー覧でスパムの可能性があるアカウントを強調表示する Violentmonkey 用スクリプトを書いてみました。フォロワー欄をパァーっとスクロールしながら怪しいアカウントを素早く見つけることを目的としています。" />
+    <meta property="og:image" content="https://blog.shapoco.net/2024/1119-x-spam-highlighter/thumbnail.png" />
+
+    <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+    <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171109827-1"></script>
+    <script>
+      var remoteHost = window.location.hostname;
+      if (remoteHost == "localhost") {
+        console.log(`Google Analytics disabled on: '${remoteHost}'`);
+      }
+      else {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-171109827-1');
+      }
+    </script>
+
+    <link href="/style.css?168117d3" rel="stylesheet" type="text/css">
+    <script src="/style.js?ce25839c"></script>
+
+    <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+    <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+    <title>𝕏: フォロワー欄でスパムを強調表示する Violentmonkey 用スクリプト | シャポログ</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div id="root_navi"></div>
+
+      <header class="article_header">
+        <h1><a href="/">シャポログ</a></h1>
+      </header>
+      <main>
+        <h2>𝕏: フォロワー欄でスパムを強調表示する Violentmonkey 用スクリプト</h2>
+
+        <div class="article_info_wrap">
+          <div id="shpcstamp_wrap"></div>
+          <script async src="/stamp/v1/widget.js?20241202173248"></script>
+
+          <div class="article_info">
+            2024/11/19 |
+            <a href="https://github.com/shapoco/blog/commits/main/src/article/2024/1119-x-spam-highlighter/article.md" target="_blank">更新履歴</a>
+          </div>
+        </div>
+
+        <p>PC 版 X のフォロワー覧でスパムの可能性があるアカウントを強調表示する Violentmonkey 用スクリプトを書いてみました。フォロワー欄をパァーっとスクロールしながら怪しいアカウントを素早く見つけることを目的としています。</p>
+        <p>ダウンロード/インストール: <a href="https://github.com/shapoco/x-spam-highlighter" target="_blank">x-spam-highlighter</a> (GitHub)</p>
+        <p><img src="./screenshot.png" alt=""></p>
+
+      </main>
+      <footer>
+        Copyright &copy; Shapoco 
+      </footer>
+    </div>
+  </body>
+</html>

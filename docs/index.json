@@ -85,8 +85,8 @@
       "description": "イラストや写真等を公開するアカウントの場合、それしか投稿してなければ 「メディア欄を見て」でいいかと思いますが、それ以外の日常の写真や ゲームのスクリーンショットなども投稿する場合、自作品だけを まとめたページが欲しくなります。Bluesky にはいわゆるハッシュタグは ありませんが(※1)、「カスタムフィード」を使えば、特定のキーワードを 含むポストをまとめることができます。",
       "date": "2024/02/06",
       "url": "/2024/0206-bskycustomfeed",
-      "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2024/0206-bskycustomfeed/cover.png"
+      "twitter_card_size": "summary",
+      "card_image_url": "/2024/0206-bskycustomfeed/thumbnail.png"
     },
     {
       "title": "【追記あり】X Pro（旧 TweetDeck）でプロフィールなどがポップアップされたまま消えない問題の応急処置",
@@ -95,6 +95,14 @@
       "url": "/2024/0526-xpro-stop-popup",
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2024/0526-xpro-stop-popup/cover.png"
+    },
+    {
+      "title": "𝕏: フォロワー欄でスパムを強調表示する Violentmonkey 用スクリプト",
+      "description": "PC 版 X のフォロワー覧でスパムの可能性があるアカウントを強調表示する Violentmonkey 用スクリプトを書いてみました。フォロワー欄をパァーっとスクロールしながら怪しいアカウントを素早く見つけることを目的としています。",
+      "date": "2024/11/19",
+      "url": "/2024/1119-x-spam-highlighter",
+      "twitter_card_size": "summary",
+      "card_image_url": "/2024/1119-x-spam-highlighter/thumbnail.png"
     },
     {
       "title": "静電気検知瓶",
