@@ -185,6 +185,14 @@
       "card_image_url": "/2024/0526-xpro-stop-popup/cover.png"
     },
     {
+      "title": "Mac mini 2024 の底面電源スイッチを上から押すやつ",
+      "description": "Mac mini 2024 の底面にある電源スイッチを上から押すための治具の STL です。",
+      "date": "2024/10/31",
+      "url": "/2024/1031-macmini-pwsw-lever",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2024/1031-macmini-pwsw-lever/cover.jpg"
+    },
+    {
       "title": "𝕏: フォロワー欄でスパムを強調表示する Violentmonkey 用スクリプト",
       "description": "PC 版 X のフォロワー覧でスパムの可能性があるアカウントを強調表示する Violentmonkey 用スクリプトを書いてみました。フォロワー欄をパァーっとスクロールしながら怪しいアカウントを素早く見つけることを目的としています。",
       "date": "2024/11/19",
