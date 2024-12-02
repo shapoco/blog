@@ -25,6 +25,14 @@
       "card_image_url": "/image/default_card_summary.png"
     },
     {
+      "title": "ちょっと治安の悪い呼び込みくん",
+      "description": "以前自作した ZVS インバータに放電制御用の外部入力端子を追加し、そこにマイコンから矩形波を入力して音楽を演奏してみました。",
+      "date": "2020/10/10",
+      "url": "/2020/1010-hv-yobikomi-kun",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2020/1010-hv-yobikomi-kun/cover.jpg"
+    },
+    {
       "title": "メタルラック用ケーブル固定器具",
       "description": "メタルラック (スチールラック) のポールにケーブルを固定する器具の STL です。19mm 用ですが、1.33倍にスケーリングして印刷すれば 25mm にも適合します。",
       "date": "2021/02/22",
@@ -58,7 +66,7 @@
     },
     {
       "title": "マルクスジェネレータ",
-      "description": "マルクスジェネレータです。改造した点火用小型トランスを Mazilli の ZVS インバータで駆動し、3 段のコッククロフト・ウォルトン回路で昇圧した後、9 段のマルクスジェネレータの中央に入力することによって正負の高電圧を同時に生成します。",
+      "description": "",
       "date": "2023/01/47",
       "url": "/2023/0147-marx-generator",
       "twitter_card_size": "summary_large_image",

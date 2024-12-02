@@ -2,7 +2,9 @@
 
 例の眩しすぎる X の看板を LEDランタンにしてみた。調光機能付きで、明るさを MAX にするとパリピモードに入ります。
 
-<blockquote class="twitter-tweet" data-media-max-width="560"><p lang="ja" dir="ltr">例の眩しすぎる X の看板を LEDランタンにしてみた。調光機能付きで、明るさを MAX にするとパリピモードに入ります。 <a href="https://twitter.com/hashtag/shapolab?src=hash&amp;ref_src=twsrc%5Etfw">#shapolab</a> <a href="https://t.co/PnC5KuHAgt">pic.twitter.com/PnC5KuHAgt</a></p>&mdash; シャポコ🌵 (@shapoco) <a href="https://twitter.com/shapoco/status/1687774995303587840?ref_src=twsrc%5Etfw">August 5, 2023</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+![](https://www.shapoco.net/media/2023/20230805-x-sign-lantern.mp4)
 
-- ニコニコ動画: [眩しすぎるX看板のLEDランタンを作った - ニコニコ動画](https://www.nicovideo.jp/watch/sm42584102)
-- YouTube: [眩しすぎるX看板のLEDランタンを作った (X sign lantern) - YouTube](https://www.youtube.com/watch?v=Z6l9-o6nyVw&ab_channel=Shapoco)
+- [X本社ビルの輝く「X」看板、3日で撤去される - ITmedia NEWS](https://www.itmedia.co.jp/news/articles/2308/01/news081.html)
+- [例の眩しすぎる X の看板を LEDランタンにしてみた](https://x.com/shapoco/status/1687774995303587840)
+- [眩しすぎるX看板のLEDランタンを作った - ニコニコ動画](https://www.nicovideo.jp/watch/sm42584102)
+- [眩しすぎるX看板のLEDランタンを作った (X sign lantern) - YouTube](https://www.youtube.com/watch?v=Z6l9-o6nyVw&ab_channel=Shapoco)
