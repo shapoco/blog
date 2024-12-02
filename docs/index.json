@@ -73,6 +73,14 @@
       "card_image_url": "/2021/0321-paper-tape-i2c/cover.jpg"
     },
     {
+      "title": "ラー油キャンドル",
+      "description": "サラダ油や廃油を使ってキャンドルを作れると聞いてラー油でもいけるのではないかと思ったら、できた。",
+      "date": "2021/08/19",
+      "url": "/2021/0819-ra-yu-candle",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2021/0819-ra-yu-candle/cover.jpg"
+    },
+    {
       "title": "いらない CD とアルミテープと3Dプリンタでウィムズハースト起電機作ってみた",
       "description": "回転する 2 枚の円盤と電極を使って、初期状態の僅かな電荷の偏りを静電誘導によって増幅し蓄積する装置です。乾燥する時期になるとよく放電します。",
       "date": "2022/05/22",
