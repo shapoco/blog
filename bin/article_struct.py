@@ -179,7 +179,7 @@ class TABLE(TaggedElement):
         nowraps = [True] * len(self.rows[0])
         for cols in self.rows:
             for icol in range(len(cols)):
-                nowraps[icol] &= len(cols[icol]) < 15
+                nowraps[icol] &= len(remove_tags(cols[icol])) < 15
         
         html = ''
         html += '<table>\n'
