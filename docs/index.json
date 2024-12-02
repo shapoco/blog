@@ -25,6 +25,14 @@
       "card_image_url": "/image/default_card_summary.png"
     },
     {
+      "title": "006P 電池短絡防止キャップ",
+      "description": "006P・PP3・6LR61用のバッテリーカバーです。 端子を覆うことで短絡を防止します。 各端子の位置に穴が開いていますので、カバーを付けた状態で電圧を確認できます。",
+      "date": "2020/05/22",
+      "url": "/2020/0522-006p-battery-cap",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2020/0522-006p-battery-cap/cover.jpg"
+    },
+    {
       "title": "ちょっと治安の悪い呼び込みくん",
       "description": "以前自作した ZVS インバータに放電制御用の外部入力端子を追加し、そこにマイコンから矩形波を入力して音楽を演奏してみました。",
       "date": "2020/10/10",
