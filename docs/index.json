@@ -65,14 +65,6 @@
       "card_image_url": "/2022/0522-wimshurst-machine/cover.jpg"
     },
     {
-      "title": "マルクスジェネレータ",
-      "description": "",
-      "date": "2023/01/47",
-      "url": "/2023/0147-marx-generator",
-      "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2023/0147-marx-generator/cover.jpg"
-    },
-    {
       "title": "簡易静電気メーター",
       "description": "静電気の極性とレベルを正負それぞれ5段階で表示できる簡易式の「静電気メーター」を作りました。",
       "date": "2023/02/23",
@@ -135,6 +127,14 @@
       "url": "/2023/1018-smart-boiled-egg",
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2023/1018-smart-boiled-egg/cover.jpg"
+    },
+    {
+      "title": "マルクスジェネレータ",
+      "description": "",
+      "date": "2023/12/31",
+      "url": "/2023/1231-marx-generator",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2023/1231-marx-generator/cover.jpg"
     },
     {
       "title": "SkyFeed を使って Bluesky で自作品のフィードを公開する",
