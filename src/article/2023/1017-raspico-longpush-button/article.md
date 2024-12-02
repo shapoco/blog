@@ -21,7 +21,7 @@ RUNピンにリセットスイッチを追加し、BOOTSELボタンと同時押�
 
 ## 動作の様子
 
-<blockquote class="twitter-tweet" data-media-max-width="560"><p lang="ja" dir="ltr">クリックでリセット&#12289;長押しで書き込みモードになるボタン&#12289;ラズピコ2 でも動いた <a href="https://twitter.com/hashtag/shapolab?src=hash&amp;ref_src=twsrc%5Etfw">#shapolab</a> <a href="https://t.co/i9PjJOSfre">pic.twitter.com/i9PjJOSfre</a></p>&mdash; シャポコ🌵 (@shapoco) <a href="https://twitter.com/shapoco/status/1835247604898345384?ref_src=twsrc%5Etfw">September 15, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+![](https://www.shapoco.net/media/2024/20240915-pico2-longpush-button.mp4)
 
 ## 回路
 
@@ -63,3 +63,7 @@ RUN の立ち上がり時に BOOTSEL がバタついていますが、これは�
 BOOTSEL はだいぶ鈍っていますが、RUN の立ち上がりではしっかり GND に落ちていて、ちゃんと Mass Storage Mode に入れます。
 
 ![](./waveform_long_push.jpg)
+
+## 関連リンク
+
+- [クリックでリセット、長押しで書き込みモードになるボタン、ラズピコ2 でも動いた](https://x.com/shapoco/status/1835247604898345384)

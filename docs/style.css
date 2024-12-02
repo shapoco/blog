@@ -134,8 +134,8 @@ tr:nth-child(odd) {
 
 th,
 td {
-  border: solid 1px #68a;
-  padding: 0.2ex 0.5em;
+    border: solid 1px #68a;
+    padding: 0.2ex 0.5em;
 }
 
 th {
@@ -143,7 +143,11 @@ th {
 }
 
 .nowrap {
-  white-space: nowrap;
+    white-space: nowrap;
+}
+
+strong {
+    color: #c00;
 }
 
 img,

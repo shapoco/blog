@@ -115,7 +115,7 @@ class TaggedElement(Element):
         for child in self.children:
             if issubclass(type(child), TaggedElement):
                 ret = child.get_1st_element_by_class(typ, depth - 1)
-                if ret and not ret.text_content().startswith('<img '):
+                if ret and not ret.text_content().startswith('<img ') and not ret.text_content().startswith('<video '):
                     return ret
         return None
 
