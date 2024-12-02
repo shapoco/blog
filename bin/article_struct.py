@@ -168,6 +168,54 @@ class BLOCKQUOTE(TaggedElement):
     def __init__(self):
         super().__init__('blockquote')
 
+class TABLE(TaggedElement):
+    def __init__(self, aligns: list[str], rows: list[list[str]]):
+        super().__init__('table')
+        self.aligns = aligns
+        self.rows = rows
+
+    def to_html(self, depth = 0) -> str:
+        # 文字数が少ない列は nowrap にする
+        nowraps = [True] * len(self.rows[0])
+        for cols in self.rows:
+            for icol in range(len(cols)):
+                nowraps[icol] &= len(cols[icol]) < 15
+        
+        html = ''
+        html += '<table>\n'
+        for irow in range(len(self.rows)):
+            cell_tag = 'th' if irow == 0 else 'td'
+            cols = self.rows[irow]
+            html += '  <tr>\n'
+            for icol in range(len(cols)):
+                attr = ''
+                if nowraps[icol]:
+                    attr += ' class="nowrap"'
+                if self.aligns[icol]:
+                    attr += f' style="text-align: {self.aligns[icol]};"'
+                html += f'    <{cell_tag}{attr}>{cols[icol]}</{cell_tag}>\n'
+            html += '  </tr>\n'
+        html += '</table>'
+        return html.replace('\n', f'\n{get_indent(depth-1)}')
+
+    def is_multiline(self) -> bool:
+        return True
+
+class TR(TaggedElement):
+    def __init__(self):
+        super().__init__('tr')
+
+    def is_multiline(self) -> bool:
+        return True
+
+class TH(TaggedElement):
+    def __init__(self):
+        super().__init__('th')
+
+class TD(TaggedElement):
+    def __init__(self):
+        super().__init__('td')
+
 class HR(TaggedElement):
     def __init__(self):
         super().__init__('hr')

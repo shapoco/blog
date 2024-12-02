@@ -39,9 +39,29 @@ LED が点灯していない間の消費電力はほぼゼロなので、電源�
 
 ## 部品リスト
 
+### 瓶
+
 瓶はフタが金属でできたダイソーの瓶や薬瓶（『ルル』の大きい方）などを使用します。
 
-<iframe src="https://aki.prioris.jp/emb/525e0280-46c9-4ac4-82ac-725917959f12/" width=600 height=400 sandbox="allow-popups allow-scripts allow-same-origin allow-forms" frameborder=0></iframe>
+### 電子部品
+
+[AkiCart](https://aki.prioris.jp/list/525e0280-46c9-4ac4-82ac-725917959f12/) の `まとめて一括注文に入力` ボタンから秋月電子の買い物かごにまとめて入れることができます。
+
+|通販コード|商品名|数量|
+|:--:|:--|:--:|
+|[112113](https://akizukidenshi.com/catalog/g/g112113)|金属皮膜抵抗 10MΩ1/4W1%|1|
+|[125105](https://akizukidenshi.com/catalog/g/g125105)|カーボン抵抗(炭素皮膜抵抗) 1/4W 1MΩ (100本入)|1|
+|[125102](https://akizukidenshi.com/catalog/g/g125102)|カーボン抵抗(炭素皮膜抵抗) 1/4W 1kΩ (100本入)|1|
+|[125101](https://akizukidenshi.com/catalog/g/g125101)|カーボン抵抗(炭素皮膜抵抗) 1/4W 100Ω (100本入)|1|
+|[106050](https://akizukidenshi.com/catalog/g/g106050)|NchパワーMOSFET IRFU120NPBF (100V9.4A)|1|
+|[110623](https://akizukidenshi.com/catalog/g/g110623)|高周波スイッチ用ダイオード 1SS277|1|
+|[111255](https://akizukidenshi.com/catalog/g/g111255)|ボタン電池基板取付用ホルダー CR2032用 表面実装用|1|
+|[105694](https://akizukidenshi.com/catalog/g/g105694)|リチウム電池 CR2032 ゴールデンパワー製 (5個入)|1|
+|[105093](https://akizukidenshi.com/catalog/g/g105093)|ラグ端子GND-2(10個入)|1|
+|[107325](https://akizukidenshi.com/catalog/g/g107325)|なべ小ねじ(+) M3×5 (100個入)|1|
+|[111521](https://akizukidenshi.com/catalog/g/g111521)|六角ナット M3×0.5 (100個入)|1|
+|[105224](https://akizukidenshi.com/catalog/g/g105224)|高輝度5mm黄色LED 60度 OSY5EA5B61A-QR (10個入)|1|
+|[106477](https://akizukidenshi.com/catalog/g/g106477)|トランジスタ 2SC1815L-GR-T92-K 60V150mA (20個入)|1|
 
 ## 作りかた
 

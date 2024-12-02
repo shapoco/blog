@@ -119,6 +119,33 @@ blockquote.caution {
     background: #fdd;
 }
 
+table {
+    background: #fff; 
+    border-collapse: collapse;
+    font-size: 80%;
+    line-height: 2.5ex;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+tr:nth-child(odd) {
+    background-color: #f8f8f8;
+}
+
+th,
+td {
+  border: solid 1px #68a;
+  padding: 0.2ex 0.5em;
+}
+
+th {
+    background: #def;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
 img,
 video {
     vertical-align: middle;

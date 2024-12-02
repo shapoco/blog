@@ -9,7 +9,8 @@ class MdParser:
     RE_UL = r'^([-\*])\s+(.*)$'
     RE_OL = r'^(\d+)\.\s+(.*)$'
     RE_BLOCKQUOTE = r'^(>\s+)(.*)$'
-    RE_NOTES = r'\[!(note|tip|important|warning|caution)\]'
+    RE_NOTES = r'^\[!(note|tip|important|warning|caution)\]$'
+    RE_TABLE = r'^\|(.+\|.+)\|$'
     RE_HR = r'^---+$'
     
     def __init__(self, lines: list[str]):
@@ -133,6 +134,8 @@ class MdParser:
                 children.append(self.ol(line))
             elif re.match(MdParser.RE_BLOCKQUOTE, line):
                 children.append(self.blockquote(line))
+            elif re.match(MdParser.RE_TABLE, line):
+                children.append(self.table(line))
             elif re.match(MdParser.RE_HR, line):
                 children.append(HR())
             else:
@@ -224,6 +227,45 @@ class MdParser:
         self.info(f'<-- blockquote()')
         return ret
 
+    def table(self, first_line: str) -> TABLE:
+        self.info(f'--> table("{first_line}")')
+
+        rows: list[list[str]] = []
+        
+        header = self.table_line(first_line)
+        rows.append(header)
+        
+        aligns = self.table_line(self.pop_line_unindent(end_with_empty_line=True))
+        assert len(header) == len(aligns), f'Number of column mismatch: {len(header)} != {len(aligns)}'
+        for i in range(len(aligns)):
+            if re.match(r'^\s*:-+\s*$', aligns[i]):
+                aligns[i] = None
+            elif re.match(r'^\s*-+:\s*$', aligns[i]):
+                aligns[i] = 'right'
+            elif re.match(r'^\s*:-+:\s*$', aligns[i]) or re.match(r'^\s*-+\s*$', aligns[i]):
+                aligns[i] = 'center'
+            else:
+                raise Exception(f'Invalid alignment: "{aligns[i]}"')
+        
+        while not self.end_of_block(end_with_empty_line=True):
+            cols = self.table_line(self.pop_line_unindent(end_with_empty_line=True))
+            assert len(header) == len(cols), f'Number of column mismatch: {len(header)} != {len(cols)}'
+            rows.append(cols)
+            
+        self.info(f'<-- table()')
+        return TABLE(aligns, rows)
+
+    def table_line(self, line: str) -> list[str]:
+        lex = SimpleLexer(line)
+        cells: list[str] = []
+        lex.expect('|')
+        cells.append(self.inline_text(lex, term='|'))
+        lex.expect('|')
+        while not lex.eos():
+            cells.append(self.inline_text(lex, term='|'))
+            lex.expect('|')
+        return cells
+
     def text(self, first_line: str, end_with_empty_line: bool) -> TextElement:
         self.info(f'--> text("{first_line}")')
         ret = TextElement(first_line) 
@@ -252,6 +294,8 @@ class MdParser:
                     return ret
             elif lex.eos():
                 return ret
+            
+            lex.try_eat('\\')
             
             if lex.try_eat('!['):
                 ret += self.inline_link(lex, '![')
