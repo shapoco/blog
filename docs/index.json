@@ -41,6 +41,14 @@
       "card_image_url": "/2023/0223-electrostatic-meter/cover.jpg"
     },
     {
+      "title": "眩しすぎるX看板のLEDランタンを作った",
+      "description": "例の眩しすぎる X の看板を LEDランタンにしてみた。調光機能付きで、明るさを MAX にするとパリピモードに入ります。",
+      "date": "2023/08/05",
+      "url": "/2023/0805-x-sign-lantern",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2023/0805-x-sign-lantern/cover.jpg"
+    },
+    {
       "title": "FDM式3Dプリンタで高圧トランスのボビンを作る",
       "description": "高圧トランスを自作する場合、フェライトコアは Digikey などで入手できますが、それに合ったボビンを手に入れるのは困難です。",
       "date": "2023/08/13",
