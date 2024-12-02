@@ -8,7 +8,7 @@
 
 椅子に座り、靴下を履いた足でカーペットを勢いよくこすり、そのまま足を床から浮かせて体に静電気を溜めた状態で手を瓶にかざしています。
 
-![](https://shapoco.net/media/2024/20241130_electrostatic_detector_1280x720_1mbps.mp4)
+![](https://www.shapoco.net/media/2024/20241130_electrostatic_detector_1280x720_1mbps.mp4)
 
 ## 仕組み
 
