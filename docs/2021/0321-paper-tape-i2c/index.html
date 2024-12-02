@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+    <meta name="description" content="I2C の波形を High=白 / Low=黒 で紙テープに印刷してキャラクタ LCD を制御してみました。LCD の初期化コマンドも含めて紙テープに記録しています。ACK は無視です。">
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@shapoco" />
+    <meta property="og:url" content="https://blog.shapoco.net/2021/0321-paper-tape-i2c/" />
+    <meta property="og:title" content="紙テープで I2C | シャポログ" />
+    <meta property="og:description" content="I2C の波形を High=白 / Low=黒 で紙テープに印刷してキャラクタ LCD を制御してみました。LCD の初期化コマンドも含めて紙テープに記録しています。ACK は無視です。" />
+    <meta property="og:image" content="https://blog.shapoco.net/2021/0321-paper-tape-i2c/cover.jpg" />
+
+    <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+    <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171109827-1"></script>
+    <script>
+      var remoteHost = window.location.hostname;
+      if (remoteHost == "localhost") {
+        console.log(`Google Analytics disabled on: '${remoteHost}'`);
+      }
+      else {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-171109827-1');
+      }
+    </script>
+
+    <link href="/style.css?70a249f7" rel="stylesheet" type="text/css">
+    <script src="/style.js?ce25839c"></script>
+
+    <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+    <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+    <title>紙テープで I2C | シャポログ</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div id="root_navi"></div>
+
+      <header class="article_header">
+        <h1><a href="/">シャポログ</a></h1>
+      </header>
+      <main>
+        <h2>紙テープで I2C</h2>
+
+        <div class="article_info_wrap">
+          <div class="article_info">
+            2021/03/21 |
+            <a href="https://github.com/shapoco/blog/commits/main/src/article/2021/0321-paper-tape-i2c/article.md" target="_blank">更新履歴</a>
+          </div>
+          
+          <div id="shpcstamp_wrap"></div>
+          <script async src="/stamp/v1/widget.js?20241202173248"></script>
+        </div>
+
+        <p>I2C の波形を High=白 / Low=黒 で紙テープに印刷してキャラクタ LCD を制御してみました。LCD の初期化コマンドも含めて紙テープに記録しています。ACK は無視です。</p>
+        <p><blockquote class="twitter-tweet" data-media-max-width="560"><p lang="ja" dir="ltr">I2C の波形を白黒で印刷した紙テープで LCD を制御した奴 <br>2021/03/21 <a href="https://twitter.com/hashtag/shapolab?src=hash&amp;ref_src=twsrc%5Etfw">#shapolab</a> <a href="https://t.co/IQYP1JVoVR">pic.twitter.com/IQYP1JVoVR</a></p>&mdash; シャポコ🌵 (@shapoco) <a href="https://twitter.com/shapoco/status/1724384771269390712?ref_src=twsrc%5Etfw">November 14, 2023</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+        <h3>関連記事 / 関連ポスト</h3>
+        <ul>
+          <li><a href="https://x.com/shapoco/status/1373300460006764544" target="_blank">I2Cの信号を紙テープに変換するとかいう頭の悪いツールができた</a></li>
+          <li><a href="https://x.com/shapoco/status/1373534314961326092" target="_blank">紙テープI2C、動いた🌵</a></li>
+          <li><a href="https://hackaday.com/2021/05/03/i2c-paper-tape-reader-is-not-what-you-think/" target="_blank">I2C Paper Tape Reader Is Not What You Think | Hackaday</a></li>
+        </ul>
+
+      </main>
+      <footer>
+        Copyright &copy; Shapoco 
+      </footer>
+    </div>
+  </body>
+</html>

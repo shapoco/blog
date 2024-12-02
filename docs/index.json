@@ -33,6 +33,14 @@
       "card_image_url": "/2021/0222-cable-holder-for-metal-rack/cover.jpg"
     },
     {
+      "title": "紙テープで I2C",
+      "description": "I2C の波形を High=白 / Low=黒 で紙テープに印刷してキャラクタ LCD を制御してみました。LCD の初期化コマンドも含めて紙テープに記録しています。ACK は無視です。",
+      "date": "2021/03/21",
+      "url": "/2021/0321-paper-tape-i2c",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2021/0321-paper-tape-i2c/cover.jpg"
+    },
+    {
       "title": "簡易静電気メーター",
       "description": "静電気の極性とレベルを正負それぞれ5段階で表示できる簡易式の「静電気メーター」を作りました。",
       "date": "2023/02/23",
