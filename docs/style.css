@@ -270,8 +270,8 @@ header h1 a {
 
 .article_info_wrap {
     border-radius: 5px;
-    padding: 1ex 1em;
-    background: #f4f8fc;
+    padding: 1ex 0.5em;
+    background: #f0f4f8;
     text-align: right;
 }
 
