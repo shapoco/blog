@@ -73,6 +73,14 @@
       "card_image_url": "/2022/0522-wimshurst-machine/cover.jpg"
     },
     {
+      "title": "作業自撮り用スマホスタンド",
+      "description": "「小物とか手元の作業とか撮りたいけど三脚出すほどでもねーな」っていう時にサクッと使えるスマホスタンドを作りました。",
+      "date": "2022/07/02",
+      "url": "/2022/0702-smartphone-stand",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2022/0702-smartphone-stand/cover.jpg"
+    },
+    {
       "title": "簡易静電気メーター",
       "description": "静電気の極性とレベルを正負それぞれ5段階で表示できる簡易式の「静電気メーター」を作りました。",
       "date": "2023/02/23",
