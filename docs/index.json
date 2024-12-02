@@ -177,12 +177,28 @@
       "card_image_url": "/2024/0206-bskycustomfeed/thumbnail.png"
     },
     {
+      "title": "インターネットをいつも綺麗に使っていただきありがとうございます。",
+      "description": "バズったポスト。※ クリックで高解像度版をダウンロードできます。",
+      "date": "2024/02/17",
+      "url": "/2024/0217-thx-4-using-the-internet-cleanly",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2024/0217-thx-4-using-the-internet-cleanly/cover.jpg"
+    },
+    {
       "title": "【追記あり】X Pro（旧 TweetDeck）でプロフィールなどがポップアップされたまま消えない問題の応急処置",
       "description": "2024年5月頃から X Pro（旧 TweetDeck）において「プロフィールカードなどの ポップアップ（ホバーカード）やツールチップが表示されたまま消えない」という 問題が発生しています。",
       "date": "2024/05/26",
       "url": "/2024/0526-xpro-stop-popup",
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2024/0526-xpro-stop-popup/cover.png"
+    },
+    {
+      "title": "桃太郎",
+      "description": "バズったポスト。",
+      "date": "2024/06/14",
+      "url": "/2024/0614-momo-tar",
+      "twitter_card_size": "summary",
+      "card_image_url": "/image/default_card_summary.png"
     },
     {
       "title": "Mac mini 2024 の底面電源スイッチを上から押すやつ",
