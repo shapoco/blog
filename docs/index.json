@@ -1,6 +1,14 @@
 {
   "articles": [
     {
+      "title": "PlainStyle: Unicode の学術用の文字を使って擬似的にフォントを付けられるサイト",
+      "description": "The 𝐪𝐮𝐢𝐜𝐤 𝑏𝑟𝑜𝑤𝑛 𝒇𝒐𝒙 𝒿𝓊𝓂𝓅𝓈 ℴ𝓋ℯ𝓇 𝓽𝓱𝓮 𝔩𝔞𝔷𝔶 𝕕𝕠𝕘👆 のようなテキストを作成できるページ作った (試作)https://t.co/lF2aHKtZOl&mdash; シャポコ🌵 (@shapoco) December 1, 2017",
+      "date": "2017/12/01",
+      "url": "/2017/1201-plainstyle",
+      "twitter_card_size": "summary",
+      "card_image_url": "/image/default_card_summary.png"
+    },
+    {
       "title": "ESP32 DevKitCをブレッドボードで扱いやすくする",
       "description": "ESP32 DevKitCはボードそのものは使いやすいが、幅が広く、ピンヘッダが太いため ブレッドボードでのプロトタイピングには向かないようだ。 そこで、2列のピンソケットを使ってブレッドボードと簡単に接続できるようにしてみた。 手順は以下の通り。",
       "date": "2018/02/02",
