@@ -272,6 +272,7 @@ header h1 a {
     border-radius: 5px;
     padding: 1ex 1em;
     background: #f4f8fc;
+    text-align: right;
 }
 
 .article_info_wrap:after {
@@ -279,14 +280,13 @@ header h1 a {
 }
 
 .article_info {
-    display: inline-block;
+    display: block;
     margin: 0px;
     padding: 0px;
+    float: left;
     white-space: nowrap;
 }
 
 .article_info_wrap #shpcstamp_wrap {
-    display: block;
-    float: right;
-    white-space: nowrap;
+    display: inline-block;
 }
