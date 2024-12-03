@@ -136,3 +136,5 @@ SkyFeed では複数の「ブロック」を組み合わせることによって
 ## 関連リンク
 
 - [自分のイラスト作品等を「フィード」にまとめる手順を記事にしました](https://bsky.app/profile/shapoco.net/post/3kl27gafjdk2d)
+- [Bluesky で自分のイラスト作品等を「フィード」にまとめる手順を記事にしました](https://x.com/shapoco/status/1756211553987428775)
+- [Bluesky で自分のイラスト作品等を「フィード」にまとめる手順を記事にしました](https://misskey.io/notes/9pjazn5btxyv05qe)

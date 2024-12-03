@@ -8,4 +8,6 @@
 
 ## 関連リンク
 
-- [006P の短絡防止キャップの STL](https://x.com/shapoco/status/1859074580679454888)
+- [006P の短絡防止キャップの STL。端子部に穴があるのでキャップ付きのまま電圧を確認できる](https://x.com/shapoco/status/1859074580679454888)
+- [006P の短絡防止キャップの STL。端子部に穴があるのでキャップ付きのまま電圧を確認できる](https://misskey.io/notes/a1bkaurn2r4w0574)
+- [006P の短絡防止キャップの STL。端子部に穴があるのでキャップ付きのまま電圧を確認できる](https://bsky.app/profile/shapoco.net/post/3lceusczguk2a)
