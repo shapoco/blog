@@ -105,6 +105,14 @@
       "card_image_url": "/2022/0702-smartphone-stand/cover.jpg"
     },
     {
+      "title": "ディストピア飯",
+      "description": "バズったポスト。お題箱から。",
+      "date": "2023/01/11",
+      "url": "/2023/0111-dystopian-meal",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2023/0111-dystopian-meal/cover.png"
+    },
+    {
       "title": "簡易静電気メーター",
       "description": "静電気の極性とレベルを正負それぞれ5段階で表示できる簡易式の「静電気メーター」を作りました。",
       "date": "2023/02/23",

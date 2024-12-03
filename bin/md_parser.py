@@ -295,8 +295,6 @@ class MdParser:
             elif lex.eos():
                 return ret
             
-            lex.try_eat('\\')
-            
             if lex.try_eat('!['):
                 ret += self.inline_link(lex, '![')
             elif lex.try_eat('['):
@@ -308,6 +306,7 @@ class MdParser:
             elif lex.try_eat('`'):
                 ret += self.inline_code(lex)
             else:
+                lex.try_eat('\\')
                 ret += lex.eat()
     
     def inline_link(self, lex: SimpleLexer, start_key: str) -> str:
