@@ -67,3 +67,5 @@ BOOTSEL はだいぶ鈍っていますが、RUN の立ち上がりではしっ�
 ## 関連リンク
 
 - [クリックでリセット、長押しで書き込みモードになるボタン、ラズピコ2 でも動いた](https://x.com/shapoco/status/1835247604898345384)
+- [クリックでリセット、長押しで書き込みモードになるボタン、ラズピコ2 でも動いた](https://misskey.io/notes/9y6xyluv70rf0cd7)
+- [クリックでリセット、長押しで書き込みモードになるボタン、ラズピコ2 でも動いた](https://bsky.app/profile/shapoco.net/post/3l46olsaoyt2e)

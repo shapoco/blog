@@ -8,18 +8,20 @@ document.addEventListener('DOMContentLoaded', e => {
   });
 
   const linkDecorationRules = [
+    { patterns: ['/', './', '../', 'http://localhost:', 'https://blog.shapoco.net/'], icon_src: '/image/icon32_local.png' },
     { patterns: ['https://x.com/', 'https://twitter.com/'], icon_src: '/image/icon32_x.png' },
     { patterns: ['https://misskey.io/'], icon_src: '/image/icon32_misskey-io.png' },
     { patterns: ['https://bsky.app/'], icon_src: '/image/icon32_bluesky.png' },
     { patterns: ['https://github.com/'], icon_src: '/image/icon32_github.png' },
+    { patterns: ['https://www.youtube.com/'], icon_src: '/image/icon32_youtube.png' },
+    { patterns: ['https://www.nicovideo.jp/'], icon_src: '/image/icon32_niconico.png' },
   ];
 
   // 特定のドメインへのリンクにアイコンを付与する
-  document.querySelectorAll('a').forEach(a => {
+  document.querySelectorAll('main a').forEach(a => {
     // 画像だけのリンクは除く
     if (a.textContent) {
       for (var rule of linkDecorationRules) {
-        console.log(rule.patterns);
         if (rule.patterns.filter(p => a.href.startsWith(p)).length > 0) {
           const img = document.createElement('img');
           img.src = rule.icon_src;

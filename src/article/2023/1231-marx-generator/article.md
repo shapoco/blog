@@ -9,3 +9,4 @@
 ## 関連リンク
 
 - [なかなかガッツのある音がする](https://x.com/shapoco/status/1741139010440073328)
+- [なかなかガッツのある音がする](https://misskey.io/notes/9nvvbm2x1gtz06c6)

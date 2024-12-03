@@ -339,6 +339,7 @@ class MdParser:
                 
                 # サイト内の *.md へのリンクを *.html へのリンクに置換
                 if url.endswith('.md') and (url.startswith('/') or url.startswith('./') or url.startswith('../')):
+                    url = url.replace('/article.md', '/index.md')
                     url = url[:-2] + 'html'
                     
                 if targetIsLocal:

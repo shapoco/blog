@@ -132,3 +132,7 @@ SkyFeed では複数の「ブロック」を組み合わせることによって
 
 フィードの検索条件は SkyFeed でいつでも編集でき、
 `Update Feed` ボタンで更新することができます。
+
+## 関連リンク
+
+- [自分のイラスト作品等を「フィード」にまとめる手順を記事にしました](https://bsky.app/profile/shapoco.net/post/3kl27gafjdk2d)

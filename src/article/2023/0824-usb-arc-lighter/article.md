@@ -70,3 +70,8 @@ AliExpress や Amazon で手に入ります。
 放電距離は非常に短い（1～2mm？）ので、ギリギリまで近づけておく必要があります。
 
 ![](./electrodes.jpg)
+
+## 関連リンク
+
+- [スマホの充電端子から電気取って火起こしできるプラズマアークライター](https://x.com/shapoco/status/1803431941233860956)
+- [スマホの充電端子から電気取って火起こしできるプラズマアークライター](https://misskey.io/notes/9uphjpcgw0ti0gkn)
