@@ -176,6 +176,15 @@ main img[src$="cover.svg"] {
     height: auto;
 }
 
+main img.link_icon {
+    width: 2ex;
+    height: 2ex;
+    border-style: none;
+    border-radius: 5px;
+    background: transparent;
+    margin: 0px 5px 0px 0px;
+}
+
 code {
     border-radius: 5px;
     background: #ddd;

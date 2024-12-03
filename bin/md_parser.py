@@ -329,7 +329,24 @@ class MdParser:
                     return f'<img src="{url}" alt="{link_text}">'
             else:
                 self.info(f'link: href="{url}", text="{link_text}"')
-                return f'<a href="{url}" target="_blank">{link_text}</a>'
+                
+                # サイト内リンクかどうかの判定
+                targetIsLocal = False
+                if url.startswith('http://') or url.startswith('https://'):
+                    targetIsLocal = not not re.match(r'^https?://((www|blog)\.)?shapoco\.net/', url)
+                else:
+                    targetIsLocal = True
+                
+                # サイト内の *.md へのリンクを *.html へのリンクに置換
+                if url.endswith('.md') and (url.startswith('/') or url.startswith('./') or url.startswith('../')):
+                    url = url[:-2] + 'html'
+                    
+                if targetIsLocal:
+                    return f'<a href="{url}">{link_text}</a>'
+                else:
+                    # 外部サイトは新しいウィンドウで開く
+                    return f'<a href="{url}" target="_blank">{link_text}</a>'
+
         except Exception as ex:
             self.info(f'Link parse failed: {ex}')
             lex.back_to(start_pos)
