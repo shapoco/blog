@@ -139,7 +139,14 @@ class MdParser:
             elif re.match(MdParser.RE_HR, line):
                 children.append(HR())
             else:
-                children.append(self.p(line))
+                p = self.p(line)
+                # ブロック要素の HTML が直接記述されている場合は <p>...</p> で囲まない
+                text: str = p.text_content()
+                m = re.match(r'^<(p|ul|ol|table|script)[^>]*>', text)
+                if m and text.endswith(f'</{m[1]}>'):
+                    children.append(TextElement(text))
+                else:
+                    children.append(p)
 
             line = None
         

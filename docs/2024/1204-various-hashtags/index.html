@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+    <meta name="description" content="汎用的なハッシュタグのコレクション">
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@shapoco" />
+    <meta property="og:url" content="https://blog.shapoco.net/2024/1204-various-hashtags/" />
+    <meta property="og:title" content="さまざまなハッシュタグ | シャポログ" />
+    <meta property="og:description" content="汎用的なハッシュタグのコレクション" />
+    <meta property="og:image" content="https://blog.shapoco.net/2024/1204-various-hashtags/thumbnail.png" />
+
+    <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+    <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171109827-1"></script>
+    <script>
+      var remoteHost = window.location.hostname;
+      if (remoteHost == "localhost") {
+        console.log(`Google Analytics disabled on: '${remoteHost}'`);
+      }
+      else {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-171109827-1');
+      }
+    </script>
+
+    <link href="/style.css?647642c9" rel="stylesheet" type="text/css">
+    <script src="/style.js?7e1ec41b"></script>
+
+    <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+    <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+    <title>さまざまなハッシュタグ | シャポログ</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div id="root_navi"></div>
+
+      <header class="article_header">
+        <h1><a href="/">シャポログ</a></h1>
+      </header>
+      <main>
+        <h2>さまざまなハッシュタグ</h2>
+
+        <div class="article_info_wrap">
+          <div class="article_info">
+            2024/12/04 |
+            <a href="https://github.com/shapoco/blog/commits/main/src/article/2024/1204-various-hashtags/article.md" target="_blank">更新履歴</a>
+          </div>
+          
+          <div id="shpcstamp_wrap"></div>
+          <script async src="/stamp/v1/widget.js?20241202173248"></script>
+        </div>
+
+        <p>汎用的なハッシュタグのコレクション</p>
+        <h3>よく使われるもの・汎用性が高いもの</h3>
+        <ul id="article_major_list"></ul>
+        <h3>新しいもの</h3>
+        <ul id="article_minor_list"></ul>
+        <script>
+            function articleGenerateList(selector, list) {
+                document.querySelector(selector).innerHTML = list
+                    .toSorted()
+                    .map(s => '<li><a href="https://x.com/hashtag/' + encodeURIComponent(s) + '" target="_blank">' + s + '</li>')
+                    .join('');
+            }
+            articleGenerateList('#article_major_list', [
+                'さまざまなスターバックス',
+                'さまざまな人',
+                'さまざまな嵌合',
+                'さまざまなサラダ',
+                'さまざまな報告',
+                'さまざまな料理',
+                '宣言的知識',
+            ]);
+            articleGenerateList('#article_minor_list', [
+                'さまざまなインシデント',
+                'さまざまなクソゲー',
+                'さまざまなやっていき',
+                'さまざまな悩み',
+                'さまざまな趣味',
+                'さまざまな暖房',
+                'さまざまなシミュレーター',
+                'さまざまな文化',
+                'さまざまなダイエット',
+                'さまざまな怪獣',
+                'さまざまなスイーツ',
+                'さまざまな魚類',
+                'さまざまな密輸入',
+                'さまざまな溶岩',
+            ]);
+        </script>
+
+      </main>
+      <footer>
+        Copyright &copy; Shapoco 
+      </footer>
+    </div>
+  </body>
+</html>
