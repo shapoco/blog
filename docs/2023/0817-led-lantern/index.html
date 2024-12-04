@@ -33,8 +33,8 @@
       }
     </script>
 
-    <link href="/style.css?647642c9" rel="stylesheet" type="text/css">
-    <script src="/style.js?e0936e8c"></script>
+    <link href="/style.css?f09d8a89" rel="stylesheet" type="text/css">
+    <script src="/style.js?b46dfc97"></script>
 
     <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
     <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
@@ -97,7 +97,176 @@
         <p>電池切れが近くなるとレベル表示を 1秒周期で点滅させます。電池切れ状態になると 0.5秒周期で点滅させます。</p>
         <p>drive_level_meter関数でダイナミック点灯により電圧レベルを LED に表示します。</p>
         <p>USB接続時は VBUS の電圧が ADC に入ってくるのでレベル表示はフルになります。</p>
-        <script src="https://gist.github.com/shapoco/bd8ae99e2f93c5aba1dedaa17930fa90.js"></script>
+        <pre class="lang_cxx" title="lantern.ino">#include &lt;stdint.h&gt;
+
+static const int ADC_VOLUME = 0;
+static const int ADC_BATTERY = 3;
+static const int PIN_LED_COM = 1;
+static const int PIN_LED_P0 = 0;
+static const int PIN_LED_P1 = 2;
+static const int PIN_LED_LAMP = 4;
+
+uint16_t volume_adc_offset = 512;
+uint16_t pwm_value = 0;
+
+uint8_t battery_level = 4;
+
+uint8_t meter_drive_index = 0;
+uint8_t meter_state = 0;
+
+void volume_to_pwm();
+void battery_to_level();
+void drive_level_meter();
+
+void setup() {
+    // デフォルトではPWM周波数が低すぎてカメラで撮ると点滅するため
+    // PWM (Timer1) のプリスケーラを無しにする
+    // 8MHz / 256 = 31.25kHz
+    uint8_t tmp = TCCR1;
+    tmp &amp;= 0xf0;
+    tmp |= 0x01; // CS[3:0]=0b0001
+    TCCR1 = tmp;
+
+    // RESET端子をボリューム入力として使用するため、
+    // ボリューム入力は VCC/2 でオフセットしている
+    // スイッチ付きボリュームのスイッチが ON になったときの ADC値を
+    // ボリューム入力の最小値として使用するため保持しておく
+    volume_adc_offset = analogRead(ADC_VOLUME);
+}
+
+void loop() {
+    // ボリュームの状態を明るさに反映
+    volume_to_pwm();
+
+    // バッテリー状態の読み取り
+    battery_to_level();
+
+    // バッテリーレベルメータのダイナミック点灯制御
+    drive_level_meter();
+    delay(1);
+}
+
+// ボリュームの状態を明るさに反映
+void volume_to_pwm() {
+    if (battery_level == 0) {
+        // 電池切れ --&gt; 消灯
+        pwm_value = 0;
+    }
+    else {
+        // ボリュームの値読み取り
+        int16_t adc = analogRead(ADC_VOLUME);
+
+        // 電源投入時の値を最小とする
+        if (adc &lt; volume_adc_offset) adc = volume_adc_offset;
+
+        // PWM値に変換
+        // 最小値 (電源投入時の値) を 1、電源電圧を 255 として換算
+        pwm_value = 1 + ((int32_t)adc - volume_adc_offset) * 254 / (1023 - volume_adc_offset);
+
+        if (battery_level == 1) {
+            // 間もなく電池切れ --&gt; 明るさ制限
+            pwm_value /= 4;
+        }
+
+        // 明るさゼロにならないようにする
+        if (pwm_value &lt; 1) pwm_value = 1;
+    }
+
+    // PWM に反映
+    analogWrite(PIN_LED_LAMP, pwm_value);
+}
+
+// バッテリー状態の読み取り
+void battery_to_level() {
+    int16_t adc = analogRead(ADC_BATTERY);
+
+    // 抵抗分圧前の電圧を算出
+    int16_t battery_mv = (int32_t)adc * 10000 / 1023;
+
+    // 入力ダイオード(11EQS04)の順電圧降下を加味する (300-450mV)
+    int16_t diode_vf_mv = 300 + (int32_t)pwm_value * 150 / 255;
+    battery_mv += diode_vf_mv;
+
+    // レベル閾値
+    static const int16_t thresh[] = {
+        0, 6000, 6200, 6800, 7400, 8000, 9999
+    };
+    int16_t lower_thresh = thresh[battery_level];
+    int16_t upper_thresh = thresh[battery_level + 1];
+
+    if (battery_level == 0) {
+        // 電池切れ状態はそのまま保持
+        // (一度電源を切るまで復帰しない)
+    }
+    else {
+        // レベル遷移 (100mV のヒステリシス付き)
+        if (battery_mv &lt; lower_thresh - 100) {
+            // レベルダウン
+            if (battery_level &gt; 0) battery_level--;
+        }
+        else if (battery_mv &gt; upper_thresh + 100) {
+            // レベルアップ
+            if (battery_level &lt; 5) battery_level++;
+        }
+    }
+
+    // レベルメーターの点灯状態に反映
+    switch(battery_level) {
+    case 0:
+        // 電池切れ --&gt; 速い点滅
+        meter_state = (millis() % 500 &lt; 250) ? 0x1 : 0x0;
+        break;
+    case 1:
+        // 間もなく電池切れ --&gt; 遅い点滅
+        meter_state = (millis() % 1000 &lt; 500) ? 0x1 : 0x0;
+        break;
+    case 2:
+        meter_state = 0x1;
+        break;
+    case 3:
+        meter_state = 0x3;
+        break;
+    case 4:
+        meter_state = 0x7;
+        break;
+    default:
+        meter_state = 0xf;
+        break;
+    }
+}
+
+// バッテリーレベルメータのダイナミック点灯制御
+void drive_level_meter() {
+    pinMode(PIN_LED_COM, INPUT);
+    pinMode(PIN_LED_P0, INPUT);
+    pinMode(PIN_LED_P1, INPUT);
+    switch (meter_drive_index) {
+    case 0:
+        digitalWrite(PIN_LED_COM, 1);
+        digitalWrite(PIN_LED_P0, (meter_state &amp; 1) ^ 1);
+        digitalWrite(PIN_LED_P1, 1);
+        break;
+    case 1:
+        digitalWrite(PIN_LED_COM, 0);
+        digitalWrite(PIN_LED_P0, (meter_state &gt;&gt; 1) &amp; 1);
+        digitalWrite(PIN_LED_P1, 0);
+        break;
+    case 2:
+        digitalWrite(PIN_LED_COM, 1);
+        digitalWrite(PIN_LED_P0, 1);
+        digitalWrite(PIN_LED_P1, ((meter_state &gt;&gt; 2) &amp; 1) ^ 1);
+        break;
+    case 3:
+        digitalWrite(PIN_LED_COM, 0);
+        digitalWrite(PIN_LED_P0, 0);
+        digitalWrite(PIN_LED_P1, (meter_state &gt;&gt; 3) &amp; 1);
+        break;
+    }
+    pinMode(PIN_LED_COM, OUTPUT);
+    pinMode(PIN_LED_P0, OUTPUT);
+    pinMode(PIN_LED_P1, OUTPUT);
+    meter_drive_index = (meter_drive_index + 1) &amp; 3;
+}</pre>
         <h3>筐体</h3>
         <p>Fusion 360 で設計し、FlashForge Adventurer3 でプリントしました。</p>
         <p>簡単に電池を交換できるよう、リモコンなどの電池の蓋を参考にして開けられるようにしました。</p>

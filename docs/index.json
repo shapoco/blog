@@ -2,7 +2,7 @@
   "articles": [
     {
       "title": "PlainStyle: Unicode の学術用の文字を使って擬似的にフォントを付けられるサイト",
-      "description": "The 𝐪𝐮𝐢𝐜𝐤 𝑏𝑟𝑜𝑤𝑛 𝒇𝒐𝒙 𝒿𝓊𝓂𝓅𝓈 ℴ𝓋ℯ𝓇 𝓽𝓱𝓮 𝔩𝔞𝔷𝔶 𝕕𝕠𝕘👆 のようなテキストを作成できるページ作った (試作)https://t.co/lF2aHKtZOl&mdash; シャポコ🌵 (@shapoco) December 1, 2017",
+      "description": "The 𝐪𝐮𝐢𝐜𝐤 𝑏𝑟𝑜𝑤𝑛 𝒇𝒐𝒙 𝒿𝓊𝓂𝓅𝓈 ℴ𝓋ℯ𝓇 𝓽𝓱𝓮 𝔩𝔞𝔷𝔶 𝕕𝕠𝕘👆 のようなテキストを作成できるページ作った (試作)https://t.co/lF2aHKtZOl&amp;mdash; シャポコ🌵 (@shapoco) December 1, 2017",
       "date": "2017/12/01",
       "url": "/2017/1201-plainstyle",
       "twitter_card_size": "summary",

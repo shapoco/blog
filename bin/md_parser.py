@@ -11,6 +11,7 @@ class MdParser:
     RE_BLOCKQUOTE = r'^(>\s+)(.*)$'
     RE_NOTES = r'^\[!(note|tip|important|warning|caution)\]$'
     RE_TABLE = r'^\|(.+\|.+)\|$'
+    RE_PRE = r'^```([^:]+)?(:.+)?$'
     RE_HR = r'^---+$'
     
     def __init__(self, lines: list[str]):
@@ -136,6 +137,8 @@ class MdParser:
                 children.append(self.blockquote(line))
             elif re.match(MdParser.RE_TABLE, line):
                 children.append(self.table(line))
+            elif re.match(MdParser.RE_PRE, line):
+                children.append(self.pre(line))
             elif re.match(MdParser.RE_HR, line):
                 children.append(HR())
             else:
@@ -385,5 +388,25 @@ class MdParser:
             lex.back_to(start_pos)
             return '`'
     
+    def pre(self, first_line: str) -> CodeBlock:
+        self.info(f'--> pre("{first_line}")')
+        m = re.match(MdParser.RE_PRE, first_line)
+        lang = m[1]
+        title = m[2]
+        if title.startswith(':'):
+            title = title[1:]
+
+        code =''
+        while True:
+            line = self.pop_line_unindent(end_with_empty_line=False)
+            if line.startswith('```'):
+                if line != '```':
+                    raise Exception(f'Unexpected chars after "```": "{line}"')
+                break
+            code += f'{line}\n'
+            
+        self.info(f'<-- pre()')
+        return CodeBlock(code, lang, title)
+
         
         

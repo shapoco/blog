@@ -162,7 +162,8 @@ main img {
 }
 
 main img,
-main video {
+main video,
+main pre {
     border: solid 1px #ccc;
     border-radius: 10px;
     box-sizing: border-box;
@@ -185,10 +186,22 @@ main img.link_icon {
     margin: 0px 5px 0px 0px;
 }
 
+pre,
+code {
+    font-family: Consolas, 'Courier New', Courier, monospace;
+}
+
+pre {
+    padding: 1ex 1em;
+    background: #f8f8f8;
+    max-height: 100vh;
+    overflow: scroll;
+    font-size: 80%;
+}
+
 code {
     border-radius: 5px;
-    background: #ddd;
-    font-family: Consolas, 'Courier New', Courier, monospace;
+    background: #eee;
     padding: 0px 5px;
     color: #040;
 }

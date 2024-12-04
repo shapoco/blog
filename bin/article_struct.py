@@ -5,6 +5,7 @@ def get_indent(depth: int) -> str:
     return '  ' * depth
 
 def escape_for_html(text: str) -> str:
+    text = text.replace('&', '&amp;')
     text = text.replace('"', '&quot;')
     text = text.replace("'", '&#39;')
     text = text.replace('<', '&lt;')
@@ -56,12 +57,21 @@ class RawHtml(TextElement):
         return True
 
 class CodeBlock(TextElement):
-    def __init__(self, text: str = '', lang: str = ''):
+    def __init__(self, text: str = '', lang: str = '', title: str = ''):
         super().__init__(text)
-        self.lang: str = lang
+        self.lang = lang
+        self.title = title
 
     def to_html(self, depth: int = 0) -> str:
-        return '<pre>' + self.text + '</pre>'
+        attr = ''
+        if self.lang:
+            lang_norm = self.lang
+            lang_norm = lang_norm.replace('+', 'x')
+            lang_norm = lang_norm.replace('#', 'sharp')
+            attr += f' class="lang_{lang_norm}"'
+        if self.title:
+            attr += f' title="{escape_for_attr(self.title)}"'
+        return f'<pre{attr}>{escape_for_html(self.text)}</pre>'
 
     def is_multiline(self) -> bool:
         return True
