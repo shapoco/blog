@@ -87,5 +87,5 @@ Fusion 360 で設計し、FlashForge Adventurer3 でプリントしました。
 
 ## 関連リンク
 
-- [眩しすぎるX看板のLEDランタンを作った](../../2023/0805-x-sign-lantern/)
+- [眩しすぎるX看板のLEDランタンを作った](../../2023/0805-x-sign-lantern/article.md)
 - [余ってた白色LEDでLEDランタンできた🌵](https://x.com/shapoco/status/1691641095703122400)

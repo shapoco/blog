@@ -59,7 +59,7 @@ SMD版はアンテナが裸の銅板になってますが、丸い形状の導�
 
 ## 関連リンク
 
-- [静電気検知瓶](../../2024/1130-electrostatic-detector-bottle/)
+- [静電気検知瓶](../../2024/1130-electrostatic-detector-bottle/article.md)
 - [簡易静電気メーター rev0.1 - シャポコ (shapoco) - BOOTH](https://shapoco.booth.pm/items/4537598) **完売しました**
 - [簡易静電気メーター rev0.2 - シャポコ (shapoco) - BOOTH](https://shapoco.booth.pm/items/4573943) **完売しました**
 - [簡易静電気メーター rev0.3 - シャポコ (shapoco) - BOOTH](https://shapoco.booth.pm/items/5291534) **完売しました**

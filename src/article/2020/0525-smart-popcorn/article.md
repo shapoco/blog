@@ -8,6 +8,7 @@
 
 ## 関連リンク
 
+- [スマホの USB でウズラのゆで卵をつくる](../../2023/1018-smart-boiled-egg/article.md)
 - [スマホ用ポップコーンメーカーを作った (2020/05/25) ](https://x.com/shapoco/status/1402611162546507779)
 - [スマホでポップコーンを作る - YouTube](https://www.youtube.com/watch?v=4Jk0v_xJHDc)
 - [スマホでポップコーンをつくる - ニコニコ動画](https://www.nicovideo.jp/watch/sm42541856)

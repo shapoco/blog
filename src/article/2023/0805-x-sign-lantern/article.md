@@ -8,3 +8,4 @@
 - [例の眩しすぎる X の看板を LEDランタンにしてみた](https://x.com/shapoco/status/1687774995303587840)
 - [眩しすぎるX看板のLEDランタンを作った - ニコニコ動画](https://www.nicovideo.jp/watch/sm42584102)
 - [眩しすぎるX看板のLEDランタンを作った (X sign lantern) - YouTube](https://www.youtube.com/watch?v=Z6l9-o6nyVw&ab_channel=Shapoco)
+- [18650 2セル駆動の LEDランタンを作った](../../2023/0817-led-lantern/article.md)
