@@ -163,10 +163,20 @@ main img {
 
 main img,
 main video,
-main pre {
+main .pre_wrap {
     border: solid 1px #ccc;
     border-radius: 10px;
     box-sizing: border-box;
+    overflow: hidden;
+}
+
+.pre_wrap pre {
+    margin: 0px;
+}
+.pre_wrap h5 {
+    margin: 0px;
+    padding: 0.25ex 0.5em;
+    background: #ccc;
 }
 
 main img[src$="cover.jpg"],
@@ -194,7 +204,7 @@ code {
 pre {
     padding: 1ex 1em;
     background: #f8f8f8;
-    max-height: 100vh;
+    max-height: 80vh;
     overflow: scroll;
     font-size: 80%;
 }

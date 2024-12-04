@@ -139,6 +139,17 @@ function arrangeArticleHtml(parent) {
       // 強調表示
       pre.innerHTML = applyRangeRules(lang, pre.textContent);
     }
+
+    const wrap = document.createElement('div');
+    wrap.classList.add('pre_wrap');
+    if (pre.title) {
+      const header = document.createElement('h5');
+      header.innerHTML = escapeForHtml(pre.title);
+      wrap.appendChild(header);
+    }
+    pre.parentNode.insertBefore(wrap, pre);
+    pre.remove();
+    wrap.appendChild(pre);
   });
 }
 
