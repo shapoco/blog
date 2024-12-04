@@ -12,13 +12,16 @@ function arrangeArticleHtml(parent) {
   });
 
   const linkDecorationRules = [
-    { patterns: ['/', './', '../', 'http://localhost:', 'https://blog.shapoco.net/'], icon_src: '/image/icon32_local.png' },
-    { patterns: ['https://x.com/', 'https://twitter.com/'], icon_src: '/image/icon32_x.png' },
-    { patterns: ['https://misskey.io/'], icon_src: '/image/icon32_misskey-io.png' },
-    { patterns: ['https://bsky.app/'], icon_src: '/image/icon32_bluesky.png' },
-    { patterns: ['https://github.com/'], icon_src: '/image/icon32_github.png' },
-    { patterns: ['https://www.youtube.com/'], icon_src: '/image/icon32_youtube.png' },
-    { patterns: ['https://www.nicovideo.jp/'], icon_src: '/image/icon32_niconico.png' },
+    { patterns: ['/', './', '../', /http:\/\/localhost(:[0-9]+)?\//, 'https://blog.shapoco.net/'], iconSrc: '/image/icon32_local.png' },
+    { patterns: ['https://x.com/', 'https://twitter.com/'], iconSrc: '/image/icon32_x.png' },
+    { patterns: ['https://misskey.io/'], iconSrc: '/image/icon32_misskey-io.png' },
+    { patterns: ['https://bsky.app/'], iconSrc: '/image/icon32_bluesky.png' },
+    { patterns: ['https://github.com/'], iconSrc: '/image/icon32_github.png' },
+    { patterns: ['https://www.youtube.com/'], iconSrc: '/image/icon32_youtube.png' },
+    { patterns: ['https://www.nicovideo.jp/'], iconSrc: '/image/icon32_niconico.png' },
+    { patterns: ['https://akizukidenshi.com/'], iconSrc: '/image/icon32_akizukidenshi.png' },
+    { patterns: ['https://www.switch-science.com/'], iconSrc: '/image/icon32_switch-science.png' },
+    { patterns: [/https:\/\/([\w-]+\.)?booth\.pm\//], iconSrc: '/image/icon32_booth.png' },
   ];
 
   // 特定のドメインへのリンクにアイコンを付与する
@@ -26,9 +29,14 @@ function arrangeArticleHtml(parent) {
     // 画像だけのリンクは除く
     if (a.textContent) {
       for (var rule of linkDecorationRules) {
-        if (rule.patterns.filter(p => a.href.startsWith(p)).length > 0) {
+        const matches = rule.patterns.filter(p => {
+          return typeof(p) == 'string' ?
+            a.href.startsWith(p) :
+            !!a.href.match(p);
+        });
+        if (matches.length > 0) {
           const img = document.createElement('img');
-          img.src = rule.icon_src;
+          img.src = rule.iconSrc;
           img.classList.add('link_icon');
           a.insertBefore(img, a.childNodes[0]);
           break;
