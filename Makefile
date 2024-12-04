@@ -18,19 +18,23 @@ INDEX_HTML = $(DIR_OUT)/index.html
 MDS = $(wildcard $(DIR_ARTICLE)/*/*/$(ARTICLE_MD))
 HTMLS = $(patsubst $(DIR_ARTICLE)/%,$(DIR_OUT)/%,$(patsubst %/$(ARTICLE_MD),%/index.html,$(MDS)))
 
-INDEX_EXTRA_DEPENDENCIES = \
+COMMON_EXTRA_DEPENDENCIES = \
 	$(wildcard $(DIR_BIN)/*.py) \
 	Makefile
 
+INDEX_EXTRA_DEPENDENCIES = \
+	$(COMMON_EXTRA_DEPENDENCIES)
+
 TEMPLATE_DEPENDENCIES = \
-	$(INDEX_EXTRA_DEPENDENCIES) \
+	$(COMMON_EXTRA_DEPENDENCIES) \
 	$(wildcard $(DIR_OUT)/*.js) \
 	$(wildcard $(DIR_OUT)/*.json) \
 	$(wildcard $(DIR_OUT)/*.css) \
 
-HTML_EXTRA_DEPENDENCIES = \
-	$(INDEX_EXTRA_DEPENDENCIES) \
+ARTICLE_EXTRA_DEPENDENCIES = \
+	$(COMMON_EXTRA_DEPENDENCIES) \
 	$(TEMPLATE_DEPENDENCIES) \
+	$(wildcard $(DIR_BIN)/*.py) \
 	$(wildcard $(DIR_TEPMPLATE)/*.*) \
 	$(wildcard $(DIR_TEPMPLATE_ARTICLE)/*.*)
 
@@ -48,7 +52,7 @@ $(INDEX_JSON): $(MDS) $(INDEX_EXTRA_DEPENDENCIES)
 	fi ; \
 	rm -f $@.tmp
 
-$(DIR_OUT)/%/index.html: $(DIR_ARTICLE)/%/* $(HTML_EXTRA_DEPENDENCIES)
+$(DIR_OUT)/%/index.html: $(DIR_ARTICLE)/%/* $(ARTICLE_EXTRA_DEPENDENCIES)
 	@echo "Generating: $@"
 	@mkdir -p $(shell dirname $@)
 	@rm -rf $(shell dirname $@)/*
@@ -56,18 +60,15 @@ $(DIR_OUT)/%/index.html: $(DIR_ARTICLE)/%/* $(HTML_EXTRA_DEPENDENCIES)
 		-i $(shell dirname $<) \
 		-o $(shell dirname $@) \
 		-t $(TEMPLATE_HTML)
+	@$(DIR_BIN)/update_url_postfix.py -d "docs/" -f $@
 
 $(TEMPLATE_HTML): $(TEMPLATE_DEPENDENCIES)
 	@echo "Updating: $@"
-	@$(DIR_BIN)/update_url_postfix.py -f $@ -s "/style.css"
-	@$(DIR_BIN)/update_url_postfix.py -f $@ -s "/style.js"
-	@$(DIR_BIN)/update_url_postfix.py -f $@ -s "/index.json"
+	@$(DIR_BIN)/update_url_postfix.py -d "docs/" -f $@
 
 $(INDEX_HTML): $(TEMPLATE_DEPENDENCIES)
 	@echo "Updating: $@"
-	@$(DIR_BIN)/update_url_postfix.py -f $@ -s "/style.css"
-	@$(DIR_BIN)/update_url_postfix.py -f $@ -s "/style.js"
-	@$(DIR_BIN)/update_url_postfix.py -f $@ -s "/index.json"
+	@$(DIR_BIN)/update_url_postfix.py -d "docs/" -f $@
 
 size:
 	@du -sh $(DIR_OUT)/*/*/

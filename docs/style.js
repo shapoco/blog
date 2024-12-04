@@ -1,7 +1,11 @@
 
 document.addEventListener('DOMContentLoaded', e => {
+  arrangeArticleHtml(document.querySelector('main'));
+});
+
+function arrangeArticleHtml(parent) {
   // 画像だけの段落を中央寄せにする
-  document.querySelectorAll('main p').forEach(p => {
+  parent.querySelectorAll('p').forEach(p => {
     if (p.children.length == 1 && ['img', 'video', 'table', 'iframe'].includes(p.children[0].tagName.toLowerCase())) {
       p.style.textAlign = 'center';
     }
@@ -18,7 +22,7 @@ document.addEventListener('DOMContentLoaded', e => {
   ];
 
   // 特定のドメインへのリンクにアイコンを付与する
-  document.querySelectorAll('main a').forEach(a => {
+  parent.querySelectorAll('a').forEach(a => {
     // 画像だけのリンクは除く
     if (a.textContent) {
       for (var rule of linkDecorationRules) {
@@ -32,7 +36,7 @@ document.addEventListener('DOMContentLoaded', e => {
       };
     }
   });
-});
+}
 
 function genenerateArticleLinkCard(article) {
   html = '';
