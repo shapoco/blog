@@ -57,6 +57,7 @@ $(DIR_OUT)/%/index.html: $(DIR_ARTICLE)/%/* $(ARTICLE_EXTRA_DEPENDENCIES)
 	@if [ -e "$(shell dirname $<)/Makefile" ] ; then \
 		make -C $(shell dirname $<) ; \
 	fi
+	@$(DIR_BIN)/update_code_block.py -f $(shell dirname $<)/$(ARTICLE_MD)
 	@mkdir -p $(shell dirname $@)
 	@rm -rf $(shell dirname $@)/*
 	@$(DIR_BIN)/build_article.py \

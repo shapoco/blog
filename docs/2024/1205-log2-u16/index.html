@@ -65,29 +65,44 @@
         <p>組み込み向けの粗い二進対数関数です。</p>
         <h3>定義</h3>
         <p><code>uint16_t log2u16(uint16_t x)</code></p>
-        <ul>
-          <li><code>x</code>: 関数の入力。整数。</li>
-          <li>
-            <p>戻り値:</p>
-            <ul>
-              <li><code>x > 0</code>: <code>x</code> の二進対数。整数部 4 bit、小数部 12 bit の固定小数点数。</li>
-              <li><code>x == 0</code>: <code>0</code>。</li>
-            </ul>
-          </li>
-        </ul>
+        <h4>引数</h4>
+        <table>
+          <tr>
+            <th class="nowrap" style="text-align: center;">引数名</th>
+            <th class="nowrap">説明</th>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;"><code>x</code></td>
+            <td class="nowrap">関数の入力。整数。</td>
+          </tr>
+        </table>
+        <h4>戻り値</h4>
+        <table>
+          <tr>
+            <th class="nowrap" style="text-align: center;">条件</th>
+            <th>値</th>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;"><code>x</code> > 0</td>
+            <td><code>x</code> の二進対数。整数部 4 bit、小数部 12 bit の固定小数点数。</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;"><code>x</code> = 0</td>
+            <td>0</td>
+          </tr>
+        </table>
         <h3>ソースコード</h3>
         <pre class="lang_cxx" title="log2u16.cpp">#include &lt;stdio.h&gt;
 #include &lt;stdint.h&gt;
 #include &lt;string.h&gt;
 #include &lt;math.h&gt;
+#include &lt;assert.h&gt;
 
 uint16_t log2u16(uint16_t x) {
     static constexpr uint16_t table[] = {
         0  , 22 , 44 , 63 , 82 , 100, 118, 134,
         150, 165, 179, 193, 207, 220, 232, 244, 256
     };
-
-    if (x == 0) return 0;
 
     uint16_t ret = 0xc000;
     if (x &amp; 0xf000) {
@@ -123,6 +138,8 @@ int main(int argc, char* argv[]) {
 
     int32_t error_dist[MAX_ERROR * 2 + 1];
     memset(error_dist, 0, sizeof(error_dist));
+
+    assert(log2u16(0) == 0);
 
     FILE *fp = fopen(&quot;error_all.csv&quot;, &quot;w&quot;);
     for (uint32_t x = 1; x &lt; N; x++) {
