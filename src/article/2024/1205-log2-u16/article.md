@@ -6,11 +6,18 @@
 
 `uint16_t log2u16(uint16_t x)`
 
-- `x`: 関数の入力。整数。
-- 戻り値:
+### 引数
 
-    - `x > 0`: `x` の二進対数。整数部 4 bit、小数部 12 bit の固定小数点数。
-    - `x == 0`: `0`。
+|引数名|説明|
+|:--:|:--|
+|`x`|関数の入力。整数。|
+
+### 戻り値
+
+|条件|値|
+|:--:|:--|
+|`x` > 0|`x` の二進対数。整数部 4 bit、小数部 12 bit の固定小数点数。|
+|`x` = 0|0|
 
 ## ソースコード
 
@@ -19,14 +26,13 @@
 #include <stdint.h>
 #include <string.h>
 #include <math.h>
+#include <assert.h>
 
 uint16_t log2u16(uint16_t x) {
     static constexpr uint16_t table[] = {
         0  , 22 , 44 , 63 , 82 , 100, 118, 134,
         150, 165, 179, 193, 207, 220, 232, 244, 256
     };
-
-    if (x == 0) return 0;
 
     uint16_t ret = 0xc000;
     if (x & 0xf000) {
@@ -62,6 +68,8 @@ int main(int argc, char* argv[]) {
 
     int32_t error_dist[MAX_ERROR * 2 + 1];
     memset(error_dist, 0, sizeof(error_dist));
+
+    assert(log2u16(0) == 0);
 
     FILE *fp = fopen("error_all.csv", "w");
     for (uint32_t x = 1; x < N; x++) {
