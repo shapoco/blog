@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', e => {
 function arrangeArticleHtml(parent) {
   // 画像だけの段落を中央寄せにする
   parent.querySelectorAll('p').forEach(p => {
-    if (p.children.length == 1 && ['img', 'video', 'table', 'iframe'].includes(p.children[0].tagName.toLowerCase())) {
+    if (p.children.length == 1 && ['img', 'video', 'iframe'].includes(p.children[0].tagName.toLowerCase())) {
       p.style.textAlign = 'center';
     }
   });
