@@ -21,7 +21,6 @@ def main() -> None:
     with open(args.template) as f:
         html = f.read()
 
-
     # 変数の値の設定
     vars = shapolog.get_vars(args.output)
     vars['aricle_title'] = article.title
@@ -45,6 +44,8 @@ def main() -> None:
         f.write(html)
 
     # 画像等のコピー
-    shutil.copytree(f'{args.input}/', f'{args.output}/', ignore=shutil.ignore_patterns('.*', '*.md'), dirs_exist_ok=True)
+    shutil.copytree(f'{args.input}/', f'{args.output}/', \
+        ignore=shutil.ignore_patterns('.*', '*.md', 'Makefile', '*.o', 'a.out'), \
+        dirs_exist_ok=True)
 
 main()

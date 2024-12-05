@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+    <meta name="description" content="組み込み向けの粗い二進対数関数です。">
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@shapoco" />
+    <meta property="og:url" content="https://blog.shapoco.net/2024/1205-log2-u16/" />
+    <meta property="og:title" content="16 ビット固定小数版二進対数 | シャポログ" />
+    <meta property="og:description" content="組み込み向けの粗い二進対数関数です。" />
+    <meta property="og:image" content="https://blog.shapoco.net/image/default_card_summary.png" />
+
+    <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+    <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171109827-1"></script>
+    <script>
+      var remoteHost = window.location.hostname;
+      if (remoteHost == "localhost") {
+        console.log(`Google Analytics disabled on: '${remoteHost}'`);
+      }
+      else {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-171109827-1');
+      }
+    </script>
+
+    <link href="/style.css?760aa038" rel="stylesheet" type="text/css">
+    <script src="/style.js?eca7460a"></script>
+
+    <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+    <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+    <title>16 ビット固定小数版二進対数 | シャポログ</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div id="root_navi"></div>
+
+      <header class="article_header">
+        <h1><a href="/">シャポログ</a></h1>
+      </header>
+      <main>
+        <h2>16 ビット固定小数版二進対数</h2>
+
+        <div class="article_info_wrap">
+          <div class="article_info">
+            2024/12/05 |
+            <a href="https://github.com/shapoco/blog/commits/main/src/article/2024/1205-log2-u16/article.md" target="_blank">更新履歴</a>
+          </div>
+          
+          <div id="shpcstamp_wrap"></div>
+          <script async src="/stamp/v1/widget.js?115a0eef"></script>
+        </div>
+
+        <p>組み込み向けの粗い二進対数関数です。</p>
+        <h3>定義</h3>
+        <p><code>uint16_t log2u16(uint16_t x)</code></p>
+        <ul>
+          <li><code>x</code>: 関数の入力。整数。</li>
+          <li>
+            <p>戻り値:</p>
+            <ul>
+              <li><code>x > 0</code>: <code>x</code> の二進対数。整数部 4 bit、小数部 12 bit の固定小数点数。</li>
+              <li><code>x == 0</code>: <code>0</code>。</li>
+            </ul>
+          </li>
+        </ul>
+        <h3>ソースコード</h3>
+        <pre class="lang_cxx" title="log2u16.cpp">#include &lt;stdio.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;string.h&gt;
+#include &lt;math.h&gt;
+
+uint16_t log2u16(uint16_t x) {
+    static constexpr uint16_t table[] = {
+        0  , 22 , 44 , 63 , 82 , 100, 118, 134,
+        150, 165, 179, 193, 207, 220, 232, 244, 256
+    };
+
+    if (x == 0) return 0;
+
+    uint16_t ret = 0xc000;
+    if (x &amp; 0xf000) {
+        if (x &amp; 0xc000) { x &gt;&gt;= 2; ret += 0x2000; }
+        if (x &amp; 0x2000) { x &gt;&gt;= 1; ret += 0x1000; }
+    }
+    else {
+        if (!(x &amp; 0xffc0)) { x &lt;&lt;= 6; ret -= 0x6000; }
+        if (!(x &amp; 0xfe00)) { x &lt;&lt;= 3; ret -= 0x3000; }
+        if (!(x &amp; 0xf800)) { x &lt;&lt;= 2; ret -= 0x2000; }
+        if (!(x &amp; 0xf000)) { x &lt;&lt;= 1; ret -= 0x1000; }
+    }
+
+    int index = (x &gt;&gt; 8) &amp; 0xf;
+    uint16_t a = table[index];
+    uint16_t b = table[index + 1];
+    uint16_t q = x &amp; 0xff;
+    uint16_t p = 256 - q;
+    ret += ((a * p + b * q) + 8) &gt;&gt; 4;
+
+    return ret;
+}
+
+int main(int argc, char* argv[]) {
+    static constexpr int N = 1 &lt;&lt; 16;
+    static constexpr int MAX_ERROR = 16;
+    float diff_f32_neg_worst = 0;
+    float diff_f32_pos_worst = 0;
+    float diff_f32_sum = 0;
+    int32_t diff_u16_neg_worst = 0;
+    int32_t diff_u16_pos_worst = 0;
+    int32_t diff_u16_sum = 0;
+
+    int32_t error_dist[MAX_ERROR * 2 + 1];
+    memset(error_dist, 0, sizeof(error_dist));
+
+    FILE *fp = fopen(&quot;error_all.csv&quot;, &quot;w&quot;);
+    for (uint32_t x = 1; x &lt; N; x++) {
+        float exp_f32 = log2(x);
+        uint32_t exp_u32 = round(exp_f32 * 4096);
+        uint16_t exp_u16 = exp_u32 &lt; 0xffffu ? exp_u32 : 0xffffu;
+
+        uint16_t act_u16 = log2u16(x);
+        float act_f32 = (float)act_u16 / 4096;
+
+        int32_t diff_u16 = (int32_t)act_u16 - (int32_t)exp_u16;
+        float diff_f32 = act_f32 - exp_f32;
+
+        if (abs(diff_u16) &lt; MAX_ERROR) {
+            error_dist[diff_u16 + MAX_ERROR]++;
+        }
+        else {
+            fprintf(stderr, &quot;*ERROR: x=%5d, exp=%7.3f (0x%4x), act=%7.3f (0x%4x), err=%+7.3f (%+4d)\n&quot;,
+                x,
+                exp_f32, (int)exp_u16,
+                act_f32, (int)act_u16,
+                diff_f32, (int)diff_u16);
+        }
+
+        fprintf(fp, &quot;%d,%d\n&quot;, x, (int)diff_u16);
+
+        if (diff_f32 &lt; diff_f32_neg_worst) diff_f32_neg_worst = diff_f32;
+        if (diff_f32 &gt; diff_f32_pos_worst) diff_f32_pos_worst = diff_f32;
+        diff_f32_sum += diff_f32;
+
+        if (diff_u16 &lt; diff_u16_neg_worst) diff_u16_neg_worst = diff_u16;
+        if (diff_u16 &gt; diff_u16_pos_worst) diff_u16_pos_worst = diff_u16;
+        diff_u16_sum += diff_u16;
+    }
+    fclose(fp);
+
+    fp = fopen(&quot;error_dist.csv&quot;, &quot;w&quot;);
+    for (int32_t err = -MAX_ERROR; err &lt;= MAX_ERROR; err++) {
+        fprintf(fp, &quot;%d,%d\n&quot;, err, error_dist[err + MAX_ERROR]);
+    }
+    fclose(fp);
+
+    fp = fopen(&quot;summary.log&quot;, &quot;w&quot;);
+    float diff_f32_ave = diff_f32_sum / (N - 1);
+    float diff_u16_ave = (float)diff_u16_sum / (N - 1);
+    fprintf(fp, &quot;Worst Negative Error = %10.6f (%+5d LSB)\n&quot;, diff_f32_neg_worst, diff_u16_neg_worst);
+    fprintf(fp, &quot;Worst Positive Error = %10.6f (%+5d LSB)\n&quot;, diff_f32_pos_worst, diff_u16_pos_worst);
+    fprintf(fp, &quot;Average Error        = %10.6f (%+5.2f LSB)\n&quot;, diff_f32_ave, diff_u16_ave);
+    fclose(fp);
+
+    return diff_u16_ave &lt; 16 ? 0 : 1;
+}</pre>
+        <h3>誤差</h3>
+        <p>最大 0.0026 (11 LSB) 程度の誤差がある。誤差は全体的にマイナス方向に酔っている。</p>
+        <h4>サマリ</h4>
+        <pre title="summary.log">Worst Negative Error =  -0.002566 (  -11 LSB)
+Worst Positive Error =   0.002019 (   +8 LSB)
+Average Error        =  -0.000489 (-2.01 LSB)</pre>
+        <h4>`x` vs 誤差</h4>
+        <p><canvas id="article_chart_error_all" width="900" height="300"></canvas></p>
+        <h4>誤差の分布</h4>
+        <p><canvas id="article_chart_error_dist" width="900" height="300"></canvas></p>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+        <script>
+        fetch('error_all.csv')
+            .then(resp => resp.text())
+            .then(text => articleRenderErrorAll(text))
+            .catch(error => {});
+        function articleRenderErrorAll(text) {
+            const rows = text
+                .trim()
+                .split('\n') // todo: 改行を n でいいようにする
+                .map(line => line.split(',')
+                .map(x => parseFloat(x.trim())));
+            const colX = rows.map(row => row[0] / 4096);
+            const colError = rows.map(row => row[1]);
+            new Chart(document.querySelector("#article_chart_error_all"), {
+                type: 'line',
+                data: {
+                    labels: colX,
+                    datasets: [{
+                        label: '誤差',
+                        data: colError,
+                        fill: true,
+                        borderColor: 'rgba(0,0,0,0)',
+                        backgroundColor: 'rgba(255,0,0,1)',
+                    }],
+                },
+                options: {
+        			animation: false,
+                    elements: {
+                        point: {
+                            radius: 0,
+                        },
+                    },
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                    },
+                    scales: {
+                        x: {
+                            type: 'logarithmic',
+                            min: 1.0 / 4096,
+                            max: 65536.0 / 4096,
+                            title: {
+                                display: true,
+                                text: 'x',
+                            },
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: '誤差 [LSB]'
+                            },
+                        },
+                    },
+                }
+            });
+        }
+        fetch('error_dist.csv')
+            .then(resp => resp.text())
+            .then(text => articleRenderErrorDist(text))
+            .catch(error => {});
+        function articleRenderErrorDist(text) {
+            const rows = text
+                .trim()
+                .split('\n') // todo: 改行を n でいいようにする
+                .map(line => line.split(',')
+                .map(x => parseFloat(x.trim())));
+            const colDist = rows.map(row => row[0]);
+            const colCount = rows.map(row => row[1]);
+            new Chart(document.querySelector("#article_chart_error_dist"), {
+                type: 'line',
+                data: {
+                    labels: colDist,
+                    datasets: [{
+                        label: '誤差',
+                        data: colCount,
+                        fill: true,
+                        borderColor: 'rgba(0,0,0,0)',
+                        backgroundColor: 'rgba(255,0,0,1)',
+                    }],
+                },
+                options: {
+        			animation: false,
+                    elements: {
+                        point: {
+                            radius: 0,
+                        },
+                    },
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: '誤差 [LSB]',
+                            },
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'カウント'
+                            },
+                        },
+                    },
+                }
+            });
+        }
+        </script>
+
+      </main>
+      <footer>
+        Copyright &copy; Shapoco 
+      </footer>
+    </div>
+  </body>
+</html>

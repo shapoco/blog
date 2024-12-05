@@ -54,6 +54,9 @@ $(INDEX_JSON): $(MDS) $(INDEX_EXTRA_DEPENDENCIES)
 
 $(DIR_OUT)/%/index.html: $(DIR_ARTICLE)/%/* $(ARTICLE_EXTRA_DEPENDENCIES)
 	@echo "Generating: $@"
+	@if [ -e "$(shell dirname $<)/Makefile" ] ; then \
+		make -C $(shell dirname $<) ; \
+	fi
 	@mkdir -p $(shell dirname $@)
 	@rm -rf $(shell dirname $@)/*
 	@$(DIR_BIN)/build_article.py \

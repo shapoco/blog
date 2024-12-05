@@ -47,12 +47,12 @@ function arrangeArticleHtml(parent) {
 
   // コードブロックのマークアップ
   const STYLE_KEYWORD = 'color: #44c;';
-  const STYLE_STRING = 'color: #cc4;';
+  const STYLE_STRING = 'color: #c44;';
   const STYLE_COMMENT = 'color: #080; font-style: italic;';
   const STYLE_MACRO = 'color: #c48;';
   const STYLE_CONST = 'color: #880;';
   const STYLE_EMBEDDED = 'color: #84c;';
-  const STYLE_LITERAL = 'color: #800;';
+  const STYLE_LITERAL = 'color: #c44;';
 
   const langCxx = {
     rangeRules: [
