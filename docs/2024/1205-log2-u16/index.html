@@ -10,7 +10,7 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@shapoco" />
     <meta property="og:url" content="https://blog.shapoco.net/2024/1205-log2-u16/" />
-    <meta property="og:title" content="16 ビット固定小数版二進対数 | シャポログ" />
+    <meta property="og:title" content="16 ビット固定小数版二進対数関数 | シャポログ" />
     <meta property="og:description" content="組み込み向けの粗い二進対数関数です。" />
     <meta property="og:image" content="https://blog.shapoco.net/image/default_card_summary.png" />
 
@@ -33,13 +33,13 @@
       }
     </script>
 
-    <link href="/style.css?760aa038" rel="stylesheet" type="text/css">
+    <link href="/style.css?aeadb49d" rel="stylesheet" type="text/css">
     <script src="/style.js?eca7460a"></script>
 
     <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
     <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
 
-    <title>16 ビット固定小数版二進対数 | シャポログ</title>
+    <title>16 ビット固定小数版二進対数関数 | シャポログ</title>
   </head>
 
   <body>
@@ -50,7 +50,7 @@
         <h1><a href="/">シャポログ</a></h1>
       </header>
       <main>
-        <h2>16 ビット固定小数版二進対数</h2>
+        <h2>16 ビット固定小数版二進対数関数</h2>
 
         <div class="article_info_wrap">
           <div class="article_info">
@@ -176,15 +176,15 @@ int main(int argc, char* argv[]) {
     return diff_u16_ave &lt; 16 ? 0 : 1;
 }</pre>
         <h3>誤差</h3>
-        <p>最大 0.0026 (11 LSB) 程度の誤差がある。誤差は全体的にマイナス方向に酔っている。</p>
+        <p>最大 0.0026 (11 LSB) 程度の誤差があります。誤差は全体的にマイナス方向に偏っています。</p>
         <h4>サマリ</h4>
         <pre title="summary.log">Worst Negative Error =  -0.002566 (  -11 LSB)
 Worst Positive Error =   0.002019 (   +8 LSB)
 Average Error        =  -0.000489 (-2.01 LSB)</pre>
-        <h4>`x` vs 誤差</h4>
-        <p><canvas id="article_chart_error_all" width="900" height="300"></canvas></p>
+        <h4><code>x</code> vs 誤差</h4>
+        <p><canvas id="article_chart_error_all" width="900" height="400"></canvas></p>
         <h4>誤差の分布</h4>
-        <p><canvas id="article_chart_error_dist" width="900" height="300"></canvas></p>
+        <p><canvas id="article_chart_error_dist" width="900" height="400"></canvas></p>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
         <script>
         fetch('error_all.csv')
@@ -256,7 +256,7 @@ Average Error        =  -0.000489 (-2.01 LSB)</pre>
             const colDist = rows.map(row => row[0]);
             const colCount = rows.map(row => row[1]);
             new Chart(document.querySelector("#article_chart_error_dist"), {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels: colDist,
                     datasets: [{

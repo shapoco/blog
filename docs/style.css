@@ -151,7 +151,8 @@ strong {
 }
 
 img,
-video {
+video,
+canvas {
     vertical-align: middle;
     max-width: 100%;
     height: auto;

@@ -169,7 +169,7 @@ class MdParser:
         level = len(m[1])
         text = m[2]
         self.info(f'<-- hx()')
-        return Hx(level, text)
+        return Hx(level, self.markup_inline_text(text))
 
     def ul(self, first_line: str) -> UL:
         return self.xl(ordered=False, first_line=first_line)

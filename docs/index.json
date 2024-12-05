@@ -257,7 +257,7 @@
       "card_image_url": "/2024/1204-various-hashtags/thumbnail.png"
     },
     {
-      "title": "16 ビット固定小数版二進対数",
+      "title": "16 ビット固定小数版二進対数関数",
       "description": "組み込み向けの粗い二進対数関数です。",
       "date": "2024/12/05",
       "url": "/2024/1205-log2-u16",

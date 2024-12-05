@@ -1,4 +1,4 @@
-# 16 ビット固定小数版二進対数
+# 16 ビット固定小数版二進対数関数
 
 組み込み向けの粗い二進対数関数です。
 
@@ -118,7 +118,7 @@ int main(int argc, char* argv[]) {
 
 ## 誤差
 
-最大 0.0026 (11 LSB) 程度の誤差がある。誤差は全体的にマイナス方向に酔っている。
+最大 0.0026 (11 LSB) 程度の誤差があります。誤差は全体的にマイナス方向に偏っています。
 
 ### サマリ
 
@@ -130,11 +130,11 @@ Average Error        =  -0.000489 (-2.01 LSB)
 
 ### `x` vs 誤差
 
-<canvas id="article_chart_error_all" width="900" height="300"></canvas>
+<canvas id="article_chart_error_all" width="900" height="400"></canvas>
 
 ### 誤差の分布
 
-<canvas id="article_chart_error_dist" width="900" height="300"></canvas>
+<canvas id="article_chart_error_dist" width="900" height="400"></canvas>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
 <script>
@@ -207,7 +207,7 @@ function articleRenderErrorDist(text) {
     const colDist = rows.map(row => row[0]);
     const colCount = rows.map(row => row[1]);
     new Chart(document.querySelector("#article_chart_error_dist"), {
-        type: 'line',
+        type: 'bar',
         data: {
             labels: colDist,
             datasets: [{
