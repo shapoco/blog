@@ -9,7 +9,7 @@
       "card_image_url": "/image/default_card_summary.png"
     },
     {
-      "title": "ESP32 DevKitCをブレッドボードで扱いやすくする",
+      "title": "[メモ] ESP32 DevKitCをブレッドボードで扱いやすくする",
       "description": "ESP32 DevKitCはボードそのものは使いやすいが、幅が広く、ピンヘッダが太いため ブレッドボードでのプロトタイピングには向かないようだ。 そこで、2列のピンソケットを使ってブレッドボードと簡単に接続できるようにしてみた。 手順は以下の通り。",
       "date": "2018/02/02",
       "url": "/2018/0202-esp32devkitc4breadboard",
@@ -17,7 +17,7 @@
       "card_image_url": "/2018/0202-esp32devkitc4breadboard/cover.jpg"
     },
     {
-      "title": "ボリュームの端子を曲げてはならない",
+      "title": "[メモ] ボリュームの端子を曲げてはならない",
       "description": "ボリュームを狭い空間に押し込むために端子をこのように内側に曲げたところ、真ん中の端子が接触不良を起こして壊れてしまった。2個試したが、全く同じ壊れ方をした。端子の根元に力がかからないように、端子だけをつまんで曲げてみたつもりだったがダメだった。全てのボリュームに該当するのかは分からないが、端子は曲げてはいけないようなので注意されたい。",
       "date": "2018/02/14",
       "url": "/2018/0214-dont-bend-volume-pin",
@@ -89,7 +89,7 @@
       "card_image_url": "/2021/0321-paper-tape-i2c/cover.jpg"
     },
     {
-      "title": "人類の英智を描いた",
+      "title": "[メモ] 人類の英智を描いた",
       "description": "バズったポスト。※ クリックで高解像度版をダウンロードできます。",
       "date": "2021/05/24",
       "url": "/2021/0524-how-to-open-soup-sachet",
@@ -121,7 +121,7 @@
       "card_image_url": "/2022/0702-smartphone-stand/cover.jpg"
     },
     {
-      "title": "ディストピア飯",
+      "title": "[メモ] ディストピア飯",
       "description": "バズったポスト。お題箱から。",
       "date": "2023/01/11",
       "url": "/2023/0111-dystopian-meal",
@@ -209,7 +209,7 @@
       "card_image_url": "/2024/0206-bskycustomfeed/thumbnail.png"
     },
     {
-      "title": "インターネットをいつも綺麗に使っていただきありがとうございます。",
+      "title": "[メモ] インターネットをいつも綺麗に使っていただきありがとうございます。",
       "description": "バズったポスト。※ クリックで高解像度版をダウンロードできます。",
       "date": "2024/02/17",
       "url": "/2024/0217-thx-4-using-the-internet-cleanly",
@@ -225,7 +225,7 @@
       "card_image_url": "/2024/0526-xpro-stop-popup/cover.png"
     },
     {
-      "title": "桃太郎",
+      "title": "[メモ] 桃太郎",
       "description": "バズったポスト。",
       "date": "2024/06/14",
       "url": "/2024/0614-momo-tar",
@@ -257,7 +257,7 @@
       "card_image_url": "/2024/1130-electrostatic-detector-bottle/cover.jpg"
     },
     {
-      "title": "さまざまなハッシュタグ",
+      "title": "[メモ] さまざまなハッシュタグ",
       "description": "汎用的なハッシュタグのコレクション",
       "date": "2024/12/04",
       "url": "/2024/1204-various-hashtags",
@@ -265,7 +265,7 @@
       "card_image_url": "/2024/1204-various-hashtags/thumbnail.png"
     },
     {
-      "title": "16 ビット固定小数版二進対数関数",
+      "title": "[メモ] 16 ビット固定小数版二進対数関数",
       "description": "組み込み向けの粗い二進対数関数です。",
       "date": "2024/12/05",
       "url": "/2024/1205-log2-u16",
