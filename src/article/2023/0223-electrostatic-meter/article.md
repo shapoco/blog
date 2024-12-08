@@ -57,11 +57,18 @@ SMD版はアンテナが裸の銅板になってますが、丸い形状の導�
 > [!WARNING]
 > アンテナを物体に直接当てないでください。MOS-FET が壊れる可能性があります。
 
+## PCB 版
+
+プリント基板化したものを BOOTH で販売し、多くの方に購入頂きました。
+
+[shapoco/staticmeter: Electrostatic Level Meter](https://github.com/shapoco/staticmeter)
+
+![](https://www.shapoco.net/media/2023/20230218_static_meter_960x720_800kbps.mp4)
+
 ## 関連リンク
 
-- [静電気検知瓶](../../2024/1130-electrostatic-detector-bottle/article.md)
 - [簡易静電気メーター rev0.1 - シャポコ (shapoco) - BOOTH](https://shapoco.booth.pm/items/4537598) **完売しました**
 - [簡易静電気メーター rev0.2 - シャポコ (shapoco) - BOOTH](https://shapoco.booth.pm/items/4573943) **完売しました**
 - [簡易静電気メーター rev0.3 - シャポコ (shapoco) - BOOTH](https://shapoco.booth.pm/items/5291534) **完売しました**
-- [shapoco/staticmeter: Electrostatic Level Meter](https://github.com/shapoco/staticmeter)
 - [静電気メーター 、外部電源でも動いた🍣](https://x.com/shapoco/status/1626569698732298240)
+- [静電気検知瓶](../../2024/1130-electrostatic-detector-bottle/article.md)
