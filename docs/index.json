@@ -58,7 +58,7 @@
     },
     {
       "title": "Quotgle",
-      "description": "Google 検索の最、キーワードが勝手に除外されないように引用符を補完して検索を実行するためのページです。",
+      "description": "Google 検索の際、キーワードが勝手に除外されないように引用符を補完して検索を実行するためのページです。",
       "date": "2020/12/03",
       "url": "/2020/1203-quotgle",
       "twitter_card_size": "summary",
