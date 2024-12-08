@@ -10,7 +10,7 @@ class Article:
         self.date = ''
         self.body = None
         self.url = dir_path.replace('src/article/', '/')
-        self.github_url = f'https://github.com/shapoco/blog/commits/main/{dir_path}/article.md'
+        self.github_url = f'https://github.com/shapoco/blog/tree/main/{dir_path}/'
         self.twitter_card_size = 'summary'
         self.card_image_url = '/image/default_card_summary.png'
 
