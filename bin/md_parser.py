@@ -343,7 +343,7 @@ class MdParser:
                 # サイト内リンクかどうかの判定
                 targetIsLocal = False
                 if url.startswith('http://') or url.startswith('https://'):
-                    targetIsLocal = not not re.match(r'^https?://((www|blog)\.)?shapoco\.net/', url)
+                    targetIsLocal = not not re.match(r'^https?://blog\.shapoco\.net/', url)
                 else:
                     targetIsLocal = True
                 
