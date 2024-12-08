@@ -271,6 +271,14 @@
       "url": "/2024/1205-log2-u16",
       "twitter_card_size": "summary",
       "card_image_url": "/image/default_card_summary.png"
+    },
+    {
+      "title": "[メモ] RCサーボSG-90の軸と噛み合う3Dモデルの寸法",
+      "description": "秋月で売っている マイクロサーボ SG-90 に取り付けるアームを 3D プリンタで作ろうと思いましたが、データシートを見ても軸の寸法が分からず、共通の規格が存在するのかどうかもよく分からなかったので現物合わせしました。",
+      "date": "2024/12/08",
+      "url": "/2024/1208-sg90-shaft-dimension",
+      "twitter_card_size": "summary",
+      "card_image_url": "/2024/1208-sg90-shaft-dimension/thumbnail.jpg"
     }
   ]
 }

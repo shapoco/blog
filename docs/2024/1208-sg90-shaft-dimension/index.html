@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+    <meta name="description" content="秋月で売っている マイクロサーボ SG-90 に取り付けるアームを 3D プリンタで作ろうと思いましたが、データシートを見ても軸の寸法が分からず、共通の規格が存在するのかどうかもよく分からなかったので現物合わせしました。">
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@shapoco" />
+    <meta property="og:url" content="https://blog.shapoco.net/2024/1208-sg90-shaft-dimension/" />
+    <meta property="og:title" content="[メモ] RCサーボSG-90の軸と噛み合う3Dモデルの寸法 | シャポログ" />
+    <meta property="og:description" content="秋月で売っている マイクロサーボ SG-90 に取り付けるアームを 3D プリンタで作ろうと思いましたが、データシートを見ても軸の寸法が分からず、共通の規格が存在するのかどうかもよく分からなかったので現物合わせしました。" />
+    <meta property="og:image" content="https://blog.shapoco.net/2024/1208-sg90-shaft-dimension/thumbnail.jpg" />
+
+    <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+    <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171109827-1"></script>
+    <script>
+      var remoteHost = window.location.hostname;
+      if (remoteHost == "localhost") {
+        console.log(`Google Analytics disabled on: '${remoteHost}'`);
+      }
+      else {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-171109827-1');
+      }
+    </script>
+
+    <link href="/style.css?128f0110" rel="stylesheet" type="text/css">
+    <script src="/style.js?ef3946a9"></script>
+
+    <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+    <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+    <title>[メモ] RCサーボSG-90の軸と噛み合う3Dモデルの寸法 | シャポログ</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div id="root_navi"></div>
+
+      <header class="article_header">
+        <h1><a href="/">シャポログ</a></h1>
+      </header>
+      <main>
+        <h2>[メモ] RCサーボSG-90の軸と噛み合う3Dモデルの寸法</h2>
+
+        <div class="article_info_wrap">
+          <div class="article_info">
+            2024/12/08 |
+            <a href="https://github.com/shapoco/blog/commits/main/src/article/2024/1208-sg90-shaft-dimension/article.md" target="_blank">更新履歴</a>
+          </div>
+          
+          <div id="shpcstamp_wrap"></div>
+          <script async src="/stamp/v1/widget.js?115a0eef"></script>
+        </div>
+
+        <p>秋月で売っている <a href="https://akizukidenshi.com/catalog/g/g108761/" target="_blank">マイクロサーボ SG-90</a> に取り付けるアームを 3D プリンタで作ろうと思いましたが、データシートを見ても軸の寸法が分からず、共通の規格が存在するのかどうかもよく分からなかったので現物合わせしました。</p>
+        <p><img src="./dimension.png" alt=""></p>
+        <p>Fusion360 で図の右のような寸法でモデリングしてプリントしたところ、ちょっとキツかったですが一応ハマりました。モデルの内径が軸径の実測より小さいですが、実際にプリントすると角が丸くなるので、モデルよりやや大きくなると思います。</p>
+        <blockquote class="warning">パラメータは使用するプリンタやコンフィギュレーションに応じて調整が必要です。</blockquote>
+
+      </main>
+      <footer>
+        Copyright &copy; Shapoco 
+      </footer>
+    </div>
+  </body>
+</html>
