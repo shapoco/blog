@@ -34,3 +34,9 @@ Fusion360 で図の右のような寸法でモデリングしてプリントし�
     ![](./ss10_scaling.png)
 
 3. この図形をプロファイルとして押し出しにより穴を開けます。
+
+## 関連リンク
+
+- [X の投稿](https://x.com/shapoco/status/1865586153002590515)
+- [Misskey.io の投稿](https://misskey.io/notes/a1ik7qeki43501nd)
+- [Bluesky の投稿](https://bsky.app/profile/shapoco.net/post/3lcr6owk37s2y)
