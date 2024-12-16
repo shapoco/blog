@@ -287,6 +287,14 @@
       "url": "/2024/1208-sg90-shaft-dimension",
       "twitter_card_size": "summary",
       "card_image_url": "/2024/1208-sg90-shaft-dimension/thumbnail.jpg"
+    },
+    {
+      "title": "X に mixi2 プロフィールを共有した時のリンクカードを任意の画像にする",
+      "description": "mixi2 のプロフィールのリンクを X など他の SNS で投稿したときに表示されるカバー画像 (OGP 画像) をカスタマイズする方法です。",
+      "date": "2024/12/16",
+      "url": "/2024/1216-mixi2-custom-profile-ogp",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2024/1216-mixi2-custom-profile-ogp/cover.png"
     }
   ]
 }

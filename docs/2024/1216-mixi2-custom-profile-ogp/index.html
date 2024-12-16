@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+    <meta name="description" content="mixi2 のプロフィールのリンクを X など他の SNS で投稿したときに表示されるカバー画像 (OGP 画像) をカスタマイズする方法です。">
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@shapoco" />
+    <meta property="og:url" content="https://blog.shapoco.net/2024/1216-mixi2-custom-profile-ogp/" />
+    <meta property="og:title" content="X に mixi2 プロフィールを共有した時のリンクカードを任意の画像にする | シャポログ" />
+    <meta property="og:description" content="mixi2 のプロフィールのリンクを X など他の SNS で投稿したときに表示されるカバー画像 (OGP 画像) をカスタマイズする方法です。" />
+    <meta property="og:image" content="https://blog.shapoco.net/2024/1216-mixi2-custom-profile-ogp/cover.png" />
+
+    <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+    <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171109827-1"></script>
+    <script>
+      var remoteHost = window.location.hostname;
+      if (remoteHost == "localhost") {
+        console.log(`Google Analytics disabled on: '${remoteHost}'`);
+      }
+      else {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-171109827-1');
+      }
+    </script>
+
+    <link href="/style.css?128f0110" rel="stylesheet" type="text/css">
+    <script src="/style.js?ef3946a9"></script>
+
+    <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+    <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+    <title>X に mixi2 プロフィールを共有した時のリンクカードを任意の画像にする | シャポログ</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div id="root_navi"></div>
+
+      <header class="article_header">
+        <h1><a href="/">シャポログ</a></h1>
+      </header>
+      <main>
+        <h2>X に mixi2 プロフィールを共有した時のリンクカードを任意の画像にする</h2>
+
+        <div class="article_info_wrap">
+          <div class="article_info">
+            2024/12/16 |
+            <a href="https://github.com/shapoco/blog/tree/main/src/article/2024/1216-mixi2-custom-profile-ogp/" target="_blank">記事のソース</a>
+          </div>
+          
+          <div id="shpcstamp_wrap"></div>
+          <script async src="/stamp/v1/widget.js?115a0eef"></script>
+        </div>
+
+        <p>mixi2 のプロフィールのリンクを X など他の SNS で投稿したときに表示されるカバー画像 (OGP 画像) をカスタマイズする方法です。</p>
+        <h3>mixi2 のプロフィールを共有したときに表示される画像</h3>
+        <p>2024/12/16 現在、mixi2 のプロフィールの URL (<code>https://mixi.social/@ユーザーID</code>) を X で投稿すると、下図のようにプロフィール画像の中央付近を拡大したものが OGP 画像として使用されます。</p>
+        <p><img src="./ss_profile_link_share.png" alt=""></p>
+        <p>この OGP 画像は一度 X にリンクを投稿すると X 側のサーバーにキャッシュされる (※) ので、投稿した後に mixi2 のプロフィール画像を変更しても、リンクカードの画像は元のままになります。</p>
+        <p>これを利用すれば、リンクのカバー画像とプロフィールアイコンを別の画像にすることができます。</p>
+        <p><img src="./cover.png" alt=""></p>
+        <blockquote class="warning">※ OGP 画像がいつまでキャッシュされるかは投稿先のサービス次第です。経験的に X や Bluesky では長期間キャッシュされますが、Misskey.io では比較的短時間でキャッシュの期限が切れて最新の画像に更新されます。リンクが表示される頻度にも影響されるかもしれません。</blockquote>
+        <h3>OGP 画像として表示される領域</h3>
+        <p>mixi2 のプロフィール画像として正方形の画像を設定した場合の、OGP 画像として表示される領域を示します。</p>
+        <p><img src="./ogp_visible_area.png" alt=""></p>
+        <ul>
+          <li>X や Bluesky: 中央の 16:9 の領域が切り抜かれて表示されます。</li>
+          <li>Misskey.io: 正方形の画像全体が小さく表示されます。</li>
+        </ul>
+        <p>16:9 の画像は拡張して正方形にする必要がありますが、X や Bluesky 以外のサイトでは正方形の画像全体が表示されるので、それも意識した画像にすると良いと思います (単なる黒帯で埋めるのではなく上図のようにぼかした画像で埋めるなど)。</p>
+        <h3>既に X に投稿されたリンクの OGP 画像を置き換えるには</h3>
+        <p>既に過去に X でリンクを投稿していた場合、OGP 画像は X 側のサーバーにキャッシュされており、ポストを作成し直しても自動で置き換わることはありません。</p>
+        <p>最新の OGP 画像 ( = 最新の mixi2 のプロフィールアイコン) を使用するには、<a href="https://cards-dev.x.com/validator" target="_blank">Twitter Card Validator</a> でプロフィールの URL を入力し Preview card をクリックします。</p>
+        <p>経験的に、実際に新しい画像が表示されるまでには数分かかります。しばらく待ってください (<strong>反映されないからといって Card Validator のボタンを連打しないように！</strong>)</p>
+        <p><img src="./ss_card_validator.png" alt=""></p>
+        <p>2024/12/16 現在、Twitter Card Validator ではリンクカードのプレビューは利用できませんが、<a href="https://ogp.buta3.net/" target="_blank">OGP確認ツール</a> などの外部サイトを利用して事前に確認することができます。</p>
+        <blockquote class="warning">Twitter Card Validator で OGP 画像を更新すると、過去に同じ URL を使用して投稿されたポストのカバー画像も更新されますので注意してください。</blockquote>
+        <blockquote class="warning">X のリンクカード画像は上記の方法で更新できますが、Bluesky の画像の更新方法は分かりませんでした。更新できないのかもしれません。</blockquote>
+        <h3>実際のポスト</h3>
+        <p>もしかするとあなたがこの記事をあなたが読んでいる時点ではキャッシュの期限が切れて mixi2 のプロフィールアイコンと同じ画像になっているかもしれません。</p>
+        <p><blockquote class="twitter-tweet" data-media-max-width="560"><p lang="ja" dir="ltr">mixi2 アカウント<a href="https://t.co/gSrimJFgab">https://t.co/gSrimJFgab</a></p>&mdash; シャポコ🌵 (@shapoco) <a href="https://twitter.com/shapoco/status/1868654948403327275?ref_src=twsrc%5Etfw">December 16, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+      </main>
+      <footer>
+        Copyright &copy; Shapoco 
+      </footer>
+    </div>
+  </body>
+</html>
