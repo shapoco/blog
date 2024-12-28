@@ -1,4 +1,4 @@
-# XPro Auto Top:「新しいポストを表示」を自動的にクリックする UserScript
+# XProAutoTop:「新しいポストを表示」を自動的にクリックする UserScript
 
 ![](./cover.png)
 
@@ -6,4 +6,4 @@ XPro (旧TweetDeck) でことある毎に現れて TL の読み込みを止め�
 
 Firefox/Chrome + Violentmonkey/Tampermonkey で動作確認しました。
 
-ダウンロード/インストール: [XPro Auto Top](https://github.com/shapoco/xpro-auto-top) (GitHub)
+ダウンロード/インストール: [XProAutoTop](https://github.com/shapoco/xpro-auto-top) (GitHub)
