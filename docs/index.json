@@ -297,7 +297,7 @@
       "card_image_url": "/2024/1216-mixi2-custom-profile-ogp/cover.png"
     },
     {
-      "title": "XProAutoTop:「新しいポストを表示」を自動的にクリックする UserScript",
+      "title": "XProAutoTop: XPro の「新しいポストを表示」を自動的にクリックする UserScript",
       "description": "XPro (旧TweetDeck) でことある毎に現れて TL の読み込みを止めてしまう「新しいポストを表示」のボタンを自動的にクリックする Greasemonkey UserScript を書きました。",
       "date": "2024/12/29",
       "url": "/2024/1229-xpro-auto-top",

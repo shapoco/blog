@@ -1,4 +1,4 @@
-# XProAutoTop:「新しいポストを表示」を自動的にクリックする UserScript
+# XProAutoTop: XPro の「新しいポストを表示」を自動的にクリックする UserScript
 
 ![](./cover.png)
 
