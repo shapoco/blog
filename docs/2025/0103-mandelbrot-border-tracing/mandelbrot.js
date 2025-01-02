@@ -15,7 +15,7 @@
       label: 'Image',
       items: [
         { type: 'int', key: 'width', label: 'Width', init: 64, min: 8, max: 1024, ui: null },
-        { type: 'int', key: 'height', label: 'Height', init: 64, min: 8, max: 1024, ui: null },
+        { type: 'int', key: 'height', label: 'Height', init: null, min: 8, max: 1024, ui: null },
       ]
     },
     {
@@ -23,7 +23,7 @@
       items: [
         { type: 'float', key: 'a', label: 'a', init: -0.5, min: -2, max: 2, ui: null },
         { type: 'float', key: 'b', label: 'b', init: 0, min: -2, max: 2, ui: null },
-        { type: 'float', key: 'scale', label: 'Scale', init: 2, min: 0, max: 4, ui: null },
+        { type: 'float', key: 'range', label: 'Range', init: 2, min: 0, max: 4, ui: null },
         { type: 'int', key: 'maxIter', label: 'Max Iterations', init: 100, min: 1, max: 1000, ui: null },
       ],
     },
@@ -32,8 +32,8 @@
       items: [
         { type: 'int', key: 'iterPerSec', label: 'Iteration/sec', init: 10000, min: 1, max: 1000 * 1000, ui: null },
         { type: 'int', key: 'memPerSec', label: 'Memory Op./sec', init: 10000, min: 1, max: 1000 * 1000, ui: null },
-        { type: 'int', key: 'entryQueueDepth', label: 'Entry Queue Depth', init: 256, min: 1, max: 65536, ui: null },
-        { type: 'int', key: 'resultQueueDepth', label: 'Result Queue Depth', init: 256, min: 1, max: 65536, ui: null },
+        { type: 'int', key: 'entryQueueDepth', label: 'Entry Queue Depth', init: null, min: 1, max: 65536, ui: null },
+        { type: 'int', key: 'resultQueueDepth', label: 'Result Queue Depth', init: null, min: 1, max: 65536, ui: null },
       ]
     }
   ];
@@ -71,9 +71,14 @@
           const input = document.createElement('input');
           input.id = inputId;
           input.type = 'text';
-          input.value = prop.init;
+          if (prop.init === null) {
+            input.value = '';
+            input.placeholder = '(auto)';
+          }
+          else {
+            input.value = prop.init;
+          }
           input.size = 4;
-          input.style.textAlign = 'right';
           input.addEventListener('change', (function(t, p) {
             return ()=>t.inputChanged(p);
           })(this, prop));
@@ -121,14 +126,20 @@
 
     inputChanged(prop) {
       try {
-        const value = parseFloat(prop.ui.value);
-        if (prop.type == 'int' && value != Math.floor(value)) {
-          throw new Error('Value must be integer.');
+        var valueStr = prop.ui.value.trim();
+        if (prop.init === null && !valueStr) {
+          this.config[prop.key] = null;
         }
-        if (value < prop.min || prop.max < value) {
-          throw new Error('Value out of range.');
+        else {
+          const value = parseFloat(valueStr);
+          if (prop.type == 'int' && value != Math.floor(value)) {
+            throw new Error('Value must be integer.');
+          }
+          if (value < prop.min || prop.max < value) {
+            throw new Error('Value out of range.');
+          }
+          this.config[prop.key] = value;
         }
-        this.config[prop.key] = value;
         prop.ui.style.background = 'unset';
         prop.ui.style.color = 'unset';
       }
@@ -152,6 +163,19 @@
     ready() {
       this.abort();
       const cfg = structuredClone(this.config);
+
+      if (cfg.height === null) {
+        cfg.height = cfg.width;
+      }
+
+      const preferredQueueDepth = (cfg.width + cfg.height) * 2;
+      if (cfg.entryQueueDepth === null) {
+        cfg.entryQueueDepth = preferredQueueDepth;
+      }
+      if (cfg.resultQueueDepth === null) {
+        cfg.resultQueueDepth = preferredQueueDepth;
+      }
+
       this.normalEngine = new EngineUi(new NormalEngine(cfg));
       this.fastEngine = new EngineUi(new FastMandel(cfg));
       this.lastMs = undefined;
@@ -748,10 +772,18 @@
       this.x = x;
       this.y = y;
 
-      const a0 = cfg.a - cfg.scale / 2;
-      const a1 = cfg.a + cfg.scale / 2;
-      const b0 = cfg.b - cfg.scale / 2;
-      const b1 = cfg.b + cfg.scale / 2;
+      var rangeX = cfg.range;
+      var rangeY = cfg.range;
+      if (cfg.width > cfg.height) {
+        rangeY = rangeX * cfg.height / cfg.width;
+      }
+      else {
+        rangeX = rangeY * cfg.width / cfg.height;
+      }
+      const a0 = cfg.a - rangeX / 2;
+      const a1 = cfg.a + rangeX / 2;
+      const b0 = cfg.b - rangeY / 2;
+      const b1 = cfg.b + rangeY / 2;
       this.a = a0 + (a1 - a0) * x / cfg.width;
       this.b = b0 + (b1 - b0) * y / cfg.height;
 
