@@ -71,30 +71,30 @@
         const th = document.createElement('th');
         const td = document.createElement('td');
         th.innerHTML = category.label;
-        for (var prop of category.items) {
-          const inputId = `article_${category.id}_${prop.key}`;
+        for (var item of category.items) {
+          const inputId = `article_${category.id}_${item.key}`;
           
           const label = document.createElement('label');
           label.htmlFor = inputId;
-          label.innerHTML = ` ${prop.label}:`;
+          label.innerHTML = ` ${item.label}:`;
           
           const input = document.createElement('input');
           input.id = inputId;
           input.type = 'text';
-          if (prop.init === null) {
+          if (item.init === null) {
             // 初期値が null の場合は省略可能とする
             input.value = '';
             input.placeholder = '(auto)';
           }
           else {
-            input.value = prop.init;
+            input.value = item.init;
           }
           input.size = 4;
           input.addEventListener('change', ()=>this.requestConfigValidation());
           input.addEventListener('keydown', ()=>this.requestConfigValidation());
 
-          prop.ui = input;
-          this.config[prop.key] = prop.init;
+          item.ui = input;
+          this.config[item.key] = item.init;
 
           const span = document.createElement('span');
           span.style.whiteSpace = 'nowrap';
@@ -147,31 +147,31 @@
     completeConfigValidation() {
       try {
         for (var category of CONFIG_ITEMS) {
-          for (var prop of category.items) {
-            var valueStr = prop.ui.value.trim();
-            if (prop.init === null && !valueStr) {
-              this.config[prop.key] = null;
+          for (var item of category.items) {
+            var valueStr = item.ui.value.trim();
+            if (item.init === null && !valueStr) {
+              this.config[item.key] = null;
             }
             else {
               const value = parseFloat(valueStr);
-              if (prop.type == 'int' && value != Math.floor(value)) {
+              if (item.type == 'int' && value != Math.floor(value)) {
                 throw new Error('Value must be integer.');
               }
-              if (value < prop.min || prop.max < value) {
+              if (value < item.min || item.max < value) {
                 throw new Error('Value out of range.');
               }
-              this.config[prop.key] = value;
+              this.config[item.key] = value;
             }
-            //prop.ui.style.background = 'unset';
-            prop.ui.style.color = 'unset';
+            //item.ui.style.background = 'unset';
+            item.ui.style.color = 'unset';
           }
         }
         this.startButton.disabled = false;
         return true;
       }
       catch(ex) {
-        //prop.ui.style.background = '#fcc';
-        prop.ui.style.color = '#f00';
+        //item.ui.style.background = '#fcc';
+        item.ui.style.color = '#f00';
         this.startButton.disabled = true;
         return false;
       }
