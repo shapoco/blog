@@ -1,15 +1,22 @@
 (function() {
   'use strict';
 
+  // ピクセルの状態を示すフラグ
   const FLAG_HANDLED = 1 << 28;
   const FLAG_DIVERGED = 1 << 29;
   const FLAG_FINISHED = 1 << 30;
   const COUNT_MASK = (1 << 28) - 1;
 
+  // 表示更新用のイベントコード
   const EVT_ITERATION = 1;
   const EVT_MEM_WRITE = 2;
   const EVT_MEM_READ = 3;
 
+  // UI の内部的な解像度
+  const UI_WIDTH = 1280;
+  const UI_HEIGHT = 960;
+
+  // 設定項目
   const CONFIG_ITEMS = [
     {
       label: 'Image',
@@ -38,7 +45,8 @@
     }
   ];
 
-  class MandelUi {
+  // UIクラス
+  class MandelbrotUi {
     constructor(wrapperId) {
       this.canvas = document.createElement('canvas');
       this.wrapper = document.querySelector(`#${wrapperId}`);
@@ -49,12 +57,14 @@
       this.simTimeMs = 0;
       this.normalEngine = null;
       this.fastEngine = null;
+      this.validateTimeoutId = null;
     }
 
     init() {
-      this.canvas.width = 1280;
-      this.canvas.height = 960;
+      this.canvas.width = UI_WIDTH;
+      this.canvas.height = UI_HEIGHT;
 
+      // 設定UIの生成
       const table = document.createElement('table');
       for (var category of CONFIG_ITEMS) {
         const tr = document.createElement('tr');
@@ -72,6 +82,7 @@
           input.id = inputId;
           input.type = 'text';
           if (prop.init === null) {
+            // 初期値が null の場合は省略可能とする
             input.value = '';
             input.placeholder = '(auto)';
           }
@@ -79,9 +90,8 @@
             input.value = prop.init;
           }
           input.size = 4;
-          input.addEventListener('change', (function(t, p) {
-            return ()=>t.inputChanged(p);
-          })(this, prop));
+          input.addEventListener('change', ()=>this.requestConfigValidation());
+          input.addEventListener('keydown', ()=>this.requestConfigValidation());
 
           prop.ui = input;
           this.config[prop.key] = prop.init;
@@ -104,6 +114,7 @@
       this.startButton.innerHTML = 'Start';
       this.abortButton.type = 'button';
       this.abortButton.innerHTML = 'Abort';
+      this.abortButton.disabled = true;
 
       const pControl = document.createElement('p');
       pControl.style.textAlign = 'center';
@@ -124,31 +135,49 @@
       // this.start();
     }
 
-    inputChanged(prop) {
+    // パラメータの検証をリクエスト
+    requestConfigValidation() {
+      if (this.validateTimeoutId !== null) {
+        window.clearTimeout(this.validateTimeoutId);
+      }
+      this.validateTimeoutId = window.setTimeout(() => this.completeConfigValidation(), 500);
+    }
+
+    // パラメータの検証を完了させる
+    completeConfigValidation() {
       try {
-        var valueStr = prop.ui.value.trim();
-        if (prop.init === null && !valueStr) {
-          this.config[prop.key] = null;
-        }
-        else {
-          const value = parseFloat(valueStr);
-          if (prop.type == 'int' && value != Math.floor(value)) {
-            throw new Error('Value must be integer.');
+        for (var category of CONFIG_ITEMS) {
+          for (var prop of category.items) {
+            var valueStr = prop.ui.value.trim();
+            if (prop.init === null && !valueStr) {
+              this.config[prop.key] = null;
+            }
+            else {
+              const value = parseFloat(valueStr);
+              if (prop.type == 'int' && value != Math.floor(value)) {
+                throw new Error('Value must be integer.');
+              }
+              if (value < prop.min || prop.max < value) {
+                throw new Error('Value out of range.');
+              }
+              this.config[prop.key] = value;
+            }
+            //prop.ui.style.background = 'unset';
+            prop.ui.style.color = 'unset';
           }
-          if (value < prop.min || prop.max < value) {
-            throw new Error('Value out of range.');
-          }
-          this.config[prop.key] = value;
         }
-        prop.ui.style.background = 'unset';
-        prop.ui.style.color = 'unset';
+        this.startButton.disabled = false;
+        return true;
       }
       catch(ex) {
-        prop.ui.style.background = '#fcc';
-        prop.ui.style.color = '#c00';
+        //prop.ui.style.background = '#fcc';
+        prop.ui.style.color = '#f00';
+        this.startButton.disabled = true;
+        return false;
       }
     }
 
+    // 処理の中断
     abort() {
       if (this.normalEngine) {
         this.normalEngine.abort();
@@ -158,16 +187,23 @@
         this.fastEngine.abort();
         this.fastEngine = null;
       }
+      this.startButton.disabled = !this.completeConfigValidation();
+      this.abortButton.disabled = true;
     }
 
+    // 実行準備
     ready() {
+      if (!this.completeConfigValidation()) return false;
+
       this.abort();
       const cfg = structuredClone(this.config);
 
+      // 画像の高さが未指定の場合は幅と同じにする
       if (cfg.height === null) {
         cfg.height = cfg.width;
       }
 
+      // キューの容量が指定されていない場合は自動決定する
       const preferredQueueDepth = (cfg.width + cfg.height) * 2;
       if (cfg.entryQueueDepth === null) {
         cfg.entryQueueDepth = preferredQueueDepth;
@@ -177,19 +213,26 @@
       }
 
       this.normalEngine = new EngineUi(new NormalEngine(cfg));
-      this.fastEngine = new EngineUi(new FastMandel(cfg));
+      this.fastEngine = new EngineUi(new FastEngine(cfg));
       this.lastMs = undefined;
       this.simTimeMs = 0;
+
+      return true;
     }
 
+    // 演算開始
     start() {
-      this.ready();
+      if (!this.ready()) return;
       window.requestAnimationFrame((t)=>this.loop(t));
+      this.abortButton.disabled = false;
+      this.startButton.disabled = true;
     }
 
+    // 更新処理
     loop(nowMs) {
       if (!this.normalEngine || !this.fastEngine) return;
 
+      // フレームレートに応じて処理を進めるが、処理量には上限を設ける
       if (this.lastMs === undefined) {
         this.lastMs = nowMs;
       }
@@ -198,16 +241,23 @@
 
       this.simTimeMs += deltaMs;
 
+      // 演算処理
       this.normalEngine.update(this.simTimeMs);
       this.fastEngine.update(this.simTimeMs);
 
+      // 描画処理
       this.render(nowMs);
 
       if (this.normalEngine.busy() || this.fastEngine.busy()) {
         window.requestAnimationFrame((t)=>this.loop(t));
       }
+      else {
+        this.startButton.disabled = !this.completeConfigValidation();
+        this.abortButton.disabled = true;
+      }
     }
 
+    // 描画処理
     render(nowMs) {
       const g = this.canvas.getContext('2d');
 
@@ -233,6 +283,7 @@
     }
   }
 
+  // エンジン毎のUI
   class EngineUi {
     static PALETTE = (function(){
       const a = 64;
@@ -247,14 +298,17 @@
         [a + p, a - p, a - p],
       ];
     })();
-    static COL_BUSY = '255 192 0';
-    static COL_READ = '0 255 128';
-    static COL_WRITE = '255 64 0';
+
+    // ピクセルの強調表示の色
+    static COL_BUSY = '255 192 0'; // 処理中のピクセルの色
+    static COL_READ = '0 255 128'; // メモリ読み出し中のピクセルの色
+    static COL_WRITE = '255 64 0'; // メモリ書き込み中のピクセルの色
 
     constructor(engine) {
       this.cfg = engine.cfg;
       this.engine = engine;
 
+      // バックバッファの生成
       this.pixelSize = Math.ceil(512 / this.cfg.width);
       this.canvas = document.createElement('canvas');
       this.canvas.width = this.cfg.width * this.pixelSize;
@@ -263,6 +317,7 @@
       g.fillStyle = '#404';
       g.fillRect(0, 0, this.canvas.width, this.canvas.height);
       
+      // ピクセル強調表示の管理用辞書
       this.busyMarkers = {};
       this.writeMarkers = {};
       this.readMarkers = {};
@@ -287,7 +342,8 @@
     }
 
     render(nowMs, g, viewX, viewY, viewW, viewH) {
-      this.updateImage(this.engine.eventQueue);
+      // 描画表示更新用キューからイベントを刈り取って表示を更新する
+      this.updateBackbuffer(this.engine.eventQueue);
       for (const evt of this.engine.eventQueue) {
         const x = evt.x;
         const y = evt.y;
@@ -303,9 +359,10 @@
       
       const margin = Math.floor(viewH / 40);
 
+      // バックバッファの描画
       const imgW = viewW;
       const imgH = imgW;
-      this.renderImage(nowMs, g, viewX, viewY, imgW, imgH);
+      this.renderBackbuffer(nowMs, g, viewX, viewY, imgW, imgH);
 
       const lineH = Math.floor((viewH - margin - imgH) / 7);
       const fontH = Math.ceil(lineH * 3 / 4);
@@ -356,14 +413,14 @@
       g.strokeStyle = `rgb(${EngineUi.COL_READ})`;
       g.strokeRect(viewX, y, fontH, fontH);
       g.fillText('Mem. Read:', viewX + fontH * 3 / 2, y + fontH);
-      g.fillText(`${this.engine.memNumReads}`.padStart(countDigits, ' '), viewX + labelW, y + fontH);
+      g.fillText(`${this.engine.numMemReads}`.padStart(countDigits, ' '), viewX + labelW, y + fontH);
       y += lineH;
 
       g.lineWidth = 3;
       g.strokeStyle = `rgb(${EngineUi.COL_WRITE})`;
       g.strokeRect(viewX, y, fontH, fontH);
       g.fillText('Mem. Write:', viewX + fontH * 3 / 2, y + fontH);
-      g.fillText(`${this.engine.memNumWrites}`.padStart(countDigits, ' '), viewX + labelW, y + fontH);
+      g.fillText(`${this.engine.numMemWrites}`.padStart(countDigits, ' '), viewX + labelW, y + fontH);
       y += lineH;
 
       g.fillText('Rendering Time:', viewX, y + fontH);
@@ -371,16 +428,18 @@
       y += lineH;
     }
 
-    updateImage(eventQueue) {
+    // バックバッファの更新
+    updateBackbuffer(eventQueue) {
       const pxSize = this.pixelSize;
       const g = this.canvas.getContext('2d');
       for (const evt of eventQueue) {
-        if (evt.code != EVT_MEM_WRITE) continue;
+        if (evt.code != EVT_MEM_WRITE) continue; // メモリ書き込みイベント以外は無視
         const x = evt.x;
         const y = evt.y;
         const value = this.engine.mem[y * this.cfg.width + x];
         if (value & FLAG_FINISHED) {
           if (value & FLAG_DIVERGED) {
+            // 発散したピクセル: パレットを補間して色を生成
             var p = value & COUNT_MASK;
             p /= EngineUi.PALETTE.length;
             p %= EngineUi.PALETTE.length;
@@ -397,24 +456,29 @@
             ];
             g.fillStyle = `rgb(${rgb[0]} ${rgb[1]} ${rgb[2]})`;
           }
-          else  {
+          else {
+            // 発散しなかったピクセル
             g.fillStyle = '#000';
           }
         }
         else if (value & FLAG_HANDLED) {
-          g.fillStyle = '#0cf';
+          // キューイング済みピクセル
+          g.fillStyle = '#fff';
         }
         else if (value == 0) {
+          // ゼロクリアされたピクセル
           g.fillStyle = '#008';
         }
         else {
+          // 不明
           g.fillStyle = '#f00';
         }
         g.fillRect(x * pxSize, y * pxSize, pxSize, pxSize);
       }
     }
     
-    renderImage(nowMs, g, viewX, viewY, viewW, viewH) {
+    // バックバッファの描画
+    renderBackbuffer(nowMs, g, viewX, viewY, viewW, viewH) {
       const imgW = this.canvas.width;
       const imgH = this.canvas.height;
       var drawX = viewX;
@@ -439,54 +503,62 @@
       g.strokeStyle = '#888';
       g.strokeRect(viewX, viewY, viewW, viewH);
 
-      this.renderRects(nowMs, g, drawX, drawY, drawW, drawH, this.busyMarkers, EngineUi.COL_BUSY, true);
-      this.renderRects(nowMs, g, drawX, drawY, drawW, drawH, this.readMarkers, EngineUi.COL_READ, false);
-      this.renderRects(nowMs, g, drawX, drawY, drawW, drawH, this.writeMarkers, EngineUi.COL_WRITE, false);
+      // 強調表示の描画
+      this.renderMarkers(nowMs, g, drawX, drawY, drawW, drawH, this.busyMarkers, EngineUi.COL_BUSY, true);
+      this.renderMarkers(nowMs, g, drawX, drawY, drawW, drawH, this.readMarkers, EngineUi.COL_READ, false);
+      this.renderMarkers(nowMs, g, drawX, drawY, drawW, drawH, this.writeMarkers, EngineUi.COL_WRITE, false);
     }
 
-    renderRects(nowMs, g, viewX, viewY, viewW, viewH, rects, rgb, fill) {
-      const FADE_TIME_MS = 100;
+    // ピクセルの強調表示
+    renderMarkers(nowMs, g, viewX, viewY, viewW, viewH, markers, rgb, fill) {
+      const FADE_TIME_MS = 100; // フェードアウト時間
       const pixW = viewW / this.cfg.width;
       const pixH = viewH / this.cfg.height;
       g.lineWidth = 2;
-      for(const key of Object.keys(rects)) {
-        const rect = rects[key];
-        var alpha = Math.max(0, Math.min(1, 1 - (nowMs - rect.tsMs) / FADE_TIME_MS));
+      for(const key of Object.keys(markers)) {
+        const marker = markers[key];
+        var alpha = Math.max(0, Math.min(1, 1 - (nowMs - marker.tsMs) / FADE_TIME_MS));
         alpha = alpha * alpha;
         if (fill) {
           g.fillStyle = `rgba(${rgb} / ${alpha})`;
-          g.fillRect(viewX + pixW * rect.x, viewY + pixH * rect.y, pixW, pixH);
+          g.fillRect(viewX + pixW * marker.x, viewY + pixH * marker.y, pixW, pixH);
         }
         else {
           g.lineWidth = 3;
           g.strokeStyle = `rgba(${rgb} / ${alpha})`;
-          g.strokeRect(viewX + pixW * rect.x, viewY + pixH * rect.y, pixW, pixH);
+          g.strokeRect(viewX + pixW * marker.x, viewY + pixH * marker.y, pixW, pixH);
         }
         if (alpha <= 0) {
-          delete rects[key];
+          // フェードアウト時間が過ぎたものは削除
+          delete markers[key];
         }
       }
     }
   }
 
+  // エンジンの基底クラス
   class EngineBase {
     constructor(cfg) {
       this.cfg = cfg;
       
+      // ワークメモリ
       this.mem = new Int32Array(cfg.width * cfg.height);
+
+      // キュー
       this.entryQueue = new Queue(cfg.entryQueueDepth);
       this.resultQueue = new Queue(cfg.resultQueueDepth);
 
+      // 処理速度調整用のクレジット
       this.iterCredit = 0;
       this.memCredit = 0;
 
-      this.totalIters = 0;
-      this.memNumWrites = 0;
-      this.memNumReads = 0;
+      // 表示用のフィールド
       this.eventQueue = [];
-      this.numFinished = 0;
-
       this.elapsedMs = 0;
+      this.totalIters = 0;
+      this.numMemWrites = 0;
+      this.numMemReads = 0;
+      this.numFinished = 0;
     }
 
     abort() {
@@ -528,12 +600,12 @@
           this.resultQueue.push(task);
         }
       }
-
     }
     
+    // ワークメモリ書き込み
     memWrite(x, y, value) {
       this.mem[y * this.cfg.width + x] = value;
-      this.memNumWrites++;
+      this.numMemWrites++;
       this.memCredit--;
       this.eventQueue.push(new MandelbrotEvent(x, y, EVT_MEM_WRITE));
       if ((value & FLAG_FINISHED) != 0) {
@@ -541,14 +613,16 @@
       }
     }
 
+    // ワークメモリ読み出し
     memRead(x, y) {
-      this.memNumReads++;
+      this.numMemReads++;
       this.memCredit--;
       this.eventQueue.push(new MandelbrotEvent(x, y, EVT_MEM_READ));
       return this.mem[y * this.cfg.width + x];
     }
   }
 
+  // 通常のマンデルブロ集合エンジン
   class NormalEngine extends EngineBase {
     constructor(cfg) {
       super(cfg);
@@ -561,8 +635,14 @@
     }
 
     onUpdating() {
+      // エントリーキューへのタスク挿入
       while(this.y < this.cfg.height && !this.entryQueue.checkFull()) {
         this.entryQueue.push(new MandelbrotTask(this.cfg, this.x, this.y));
+        
+        // キューイングされたピクセルの表示のためにこっそりメモリ書き込み
+        this.mem[this.y * this.cfg.width + this.x] = FLAG_HANDLED;
+        this.eventQueue.push(new MandelbrotEvent(this.x, this.y, EVT_MEM_WRITE));
+        
         this.x += 1;
         if (this.x >= this.cfg.width) {
           this.y += 1;
@@ -570,6 +650,7 @@
         }
       }
 
+      // 結果キューからの刈り取り --> メモリに反映して更新通知
       while (!this.resultQueue.empty() && this.memCredit > 0) {
         const task = this.resultQueue.pop();
         var value = task.n;
@@ -580,36 +661,39 @@
     }
   }
   
-  class FastMandel extends EngineBase {
-    static ST_INIT = 0;
-    static ST_WORK = 1;
-    static ST_FILL = 2;
-    static ST_FINISHED = 3;
+  // border tracing の実装
+  class FastEngine extends EngineBase {
+    // ステート定義
+    static ST_INIT = 0; // ワークメモリの初期化
+    static ST_WORK = 1; // 演算処理
+    static ST_FILL = 2; // 塗りつぶし
+    static ST_FINISHED = 3; // 完了
 
     constructor(cfg) {
       super(cfg);
-      this.state = FastMandel.ST_INIT;
+      this.state = FastEngine.ST_INIT;
       this.x = 0;
       this.y = 0;
-      this.fillValue = 0;
+      this.fillValue = 0; // 塗りつぶし用の変数
     }
 
     busy() {
-      return (this.state != FastMandel.ST_FINISHED) || super.busy();
+      return (this.state != FastEngine.ST_FINISHED) || super.busy();
     }
 
     onUpdating() {      
       while(this.memCredit > 0) {
         var busy = false;
         switch(this.state) {
-          case FastMandel.ST_INIT: busy |= this.init(); break;
-          case FastMandel.ST_WORK: busy |= this.work(); break;
-          case FastMandel.ST_FILL: busy |= this.fill(); break;
+          case FastEngine.ST_INIT: busy |= this.init(); break;
+          case FastEngine.ST_WORK: busy |= this.work(); break;
+          case FastEngine.ST_FILL: busy |= this.fill(); break;
         }
         if (!busy) break;
       }
     }
 
+    // ワークメモリの初期化
     init() {
       if (this.entryQueue.checkFull()) {
         return false;
@@ -636,27 +720,29 @@
       if (this.y >= this.cfg.height) {
         this.x = 0;
         this.y = 0;
-        this.state = FastMandel.ST_WORK;
+        this.state = FastEngine.ST_WORK;
       }
 
       return true;
     }
 
+    // 演算処理
     work() {
       const busy = !this.resultQueue.empty() && !this.entryQueue.checkFull(8);
       
       if (busy) {
+        // 結果キューから pop してワークメモリに反映
         const task = this.resultQueue.pop();
-
         var value = task.n;
         value |= FLAG_HANDLED;
         if (task.diverged) value |= FLAG_DIVERGED;
         if (task.finished) value |= FLAG_FINISHED;
         this.memWrite(task.x, task.y, value);
 
+        // 近傍ピクセルの取得
+        // コードの簡略のため PixelInfo として取得
         const cx = task.x;
         const cy = task.y;
-
         const c = this.getPixelInfo(cx, cy);
         const l = this.getPixelInfo(cx - 1, cy);
         const r = this.getPixelInfo(cx + 1, cy);
@@ -666,6 +752,8 @@
         const ru = this.getPixelInfo(cx + 1, cy - 1);
         const ld = this.getPixelInfo(cx - 1, cy + 1);
         const rd = this.getPixelInfo(cx + 1, cy + 1);
+
+        // 近傍ピクセルと値を比較して境界線を見つける
         this.compare(c, l, u, lu);
         this.compare(c, r, u, ru);
         this.compare(c, l, d, ld);
@@ -677,7 +765,8 @@
       }
 
       if (this.resultQueue.empty() && !super.busy()) {
-        this.state = FastMandel.ST_FILL;
+        // タスクが無くなったら塗りつぶしへ移行
+        this.state = FastEngine.ST_FILL;
         this.x = 0;
         this.y = 0;
       }
@@ -685,6 +774,45 @@
       return busy;
     }
 
+    // ワークメモリからピクセル情報を取得する
+    getPixelInfo(x, y) {
+      if (0 <= x && x < this.cfg.width && 0 <= y && y < this.cfg.height) {
+        return new PixelInfo(x, y, this.memRead(x, y));
+      }
+      else {
+        return null;
+      }
+    }
+
+    // 境界線の処理
+    // a: 注目ピクセル
+    // b: 境界線検出用の隣接ピクセル
+    // c, d: 新たに処理対象とするピクセル
+    //   |   |   |
+    // --+---+---+--
+    //   | d | c | 
+    // --+---+---+--
+    //   | b | a | 
+    // --+---+---+--
+    //   |   |   |
+    compare(a, b, c, d) {
+      if (b && b.finished && b.count != a.count) {
+        // b ピクセルが処理完了済みかつ値が a と異なる
+        // c, d が未処理であればエンキュー (重複しないように handled フラグを立てる)
+        if (c && !c.handled) {
+          c.handled = true;
+          this.memWrite(c.x, c.y, FLAG_HANDLED);
+          this.entryQueue.push(new MandelbrotTask(this.cfg, c.x, c.y));
+        }
+        if (d && !d.handled) {
+          d.handled = true;
+          this.memWrite(d.x, d.y, FLAG_HANDLED);
+          this.entryQueue.push(new MandelbrotTask(this.cfg, d.x, d.y));
+        }
+      }
+    }
+    
+    // 未処理ピクセルの塗りつぶし
     fill() {
       const edge =
         (this.x == 0) ||
@@ -708,35 +836,11 @@
       if (this.y >= this.cfg.height) {
         this.x = 0;
         this.y = 0;
-        this.state = FastMandel.ST_FINISHED;
+        this.state = FastEngine.ST_FINISHED;
         return false;
       }
 
       return true;
-    }
-
-    getPixelInfo(x, y) {
-      if (0 <= x && x < this.cfg.width && 0 <= y && y < this.cfg.height) {
-        return new PixelInfo(x, y, this.memRead(x, y));
-      }
-      else {
-        return null;
-      }
-    }
-
-    compare(c, l, u, lu) {
-      if (l && l.finished && l.count != c.count) {
-        if (u && !u.handled) {
-          u.handled = true;
-          this.memWrite(u.x, u.y, FLAG_HANDLED);
-          this.entryQueue.push(new MandelbrotTask(this.cfg, u.x, u.y));
-        }
-        if (lu && !lu.handled) {
-          lu.handled = true;
-          this.memWrite(lu.x, lu.y, FLAG_HANDLED);
-          this.entryQueue.push(new MandelbrotTask(this.cfg, lu.x, lu.y));
-        }
-      }
     }
   }
 
@@ -795,6 +899,7 @@
       this.diverged = false;
     }
 
+    // マンデルブロ集合の反復処理
     process(iterStep) {
       const maxIter = this.cfg.maxIter;
       const a = this.a;
@@ -894,6 +999,6 @@
     return digits.join('').padStart(width, ' ');
   }
 
-  const ui = new MandelUi('article_mandelbrot_wrapper');
+  const ui = new MandelbrotUi('article_mandelbrot_wrapper');
   ui.init();
 })();  

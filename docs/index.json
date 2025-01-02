@@ -306,7 +306,7 @@
     },
     {
       "title": "マンデルブロ集合描画時の border tracing アルゴリズムの効果",
-      "description": "ある条件下でマンデルブロ集合の描画を大幅に向上することができる border tracing アルゴリズムの効果を視覚的に確認できるようにしてみました。",
+      "description": "一定の条件下でマンデルブロ集合の描画速度を大幅に向上することができる border tracing アルゴリズム の効果を視覚的に確認できるようにしてみました。",
       "date": "2025/01/03",
       "url": "/2025/0103-mandelbrot-border-tracing",
       "twitter_card_size": "summary_large_image",
