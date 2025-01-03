@@ -1,6 +1,9 @@
 (function() {
   'use strict';
 
+  // 実行間隔
+  const INTERVAL_MS = 20;
+
   // ピクセルの状態を示すフラグ
   const FLAG_HANDLED = 1 << 28;
   const FLAG_DIVERGED = 1 << 29;
@@ -17,6 +20,8 @@
   const UI_HEIGHT = 960;
 
   // 設定項目
+  const CONFIG_REAL = { type: 'float', key: 'real', label: 'real', init: -0.5, min: -2, max: 2, ui: null };
+  const CONFIG_IMAG = { type: 'float', key: 'imag', label: 'imag', init: 0, min: -2, max: 2, ui: null };
   const CONFIG_ITEMS = [
     {
       label: 'Image',
@@ -28,8 +33,8 @@
     {
       label: 'Scene',
       items: [
-        { type: 'float', key: 'a', label: 'a', init: -0.5, min: -2, max: 2, ui: null },
-        { type: 'float', key: 'b', label: 'b', init: 0, min: -2, max: 2, ui: null },
+        CONFIG_REAL,
+        CONFIG_IMAG,
         { type: 'float', key: 'range', label: 'Range', init: 2, min: 0, max: 4, ui: null },
         { type: 'int', key: 'maxIter', label: 'Max Iterations', init: 100, min: 1, max: 1000, ui: null },
       ],
@@ -49,21 +54,39 @@
   class MandelbrotUi {
     constructor(wrapperId) {
       this.canvas = document.createElement('canvas');
-      this.wrapper = document.querySelector(`#${wrapperId}`);
-      this.startButton = document.createElement('button');;
-      this.abortButton = document.createElement('button');;
-      this.config = {};
-      this.lastMs = undefined;
-      this.simTimeMs = 0;
-      this.normalEngine = null;
-      this.fastEngine = null;
-      this.validateTimeoutId = null;
-    }
-
-    init() {
       this.canvas.width = UI_WIDTH;
       this.canvas.height = UI_HEIGHT;
 
+      const margin = Math.floor(UI_WIDTH / 40);
+      const engineW = Math.floor((UI_WIDTH - margin * 3) / 2);
+      const engineH = UI_HEIGHT - margin * 2;
+      this.normalEngineUi = new EngineUi('Normal', new Rect(margin, margin, engineW, engineH));
+      this.fastEngineUi = new EngineUi('with Border Tracing', new Rect(margin * 2 + engineW, margin, engineW, engineH));
+      this.engineUis = [
+        this.normalEngineUi,
+        this.fastEngineUi,
+      ];
+
+      this.hovered = false;
+      this.cursorX = 0;
+      this.cursorY = 0;
+
+      this.imageHovered = false;
+      this.imagePixelX = 0;
+      this.imagePixelY = 0;
+
+      this.wrapper = document.querySelector(`#${wrapperId}`);
+      this.startButton = document.createElement('button');;
+      this.stopButton = document.createElement('button');;
+      this.config = {};
+      this.simTimeMs = 0;
+      this.validateTimeoutId = null;
+
+      this.updateIntervalId = null;
+      this.waitingToRender = false;
+    }
+
+    init() {
       // 設定UIの生成
       const table = document.createElement('table');
       for (var category of CONFIG_ITEMS) {
@@ -112,27 +135,62 @@
 
       this.startButton.type = 'button';
       this.startButton.innerHTML = 'Start';
-      this.abortButton.type = 'button';
-      this.abortButton.innerHTML = 'Abort';
-      this.abortButton.disabled = true;
+      this.stopButton.type = 'button';
+      this.stopButton.innerHTML = 'Stop';
+      this.stopButton.disabled = true;
 
       const pControl = document.createElement('p');
       pControl.style.textAlign = 'center';
       pControl.appendChild(this.startButton);
       pControl.appendChild(document.createTextNode('\n'));
-      pControl.appendChild(this.abortButton);
+      pControl.appendChild(this.stopButton);
       this.wrapper.appendChild(pControl);
 
       const pCanvas = document.createElement('p');
       pCanvas.appendChild(this.canvas);
       this.wrapper.appendChild(pCanvas);
 
+      this.canvas.addEventListener('mouseenter', (evt)=>{
+        this.hovered = true;
+        this.requestRender();
+      });
+      this.canvas.addEventListener('mousemove', (evt)=>{
+        const xy = this.cursorToClient(evt);
+        this.cursorX = xy[0];
+        this.cursorY = xy[1];
+        this.requestRender();
+      });
+      this.canvas.addEventListener('mouseout', (evt)=>{
+        this.hovered = false;
+        this.requestRender();
+      });
+      this.canvas.addEventListener('click', (evt)=>{
+        const xy = this.cursorToClient(evt);
+        const x = xy[0], y = xy[1];
+        this.engineUis.forEach(eui => {
+          if (eui.imageRectToParent().contains(x, y)) {
+            const c = eui.parentToComplex(x, y);
+            CONFIG_REAL.ui.value = c[0];
+            CONFIG_IMAG.ui.value = c[1];
+          }
+        });
+        this.completeConfigValidation();
+      });
+
       this.startButton.addEventListener('click', ()=>this.start());
-      this.abortButton.addEventListener('click', ()=>this.abort());
+      this.stopButton.addEventListener('click', ()=>this.stop());
 
       this.ready();
-      this.render();
+      this.completeRender(0);
       // this.start();
+    }
+
+    cursorToClient(evt) {
+      const canvasRect = this.canvas.getBoundingClientRect();
+      return [
+        evt.offsetX * UI_WIDTH / canvasRect.width,
+        evt.offsetY * UI_HEIGHT / canvasRect.height
+      ];
     }
 
     // パラメータの検証をリクエスト
@@ -167,6 +225,7 @@
           }
         }
         this.startButton.disabled = false;
+        this.requestRender();
         return true;
       }
       catch(ex) {
@@ -178,24 +237,21 @@
     }
 
     // 処理の中断
-    abort() {
-      if (this.normalEngine) {
-        this.normalEngine.abort();
-        this.normalEngine = null;
+    stop() {
+      if (this.updateIntervalId !== null) {
+        window.clearInterval(this.updateIntervalId);
+        this.updateIntervalId = null;
       }
-      if (this.fastEngine) {
-        this.fastEngine.abort();
-        this.fastEngine = null;
-      }
+      this.engineUis.forEach(e => e.stop());
       this.startButton.disabled = !this.completeConfigValidation();
-      this.abortButton.disabled = true;
+      this.stopButton.disabled = true;
     }
 
     // 実行準備
     ready() {
       if (!this.completeConfigValidation()) return false;
 
-      this.abort();
+      this.stop();
       const cfg = structuredClone(this.config);
 
       // 画像の高さが未指定の場合は幅と同じにする
@@ -212,9 +268,9 @@
         cfg.resultQueueDepth = preferredQueueDepth;
       }
 
-      this.normalEngine = new EngineUi(new NormalEngine(cfg));
-      this.fastEngine = new EngineUi(new FastEngine(cfg));
-      this.lastMs = undefined;
+      this.normalEngineUi.init(new NormalEngine(cfg));
+      this.fastEngineUi.init(new FastEngine(cfg));
+
       this.simTimeMs = 0;
 
       return true;
@@ -223,42 +279,41 @@
     // 演算開始
     start() {
       if (!this.ready()) return;
-      window.requestAnimationFrame((t)=>this.loop(t));
-      this.abortButton.disabled = false;
+      this.engineUis.forEach(e => e.start());
+
+      this.updateIntervalId = window.setInterval(() => this.loop(), INTERVAL_MS);
+
+      this.stopButton.disabled = false;
       this.startButton.disabled = true;
     }
 
     // 更新処理
-    loop(nowMs) {
-      if (!this.normalEngine || !this.fastEngine) return;
-
-      // フレームレートに応じて処理を進めるが、処理量には上限を設ける
-      if (this.lastMs === undefined) {
-        this.lastMs = nowMs;
-      }
-      const deltaMs = Math.min(100, nowMs - this.lastMs);
-      this.lastMs = nowMs;
-
-      this.simTimeMs += deltaMs;
+    loop() {
+      this.simTimeMs += INTERVAL_MS;
 
       // 演算処理
-      this.normalEngine.update(this.simTimeMs);
-      this.fastEngine.update(this.simTimeMs);
+      this.engineUis.forEach(e => e.update(this.simTimeMs));
 
-      // 描画処理
-      this.render(nowMs);
+      if (this.engineUis.every(e => !e.engine || !e.engine.busy())) {
+        // 全ての処理が終了したら停止
+        this.stop();
+      }
+      
+      // 再描画
+      this.requestRender();
+    }
 
-      if (this.normalEngine.busy() || this.fastEngine.busy()) {
-        window.requestAnimationFrame((t)=>this.loop(t));
-      }
-      else {
-        this.startButton.disabled = !this.completeConfigValidation();
-        this.abortButton.disabled = true;
-      }
+    // 再描画要求
+    requestRender() {
+      if (this.waitingToRender) return;
+      this.waitingToRender = true;
+      window.requestAnimationFrame((t)=>this.completeRender(t));
     }
 
     // 描画処理
-    render(nowMs) {
+    completeRender(nowMs) {
+      this.waitingToRender = false;
+
       const g = this.canvas.getContext('2d');
 
       const w = this.canvas.width;
@@ -271,15 +326,51 @@
       g.fillStyle = '#000';
       g.fillRect(0, 0, w, h);
 
-      if (this.normalEngine) {
-        const engine = this.normalEngine;
-        engine.render(nowMs, g, margin, margin, viewW, viewH);
+      this.engineUis.forEach(eui => eui.render(nowMs, g));
+      this.engineUis.forEach(eui => this.renderCursor(nowMs, g, eui));
+
+      if (this.engineUis.some(e => e.animating())) {
+        this.requestRender();
+      }
+    }
+
+    renderCursor(nowMs, g, eui) {
+      if (!eui.engine || !eui.engine.scene) return;
+
+      const scene = eui.engine.scene;
+      const fontH = Math.round(eui.imageViewBounds.height / 30);
+
+      const imgRect = eui.imageRectToParent();
+
+      const xy = eui.complexToScreen(this.config.real, this.config.imag);
+      const x = xy[0];
+      const y = xy[1];
+      const size = 16;
+      g.fillStyle = 'rgba(0 0 0 /50%)';
+      g.fillRect(x - 2, y - 16 / 2 - 1, 4, 16 + 2);
+      g.fillRect(x - 16 / 2 - 1, y - 2, 16 + 2, 4);
+      g.fillStyle = '#fff';
+      g.fillRect(x - 1, y - 16 / 2, 2, 16);
+      g.fillRect(x - 16 / 2, y - 1, 16, 2);
+    
+      const cursorX = this.cursorX;
+      const cursorY = this.cursorY;
+      if (imgRect.contains(cursorX, cursorY)) {
+        const c = eui.parentToComplex(cursorX, cursorY);
+        const reText = `re:${formatFloat(3 + 8, 8, c[0])}`;
+        const imText = `im:${formatFloat(3 + 8, 8, c[1])}`;
+
+        g.font = `${fontH}px monospace`;
+        const tipW = Math.max(g.measureText(reText).width, g.measureText(imText).width);
+        const tipX = Math.round(cursorX - tipW / 2);
+        const tipY = Math.round(cursorY - fontH * 2.5);
+        g.fillStyle = 'rgba(0 0 0 /50%)';
+        g.fillRect(tipX, tipY, tipW, fontH * 2);
+        g.fillStyle = '#fff';
+        g.fillText(reText, tipX, tipY + fontH);
+        g.fillText(imText, tipX, tipY + fontH * 2);
       }
 
-      if (this.fastEngine) {
-        const engine = this.fastEngine;
-        engine.render(nowMs, g, margin * 2 + viewW, margin, viewW, viewH);
-      }
     }
   }
 
@@ -304,26 +395,65 @@
     static COL_READ = '0 255 128'; // メモリ読み出し中のピクセルの色
     static COL_WRITE = '255 64 0'; // メモリ書き込み中のピクセルの色
 
-    constructor(engine) {
-      this.cfg = engine.cfg;
-      this.engine = engine;
+    constructor(title, bounds) {
+      this.title = title;
+      this.bounds = bounds;
 
-      // バックバッファの生成
-      this.pixelSize = Math.ceil(512 / this.cfg.width);
-      this.canvas = document.createElement('canvas');
-      this.canvas.width = this.cfg.width * this.pixelSize;
-      this.canvas.height = this.cfg.height * this.pixelSize;
-      const g = this.canvas.getContext('2d');
-      g.fillStyle = '#404';
-      g.fillRect(0, 0, this.canvas.width, this.canvas.height);
+      this.margin = Math.floor(bounds.height / 40);
+      this.titleFontHeight = bounds.height / 40;
+      this.imageViewBounds = new Rect(0, this.titleFontHeight + this.margin, bounds.width, bounds.width);
+      this.imageContentBounds = new Rect(0, this.titleFontHeight + this.margin, bounds.width, bounds.width);
+
+      this.cfg = null;
+      this.engine = null;
       
+      this.canvas = document.createElement('canvas');
+      this.prepareBackBuffer(256, 256);
+
       // ピクセル強調表示の管理用辞書
       this.busyMarkers = {};
       this.writeMarkers = {};
       this.readMarkers = {};
     }
 
-    busy() {
+    init(engine) {
+      this.engine = engine;
+      this.cfg = engine.cfg;
+
+      // バックバッファの生成
+      const pxSize = Math.ceil(1024 / (this.cfg.width + this.cfg.height));
+      this.prepareBackBuffer(pxSize * this.cfg.width, pxSize * this.cfg.height);
+      
+      this.busyMarkers = {};
+      this.writeMarkers = {};
+      this.readMarkers = {};
+    }
+
+    prepareBackBuffer(buffW, buffH) {
+      this.canvas.width = buffW;
+      this.canvas.height = buffH;
+      const g = this.canvas.getContext('2d');
+      g.fillStyle = '#404';
+      g.fillRect(0, 0, buffW, buffH);
+      
+      const view = this.imageViewBounds;
+      const draw = this.imageContentBounds;
+      draw.x = 0;
+      draw.y = 0;
+      draw.width = view.width;
+      draw.height = view.height;
+      if (view.width / view.height > buffW / buffH) {
+        draw.width = view.height * buffW / buffH;
+        draw.x = (view.width - draw.width) / 2;
+      }
+      else {
+        draw.height = view.width * buffH / buffW;
+        draw.y = (view.height - draw.height) / 2;
+      }
+    }
+
+    animating() {
+      if (!this.engine || !this.cfg) return false;
       return (
         this.engine.busy() ||
         this.engine.eventQueue.length > 0 ||
@@ -333,105 +463,130 @@
       );
     }
 
-    abort() {
-      this.engine.abort();
+    start() {
+      if (this.engine) {
+        this.engine.start();
+      }
+    }
+
+    stop() {
+      if (this.engine) {
+        this.engine.stop();
+      }
     }
 
     update(simTimeMs) {
-      this.engine.update(simTimeMs);
+      if (this.engine) {
+        this.engine.update(simTimeMs);
+      }
     }
 
-    render(nowMs, g, viewX, viewY, viewW, viewH) {
-      // 描画表示更新用キューからイベントを刈り取って表示を更新する
-      this.updateBackbuffer(this.engine.eventQueue);
-      for (const evt of this.engine.eventQueue) {
-        const x = evt.x;
-        const y = evt.y;
-        const key = evt.y * this.cfg.width + evt.x;
-        const rect = new PixelMarker(nowMs, evt.x, evt.y);
-        switch(evt.code) {
-          case EVT_ITERATION: this.busyMarkers[key] = rect; break;
-          case EVT_MEM_READ: this.readMarkers[key] = rect; break;
-          case EVT_MEM_WRITE: this.writeMarkers[key] = rect; break;
-        }
-      }
-      this.engine.eventQueue = [];
+    render(nowMs, g) {
+      const viewW = this.bounds.width;
+      const viewH = this.bounds.height;
       
-      const margin = Math.floor(viewH / 40);
+      g.save();
+      g.translate(this.bounds.x, this.bounds.y);
 
+      var progress = 0;
+      var entryQueueRatio = 0;
+      var resultQueueUsage = 0;
+      var totalIters = 0;
+      var numMemReads = 0;
+      var numMemWrites = 0;
+      var elapsedMs = 0;
+      var countDigits = 4;
+
+      g.font = `${this.titleFontHeight}px monospace`;
+      g.fillStyle = '#fff';
+      g.fillText(this.title, 0, this.titleFontHeight);
+
+      if (this.engine && this.cfg) {
+        // 描画表示更新用キューからイベントを刈り取って表示を更新する
+        this.updateBackbuffer(this.engine.eventQueue);
+        for (const evt of this.engine.eventQueue) {
+          const key = evt.y * this.cfg.width + evt.x;
+          const rect = new PixelMarker(nowMs, evt.x, evt.y);
+          switch(evt.code) {
+            case EVT_ITERATION: this.busyMarkers[key] = rect; break;
+            case EVT_MEM_READ: this.readMarkers[key] = rect; break;
+            case EVT_MEM_WRITE: this.writeMarkers[key] = rect; break;
+          }
+        }
+        this.engine.eventQueue = [];
+        
+        progress = this.engine.numFinished / (this.cfg.width * this.cfg.height);
+        entryQueueRatio = this.engine.entryQueue.count() / this.cfg.entryQueueDepth;
+        resultQueueUsage = this.engine.resultQueue.count() / this.cfg.resultQueueDepth;
+        totalIters = this.engine.totalIters;
+        numMemReads = this.engine.numMemReads;
+        numMemWrites = this.engine.numMemWrites;
+        elapsedMs = this.engine.elapsedMs;
+        countDigits = Math.ceil(Math.log10(this.cfg.width * this.cfg.height * this.cfg.maxIter));
+      }
+      
       // バックバッファの描画
-      const imgW = viewW;
-      const imgH = imgW;
-      this.renderBackbuffer(nowMs, g, viewX, viewY, imgW, imgH);
+      this.renderBackbuffer(nowMs, g);
 
-      const lineH = Math.floor((viewH - margin - imgH) / 7);
+      const lineH = Math.floor((viewH - this.imageViewBounds.bottom() - this.margin) / 7);
       const fontH = Math.ceil(lineH * 3 / 4);
       g.font = `${fontH}px monospace`;
-
       const labelW = Math.ceil(g.measureText('m').width * 16);
       const percentW = Math.ceil(g.measureText('_100.0%').width);
-
-      var y = viewY + imgH + margin;
-
-      const countDigits = Math.ceil(Math.log10(this.cfg.width * this.cfg.height * this.cfg.maxIter));
-
-      {
-        var p = this.engine.numFinished / (this.cfg.width * this.cfg.height);
-        g.fillStyle = '#fff';
-        g.fillText('Progress: ', viewX, y + fontH);
-        g.fillText(`${formatFloat(5, 1, 100 * p)}% `, viewX + labelW, y + fontH);
-        g.fillRect(viewX + labelW + percentW, y, p * (viewW - labelW - percentW), fontH);
-        y += lineH;
-      }
       
-      {
-        var p = this.engine.entryQueue.count() / this.cfg.entryQueueDepth;
-        g.fillStyle = '#fff';
-        g.fillText('Entry Queue: ', viewX, y + fontH);
-        g.fillText(`${formatFloat(5, 1, 100 * p)}% `, viewX + labelW, y + fontH);
-        g.fillRect(viewX + labelW + percentW, y, p * (viewW - labelW - percentW), fontH);
-        y += lineH;
-      }
-      
-      {
-        var p = this.engine.resultQueue.count() / this.cfg.resultQueueDepth;
-        g.fillStyle = '#fff';
-        g.fillText('Result Queue: ', viewX, y + fontH);
-        g.fillText(`${formatFloat(5, 1, 100 * p)}% `, viewX + labelW, y + fontH);
-        g.fillRect(viewX + labelW + percentW, y, p * (viewW - labelW - percentW), fontH);
-        y += lineH;
-      }
+      var y = this.imageViewBounds.bottom() + this.margin;
+
+      g.fillStyle = '#fff';
+      g.fillText('Progress: ', 0, y + fontH);
+      g.fillText(`${formatFloat(5, 1, 100 * progress)}% `, labelW, y + fontH);
+      g.fillRect(labelW + percentW, y, progress * (viewW - labelW - percentW), fontH);
+      y += lineH;
+    
+      g.fillStyle = '#fff';
+      g.fillText('Entry Queue: ', 0, y + fontH);
+      g.fillText(`${formatFloat(5, 1, 100 * entryQueueRatio)}% `, labelW, y + fontH);
+      g.fillRect(labelW + percentW, y, entryQueueRatio * (viewW - labelW - percentW), fontH);
+      y += lineH;
+    
+      g.fillStyle = '#fff';
+      g.fillText('Result Queue: ', 0, y + fontH);
+      g.fillText(`${formatFloat(5, 1, 100 * resultQueueUsage)}% `, labelW, y + fontH);
+      g.fillRect(labelW + percentW, y, resultQueueUsage * (viewW - labelW - percentW), fontH);
+      y += lineH;
 
       g.lineWidth = 3;
       g.strokeStyle = `rgb(${EngineUi.COL_BUSY})`;
-      g.strokeRect(viewX, y, fontH, fontH);
-      g.fillText('Iterations:', viewX + fontH * 3 / 2, y + fontH);
-      g.fillText(`${this.engine.totalIters}`.padStart(countDigits, ' '), viewX + labelW, y + fontH);
+      g.strokeRect(0, y, fontH, fontH);
+      g.fillText('Iterations:', fontH * 3 / 2, y + fontH);
+      g.fillText(`${totalIters}`.padStart(countDigits, ' '), labelW, y + fontH);
       y += lineH;
 
       g.lineWidth = 3;
       g.strokeStyle = `rgb(${EngineUi.COL_READ})`;
-      g.strokeRect(viewX, y, fontH, fontH);
-      g.fillText('Mem. Read:', viewX + fontH * 3 / 2, y + fontH);
-      g.fillText(`${this.engine.numMemReads}`.padStart(countDigits, ' '), viewX + labelW, y + fontH);
+      g.strokeRect(0, y, fontH, fontH);
+      g.fillText('Mem. Read:', fontH * 3 / 2, y + fontH);
+      g.fillText(`${numMemReads}`.padStart(countDigits, ' '), labelW, y + fontH);
       y += lineH;
 
       g.lineWidth = 3;
       g.strokeStyle = `rgb(${EngineUi.COL_WRITE})`;
-      g.strokeRect(viewX, y, fontH, fontH);
-      g.fillText('Mem. Write:', viewX + fontH * 3 / 2, y + fontH);
-      g.fillText(`${this.engine.numMemWrites}`.padStart(countDigits, ' '), viewX + labelW, y + fontH);
+      g.strokeRect(0, y, fontH, fontH);
+      g.fillText('Mem. Write:', fontH * 3 / 2, y + fontH);
+      g.fillText(`${numMemWrites}`.padStart(countDigits, ' '), labelW, y + fontH);
       y += lineH;
 
-      g.fillText('Rendering Time:', viewX, y + fontH);
-      g.fillText(`${formatFloat(6, 2, this.engine.elapsedMs / 1000)}`.padEnd(6, ' ')+' sec', viewX + labelW, y + fontH);
+      g.fillText('Rendering Time:', 0, y + fontH);
+      g.fillText(`${formatFloat(6, 2, elapsedMs / 1000)}`.padEnd(6, ' ')+' sec', labelW, y + fontH);
       y += lineH;
+
+      g.restore();
     }
 
     // バックバッファの更新
     updateBackbuffer(eventQueue) {
-      const pxSize = this.pixelSize;
       const g = this.canvas.getContext('2d');
+      const pixW = this.canvas.width / this.cfg.width;
+      const pixH = this.canvas.height / this.cfg.height;
       for (const evt of eventQueue) {
         if (evt.code != EVT_MEM_WRITE) continue; // メモリ書き込みイベント以外は無視
         const x = evt.x;
@@ -473,44 +628,47 @@
           // 不明
           g.fillStyle = '#f00';
         }
-        g.fillRect(x * pxSize, y * pxSize, pxSize, pxSize);
+        g.fillRect(x * pixW, y * pixH, pixW, pixH);
       }
     }
     
     // バックバッファの描画
-    renderBackbuffer(nowMs, g, viewX, viewY, viewW, viewH) {
-      const imgW = this.canvas.width;
-      const imgH = this.canvas.height;
-      var drawX = viewX;
-      var drawY = viewY;
-      var drawW = viewW;
-      var drawH = viewH;
-      if (viewW / viewH > imgW / imgH) {
-        drawW = viewH * imgW / imgH;
-        drawX = viewX + (viewW - drawW) / 2;
-      }
-      else {
-        drawH = viewW * imgH / imgW;
-        drawY = viewY + (viewH - drawH) / 2;
-      }
+    renderBackbuffer(nowMs, g) {
+      const viewW = this.imageViewBounds.width;
+      const viewH = this.imageViewBounds.height;
+      const drawW = this.imageContentBounds.width;
+      const drawH = this.imageContentBounds.height;
+
+      g.save();
+      g.translate(this.imageViewBounds.x, this.imageViewBounds.y);
 
       g.fillStyle = '#444';
-      g.fillRect(viewX, viewY, viewW, viewH);
+      g.fillRect(0, 0, viewW, viewH);
 
-      g.drawImage(this.canvas, drawX, drawY, drawW, drawH);
+      {
+        g.save();
+        g.translate(this.imageContentBounds.x, this.imageContentBounds.y);
+        
+        // 画像描画
+        g.drawImage(this.canvas, 0, 0, drawW, drawH);
+
+        // 強調表示の描画
+        this.renderMarkers(nowMs, g, drawW, drawH, this.busyMarkers, EngineUi.COL_BUSY, true);
+        this.renderMarkers(nowMs, g, drawW, drawH, this.readMarkers, EngineUi.COL_READ, false);
+        this.renderMarkers(nowMs, g, drawW, drawH, this.writeMarkers, EngineUi.COL_WRITE, false);
+
+        g.restore();
+      }
 
       g.lineWidth = 1;
       g.strokeStyle = '#888';
-      g.strokeRect(viewX, viewY, viewW, viewH);
+      g.strokeRect(0, 0, viewW, viewH);
 
-      // 強調表示の描画
-      this.renderMarkers(nowMs, g, drawX, drawY, drawW, drawH, this.busyMarkers, EngineUi.COL_BUSY, true);
-      this.renderMarkers(nowMs, g, drawX, drawY, drawW, drawH, this.readMarkers, EngineUi.COL_READ, false);
-      this.renderMarkers(nowMs, g, drawX, drawY, drawW, drawH, this.writeMarkers, EngineUi.COL_WRITE, false);
+      g.restore();
     }
 
     // ピクセルの強調表示
-    renderMarkers(nowMs, g, viewX, viewY, viewW, viewH, markers, rgb, fill) {
+    renderMarkers(nowMs, g, viewW, viewH, markers, rgb, fill) {
       const FADE_TIME_MS = 100; // フェードアウト時間
       const pixW = viewW / this.cfg.width;
       const pixH = viewH / this.cfg.height;
@@ -521,12 +679,12 @@
         alpha = alpha * alpha;
         if (fill) {
           g.fillStyle = `rgba(${rgb} / ${alpha})`;
-          g.fillRect(viewX + pixW * marker.x, viewY + pixH * marker.y, pixW, pixH);
+          g.fillRect(pixW * marker.x, pixH * marker.y, pixW, pixH);
         }
         else {
           g.lineWidth = 3;
           g.strokeStyle = `rgba(${rgb} / ${alpha})`;
-          g.strokeRect(viewX + pixW * marker.x, viewY + pixH * marker.y, pixW, pixH);
+          g.strokeRect(pixW * marker.x, pixH * marker.y, pixW, pixH);
         }
         if (alpha <= 0) {
           // フェードアウト時間が過ぎたものは削除
@@ -534,12 +692,39 @@
         }
       }
     }
+
+    imageRectToParent() {
+      return new Rect(
+        this.bounds.x + this.imageViewBounds.x + this.imageContentBounds.x,
+        this.bounds.y + this.imageViewBounds.y + this.imageContentBounds.y,
+        this.imageContentBounds.width,
+        this.imageContentBounds.height
+      );
+    }
+
+    parentToComplex(x, y) {
+      if (!this.engine || !this.engine.scene) return [0, 0];
+      const imgRect = this.imageRectToParent();
+      x = (x - imgRect.x) * this.cfg.width / imgRect.width;
+      y = (y - imgRect.y) * this.cfg.height / imgRect.height;
+      return this.engine.scene.xyToComplex(x, y);
+    }
+
+    complexToScreen(r, i) {
+      if (!this.engine || !this.engine.scene) return [0, 0];
+      const imgRect = this.imageRectToParent();
+      const xy = this.engine.scene.complexToXy(r, i);
+      xy[0] = imgRect.x + xy[0] * imgRect.width / this.cfg.width;
+      xy[1] = imgRect.y + xy[1] * imgRect.height / this.cfg.height;
+      return xy;
+    }
   }
 
   // エンジンの基底クラス
   class EngineBase {
     constructor(cfg) {
       this.cfg = cfg;
+      this.scene = new MandelbrotScene(cfg);
       
       // ワークメモリ
       this.mem = new Int32Array(cfg.width * cfg.height);
@@ -559,20 +744,29 @@
       this.numMemWrites = 0;
       this.numMemReads = 0;
       this.numFinished = 0;
-    }
 
-    abort() {
-      this.entryQueue.clear();
-      this.resultQueue.clear();
-      this.eventQueue = [];
+      this.running = false;
     }
 
     busy() { 
-      return !this.entryQueue.empty() || !this.resultQueue.empty(); 
+      return (
+        (this.entryQueue.length > 0) ||
+        (this.resultQueue.length > 0)
+      );
+    }
+
+    start() {
+      this.running = true;
+      this.onStart();
+    }
+    
+    stop() {
+      this.running = false;
+      this.onStop();
     }
 
     update(simTimeMs) {
-      if (!this.busy()) return;
+      if (!this.running) return;
 
       // 経過時間
       const deltaMs = simTimeMs - this.elapsedMs;
@@ -600,6 +794,10 @@
           this.resultQueue.push(task);
         }
       }
+
+      if (!this.busy()) {
+        this.stop();
+      }
     }
     
     // ワークメモリ書き込み
@@ -626,37 +824,52 @@
   class NormalEngine extends EngineBase {
     constructor(cfg) {
       super(cfg);
-      this.x = 0;
-      this.y = 0;
+      this.vars = {
+        x: 0,
+        y: 0,
+        busy: false,
+      };
     }
 
-    busy() {
-      return (this.y < this.cfg.height) || super.busy();
+    busy() { return this.vars.busy || super.busy(); }
+
+    onStart() {
+      this.vars.busy = true;
+    }
+
+    onStop() {
+      this.vars.busy = false;
     }
 
     onUpdating() {
+      var vars = this.vars;
+
       // エントリーキューへのタスク挿入
-      while(this.y < this.cfg.height && !this.entryQueue.checkFull()) {
-        this.entryQueue.push(new MandelbrotTask(this.cfg, this.x, this.y));
+      while(vars.y < this.cfg.height && !this.entryQueue.checkFull()) {
+        this.entryQueue.push(new MandelbrotTask(this.scene, vars.x, vars.y));
         
         // キューイングされたピクセルの表示のためにこっそりメモリ書き込み
-        this.mem[this.y * this.cfg.width + this.x] = FLAG_HANDLED;
-        this.eventQueue.push(new MandelbrotEvent(this.x, this.y, EVT_MEM_WRITE));
+        this.mem[vars.y * this.cfg.width + vars.x] = FLAG_HANDLED;
+        this.eventQueue.push(new MandelbrotEvent(vars.x, vars.y, EVT_MEM_WRITE));
         
-        this.x += 1;
-        if (this.x >= this.cfg.width) {
-          this.y += 1;
-          this.x = 0;
+        vars.x += 1;
+        if (vars.x >= this.cfg.width) {
+          vars.y += 1;
+          vars.x = 0;
         }
       }
 
       // 結果キューからの刈り取り --> メモリに反映して更新通知
       while (!this.resultQueue.empty() && this.memCredit > 0) {
         const task = this.resultQueue.pop();
-        var value = task.n;
+        var value = task.count;
         if (task.diverged) value |= FLAG_DIVERGED;
         if (task.finished) value |= FLAG_FINISHED;
         this.memWrite(task.x, task.y, value);
+      }
+
+      if (vars.y >= this.cfg.height && this.entryQueue.empty() && this.resultQueue.empty()) {
+        vars.busy = false;
       }
     }
   }
@@ -664,27 +877,37 @@
   // border tracing の実装
   class FastEngine extends EngineBase {
     // ステート定義
-    static ST_INIT = 0; // ワークメモリの初期化
-    static ST_WORK = 1; // 演算処理
-    static ST_FILL = 2; // 塗りつぶし
-    static ST_FINISHED = 3; // 完了
+    static ST_IDLE = 0; // 完了
+    static ST_INIT = 1; // ワークメモリの初期化
+    static ST_WORK = 2; // 演算処理
+    static ST_FILL = 3; // 塗りつぶし
 
     constructor(cfg) {
       super(cfg);
-      this.state = FastEngine.ST_INIT;
-      this.x = 0;
-      this.y = 0;
-      this.fillValue = 0; // 塗りつぶし用の変数
+      this.vars = {
+        state: FastEngine.ST_IDLE,
+        x: 0,
+        y: 0,
+        fillValue: 0,
+      };
     }
 
     busy() {
-      return (this.state != FastEngine.ST_FINISHED) || super.busy();
+      return (this.vars.state != FastEngine.ST_IDLE) || super.busy();
+    }
+
+    onStart() {
+      this.vars.state = FastEngine.ST_INIT;
+    }
+
+    onStop() {
+      this.vars.state = FastEngine.ST_IDLE;
     }
 
     onUpdating() {      
       while(this.memCredit > 0) {
         var busy = false;
-        switch(this.state) {
+        switch(this.vars.state) {
           case FastEngine.ST_INIT: busy |= this.init(); break;
           case FastEngine.ST_WORK: busy |= this.work(); break;
           case FastEngine.ST_FILL: busy |= this.fill(); break;
@@ -695,32 +918,34 @@
 
     // ワークメモリの初期化
     init() {
+      var vars = this.vars;
+
       if (this.entryQueue.checkFull()) {
         return false;
       }
 
       const edge =
-        (this.x == 0) ||
-        (this.x == this.cfg.width - 1) ||
-        (this.y == 0) ||
-        (this.y == this.cfg.height - 1);
+        (vars.x == 0) ||
+        (vars.x == this.cfg.width - 1) ||
+        (vars.y == 0) ||
+        (vars.y == this.cfg.height - 1);
 
       var value = 0;
       if (edge) {
-        this.entryQueue.push(new MandelbrotTask(this.cfg, this.x, this.y));
+        this.entryQueue.push(new MandelbrotTask(this.scene, vars.x, vars.y));
         value |= FLAG_HANDLED;
       }
-      this.memWrite(this.x, this.y, value);
+      this.memWrite(vars.x, vars.y, value);
       
-      this.x++;
-      if (this.x >= this.cfg.width) {
-        this.y++;
-        this.x = 0;
+      vars.x++;
+      if (vars.x >= this.cfg.width) {
+        vars.y++;
+        vars.x = 0;
       }
-      if (this.y >= this.cfg.height) {
-        this.x = 0;
-        this.y = 0;
-        this.state = FastEngine.ST_WORK;
+      if (vars.y >= this.cfg.height) {
+        vars.x = 0;
+        vars.y = 0;
+        vars.state = FastEngine.ST_WORK;
       }
 
       return true;
@@ -728,12 +953,14 @@
 
     // 演算処理
     work() {
+      var vars = this.vars;
+      
       const busy = !this.resultQueue.empty() && !this.entryQueue.checkFull(8);
       
       if (busy) {
         // 結果キューから pop してワークメモリに反映
         const task = this.resultQueue.pop();
-        var value = task.n;
+        var value = task.count;
         value |= FLAG_HANDLED;
         if (task.diverged) value |= FLAG_DIVERGED;
         if (task.finished) value |= FLAG_FINISHED;
@@ -764,11 +991,11 @@
         this.compare(c, d, r, rd);
       }
 
-      if (this.resultQueue.empty() && !super.busy()) {
+      if (this.entryQueue.empty() && this.resultQueue.empty()) {
         // タスクが無くなったら塗りつぶしへ移行
-        this.state = FastEngine.ST_FILL;
-        this.x = 0;
-        this.y = 0;
+        vars.state = FastEngine.ST_FILL;
+        vars.x = 0;
+        vars.y = 0;
       }
 
       return busy;
@@ -802,41 +1029,43 @@
         if (c && !c.handled) {
           c.handled = true;
           this.memWrite(c.x, c.y, FLAG_HANDLED);
-          this.entryQueue.push(new MandelbrotTask(this.cfg, c.x, c.y));
+          this.entryQueue.push(new MandelbrotTask(this.scene, c.x, c.y));
         }
         if (d && !d.handled) {
           d.handled = true;
           this.memWrite(d.x, d.y, FLAG_HANDLED);
-          this.entryQueue.push(new MandelbrotTask(this.cfg, d.x, d.y));
+          this.entryQueue.push(new MandelbrotTask(this.scene, d.x, d.y));
         }
       }
     }
     
     // 未処理ピクセルの塗りつぶし
     fill() {
-      const edge =
-        (this.x == 0) ||
-        (this.x == this.cfg.width - 1) ||
-        (this.y == 0) ||
-        (this.y == this.cfg.height - 1);
+      var vars = this.vars;
 
-      var value = this.memRead(this.x, this.y);
+      const edge =
+        (vars.x == 0) ||
+        (vars.x == this.cfg.width - 1) ||
+        (vars.y == 0) ||
+        (vars.y == this.cfg.height - 1);
+
+      var value = this.memRead(vars.x, vars.y);
       if (value == 0) {
-        this.memWrite(this.x, this.y, this.fillValue);
+        this.memWrite(vars.x, vars.y, vars.fillValue);
       }
       else {
-        this.fillValue = value;
+        vars.fillValue = value;
       }
 
-      this.x++;
-      if (this.x >= this.cfg.width) {
-        this.y++;
-        this.x = 0;
+      vars.x++;
+      if (vars.x >= this.cfg.width) {
+        vars.y++;
+        vars.x = 0;
       }
-      if (this.y >= this.cfg.height) {
-        this.x = 0;
-        this.y = 0;
-        this.state = FastEngine.ST_FINISHED;
+      if (vars.y >= this.cfg.height) {
+        vars.x = 0;
+        vars.y = 0;
+        vars.state = FastEngine.ST_IDLE;
         return false;
       }
 
@@ -862,71 +1091,95 @@
     }
   }
 
-  class PixelMarker {
-    constructor(tsMs, x, y) {
-      this.tsMs = tsMs;
-      this.x = x;
-      this.y = y;
+  class MandelbrotScene {
+    constructor(cfg) {
+      this.cfg = cfg;
+
+      this.realRange = cfg.range;
+      this.imagRange = cfg.range;
+      if (cfg.width > cfg.height) {
+        this.imagRange = this.realRange * cfg.height / cfg.width;
+      }
+      else {
+        this.realRange = this.imagRange * cfg.width / cfg.height;
+      }
+      this.realMin = cfg.real - this.realRange / 2;
+      this.realMax = cfg.real + this.realRange / 2;
+      this.imagMin = cfg.imag - this.imagRange / 2;
+      this.imagMax = cfg.imag + this.imagRange / 2;
+    }
+
+    // 画像内の座標から複素数に変換
+    xyToComplex(x, y) {
+      return [
+        this.realMin + this.realRange * x / this.cfg.width,
+        this.imagMin + this.imagRange * y / this.cfg.height,
+      ];
+    }
+
+    // 輻輳数から画像内の座標に変換
+    complexToXy(r, i) {
+      return [
+        this.cfg.width * (r - this.realMin) / this.realRange,
+        this.cfg.height * (i - this.imagMin) / this.imagRange,
+      ];
     }
   }
 
   class MandelbrotTask {
-    constructor(cfg, x, y) {
-      this.cfg = cfg;
+    constructor(scene, x, y) {
+      this.scene = scene;
       this.x = x;
       this.y = y;
 
-      var rangeX = cfg.range;
-      var rangeY = cfg.range;
-      if (cfg.width > cfg.height) {
-        rangeY = rangeX * cfg.height / cfg.width;
-      }
-      else {
-        rangeX = rangeY * cfg.width / cfg.height;
-      }
-      const a0 = cfg.a - rangeX / 2;
-      const a1 = cfg.a + rangeX / 2;
-      const b0 = cfg.b - rangeY / 2;
-      const b1 = cfg.b + rangeY / 2;
-      this.a = a0 + (a1 - a0) * x / cfg.width;
-      this.b = b0 + (b1 - b0) * y / cfg.height;
+      const c = scene.xyToComplex(x, y);
+      this.cReal = c[0];
+      this.cImag = c[1];
 
-      this.r = 0;
-      this.i = 0;
-      this.n = 0;
+      this.zReal = 0;
+      this.zImag = 0;
+      this.count = 0;
 
       this.finished = false;
       this.diverged = false;
     }
 
     // マンデルブロ集合の反復処理
-    process(iterStep) {
-      const maxIter = this.cfg.maxIter;
-      const a = this.a;
-      const b = this.b;
-      var r = this.r;
-      var i = this.i;
-      var n = this.n;
+    process(iterCredit) {
+      const maxIter = this.scene.cfg.maxIter;
+      const a = this.cReal;
+      const b = this.cImag;
+      var x = this.zReal;
+      var y = this.zImag;
+      var n = this.count;
       var diverged = this.diverged;
       var finished = this.finished;
-      var numIters = 0;
-      while (!finished && numIters < iterStep) {
-        const rr = r * r;
-        const ii = i * i;
-        const ri = r * i;
-        diverged = (rr + ii >= 4);
+      var steps = 0;
+      while (!finished && steps < iterCredit) {
+        const xx = x * x;
+        const yy = y * y;
+        const xy = x * y;
+        diverged = (xx + yy >= 4);
         finished = (n >= maxIter) || diverged;
-        r = rr - ii + a;
-        i = 2 * ri + b;
+        x = xx - yy + a;
+        y = 2 * xy + b;
         n++;
-        numIters++;
+        steps++;
       }
-      this.r = r;
-      this.i = i;
-      this.n = n;
+      this.zReal = x;
+      this.zImag = y;
+      this.count = n;
       this.diverged = diverged;
       this.finished = finished;
-      return numIters;
+      return steps;
+    }
+  }
+
+  class PixelMarker {
+    constructor(tsMs, x, y) {
+      this.tsMs = tsMs;
+      this.x = x;
+      this.y = y;
     }
   }
 
@@ -970,6 +1223,19 @@
       this.fullFlag = false;
       this.array = [];
     }
+  }
+
+  class Rect {
+    constructor(x = 0, y = 0, w = 0, h = 0) {
+      this.x = x;
+      this.y = y;
+      this.width = w;
+      this.height = h;
+    }
+
+    right() { return this.x + this.width; }
+    bottom() { return this.y + this.height; }
+    contains(x, y) { return (this.x <= x && x < this.right() && this.y <= y && y < this.bottom()); }
   }
 
   function formatFloat(width, fracWidth, value) {
