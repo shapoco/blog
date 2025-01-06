@@ -5,11 +5,10 @@
   const INTERVAL_MS = 20;
 
   // ピクセルの状態を示すフラグ
-  const FLAG_DIVERGED = 1 << 27;
-  const FLAG_PRIORITY = 1 << 28;
-  const FLAG_HANDLED = 1 << 29;
+  const FLAG_HANDLED = 1 << 28;
+  const FLAG_DIVERGED = 1 << 29;
   const FLAG_FINISHED = 1 << 30;
-  const COUNT_MASK = (1 << 27) - 1;
+  const COUNT_MASK = (1 << 28) - 1;
 
   // 表示更新用のイベントコード
   const EVT_ITERATION = 1;
@@ -46,7 +45,7 @@
         { urlArg: 'ei', type: 'int', key: 'iterPerSec', label: 'Iteration', unit: 'iter/sec', init: null, min: 1, max: 1000 * 1000, radix: 10 },
         { urlArg: 'ee', type: 'int', key: 'entryQueueDepth', label: 'Entry Queue Size', unit: 'px', init: null, min: 1, max: 65536, radix: 2 },
         { urlArg: 'er', type: 'int', key: 'resultQueueDepth', label: 'Result Queue Size', unit: 'px', init: null, min: 1, max: 65536, radix: 2 },
-        { urlArg: 'es', type: 'bool', key: 'usePriority', label: 'Use Priority for Tracing', init: true },
+        //{ urlArg: 'es', type: 'bool', key: 'usePriority', label: 'Use Priority for Tracing', init: true },
       ]
     },
     {
@@ -299,35 +298,9 @@
 
     // パラメータの検証を完了させる
     completeConfigValidation() {
-      var cfg = this.nextConfig;
-      var props = {};
 
       try {
-        for (var category of CONFIG_ITEMS) {
-          for (var item of category.items) {
-            props[item.key] = item;
-            if (item.type == 'bool') {
-              cfg[item.key] = item.ui.checked;
-            }
-            else {
-              var valueStr = item.ui.value.trim();
-              if (item.init === null && !valueStr) {
-                cfg[item.key] = null;
-              }
-              else {
-                const value = parseExpr(valueStr).value;
-                if (item.type == 'int' && value != Math.floor(value)) {
-                  throw new Error('Value must be integer.');
-                }
-                if (value < item.min || item.max < value) {
-                  throw new Error('Value out of range.');
-                }
-                cfg[item.key] = value;
-              }
-              item.ui.style.color = 'unset';
-            }
-          }
-        }
+        var cfg = this.configFromForm();
 
         this.fixConfig(cfg);
 
@@ -348,6 +321,35 @@
         this.startButton.disabled = true;
         return false;
       }
+    }
+
+    configFromForm() {
+      var cfg = this.nextConfig;
+      for (var category of CONFIG_ITEMS) {
+        for (var item of category.items) {
+          if (item.type == 'bool') {
+            cfg[item.key] = item.ui.checked;
+          }
+          else {
+            var valueStr = item.ui.value.trim();
+            if (item.init === null && !valueStr) {
+              cfg[item.key] = null;
+            }
+            else {
+              const value = parseExpr(valueStr).value;
+              if (item.type == 'int' && value != Math.floor(value)) {
+                throw new Error('Value must be integer.');
+              }
+              if (value < item.min || item.max < value) {
+                throw new Error('Value out of range.');
+              }
+              cfg[item.key] = value;
+            }
+            item.ui.style.color = 'unset';
+          }
+        }
+      }
+      return cfg;
     }
 
     // 値の自動決定
@@ -381,7 +383,7 @@
 
       // キャッシュ性能の自動決定
       if (cfg.cacheOpPerSec === null) {
-        cfg.cacheOpPerSec =  cfg.memOpPerSec * 10;
+        cfg.cacheOpPerSec =  preferredPerf;
       }
 
       // キャッシュラインサイズの自動決定
@@ -405,9 +407,7 @@
 
     // 設定をURLに反映
     configToUrl() {
-      var url = window.location.href.replaceAll(/#.+$/g, '');
-
-      var autoCfg = structuredClone(this.lastConfig);
+      var autoCfg = structuredClone(this.configFromForm());
       for (var category of CONFIG_ITEMS) {
         for (var item of category.items) {
           if (item.init === null) {
@@ -446,10 +446,11 @@
       }
 
       if (args.length > 0) {
-        url += '#' + args.join('&')
+        window.location.href = '#' + args.join('&')
       }
-
-      window.location.href = url;
+      else {
+        window.location.href = './';
+      }
     }
 
     // URLから設定をロード
@@ -1362,7 +1363,8 @@
 
       var value = 0;
       if (edge) {
-        const priority = this.cfg.usePriority && edgeH;
+        //const priority = this.cfg.usePriority && edgeH;
+        const priority = false;
         this.entryQueue.push(new MandelbrotTask(this.scene, vars.x, vars.y, priority));
         value |= FLAG_HANDLED;
       }
@@ -1393,6 +1395,7 @@
         const task = this.resultQueue.pop();
         const cx = task.x;
         const cy = task.y;
+        const priority = task.highPriority;
 
         var value = task.count;
         value |= FLAG_HANDLED;
@@ -1413,14 +1416,14 @@
         const rd = this.getPixelInfo(cx + 1, cy + 1);
 
         // 近傍ピクセルと値を比較して境界線を見つける
-        this.compare(c, u, l, lu, task.highPriority);
-        this.compare(c, d, l, ld, task.highPriority);
-        this.compare(c, u, r, ru, task.highPriority);
-        this.compare(c, d, r, rd, task.highPriority);
-        this.compare(c, l, u, lu, task.highPriority);
-        this.compare(c, r, u, ru, task.highPriority);
-        this.compare(c, l, d, ld, task.highPriority);
-        this.compare(c, r, d, rd, task.highPriority);
+        this.compare(c, u, l, lu, priority);
+        this.compare(c, d, l, ld, priority);
+        this.compare(c, u, r, ru, priority);
+        this.compare(c, d, r, rd, priority);
+        this.compare(c, l, u, lu, priority);
+        this.compare(c, r, u, ru, priority);
+        this.compare(c, l, d, ld, priority);
+        this.compare(c, r, d, rd, priority);
       }
 
       if (this.entryQueue.empty() && this.resultQueue.empty()) {

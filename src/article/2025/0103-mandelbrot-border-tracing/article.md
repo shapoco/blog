@@ -9,4 +9,4 @@
 ## シミュレーター
 
 <div id="article_mandelbrot_wrapper"></div>
-<script async src="./mandelbrot.js"></script>
+<script src="./mandelbrot.js"></script>

@@ -407,9 +407,7 @@
 
     // 設定をURLに反映
     configToUrl() {
-      var url = window.location.href.replaceAll(/#.+$/g, '');
-
-      var autoCfg = this.configFromForm();
+      var autoCfg = structuredClone(this.configFromForm());
       for (var category of CONFIG_ITEMS) {
         for (var item of category.items) {
           if (item.init === null) {
@@ -448,10 +446,11 @@
       }
 
       if (args.length > 0) {
-        url += '#' + args.join('&')
+        window.location.href = '#' + args.join('&')
       }
-
-      window.location.href = url;
+      else {
+        window.location.href = './';
+      }
     }
 
     // URLから設定をロード
