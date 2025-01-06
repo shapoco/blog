@@ -445,12 +445,11 @@
         }
       }
 
+      let url = window.location.href.replaceAll(/#.+$/g, '');
       if (args.length > 0) {
-        window.location.href = '#' + args.join('&')
+        url += '#' + args.join('&');
       }
-      else {
-        window.location.href = './';
-      }
+      window.history.replaceState(null, null, url);
     }
 
     // URLから設定をロード
