@@ -5,10 +5,11 @@
   const INTERVAL_MS = 20;
 
   // ピクセルの状態を示すフラグ
-  const FLAG_HANDLED = 1 << 28;
-  const FLAG_DIVERGED = 1 << 29;
+  const FLAG_DIVERGED = 1 << 27;
+  const FLAG_PRIORITY = 1 << 28;
+  const FLAG_HANDLED = 1 << 29;
   const FLAG_FINISHED = 1 << 30;
-  const COUNT_MASK = (1 << 28) - 1;
+  const COUNT_MASK = (1 << 27) - 1;
 
   // 表示更新用のイベントコード
   const EVT_ITERATION = 1;
@@ -16,18 +17,18 @@
   const EVT_MEM_READ = 3;
 
   // UI の内部的な解像度
-  const UI_WIDTH = 1280;
-  const UI_HEIGHT = 960;
+  const DEFAULT_UI_WIDTH = 1280;
+  const DEFAULT_UI_HEIGHT = 960;
 
   // 設定項目
-  const CONFIG_REAL = { type: 'float', key: 'real', label: 'real', init: -0.5, min: -2, max: 2, ui: null };
-  const CONFIG_IMAG = { type: 'float', key: 'imag', label: 'imag', init: 0, min: -2, max: 2, ui: null };
+  const CONFIG_REAL = { urlArg: 'sr', type: 'float', key: 'real', label: 're', init: -0.5, min: -2, max: 2 };
+  const CONFIG_IMAG = { urlArg: 'si', type: 'float', key: 'imag', label: 'im', init: 0, min: -2, max: 2 };
   const CONFIG_ITEMS = [
     {
       label: 'Image',
       items: [
-        { type: 'int', key: 'width', label: 'Width', init: 64, min: 8, max: 1024, ui: null },
-        { type: 'int', key: 'height', label: 'Height', init: null, min: 8, max: 1024, ui: null },
+        { urlArg: 'iw', type: 'int', key: 'width', label: 'Width', unit: 'px', init: 128, min: 8, max: 1024, radix: 2 },
+        { urlArg: 'ih', type: 'int', key: 'height', label: 'Height', unit: 'px', init: null, min: 8, max: 1024, radix: 2 },
       ]
     },
     {
@@ -35,35 +36,48 @@
       items: [
         CONFIG_REAL,
         CONFIG_IMAG,
-        { type: 'float', key: 'range', label: 'Range', init: 2, min: 0, max: 4, ui: null },
-        { type: 'int', key: 'maxIter', label: 'Max Iterations', init: 100, min: 1, max: 1000, ui: null },
+        { urlArg: 'sz', type: 'float', key: 'zoom', label: 'Zoom', init: '2^-1', min: -2, max: (2**50), radix: 2 },
+        { urlArg: 'sm', type: 'int', key: 'maxIter', label: 'Max Iterations', init: 100, min: 1, max: 10000, radix: 10 },
       ],
     },
     {
       label: 'Engine<br>Spec',
       items: [
-        { type: 'int', key: 'iterPerSec', label: 'Iteration/sec', init: 10000, min: 1, max: 1000 * 1000, ui: null },
-        { type: 'int', key: 'memPerSec', label: 'Memory Op./sec', init: 10000, min: 1, max: 1000 * 1000, ui: null },
-        { type: 'int', key: 'entryQueueDepth', label: 'Entry Queue Depth', init: null, min: 1, max: 65536, ui: null },
-        { type: 'int', key: 'resultQueueDepth', label: 'Result Queue Depth', init: null, min: 1, max: 65536, ui: null },
+        { urlArg: 'ei', type: 'int', key: 'iterPerSec', label: 'Iteration', unit: 'iter/sec', init: null, min: 1, max: 1000 * 1000, radix: 10 },
+        { urlArg: 'ee', type: 'int', key: 'entryQueueDepth', label: 'Entry Queue Size', unit: 'px', init: null, min: 1, max: 65536, radix: 2 },
+        { urlArg: 'er', type: 'int', key: 'resultQueueDepth', label: 'Result Queue Size', unit: 'px', init: null, min: 1, max: 65536, radix: 2 },
+        { urlArg: 'es', type: 'bool', key: 'usePriority', label: 'Use Priority for Tracing', init: true },
       ]
-    }
+    },
+    {
+      label: 'Memory<br>Spec',
+      items: [
+        { urlArg: 'mm', type: 'int', key: 'memOpPerSec', label: 'Memory', unit: 'op/sec', init: null, min: 1, max: 1000 * 1000, radix: 10 },
+        { urlArg: 'mc', type: 'int', key: 'cacheOpPerSec', label: 'Cache', unit: 'op/sec', init: null, min: 1, max: 1000 * 1000, radix: 10 },
+        { urlArg: 'ms', type: 'int', key: 'cacheLineSize', label: 'Cache Line Size', unit: 'px', init: null, min: 1, max: 65536, radix: 2 },
+        { urlArg: 'mn', type: 'int', key: 'numCacheLines', label: 'Number of Cache Lines', init: null, min: 0, max: 1024, radix: 2 },
+      ]
+    },
   ];
 
   // UIクラス
   class MandelbrotUi {
     constructor(wrapperId) {
       this.canvas = document.createElement('canvas');
-      this.canvas.width = UI_WIDTH;
-      this.canvas.height = UI_HEIGHT;
+      this.canvas.width = DEFAULT_UI_WIDTH;
+      this.canvas.height = DEFAULT_UI_HEIGHT;
 
-      const margin = Math.floor(UI_WIDTH / 40);
-      const engineW = Math.floor((UI_WIDTH - margin * 3) / 2);
-      const engineH = UI_HEIGHT - margin * 2;
-      this.normalEngineUi = new EngineUi('Normal', new Rect(margin, margin, engineW, engineH));
-      this.fastEngineUi = new EngineUi('with Border Tracing', new Rect(margin * 2 + engineW, margin, engineW, engineH));
+      const viewW = this.canvas.width;
+      const viewH = this.canvas.height;
+      this.fontHeight = viewH / 40;
+      const margin = Math.floor(viewW / 40);
+      this.uiMargin = margin;
+      const engineW = Math.floor((viewW - margin * 3) / 2);
+      const engineH = viewH - this.fontHeight - margin * 3;
+      this.rasterEngineUi = new EngineUi('Raster Scan', new Rect(margin, margin, engineW, engineH));
+      this.fastEngineUi = new EngineUi('Border Tracing', new Rect(margin * 2 + engineW, margin, engineW, engineH));
       this.engineUis = [
-        this.normalEngineUi,
+        this.rasterEngineUi,
         this.fastEngineUi,
       ];
 
@@ -76,54 +90,119 @@
       this.imagePixelY = 0;
 
       this.wrapper = document.querySelector(`#${wrapperId}`);
-      this.startButton = document.createElement('button');;
-      this.stopButton = document.createElement('button');;
-      this.config = {};
+      this.startButton = document.createElement('button');
+      this.stopButton = document.createElement('button');
+      this.nextConfig = {};
+      this.lastConfig = {};
       this.simTimeMs = 0;
       this.validateTimeoutId = null;
 
       this.updateIntervalId = null;
       this.waitingToRender = false;
+
+      this.compareResult = null;
+      this.fpsCounter = new FpsCounter();
     }
 
     init() {
       // 設定UIの生成
       const table = document.createElement('table');
-      for (var category of CONFIG_ITEMS) {
+      for (let category of CONFIG_ITEMS) {
         const tr = document.createElement('tr');
         const th = document.createElement('th');
         const td = document.createElement('td');
         th.innerHTML = category.label;
-        for (var item of category.items) {
+        for (let item of category.items) {
           const inputId = `article_${category.id}_${item.key}`;
+          const uiHeight = '3ex';
           
           const label = document.createElement('label');
           label.htmlFor = inputId;
-          label.innerHTML = ` ${item.label}:`;
+          label.innerHTML = ` ${item.label}: `;
           
           const input = document.createElement('input');
           input.id = inputId;
-          input.type = 'text';
-          if (item.init === null) {
-            // 初期値が null の場合は省略可能とする
-            input.value = '';
-            input.placeholder = '(auto)';
+          input.style.height = uiHeight;
+          input.style.boxSizing = 'border-box';
+          input.style.lineHeight = uiHeight;
+          input.style.verticalAlign = 'middle';
+          input.style.margin = '0px';
+          if (item.type == 'bool') {
+            input.type = 'checkbox';
+            input.checked = !!item.init;
           }
           else {
-            input.value = item.init;
+            input.type = 'text';
+            if (item.init === null) {
+              // 初期値が null の場合は省略可能とする
+              input.value = '';
+              input.placeholder = 'auto';
+            }
+            else {
+              input.value = item.init;
+            }
+            input.style.width = '6em';
           }
-          input.size = 4;
           input.addEventListener('change', ()=>this.requestConfigValidation());
           input.addEventListener('keydown', ()=>this.requestConfigValidation());
 
           item.ui = input;
-          this.config[item.key] = item.init;
+          this.nextConfig[item.key] = item.init;
 
           const span = document.createElement('span');
-          span.style.whiteSpace = 'nowrap';
+          span.style.display = 'inline-block';
+          span.style.borderRight = 'solid 1px #888';
+          span.style.padding = '0.5ex 0.5em';
           span.appendChild(label);
           span.appendChild(input);
+
+          if (item.radix) {
+            const updown = [
+              { label: '▴', step: 1 },
+              { label: '▾', step: -1 },
+            ];
+            for (let ud of updown) {
+              const button = document.createElement('button');
+              button.type = 'button';
+              button.innerHTML = ud.label;
+              button.style.height = uiHeight;
+              button.style.width = '1.5em';
+              button.style.lineHeight = uiHeight;
+              button.style.boxSizing = 'border-box';
+              button.style.margin = '0px';
+              button.style.padding = '0px';
+              button.style.verticalAlign = 'middle';
+              span.appendChild(button);
+              button.addEventListener('click', (evt) => {
+                const radix = parseExpr(item.ui.value).radix;
+                var value = this.nextConfig[item.key];
+                if (item.radix == 2) {
+                  if (value == 0 && ud.step > 0) {
+                    value = 1;
+                  }
+                  else {
+                    value *= 2 ** ud.step;
+                  }
+                }
+                else {
+                  const log10 = Math.floor(Math.log10(value * (1 + ud.step / 10000)));
+                  value += ud.step * (10 ** log10);
+                }
+                if (item.type == 'int') {
+                  value = Math.floor(value);
+                }
+                item.ui.value = toExpr(Math.max(item.min, Math.min(item.max, value)), radix);
+                this.completeConfigValidation();
+              });
+            }
+          }
           
+          if (item.unit) {
+            const unit = document.createElement('span');
+            unit.innerHTML = ' ' + item.unit;
+            span.appendChild(unit);
+          }
+
           td.appendChild(span);
           td.appendChild(document.createTextNode('\n'));
         }
@@ -134,8 +213,8 @@
       this.wrapper.appendChild(table);
 
       this.startButton.type = 'button';
-      this.startButton.innerHTML = 'Start';
       this.stopButton.type = 'button';
+      this.startButton.innerHTML = 'Start';
       this.stopButton.innerHTML = 'Stop';
       this.stopButton.disabled = true;
 
@@ -150,46 +229,63 @@
       pCanvas.appendChild(this.canvas);
       this.wrapper.appendChild(pCanvas);
 
-      this.canvas.addEventListener('mouseenter', (evt)=>{
-        this.hovered = true;
-        this.requestRender();
-      });
-      this.canvas.addEventListener('mousemove', (evt)=>{
-        const xy = this.cursorToClient(evt);
-        this.cursorX = xy[0];
-        this.cursorY = xy[1];
-        this.requestRender();
-      });
-      this.canvas.addEventListener('mouseout', (evt)=>{
-        this.hovered = false;
-        this.requestRender();
-      });
-      this.canvas.addEventListener('click', (evt)=>{
-        const xy = this.cursorToClient(evt);
-        const x = xy[0], y = xy[1];
-        this.engineUis.forEach(eui => {
-          if (eui.imageRectToParent().contains(x, y)) {
-            const c = eui.parentToComplex(x, y);
-            CONFIG_REAL.ui.value = c[0];
-            CONFIG_IMAG.ui.value = c[1];
-          }
-        });
-        this.completeConfigValidation();
-      });
+      this.canvas.addEventListener('mouseenter', (evt)=>{ this.onMouseEnter(evt); });
+      this.canvas.addEventListener('mousemove', (evt)=>{ this.onMouseMove(evt); });
+      this.canvas.addEventListener('mouseout', (evt)=>{ this.onMouseOut(evt); });
+      this.canvas.addEventListener('click', (evt)=>{ this.onMouseClick(evt); });
 
       this.startButton.addEventListener('click', ()=>this.start());
       this.stopButton.addEventListener('click', ()=>this.stop());
 
+      this.configFromUrl();
       this.ready();
       this.completeRender(0);
       // this.start();
     }
 
+    onMouseEnter(evt) {
+      this.hovered = true;
+      this.requestRender();
+    }
+
+    onMouseMove(evt) {
+      const xy = this.cursorToClient(evt);
+      const x = xy[0], y = xy[1];
+      this.cursorX = x;
+      this.cursorY = y;
+      if (!this.isEngineBusy() && this.engineUis.some(eui => eui.imageRectToParent().contains(x, y))) {
+        this.canvas.style.cursor = 'pointer';
+      }
+      else {
+        this.canvas.style.cursor = 'auto';
+      }
+      this.requestRender();
+    }
+
+    onMouseOut(evt) {
+      this.hovered = false;
+      this.canvas.style.cursor = 'auto';
+      this.requestRender();
+    }
+
+    onMouseClick(evt) {
+      const xy = this.cursorToClient(evt);
+      const x = xy[0], y = xy[1];
+      this.engineUis.forEach(eui => {
+        if (eui.imageRectToParent().contains(x, y)) {
+          const c = eui.parentToComplex(x, y);
+          CONFIG_REAL.ui.value = c[0];
+          CONFIG_IMAG.ui.value = c[1];
+        }
+      });
+      this.completeConfigValidation();
+    }
+
     cursorToClient(evt) {
       const canvasRect = this.canvas.getBoundingClientRect();
       return [
-        evt.offsetX * UI_WIDTH / canvasRect.width,
-        evt.offsetY * UI_HEIGHT / canvasRect.height
+        evt.offsetX * this.canvas.width / canvasRect.width,
+        evt.offsetY * this.canvas.height / canvasRect.height
       ];
     }
 
@@ -203,37 +299,212 @@
 
     // パラメータの検証を完了させる
     completeConfigValidation() {
+      var cfg = this.nextConfig;
+      var props = {};
+
       try {
         for (var category of CONFIG_ITEMS) {
           for (var item of category.items) {
-            var valueStr = item.ui.value.trim();
-            if (item.init === null && !valueStr) {
-              this.config[item.key] = null;
+            props[item.key] = item;
+            if (item.type == 'bool') {
+              cfg[item.key] = item.ui.checked;
             }
             else {
-              const value = parseFloat(valueStr);
-              if (item.type == 'int' && value != Math.floor(value)) {
-                throw new Error('Value must be integer.');
+              var valueStr = item.ui.value.trim();
+              if (item.init === null && !valueStr) {
+                cfg[item.key] = null;
               }
-              if (value < item.min || item.max < value) {
-                throw new Error('Value out of range.');
+              else {
+                const value = parseExpr(valueStr).value;
+                if (item.type == 'int' && value != Math.floor(value)) {
+                  throw new Error('Value must be integer.');
+                }
+                if (value < item.min || item.max < value) {
+                  throw new Error('Value out of range.');
+                }
+                cfg[item.key] = value;
               }
-              this.config[item.key] = value;
+              item.ui.style.color = 'unset';
             }
-            //item.ui.style.background = 'unset';
-            item.ui.style.color = 'unset';
           }
         }
+
+        this.fixConfig(cfg);
+
+        for (var category of CONFIG_ITEMS) {
+          for (var item of category.items) {
+            if (item.type != 'bool' && !item.ui.value.trim()) {
+              item.ui.placeholder = `(${cfg[item.key]})`;
+            }
+          }
+        }
+
         this.startButton.disabled = false;
         this.requestRender();
         return true;
       }
       catch(ex) {
-        //item.ui.style.background = '#fcc';
         item.ui.style.color = '#f00';
         this.startButton.disabled = true;
         return false;
       }
+    }
+
+    // 値の自動決定
+    fixConfig(cfg) {
+      // 画像の高さの自動決定
+      if (cfg.height === null) {
+        cfg.height = cfg.width;
+      }
+
+      // キュー容量の自動決定
+      const preferredQueueDepth = (cfg.width + cfg.height) * 4;
+      if (cfg.entryQueueDepth === null) {
+        cfg.entryQueueDepth = preferredQueueDepth;
+      }
+      if (cfg.resultQueueDepth === null) {
+        cfg.resultQueueDepth = preferredQueueDepth;
+      }
+
+      const exp10wh = Math.round(10 ** Math.floor(Math.log10(cfg.width * cfg.height)));
+      const preferredPerf = Math.floor(cfg.width * cfg.height / exp10wh) * exp10wh;
+
+      // エンジン性能の自動決定
+      if (cfg.iterPerSec === null) {
+        cfg.iterPerSec = preferredPerf;
+      }
+
+      // メインメモリ性能の自動決定
+      if (cfg.memOpPerSec === null) {
+        cfg.memOpPerSec = Math.ceil(preferredPerf / 10);
+      }
+
+      // キャッシュ性能の自動決定
+      if (cfg.cacheOpPerSec === null) {
+        cfg.cacheOpPerSec =  cfg.memOpPerSec * 10;
+      }
+
+      // キャッシュラインサイズの自動決定
+      if (cfg.numCacheLines === null) {
+        cfg.numCacheLines = 16;
+      }
+
+      // キャッシュラインサイズの自動決定
+      if (cfg.cacheLineSize === null) {
+        cfg.cacheLineSize = 1024;
+      }
+      
+      for (var category of CONFIG_ITEMS) {
+        for (var item of category.items) {
+          if (item.type == 'int' || item.type == 'float') {
+            cfg[item.key] = Math.max(item.min, Math.min(item.max, cfg[item.key]));
+          }
+        }
+      }
+    }
+
+    // 設定をURLに反映
+    configToUrl() {
+      var url = window.location.href.replaceAll(/#.+$/g, '');
+
+      var autoCfg = structuredClone(this.lastConfig);
+      for (var category of CONFIG_ITEMS) {
+        for (var item of category.items) {
+          if (item.init === null) {
+            autoCfg[item.key] = null;
+          }
+        }
+      }
+      this.fixConfig(autoCfg);
+
+      var defaultCfg = {};
+      for (var category of CONFIG_ITEMS) {
+        for (var item of category.items) {
+          if (item.init === null) {
+            defaultCfg[item.key] = autoCfg[item.key];
+          }
+          else {
+            defaultCfg[item.key] = parseExpr(item.init).value;
+          }
+        }
+      }
+      this.fixConfig(defaultCfg);
+
+      var args = [];
+      for (var category of CONFIG_ITEMS) {
+        for (var item of category.items) {
+          var value = this.lastConfig[item.key];
+          if (value == defaultCfg[item.key]) continue;
+          if (item.type == 'bool') {
+            value = value ? '1' : '0';
+          }
+          else {
+            value = toExpr(value, -1);
+          }
+          args.push(`${item.urlArg}=${encodeURIComponent(value)}`)
+        }
+      }
+
+      if (args.length > 0) {
+        url += '#' + args.join('&')
+      }
+
+      window.location.href = url;
+    }
+
+    // URLから設定をロード
+    configFromUrl() {
+      let cfgs = {};
+      for (var category of CONFIG_ITEMS) {
+        for (var item of category.items) {
+          cfgs[item.urlArg] = item;
+        }
+      }
+
+      const args = window.location.href.replaceAll(/^.+#/g, '').split('&');
+      for (let kvStr of args) {
+        try {
+          const kv = kvStr.split('=');
+          if (kv.length != 2) {
+            throw new Error('Invalid argument format');
+          }
+
+          let key, value;
+          [key, value] = kv.map(s => decodeURIComponent(s));
+          if (!(key in cfgs)) {
+            throw new Error('Unknown argument');
+          }
+
+          const cfg = cfgs[key];
+          if (cfg.type == 'bool') {
+            cfg.ui.checked = (parseInt(value) == 1);
+          }
+          else {
+            value = parseExpr(value).value;
+            
+            //if (cfg.radix) {
+            //  value = toExpr(value, cfg.radix);
+            //}
+            if (cfg.init) {
+              value = toExpr(value, parseExpr(cfg.init).radix);
+            }
+            else {
+              value = toExpr(value, 0);
+            }
+            cfg.ui.value = value;
+          }
+        }
+        catch(ex) {
+          console.error(`${ex.message}: '${kvStr}'`);
+        }
+      }
+
+      this.requestConfigValidation();
+    }
+
+    // 実行中か否か
+    isEngineBusy() {
+      return this.engineUis.some(eui => eui.engine && eui.engine.busy());
     }
 
     // 処理の中断
@@ -243,6 +514,7 @@
         this.updateIntervalId = null;
       }
       this.engineUis.forEach(e => e.stop());
+      this.compareResult = null;
       this.startButton.disabled = !this.completeConfigValidation();
       this.stopButton.disabled = true;
     }
@@ -252,24 +524,12 @@
       if (!this.completeConfigValidation()) return false;
 
       this.stop();
-      const cfg = structuredClone(this.config);
+      const cfg = structuredClone(this.nextConfig);
+      this.lastConfig = cfg;
 
-      // 画像の高さが未指定の場合は幅と同じにする
-      if (cfg.height === null) {
-        cfg.height = cfg.width;
-      }
-
-      // キューの容量が指定されていない場合は自動決定する
-      const preferredQueueDepth = (cfg.width + cfg.height) * 2;
-      if (cfg.entryQueueDepth === null) {
-        cfg.entryQueueDepth = preferredQueueDepth;
-      }
-      if (cfg.resultQueueDepth === null) {
-        cfg.resultQueueDepth = preferredQueueDepth;
-      }
-
-      this.normalEngineUi.init(new NormalEngine(cfg));
+      this.rasterEngineUi.init(new RasterScanEngine(cfg));
       this.fastEngineUi.init(new FastEngine(cfg));
+      this.compareResult = null;
 
       this.simTimeMs = 0;
 
@@ -279,12 +539,18 @@
     // 演算開始
     start() {
       if (!this.ready()) return;
+
+      this.configToUrl();
+
       this.engineUis.forEach(e => e.start());
+      this.compareResult = null;
 
       this.updateIntervalId = window.setInterval(() => this.loop(), INTERVAL_MS);
 
       this.stopButton.disabled = false;
       this.startButton.disabled = true;
+
+      this.fpsCounter.init();
     }
 
     // 更新処理
@@ -294,9 +560,33 @@
       // 演算処理
       this.engineUis.forEach(e => e.update(this.simTimeMs));
 
-      if (this.engineUis.every(e => !e.engine || !e.engine.busy())) {
+      if (!this.isEngineBusy()) {
         // 全ての処理が終了したら停止
         this.stop();
+      }
+      
+      const completed = this.engineUis.every(eui => eui.engine && eui.engine.completed());
+      if (!this.compareResult && completed) {
+        // 完了時の処理
+        const arrayA = this.rasterEngineUi.engine.mem;
+        const arrayB = this.fastEngineUi.engine.mem;
+        const numPixels = this.lastConfig.width * this.lastConfig.height;
+        var numErrors = 0;
+        for (var i = 0; i < numPixels; i++) {
+          const a = arrayA[i];
+          const b = arrayB[i];
+          const aFinished = (a & FLAG_FINISHED) != 0;
+          const bFinished = (b & FLAG_FINISHED) != 0;
+          const aCount = a & COUNT_MASK;
+          const bCount = b & COUNT_MASK;
+          if (!aFinished || !bFinished || aCount != bCount) {
+            numErrors++;
+          }
+        }
+        this.compareResult = new CompareResult();
+        this.compareResult.numTotalPixels = numPixels;
+        this.compareResult.numErrorPixels = numErrors;
+        this.compareResult.speedRatio = this.rasterEngineUi.engine.elapsedMs / this.fastEngineUi.engine.elapsedMs;
       }
       
       // 再描画
@@ -314,22 +604,29 @@
     completeRender(nowMs) {
       this.waitingToRender = false;
 
+      this.fpsCounter.update(nowMs);
+
       const g = this.canvas.getContext('2d');
 
-      const w = this.canvas.width;
-      const h = this.canvas.height;
-
-      const margin = Math.floor(w / 40);
-      const viewW = Math.floor((w - margin * 3) / 2);
-      const viewH = h - margin * 2;
+      const viewW = this.canvas.width;
+      const viewH = this.canvas.height;
 
       g.fillStyle = '#000';
-      g.fillRect(0, 0, w, h);
+      g.fillRect(0, 0, viewW, viewH);
 
+      // エンジン毎のUIを描画
       this.engineUis.forEach(eui => eui.render(nowMs, g));
+
+      // ターゲット座標とツールチップの描画
       this.engineUis.forEach(eui => this.renderCursor(nowMs, g, eui));
 
-      if (this.engineUis.some(e => e.animating())) {
+      // 処理結果の描画
+      this.renderResult(g)
+
+      // フレームレートの描画
+      this.renderFps(g);
+
+      if (this.engineUis.some(eui => eui.animationInProgress())) {
         this.requestRender();
       }
     }
@@ -342,35 +639,79 @@
 
       const imgRect = eui.imageRectToParent();
 
-      const xy = eui.complexToScreen(this.config.real, this.config.imag);
-      const x = xy[0];
-      const y = xy[1];
-      const size = 16;
-      g.fillStyle = 'rgba(0 0 0 /50%)';
-      g.fillRect(x - 2, y - 16 / 2 - 1, 4, 16 + 2);
-      g.fillRect(x - 16 / 2 - 1, y - 2, 16 + 2, 4);
-      g.fillStyle = '#fff';
-      g.fillRect(x - 1, y - 16 / 2, 2, 16);
-      g.fillRect(x - 16 / 2, y - 1, 16, 2);
-    
-      const cursorX = this.cursorX;
-      const cursorY = this.cursorY;
-      if (imgRect.contains(cursorX, cursorY)) {
-        const c = eui.parentToComplex(cursorX, cursorY);
-        const reText = `re:${formatFloat(3 + 8, 8, c[0])}`;
-        const imText = `im:${formatFloat(3 + 8, 8, c[1])}`;
-
-        g.font = `${fontH}px monospace`;
-        const tipW = Math.max(g.measureText(reText).width, g.measureText(imText).width);
-        const tipX = Math.round(cursorX - tipW / 2);
-        const tipY = Math.round(cursorY - fontH * 2.5);
+      {
+        const xy = eui.complexToScreen(this.nextConfig.real, this.nextConfig.imag);
+        const x = xy[0];
+        const y = xy[1];
         g.fillStyle = 'rgba(0 0 0 /50%)';
-        g.fillRect(tipX, tipY, tipW, fontH * 2);
+        g.fillRect(x - 2, y - 16 / 2 - 1, 4, 16 + 2);
+        g.fillRect(x - 16 / 2 - 1, y - 2, 16 + 2, 4);
         g.fillStyle = '#fff';
-        g.fillText(reText, tipX, tipY + fontH);
-        g.fillText(imText, tipX, tipY + fontH * 2);
+        g.fillRect(x - 1, y - 16 / 2, 2, 16);
+        g.fillRect(x - 16 / 2, y - 1, 16, 2);
       }
+    
+      if (this.hovered) {
+        const cursorX = this.cursorX;
+        const cursorY = this.cursorY;
+        if (imgRect.contains(cursorX, cursorY)) {
+          const c = eui.parentToComplex(cursorX, cursorY);
+          const reText = `re:${formatFloat(3 + 8, 8, c[0])}`;
+          const imText = `im:${formatFloat(3 + 8, 8, c[1])}`;
 
+          g.font = `${fontH}px monospace`;
+          const tipW = Math.max(g.measureText(reText).width, g.measureText(imText).width);
+          const tipX = Math.round(cursorX - tipW / 2);
+          const tipY = Math.round(cursorY - fontH * 2.5);
+          g.fillStyle = 'rgba(0 0 0 /50%)';
+          g.fillRect(tipX, tipY, tipW, fontH * 2);
+          g.fillStyle = '#fff';
+          g.fillText(reText, tipX, tipY + fontH);
+          g.fillText(imText, tipX, tipY + fontH * 2);
+        }
+      }
+    }
+    
+    // フレームレートの描画
+    renderFps(g) {
+      if (!this.isEngineBusy()) return;
+      const fontH = this.fontHeight;
+      const text = `${formatFloat(6, 2, this.fpsCounter.fps)} FPS`;
+      g.font = `${fontH}px monospace`;
+      g.fillStyle = '#888';
+      g.fillText(text, this.canvas.width - g.measureText(text).width, fontH);
+    }
+
+    // 処理結果の描画
+    renderResult(g) {
+      if (!this.compareResult) return;
+
+      const result = this.compareResult;
+      const fontH = this.fontHeight;
+      const success = (result.numErrorPixels == 0) && (result.speedRatio > 1);
+      var text = `Completed. `;
+      if (result.numErrorPixels == 0) {
+        text += 'No errors found. ';
+      }
+      else {
+        const errPercent = result.numErrorPixels * 100 / result.numTotalPixels;
+        const fracWidth = Math.max(2, -Math.log10(errPercent) + 1);
+        text += `${result.numErrorPixels} pixel (${formatFloat(fracWidth, fracWidth, errPercent)}%) error found. `;
+      }
+      text += `Border tracing is x${formatFloat(4, 2, result.speedRatio)} ${result.speedRatio > 1 ? 'faster' : 'slower'} than raster scan.`;
+      const x = this.uiMargin;
+      const y = this.engineUis[0].bounds.bottom() + this.uiMargin;
+      g.font = `${fontH}px monospace`;
+      g.fillStyle = success ? '#0f0' : '#f00';
+      g.fillText(text, x, y + fontH);
+    }
+  }
+
+  class CompareResult {
+    constructor() {
+      this.numTotalPixels = 0;
+      this.numErrorPixels = 0;
+      this.speedRatio = 0;
     }
   }
 
@@ -452,7 +793,7 @@
       }
     }
 
-    animating() {
+    animationInProgress() {
       if (!this.engine || !this.cfg) return false;
       return (
         this.engine.busy() ||
@@ -488,15 +829,6 @@
       g.save();
       g.translate(this.bounds.x, this.bounds.y);
 
-      var progress = 0;
-      var entryQueueRatio = 0;
-      var resultQueueUsage = 0;
-      var totalIters = 0;
-      var numMemReads = 0;
-      var numMemWrites = 0;
-      var elapsedMs = 0;
-      var countDigits = 4;
-
       g.font = `${this.titleFontHeight}px monospace`;
       g.fillStyle = '#fff';
       g.fillText(this.title, 0, this.titleFontHeight);
@@ -514,70 +846,18 @@
           }
         }
         this.engine.eventQueue = [];
-        
-        progress = this.engine.numFinished / (this.cfg.width * this.cfg.height);
-        entryQueueRatio = this.engine.entryQueue.count() / this.cfg.entryQueueDepth;
-        resultQueueUsage = this.engine.resultQueue.count() / this.cfg.resultQueueDepth;
-        totalIters = this.engine.totalIters;
-        numMemReads = this.engine.numMemReads;
-        numMemWrites = this.engine.numMemWrites;
-        elapsedMs = this.engine.elapsedMs;
-        countDigits = Math.ceil(Math.log10(this.cfg.width * this.cfg.height * this.cfg.maxIter));
       }
       
       // バックバッファの描画
       this.renderBackbuffer(nowMs, g);
 
-      const lineH = Math.floor((viewH - this.imageViewBounds.bottom() - this.margin) / 7);
-      const fontH = Math.ceil(lineH * 3 / 4);
-      g.font = `${fontH}px monospace`;
-      const labelW = Math.ceil(g.measureText('m').width * 16);
-      const percentW = Math.ceil(g.measureText('_100.0%').width);
-      
-      var y = this.imageViewBounds.bottom() + this.margin;
+      // 統計情報の描画
+      this.renderStats(nowMs, g);
 
-      g.fillStyle = '#fff';
-      g.fillText('Progress: ', 0, y + fontH);
-      g.fillText(`${formatFloat(5, 1, 100 * progress)}% `, labelW, y + fontH);
-      g.fillRect(labelW + percentW, y, progress * (viewW - labelW - percentW), fontH);
-      y += lineH;
-    
-      g.fillStyle = '#fff';
-      g.fillText('Entry Queue: ', 0, y + fontH);
-      g.fillText(`${formatFloat(5, 1, 100 * entryQueueRatio)}% `, labelW, y + fontH);
-      g.fillRect(labelW + percentW, y, entryQueueRatio * (viewW - labelW - percentW), fontH);
-      y += lineH;
-    
-      g.fillStyle = '#fff';
-      g.fillText('Result Queue: ', 0, y + fontH);
-      g.fillText(`${formatFloat(5, 1, 100 * resultQueueUsage)}% `, labelW, y + fontH);
-      g.fillRect(labelW + percentW, y, resultQueueUsage * (viewW - labelW - percentW), fontH);
-      y += lineH;
-
-      g.lineWidth = 3;
-      g.strokeStyle = `rgb(${EngineUi.COL_BUSY})`;
-      g.strokeRect(0, y, fontH, fontH);
-      g.fillText('Iterations:', fontH * 3 / 2, y + fontH);
-      g.fillText(`${totalIters}`.padStart(countDigits, ' '), labelW, y + fontH);
-      y += lineH;
-
-      g.lineWidth = 3;
-      g.strokeStyle = `rgb(${EngineUi.COL_READ})`;
-      g.strokeRect(0, y, fontH, fontH);
-      g.fillText('Mem. Read:', fontH * 3 / 2, y + fontH);
-      g.fillText(`${numMemReads}`.padStart(countDigits, ' '), labelW, y + fontH);
-      y += lineH;
-
-      g.lineWidth = 3;
-      g.strokeStyle = `rgb(${EngineUi.COL_WRITE})`;
-      g.strokeRect(0, y, fontH, fontH);
-      g.fillText('Mem. Write:', fontH * 3 / 2, y + fontH);
-      g.fillText(`${numMemWrites}`.padStart(countDigits, ' '), labelW, y + fontH);
-      y += lineH;
-
-      g.fillText('Rendering Time:', 0, y + fontH);
-      g.fillText(`${formatFloat(6, 2, elapsedMs / 1000)}`.padEnd(6, ' ')+' sec', labelW, y + fontH);
-      y += lineH;
+      if (this.engine.completed()) {
+        const text = 'Completed.';
+        g.fillText(text, viewW - g.measureText(text).width, viewH);
+      }
 
       g.restore();
     }
@@ -669,14 +949,21 @@
 
     // ピクセルの強調表示
     renderMarkers(nowMs, g, viewW, viewH, markers, rgb, fill) {
-      const FADE_TIME_MS = 100; // フェードアウト時間
+      const FADE_TIME_MS = 0; // フェードアウト時間
       const pixW = viewW / this.cfg.width;
       const pixH = viewH / this.cfg.height;
       g.lineWidth = 2;
       for(const key of Object.keys(markers)) {
         const marker = markers[key];
-        var alpha = Math.max(0, Math.min(1, 1 - (nowMs - marker.tsMs) / FADE_TIME_MS));
-        alpha = alpha * alpha;
+        var alpha = 0;
+        if (FADE_TIME_MS > 0) {
+          alpha = Math.max(0, Math.min(1, 1 - (nowMs - marker.tsMs) / FADE_TIME_MS));
+          alpha = alpha * alpha;
+        }
+        else {
+          alpha = marker.tsMs > 0 ? 1 : 0;
+          marker.tsMs = -1;
+        }
         if (fill) {
           g.fillStyle = `rgba(${rgb} / ${alpha})`;
           g.fillRect(pixW * marker.x, pixH * marker.y, pixW, pixH);
@@ -693,6 +980,97 @@
       }
     }
 
+    // 統計情報の描画
+    renderStats(nowMs, g) {
+      const viewW = this.bounds.width;
+      const viewH = this.bounds.height;
+      
+      var progress = 0;
+      var entryQueueRatio = 0;
+      var resultQueueUsage = 0;
+      var totalIters = 0;
+      var numMemReads = 0;
+      var numMemWrites = 0;
+      var readHitRate = 0;
+      var writeHitRate = 0;
+      var elapsedMs = 0;
+      var counterWidth = 4;
+
+      if (this.engine && this.cfg) {
+        progress = this.engine.numFinished / (this.cfg.width * this.cfg.height);
+        entryQueueRatio = this.engine.entryQueue.count() / this.cfg.entryQueueDepth;
+        resultQueueUsage = this.engine.resultQueue.count() / this.cfg.resultQueueDepth;
+        totalIters = this.engine.totalIters;
+        numMemReads = this.engine.numMemReads + this.engine.numCacheReads;
+        numMemWrites = this.engine.numMemWrites + this.engine.numCacheWrites;
+        if (numMemReads > 0) readHitRate = this.engine.numCacheReads / numMemReads;
+        if (numMemWrites > 0) writeHitRate = this.engine.numCacheWrites / numMemWrites;
+        elapsedMs = this.engine.elapsedMs;
+        counterWidth = Math.ceil(Math.log10(this.cfg.width * this.cfg.height * this.cfg.maxIter));
+      }
+
+      const lineH = Math.floor((viewH - this.imageViewBounds.bottom() - this.margin) / 7);
+      const fontH = Math.ceil(lineH * 3 / 4);
+      g.font = `${fontH}px monospace`;
+      const labelW = Math.ceil(g.measureText('m').width * 16);
+      const percentW = Math.ceil(g.measureText('_100.0%').width);
+      
+      var y = this.imageViewBounds.bottom() + this.margin;
+
+      g.fillStyle = '#fff';
+      g.fillText('Progress: ', 0, y + fontH);
+      g.fillText(`${formatFloat(5, 1, 100 * progress)}% `, labelW, y + fontH);
+      g.fillRect(labelW + percentW, y, progress * (viewW - labelW - percentW), fontH);
+      y += lineH;
+    
+      g.fillStyle = '#fff';
+      g.fillText('Entry Queue: ', 0, y + fontH);
+      g.fillText(`${formatFloat(5, 1, 100 * entryQueueRatio)}% `, labelW, y + fontH);
+      g.fillRect(labelW + percentW, y, entryQueueRatio * (viewW - labelW - percentW), fontH);
+      y += lineH;
+    
+      g.fillStyle = '#fff';
+      g.fillText('Result Queue: ', 0, y + fontH);
+      g.fillText(`${formatFloat(5, 1, 100 * resultQueueUsage)}% `, labelW, y + fontH);
+      g.fillRect(labelW + percentW, y, resultQueueUsage * (viewW - labelW - percentW), fontH);
+      y += lineH;
+
+      g.lineWidth = 3;
+      g.strokeStyle = `rgb(${EngineUi.COL_BUSY})`;
+      g.strokeRect(0, y, fontH, fontH);
+      g.fillText('Iterations:', fontH * 3 / 2, y + fontH);
+      var totalItersStr = `${totalIters}`.padStart(counterWidth, ' ');
+      if (elapsedMs > 0) {
+        const load = totalIters / (elapsedMs * this.cfg.iterPerSec / 1000);
+        totalItersStr += ` (Load:${formatFloat(6, 2, load * 100)}%)`;
+      }
+      g.fillText(totalItersStr, labelW, y + fontH);
+      y += lineH;
+
+      g.lineWidth = 3;
+      g.strokeStyle = `rgb(${EngineUi.COL_READ})`;
+      g.strokeRect(0, y, fontH, fontH);
+      g.fillText('Mem. Read:', fontH * 3 / 2, y + fontH);
+      var memReadStr = `${numMemReads}`.padStart(counterWidth, ' ');
+      if (numMemReads > 0) memReadStr += ` (CHR:${formatFloat(6, 2, readHitRate * 100)}%)`;
+      g.fillText(memReadStr, labelW, y + fontH);
+      y += lineH;
+
+      g.lineWidth = 3;
+      g.strokeStyle = `rgb(${EngineUi.COL_WRITE})`;
+      g.strokeRect(0, y, fontH, fontH);
+      g.fillText('Mem. Write:', fontH * 3 / 2, y + fontH);
+      var memWriteStr = `${numMemWrites}`.padStart(counterWidth, ' ');
+      if (numMemWrites > 0) memWriteStr += ` (CHR:${formatFloat(6, 2, writeHitRate * 100)}%)`;
+      g.fillText(memWriteStr, labelW, y + fontH);
+      y += lineH;
+
+      g.fillText('Rendering Time:', 0, y + fontH);
+      g.fillText(`${formatFloat(6, 2, elapsedMs / 1000)}`.padEnd(6, ' ')+' sec', labelW, y + fontH);
+      y += lineH;
+
+    }
+
     imageRectToParent() {
       return new Rect(
         this.bounds.x + this.imageViewBounds.x + this.imageContentBounds.x,
@@ -705,8 +1083,8 @@
     parentToComplex(x, y) {
       if (!this.engine || !this.engine.scene) return [0, 0];
       const imgRect = this.imageRectToParent();
-      x = (x - imgRect.x) * this.cfg.width / imgRect.width;
-      y = (y - imgRect.y) * this.cfg.height / imgRect.height;
+      x = (x - imgRect.x + 0.5) * this.cfg.width / (imgRect.width - 1) - 0.5;
+      y = (y - imgRect.y + 0.5) * this.cfg.height / (imgRect.height - 1) - 0.5;
       return this.engine.scene.xyToComplex(x, y);
     }
 
@@ -714,20 +1092,21 @@
       if (!this.engine || !this.engine.scene) return [0, 0];
       const imgRect = this.imageRectToParent();
       const xy = this.engine.scene.complexToXy(r, i);
-      xy[0] = imgRect.x + xy[0] * imgRect.width / this.cfg.width;
-      xy[1] = imgRect.y + xy[1] * imgRect.height / this.cfg.height;
+      xy[0] = imgRect.x + (xy[0] - 0.5) * (imgRect.width - 1) / this.cfg.width + 0.5;
+      xy[1] = imgRect.y + (xy[1] - 0.5) * (imgRect.height - 1) / this.cfg.height + 0.5;
       return xy;
     }
   }
 
   // エンジンの基底クラス
   class EngineBase {
-    constructor(cfg) {
+    constructor(cfg, allowStack) {
       this.cfg = cfg;
       this.scene = new MandelbrotScene(cfg);
       
       // ワークメモリ
       this.mem = new Int32Array(cfg.width * cfg.height);
+      this.cachedLineIndexes = [];
 
       // キュー
       this.entryQueue = new Queue(cfg.entryQueueDepth);
@@ -743,6 +1122,8 @@
       this.totalIters = 0;
       this.numMemWrites = 0;
       this.numMemReads = 0;
+      this.numCacheWrites = 0;
+      this.numCacheReads = 0;
       this.numFinished = 0;
 
       this.running = false;
@@ -757,6 +1138,7 @@
 
     start() {
       this.running = true;
+      this.completedFlag = false;
       this.onStart();
     }
     
@@ -773,19 +1155,28 @@
       this.elapsedMs = simTimeMs;
 
       // 実行速度調整するためのクレジット生成
-      // 前回のクレジットがマイナスの場合はそれも加味する
+      // 借金がある場合はそれも加味する
       this.iterCredit = Math.min(0, this.iterCredit);
       this.memCredit = Math.min(0, this.memCredit);
       this.iterCredit += deltaMs * this.cfg.iterPerSec / 1000;
-      this.memCredit += deltaMs * this.cfg.memPerSec / 1000;
+      this.memCredit += deltaMs / 1000;
 
-      // 制御処理の実行 (サブクラス)
       this.onUpdating();
-      
+      this.calculate();
+    
+      this.onUpdating();
+      this.calculate();
+    
+      if (!this.busy()) {
+        this.stop();
+      }
+    }
+    
+    calculate() {
       // クレジットが無くなるまでマンデルブロ集合演算処理
       while(this.iterCredit > 0 && !this.entryQueue.empty() && !this.resultQueue.checkFull()) {
         const task = this.entryQueue.peek();
-        const numIters = task.process(this.iterCredit);
+        const numIters = task.calculate(this.iterCredit);
         this.totalIters += numIters;
         this.iterCredit -= numIters;
         this.eventQueue.push(new MandelbrotEvent(task.x, task.y, EVT_ITERATION));
@@ -794,17 +1185,12 @@
           this.resultQueue.push(task);
         }
       }
-
-      if (!this.busy()) {
-        this.stop();
-      }
     }
     
     // ワークメモリ書き込み
     memWrite(x, y, value) {
       this.mem[y * this.cfg.width + x] = value;
-      this.numMemWrites++;
-      this.memCredit--;
+      this.memCredit -= this.getMemOpCost(x, y, true);
       this.eventQueue.push(new MandelbrotEvent(x, y, EVT_MEM_WRITE));
       if ((value & FLAG_FINISHED) != 0) {
         this.numFinished++;
@@ -813,17 +1199,50 @@
 
     // ワークメモリ読み出し
     memRead(x, y) {
-      this.numMemReads++;
-      this.memCredit--;
+      this.memCredit -= this.getMemOpCost(x, y, false);
       this.eventQueue.push(new MandelbrotEvent(x, y, EVT_MEM_READ));
       return this.mem[y * this.cfg.width + x];
+    }
+
+    getCacheLineIndex(x, y) {
+      return Math.floor((y * this.cfg.width + x) / this.cfg.cacheLineSize);
+    }
+
+    getMemOpCost(x, y, isWrite) {
+      const iLine = this.getCacheLineIndex(x, y);
+      if (this.cachedLineIndexes.includes(iLine)) {
+        if (isWrite) {
+          this.numCacheWrites++;
+        }
+        else {
+          this.numCacheReads++;
+        }
+        this.cachedLineIndexes = this.cachedLineIndexes.filter(p => p != iLine);
+        this.cachedLineIndexes.push(iLine);
+        return 1 / this.cfg.cacheOpPerSec;
+      }
+      else {
+        if (isWrite) {
+          this.numMemWrites++;
+        }
+        else {
+          this.numMemReads++;
+        }
+        if (this.cachedLineIndexes.length >= this.cfg.numCacheLines) {
+          this.cachedLineIndexes.shift();
+        }
+        if (this.cachedLineIndexes.length < this.cfg.numCacheLines) {
+          this.cachedLineIndexes.push(iLine);
+        }
+        return 1 / this.cfg.memOpPerSec;
+      }
     }
   }
 
   // 通常のマンデルブロ集合エンジン
-  class NormalEngine extends EngineBase {
+  class RasterScanEngine extends EngineBase {
     constructor(cfg) {
-      super(cfg);
+      super(cfg, false);
       this.vars = {
         x: 0,
         y: 0,
@@ -831,7 +1250,13 @@
       };
     }
 
-    busy() { return this.vars.busy || super.busy(); }
+    busy() {
+      return this.vars.busy || super.busy();
+    }
+
+    completed() {
+      return !this.busy() && (this.vars.y >= this.cfg.height);
+    }
 
     onStart() {
       this.vars.busy = true;
@@ -846,7 +1271,7 @@
 
       // エントリーキューへのタスク挿入
       while(vars.y < this.cfg.height && !this.entryQueue.checkFull()) {
-        this.entryQueue.push(new MandelbrotTask(this.scene, vars.x, vars.y));
+        this.entryQueue.push(new MandelbrotTask(this.scene, vars.x, vars.y, false));
         
         // キューイングされたピクセルの表示のためにこっそりメモリ書き込み
         this.mem[vars.y * this.cfg.width + vars.x] = FLAG_HANDLED;
@@ -877,13 +1302,14 @@
   // border tracing の実装
   class FastEngine extends EngineBase {
     // ステート定義
-    static ST_IDLE = 0; // 完了
+    static ST_IDLE = 0; // アイドル
     static ST_INIT = 1; // ワークメモリの初期化
     static ST_WORK = 2; // 演算処理
     static ST_FILL = 3; // 塗りつぶし
+    static ST_FINISHED = 4; // 完了
 
     constructor(cfg) {
-      super(cfg);
+      super(cfg, true);
       this.vars = {
         state: FastEngine.ST_IDLE,
         x: 0,
@@ -893,7 +1319,11 @@
     }
 
     busy() {
-      return (this.vars.state != FastEngine.ST_IDLE) || super.busy();
+      return (this.vars.state != FastEngine.ST_IDLE && this.vars.state != FastEngine.ST_FINISHED) || super.busy();
+    }
+
+    completed() {
+      return !this.busy() && (this.vars.state == FastEngine.ST_FINISHED);
     }
 
     onStart() {
@@ -901,7 +1331,9 @@
     }
 
     onStop() {
-      this.vars.state = FastEngine.ST_IDLE;
+      if (this.vars.state != FastEngine.ST_FINISHED) {
+        this.vars.state = FastEngine.ST_IDLE;
+      }
     }
 
     onUpdating() {      
@@ -920,19 +1352,18 @@
     init() {
       var vars = this.vars;
 
+      const edgeH = (vars.y == 0) || (vars.y == this.cfg.height - 1);
+      const edgeV = (vars.x == 0) || (vars.x == this.cfg.width - 1);
+      const edge = edgeH || edgeV;
+
       if (this.entryQueue.checkFull()) {
         return false;
       }
 
-      const edge =
-        (vars.x == 0) ||
-        (vars.x == this.cfg.width - 1) ||
-        (vars.y == 0) ||
-        (vars.y == this.cfg.height - 1);
-
       var value = 0;
       if (edge) {
-        this.entryQueue.push(new MandelbrotTask(this.scene, vars.x, vars.y));
+        const priority = this.cfg.usePriority && edgeH;
+        this.entryQueue.push(new MandelbrotTask(this.scene, vars.x, vars.y, priority));
         value |= FLAG_HANDLED;
       }
       this.memWrite(vars.x, vars.y, value);
@@ -956,10 +1387,13 @@
       var vars = this.vars;
       
       const busy = !this.resultQueue.empty() && !this.entryQueue.checkFull(8);
-      
+
       if (busy) {
         // 結果キューから pop してワークメモリに反映
         const task = this.resultQueue.pop();
+        const cx = task.x;
+        const cy = task.y;
+
         var value = task.count;
         value |= FLAG_HANDLED;
         if (task.diverged) value |= FLAG_DIVERGED;
@@ -968,9 +1402,7 @@
 
         // 近傍ピクセルの取得
         // コードの簡略のため PixelInfo として取得
-        const cx = task.x;
-        const cy = task.y;
-        const c = this.getPixelInfo(cx, cy);
+        const c = new PixelInfo(cx, cy, value);
         const l = this.getPixelInfo(cx - 1, cy);
         const r = this.getPixelInfo(cx + 1, cy);
         const u = this.getPixelInfo(cx, cy - 1);
@@ -981,14 +1413,14 @@
         const rd = this.getPixelInfo(cx + 1, cy + 1);
 
         // 近傍ピクセルと値を比較して境界線を見つける
-        this.compare(c, l, u, lu);
-        this.compare(c, r, u, ru);
-        this.compare(c, l, d, ld);
-        this.compare(c, r, d, rd);
-        this.compare(c, u, l, lu);
-        this.compare(c, d, l, ld);
-        this.compare(c, u, r, ru);
-        this.compare(c, d, r, rd);
+        this.compare(c, u, l, lu, task.highPriority);
+        this.compare(c, d, l, ld, task.highPriority);
+        this.compare(c, u, r, ru, task.highPriority);
+        this.compare(c, d, r, rd, task.highPriority);
+        this.compare(c, l, u, lu, task.highPriority);
+        this.compare(c, r, u, ru, task.highPriority);
+        this.compare(c, l, d, ld, task.highPriority);
+        this.compare(c, r, d, rd, task.highPriority);
       }
 
       if (this.entryQueue.empty() && this.resultQueue.empty()) {
@@ -1022,20 +1454,20 @@
     //   | b | a | 
     // --+---+---+--
     //   |   |   |
-    compare(a, b, c, d) {
+    compare(a, b, c, d, priority) {
       if (b && b.finished && b.count != a.count) {
         // b ピクセルが処理完了済みかつ値が a と異なる
         // c, d が未処理であればエンキュー (重複しないように handled フラグを立てる)
-        if (c && !c.handled) {
-          c.handled = true;
-          this.memWrite(c.x, c.y, FLAG_HANDLED);
-          this.entryQueue.push(new MandelbrotTask(this.scene, c.x, c.y));
-        }
-        if (d && !d.handled) {
-          d.handled = true;
-          this.memWrite(d.x, d.y, FLAG_HANDLED);
-          this.entryQueue.push(new MandelbrotTask(this.scene, d.x, d.y));
-        }
+        this.pushNeighbors(c, priority);
+        this.pushNeighbors(d, priority);
+      }
+    }
+
+    pushNeighbors(d, priority) {
+      if (d && !d.handled) {
+        d.handled = true;
+        this.memWrite(d.x, d.y, FLAG_HANDLED);
+        this.entryQueue.push(new MandelbrotTask(this.scene, d.x, d.y, priority));
       }
     }
     
@@ -1065,7 +1497,7 @@
       if (vars.y >= this.cfg.height) {
         vars.x = 0;
         vars.y = 0;
-        vars.state = FastEngine.ST_IDLE;
+        vars.state = FastEngine.ST_FINISHED;
         return false;
       }
 
@@ -1095,8 +1527,10 @@
     constructor(cfg) {
       this.cfg = cfg;
 
-      this.realRange = cfg.range;
-      this.imagRange = cfg.range;
+      const range = 1 / cfg.zoom;
+
+      this.realRange = range;
+      this.imagRange = range;
       if (cfg.width > cfg.height) {
         this.imagRange = this.realRange * cfg.height / cfg.width;
       }
@@ -1112,25 +1546,26 @@
     // 画像内の座標から複素数に変換
     xyToComplex(x, y) {
       return [
-        this.realMin + this.realRange * x / this.cfg.width,
-        this.imagMin + this.imagRange * y / this.cfg.height,
+        this.realMin + this.realRange * (x + 0.5) / (this.cfg.width - 1),
+        this.imagMin + this.imagRange * (y + 0.5) / (this.cfg.height - 1),
       ];
     }
 
     // 輻輳数から画像内の座標に変換
     complexToXy(r, i) {
       return [
-        this.cfg.width * (r - this.realMin) / this.realRange,
-        this.cfg.height * (i - this.imagMin) / this.imagRange,
+        (this.cfg.width - 1) * (r - this.realMin) / this.realRange + 0.5,
+        (this.cfg.height - 1) * (i - this.imagMin) / this.imagRange + 0.5,
       ];
     }
   }
 
   class MandelbrotTask {
-    constructor(scene, x, y) {
+    constructor(scene, x, y, highPriority) {
       this.scene = scene;
       this.x = x;
       this.y = y;
+      this.highPriority = highPriority;
 
       const c = scene.xyToComplex(x, y);
       this.cReal = c[0];
@@ -1145,7 +1580,7 @@
     }
 
     // マンデルブロ集合の反復処理
-    process(iterCredit) {
+    calculate(iterCredit) {
       const maxIter = this.scene.cfg.maxIter;
       const a = this.cReal;
       const b = this.cImag;
@@ -1186,42 +1621,59 @@
   class Queue {
     constructor(depth) {
       this.depth = depth;
-      this.array = [];
+      this.array0 = [];
+      this.array1 = [];
       this.fullFlag = false;
     }
 
     count() {
-      return this.array.length;
+      return this.array0.length + this.array1.length;
     }
 
     empty(numPop = 1) {
-      return this.array.length < numPop;
+      return this.count() < numPop;
     }
 
     checkFull(numPush = 1) {
-      this.fullFlag = this.array.length + numPush >= this.depth;
+      this.fullFlag = this.count() + numPush >= this.depth;
       return this.fullFlag;
     }
 
     push(item) {
-      if (this.array.length >= this.depth) throw new Error('Queue overflow');
-      this.array.push(item);
+      if (this.count() >= this.depth) throw new Error('Queue overflow');
+      if (item.highPriority && this.array0.length < this.depth) {
+        this.array0.push(item);
+      }
+      else {
+        this.array1.push(item);
+      }
     }
 
     pop() {
-      if (this.array.length <= 0) throw new Error('Queue underflow');
+      if (this.count() <= 0) throw new Error('Queue underflow');
       this.fullFlag = false;
-      return this.array.shift();
+      if (this.array0.length > 0) {
+        return this.array0.shift();
+      }
+      else {
+        return this.array1.shift();
+      }
     }
 
     peek() {
-      if (this.array.length <= 0) throw new Error('Queue underflow');
-      return this.array[0];
+      if (this.count() <= 0) throw new Error('Queue underflow');
+      if (this.array0.length > 0) {
+        return this.array0[0];
+      }
+      else {
+        return this.array1[0];
+      }
     }
 
     clear() {
       this.fullFlag = false;
-      this.array = [];
+      this.array0 = [];
+      this.array1 = [];
     }
   }
 
@@ -1236,6 +1688,37 @@
     right() { return this.x + this.width; }
     bottom() { return this.y + this.height; }
     contains(x, y) { return (this.x <= x && x < this.right() && this.y <= y && y < this.bottom()); }
+  }
+
+  class FpsCounter {
+    constructor() {
+      this.startMs = null;
+      this.accum = 0;
+      this.fps = 0;
+    }
+
+    init() {
+      this.startMs = null;
+      this.accum = 0;
+      this.fps = 0;
+    }
+
+    update(nowMs) {
+      if (this.startMs === null) {
+        this.startMs = nowMs;
+        this.accum = 0;
+        this.fps = 0;
+      }
+
+      this.accum += 1;
+      
+      const elapsedMs = nowMs - this.startMs;
+      if (elapsedMs >= 1000) {
+        this.fps = this.accum * 1000 / elapsedMs;
+        this.startMs = nowMs;
+        this.accum = 0;
+      }
+    }
   }
 
   function formatFloat(width, fracWidth, value) {
@@ -1263,6 +1746,59 @@
     if (neg) digits.unshift('-');
 
     return digits.join('').padStart(width, ' ');
+  }
+
+  function parseExpr(s) {
+    if (typeof(s) != 'string') {
+      return { value: s, radix: null };
+    }
+    const mPow = s.match(/^\s*([\+\-]?[0-9]+(\.[0-9]+)?)\s*\^\s*([\+\-]?[0-9]+(\.[0-9]+)?)\s*$/);
+    const mExp10 = s.match(/^\s*([\+\-]?[0-9]+(\.[0-9]+)?)\s*[eE]\s*([\+\-]?[0-9]+)\s*$/);
+    if (mPow) {
+      //console.log(`'${s}' '${m[1]}' '${m[2]}' '${m[3]}' --> ${parseFloat(m[1]) ** parseFloat(m[3])}`)
+      return {
+        value: parseFloat(mPow[1]) ** parseFloat(mPow[3]),
+        radix: 2,
+      };
+    }
+    else if (mExp10) {
+      //console.log(`'${s}' '${m[1]}' '${m[2]}' '${m[3]}' --> ${parseFloat(m[1]) ** parseFloat(m[3])}`)
+      return {
+        value: parseFloat(mExp10[1]) * (10 ** parseFloat(mExp10[3])),
+        radix: 10,
+      };
+    }
+    else {
+      return {
+        value: parseFloat(s),
+        radix: null,
+      };
+    }
+  }
+
+  function toExpr(val, expRadix = 0) {
+    const raw = val.toString();
+    const exp2 = `${val < 0 ? '-' : ''}2^${(Math.log2(Math.abs(val))).toString()}`; 
+    const log10 = Math.floor(Math.log10(Math.abs(val)));
+    const exp10 = `${val < 0 ? '-' : ''}${(val / (10 ** log10)).toString()}e${log10}`;
+
+    if (expRadix < 0) { 
+      if (raw.length < exp2.length && raw.length < exp10.length) {
+        expRadix = 0;
+      }
+      else if (exp2.length < exp10.length) {
+        expRadix = 2;
+      }
+      else {
+        expRadix = 10;
+      }
+    }
+
+    switch (expRadix) {
+      case 2: return exp2;
+      case 10:  return exp10;
+      default: return raw;
+    }
   }
 
   const ui = new MandelbrotUi('article_mandelbrot_wrapper');

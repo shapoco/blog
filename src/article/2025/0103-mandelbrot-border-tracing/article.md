@@ -6,7 +6,7 @@
 
 (執筆中)
 
-## 視覚的な比較
+## シミュレーター
 
 <div id="article_mandelbrot_wrapper"></div>
 <script async src="./mandelbrot.js"></script>
