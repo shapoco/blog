@@ -368,8 +368,9 @@
         cfg.resultQueueDepth = preferredQueueDepth;
       }
 
-      const exp10wh = Math.round(10 ** Math.floor(Math.log10(cfg.width * cfg.height)));
-      const preferredPerf = Math.floor(cfg.width * cfg.height / exp10wh) * exp10wh;
+      const load = cfg.width * cfg.height * cfg.maxIter / 100;
+      const exp10wh = Math.round(10 ** Math.floor(Math.log10(load)));
+      const preferredPerf = Math.floor(load / exp10wh) * exp10wh;
 
       // エンジン性能の自動決定
       if (cfg.iterPerSec === null) {
