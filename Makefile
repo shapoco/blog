@@ -1,4 +1,4 @@
-.PHONY: all index size install-stamp redirect-pages
+.PHONY: all index size install-stamp redirect-pages test
 
 DIR_REPO = $(shell pwd)
 
@@ -37,6 +37,8 @@ ARTICLE_EXTRA_DEPENDENCIES = \
 	$(wildcard $(DIR_BIN)/*.py) \
 	$(wildcard $(DIR_TEPMPLATE)/*.*) \
 	$(wildcard $(DIR_TEPMPLATE_ARTICLE)/*.*)
+
+TEST_PORT := 9898
 
 all: $(INDEX_JSON) $(HTMLS) $(INDEX_HTML)
 
@@ -89,3 +91,6 @@ redirect-pages:
 	$(DIR_BIN)/gen_redirect_pages.py \
 		-t '$(DIR_TEPMPLATE)/yyyy/mm/redirect.html' \
 		-o '$(DIR_OUT)'
+
+test:
+	python3 -m http.server -d $(DIR_OUT) $(TEST_PORT)
