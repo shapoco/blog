@@ -70,7 +70,7 @@
                 html += '<h2>' + category.title + '</h2>';
                 html += '<ul>';
                 Array.from(category.tags).toSorted().forEach(tag => {
-                    html += '<li><a href="https://x.com/hashtag/' + encodeURIComponent(tag) + '" target="_blank">' + tag + '</a></li>';
+                    html += '<li><a href="https://x.com/hashtag/' + encodeURIComponent(tag) + '?f=live" target="_blank">' + tag + '</a></li>';
                 });
                 html += '</ul>';
                 return html;
