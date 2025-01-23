@@ -311,6 +311,14 @@
       "url": "/2025/0103-mandelbrot-border-tracing",
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2025/0103-mandelbrot-border-tracing/cover.png"
+    },
+    {
+      "title": "XParodyLabelHider: X の Web 版で「パロディアカウント」ラベルを非表示にする UserScript",
+      "description": "X の Web 版と XPro (旧 TweetDeck) でイマイチ誰の役に立っているのかよく分からない「パロディアカウント」ラベルを非表示にする UserScript を書いてみました。",
+      "date": "2025/01/24",
+      "url": "/2025/0124-x-parody-label-hider",
+      "twitter_card_size": "summary",
+      "card_image_url": "/2025/0124-x-parody-label-hider/thumbnail.png"
     }
   ]
 }
