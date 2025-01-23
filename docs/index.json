@@ -314,7 +314,7 @@
     },
     {
       "title": "XParodyLabelHider: X の Web 版で「パロディアカウント」ラベルを非表示にする UserScript",
-      "description": "X の Web 版と XPro (旧 TweetDeck) でイマイチ誰の役に立っているのかよく分からない「パロディアカウント」ラベルを非表示にする UserScript を書いてみました。",
+      "description": "イマイチ誰の役に立っているのかよく分からない X の「パロディアカウント」ラベルを Web 版と XPro (旧 TweetDeck) で非表示にする UserScript を書いてみました。",
       "date": "2025/01/24",
       "url": "/2025/0124-x-parody-label-hider",
       "twitter_card_size": "summary",
