@@ -319,6 +319,14 @@
       "url": "/2025/0124-x-parody-label-hider",
       "twitter_card_size": "summary",
       "card_image_url": "/2025/0124-x-parody-label-hider/thumbnail.png"
+    },
+    {
+      "title": "[メモ] Fusion360 備忘録",
+      "description": "Fusion360 関連の雑多なメモ。随時追加する",
+      "date": "2025/01/29",
+      "url": "/2025/0129-fusion360-tips",
+      "twitter_card_size": "summary",
+      "card_image_url": "/2025/0129-fusion360-tips/thumbnail.png"
     }
   ]
 }
