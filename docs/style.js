@@ -54,6 +54,13 @@ function arrangeArticleHtml(parent) {
   const STYLE_EMBEDDED = 'color: #84c;';
   const STYLE_LITERAL = 'color: #c44;';
 
+  // 典型的なルール
+  const RULE_LITERAL_CSTYLE_DEC = { style: STYLE_LITERAL, pattern: /\b[0-9_]+(\.[0-9_]+)?(e[0-9]+)?(u?l?|l?f|)\b/i };
+  const RULE_LITERAL_CSTYLE_HEX = { style: STYLE_LITERAL, pattern: /\b0x[0-9a-f_]+u?l?\b/i };
+  const RULE_LITERAL_CSTYLE_OCT = { style: STYLE_LITERAL, pattern: /\b0[0-7]+u?l?\b/i };
+  const RULE_LITERAL_CSTYLE_BIN = { style: STYLE_LITERAL, pattern: /\b0b[01]+u?l?\b/i };
+  const RULE_LARGE_CONST_ID = { style: STYLE_CONST, pattern: /\b[A-Z][A-Z0-9_]*\b/ };
+
   const langCxx = {
     rangeRules: [
       {style: STYLE_COMMENT, start: '//', end: '\n', escapeChar: null},
@@ -76,12 +83,11 @@ function arrangeArticleHtml(parent) {
           'void|volatile|wchar_t|while)\\b')
       },
       { style: STYLE_KEYWORD, pattern: /\bu?int(8|16|32|64)_t\b/ },
-      { style: STYLE_CONST, pattern: /\b[A-Z][A-Z0-9_]*\b/ },
-      { style: STYLE_LITERAL, pattern: /\b[0-9_]+(\.[0-9_]+)?(e[0-9]+)?(u?l?|l?f|)\b/i },
-      { style: STYLE_LITERAL, pattern: /\b0x[0-9a-f_]+u?l?\b/i },
-      { style: STYLE_LITERAL, pattern: /\b0[01]+u?l?\b/i },
-      { style: STYLE_LITERAL, pattern: /\b0b[01]+u?l?\b/i },
-      { style: STYLE_LITERAL, pattern: /\b0b[01]+u?l?\b/i },
+      RULE_LARGE_CONST_ID,
+      RULE_LITERAL_CSTYLE_DEC,
+      RULE_LITERAL_CSTYLE_HEX,
+      RULE_LITERAL_CSTYLE_OCT,
+      RULE_LITERAL_CSTYLE_BIN,
     ],
   };
 
@@ -102,8 +108,35 @@ function arrangeArticleHtml(parent) {
       'LiquidCrystal|SD|File)\\b')
   });
 
+  const langJavaScript = {
+    rangeRules: [
+      {style: STYLE_COMMENT, start: '//', end: '\n', escapeChar: null},
+      {style: STYLE_COMMENT, start: '/*', end: '*/', escapeChar: null},
+      {style: STYLE_STRING, start: "'", end: "'", escapeChar: '\\'},
+      {style: STYLE_STRING, start: '"', end: '"', escapeChar: '\\'},
+    ],
+    regExpRules: [
+      {
+        style: STYLE_KEYWORD,
+        pattern: new RegExp(
+          '\\b(break|case|catch|class|const|continue|debugger|default|' +
+          'delete|do|else|export|extends|false|finally|for|function|if|' +
+          'import|in|instanceof|new|null|return|super|switch|this|throw|' +
+          'true|try|typeof|var|void|while|with)\\b')
+      },
+      { style: STYLE_CONST, pattern: /\b[A-Z][A-Z0-9_]*\b/ },
+      RULE_LARGE_CONST_ID,
+      RULE_LITERAL_CSTYLE_DEC,
+      RULE_LITERAL_CSTYLE_HEX,
+      RULE_LITERAL_CSTYLE_OCT,
+      RULE_LITERAL_CSTYLE_BIN,
+    ],
+  };
+
   const langs = {
-    cxx: langCxx
+    cxx: langCxx,
+    js: langJavaScript,
+    json: langJavaScript,
   };
 
   const exts = {

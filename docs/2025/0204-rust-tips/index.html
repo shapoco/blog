@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
     <meta name="keywords" content="シャポログ ${blog.article_keywords}">
-    <meta name="description" content="バズったポスト。">
+    <meta name="description" content="Rust 関連の雑多なメモ。随時追加する">
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@shapoco" />
-    <meta property="og:url" content="https://blog.shapoco.net/2024/0614-momo-tar/" />
-    <meta property="og:title" content="[メモ] 桃太郎 | シャポログ" />
-    <meta property="og:description" content="バズったポスト。" />
-    <meta property="og:image" content="https://blog.shapoco.net/image/default_card_summary.png" />
+    <meta property="og:url" content="https://blog.shapoco.net/2025/0204-rust-tips/" />
+    <meta property="og:title" content="[メモ] Rust 備忘録 | シャポログ" />
+    <meta property="og:description" content="Rust 関連の雑多なメモ。随時追加する" />
+    <meta property="og:image" content="https://blog.shapoco.net/2025/0204-rust-tips/thumbnail.png" />
 
     <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
     <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
@@ -39,7 +39,7 @@
     <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
     <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
 
-    <title>[メモ] 桃太郎 | シャポログ</title>
+    <title>[メモ] Rust 備忘録 | シャポログ</title>
   </head>
 
   <body>
@@ -50,26 +50,29 @@
         <h1><a href="/">シャポログ</a></h1>
       </header>
       <main>
-        <h2>[メモ] 桃太郎</h2>
+        <h2>[メモ] Rust 備忘録</h2>
 
         <div class="article_info_wrap">
           <div class="article_info">
-            2024/06/14 |
-            <a href="https://github.com/shapoco/blog/tree/main/src/article/2024/0614-momo-tar/" target="_blank">記事のソース</a>
+            2025/02/04 |
+            <a href="https://github.com/shapoco/blog/tree/main/src/article/2025/0204-rust-tips/" target="_blank">記事のソース</a>
           </div>
           
           <div id="shpcstamp_wrap"></div>
           <script async src="/stamp/v1/widget.js?f2543e31"></script>
         </div>
 
-        <p>バズったポスト。</p>
-        <blockquote>おばあさんが <code>git pull</code> すると、上流ブランチから <code>donburako donburako</code> という謎のコミットメッセージとともに大きな <code>momo.tar</code> が流れてきました。おじいさんが <code>tar xf momo.tar</code> するとカレントディレクトリに <code>baby</code> が展開され、<code>./baby</code> を叩くと標準出力から元気に <code>OGYAA!\a OGYAA!\a ...</code> と繰り返し出力し始めました。二人は一旦 <code>baby</code> を <code>kill</code> した後、それが <code>momo.tar</code> に含まれていたことにちなんで <code>mv baby momotaro</code> しました。</blockquote>
-        <h3>関連リンク</h3>
-        <ul>
-          <li><a href="https://x.com/shapoco/status/1801440594818122231" target="_blank">x.com</a></li>
-          <li><a href="https://misskey.io/notes/9uhonq0cokdk04z2" target="_blank">Misskey.io</a></li>
-          <li><a href="https://bsky.app/profile/shapoco.net/post/3kuu6fv446j26" target="_blank">Bluesky</a></li>
-        </ul>
+        <p>Rust 関連の雑多なメモ。随時追加する</p>
+        <h3>VSCode</h3>
+        <h4>Cargo.toml がワークスペースのルートに無いときの設定</h4>
+        <p>参考: <a href="https://zenn.dev/razokulover/scraps/17844b5b5c7147" target="_blank">RustのCargo.tomlの場所がrootに無い時にVSCodeでrust-analyzerのエラーを回避する方法</a></p>
+        <p><code>.vscode/settings.json</code> に場所を記述する</p>
+        <pre class="lang_json" title=".vscode/settings.json">{
+  &quot;rust-analyzer.linkedProjects&quot;: [
+    &quot;${workspaceFolder}/path/to/Cargo.toml&quot;
+  ]
+}</pre>
+        <p><!-- ## 細々したの --></p>
 
       </main>
       <footer>

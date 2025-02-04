@@ -393,7 +393,7 @@ class MdParser:
         m = re.match(MdParser.RE_PRE, first_line)
         lang = m[1]
         title = m[2]
-        if title.startswith(':'):
+        if title and title.startswith(':'):
             title = title[1:]
 
         code =''

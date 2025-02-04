@@ -327,6 +327,14 @@
       "url": "/2025/0129-fusion360-tips",
       "twitter_card_size": "summary",
       "card_image_url": "/2025/0129-fusion360-tips/thumbnail.png"
+    },
+    {
+      "title": "[メモ] Rust 備忘録",
+      "description": "Rust 関連の雑多なメモ。随時追加する",
+      "date": "2025/02/04",
+      "url": "/2025/0204-rust-tips",
+      "twitter_card_size": "summary",
+      "card_image_url": "/2025/0204-rust-tips/thumbnail.png"
     }
   ]
 }

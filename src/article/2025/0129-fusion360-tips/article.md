@@ -4,7 +4,7 @@ Fusion360 関連の雑多なメモ。随時追加する
 
 ## 三面図の作り方
 
-[Fusion 360で3Dデータから2D図面を作成する方法 | モデログ](https://3d-modely.com/blog/3d-software/fusion-360-drawing/)
+参考: [Fusion 360で3Dデータから2D図面を作成する方法 | モデログ](https://3d-modely.com/blog/3d-software/fusion-360-drawing/)
 
 - 左上の `デザイン` → `図面` → `デザインから` → `OK` で作成開始する
 - 投影面の追加
@@ -16,7 +16,7 @@ Fusion360 関連の雑多なメモ。随時追加する
 
 ## モデリング時のパースをきつくする
 
-[解決済み: モデリング中のカメラ設定（パース）につきまして - Autodesk Community](https://forums.autodesk.com/t5/fusion-ri-ben-yu/moderingu-zhongnokamera-she-ding-pasu-nitsukimashite/m-p/10366840)
+参考: [解決済み: モデリング中のカメラ設定（パース）につきまして - Autodesk Community](https://forums.autodesk.com/t5/fusion-ri-ben-yu/moderingu-zhongnokamera-she-ding-pasu-nitsukimashite/m-p/10366840)
 
 - インストール
 
