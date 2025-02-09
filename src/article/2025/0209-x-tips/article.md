@@ -29,7 +29,7 @@ X 関連の雑多なメモ。随時追加する
 |`min_retweets:N`|リポスト数が `N` 以上|[from:shapoco min_retweets:1000](https://x.com/search?q=from%3Ashapoco+min_retweets%3A1000)|
 |`min_faces:N`|いいね数が `N` 以上|[from:shapoco min_faves:1000](https://x.com/search?q=from%3Ashapoco+min_faves%3A1000)|
 |`near:場所 within:距離km`|`場所` から `距離` km 以内|(2025/2/9: 機能してない？)|
-|`geocode:緯度,経度,距離km`|(`緯度`, `経度`) から `距離` km 以内|[geocode:45.522192,141.936642,1km filter:media](https://x.com/search?q=geocode%3A45.522192%2C141.936642%2C1km%20filter%3Amedia&f=live)<br>(「最新」タブでないと機能しない？)|
+|`geocode:緯度,経度,距離km`|[ジオコード](https://www.geosense.co.jp/map/tool/geoconverter.php) の場所から `距離` km 以内|[geocode:45.522192,141.936642,1km filter:media](https://x.com/search?q=geocode%3A45.522192%2C141.936642%2C1km%20filter%3Amedia&f=live)<br>(「最新」タブでないと機能しない？)|
 
 ※1 「メディア」や「動画」には YouTube リンクも含まれる
 
