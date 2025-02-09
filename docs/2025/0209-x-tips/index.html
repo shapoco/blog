@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+    <meta name="description" content="X 関連の雑多なメモ。随時追加する">
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@shapoco" />
+    <meta property="og:url" content="https://blog.shapoco.net/2025/0209-x-tips/" />
+    <meta property="og:title" content="[メモ] X (旧Twitter) 備忘録 | シャポログ" />
+    <meta property="og:description" content="X 関連の雑多なメモ。随時追加する" />
+    <meta property="og:image" content="https://blog.shapoco.net/image/default_card_summary.png" />
+
+    <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+    <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171109827-1"></script>
+    <script>
+      var remoteHost = window.location.hostname;
+      if (remoteHost == "localhost") {
+        console.log(`Google Analytics disabled on: '${remoteHost}'`);
+      }
+      else {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-171109827-1');
+      }
+    </script>
+
+    <link href="/style.css?128f0110" rel="stylesheet" type="text/css">
+    <script src="/style.js?73d83023"></script>
+
+    <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+    <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+    <title>[メモ] X (旧Twitter) 備忘録 | シャポログ</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div id="root_navi"></div>
+
+      <header class="article_header">
+        <h1><a href="/">シャポログ</a></h1>
+      </header>
+      <main>
+        <h2>[メモ] X (旧Twitter) 備忘録</h2>
+
+        <div class="article_info_wrap">
+          <div class="article_info">
+            2025/02/09 |
+            <a href="https://github.com/shapoco/blog/tree/main/src/article/2025/0209-x-tips/" target="_blank">記事のソース</a>
+          </div>
+          
+          <div id="shpcstamp_wrap"></div>
+          <script async src="/stamp/v1/widget.js?f2543e31"></script>
+        </div>
+
+        <p>X 関連の雑多なメモ。随時追加する</p>
+        <h3>検索クエリ (検索コマンド)</h3>
+        <h4>演算式</h4>
+        <table>
+          <tr>
+            <th>式</th>
+            <th>説明</th>
+            <th>例</th>
+          </tr>
+          <tr>
+            <td><code>hoge piyo</code></td>
+            <td><code>hoge</code> と <code>piyo</code> を両方含む</td>
+            <td><a href="https://x.com/search?q=%E3%82%AB%E3%83%AC%E3%83%BC+%E3%81%86%E3%81%A9%E3%82%93" target="_blank">カレー うどん</a></td>
+          </tr>
+          <tr>
+            <td><code>hoge OR piyo</code></td>
+            <td><code>hoge</code> または <code>piyo</code> を含む</td>
+            <td><a href="https://x.com/search?q=%E3%83%A9%E3%83%BC%E3%83%A1%E3%83%B3+OR+%E3%81%86%E3%81%A9%E3%82%93" target="_blank">ラーメン OR うどん</a></td>
+          </tr>
+          <tr>
+            <td><code>&quot;hogepiyo&quot;</code></td>
+            <td><code>hogepiyo</code> に完全一致</td>
+            <td><a href="https://x.com/search?q=%22%E3%82%AB%E3%83%AC%E3%83%BC%E3%81%86%E3%81%A9%E3%82%93%22" target="_blank">"カレーうどん"</a><br>(<code>カレーうどん</code> のみにヒットし <code>カレーとうどん</code> などにはヒットしない)</td>
+          </tr>
+          <tr>
+            <td><code>-hoge</code></td>
+            <td><code>hoge</code> を含まない</td>
+            <td><a href="https://x.com/search?q=%E3%82%AB%E3%83%AC%E3%83%BC+%E3%81%86%E3%81%A9%E3%82%93+-%22%E3%82%AB%E3%83%AC%E3%83%BC%E3%81%86%E3%81%A9%E3%82%93%22" target="_blank">カレー うどん -"カレーうどん"</a><br>(<code>カレー</code> と <code>うどん</code> を両方含むが <code>カレーうどん</code> は含まない)</td>
+          </tr>
+        </table>
+        <h4>オプション</h4>
+        <table>
+          <tr>
+            <th>オプション</th>
+            <th>説明</th>
+            <th>例</th>
+          </tr>
+          <tr>
+            <td><code>from:ID</code></td>
+            <td><code>@ID</code> による投稿</td>
+            <td><a href="https://x.com/search?q=from%3Ashapoco" target="_blank">from:shapoco</a></td>
+          </tr>
+          <tr>
+            <td><code>to:ID</code></td>
+            <td><code>@ID</code> への返信</td>
+            <td><a href="https://x.com/search?q=to%3Ashapoco" target="_blank">to:shapoco</a></td>
+          </tr>
+          <tr>
+            <td><code>filter:media</code></td>
+            <td>メディア付き (※1)</td>
+            <td><a href="https://x.com/search?q=from%3Ashapoco+filter%3Amedia" target="_blank">from:shapoco filter:media</a></td>
+          </tr>
+          <tr>
+            <td><code>filter:images</code></td>
+            <td>画像付き</td>
+            <td><a href="https://x.com/search?q=from%3Ashapoco+filter%3Aimages" target="_blank">from:shapoco filter:images</a></td>
+          </tr>
+          <tr>
+            <td><code>filter:videos</code></td>
+            <td>動画付き (※1)</td>
+            <td><a href="https://x.com/search?q=from%3Ashapoco+filter%3Avideos" target="_blank">from:shapoco filter:videos</a></td>
+          </tr>
+          <tr>
+            <td><code>filter:links</code></td>
+            <td>メディア (※1) またはリンク付き</td>
+            <td><a href="https://x.com/search?q=from%3Ashapoco+filter%3Alinks" target="_blank">from:shapoco filter:links</a></td>
+          </tr>
+          <tr>
+            <td><code>lang:言語コード</code></td>
+            <td><a href="https://so-zou.jp/web-app/tech/data/code/language.htm" target="_blank">言語コード</a> による言語指定</td>
+            <td><a href="https://x.com/search?q=lang%3Aja" target="_blank">lang:ja</a>, <a href="https://x.com/search?q=lang%3Aen" target="_blank">lang:en</a></td>
+          </tr>
+          <tr>
+            <td><code>since:YYYY-MM-DD</code></td>
+            <td>投稿日が <code>YYYY-MM-DD</code> 以降</td>
+            <td><a href="https://x.com/search?q=from%3Ashapoco+since%3A2025-1-1" target="_blank">from:shapoco since:2025-1-1</a></td>
+          </tr>
+          <tr>
+            <td><code>until:YYYY-MM-DD</code></td>
+            <td>投稿日が <code>YYYY-MM-DD</code> 以前</td>
+            <td><a href="https://x.com/search?q=from%3Ashapoco+until%3A2024-12-31" target="_blank">from:shapoco until:2024-12-31</a></td>
+          </tr>
+          <tr>
+            <td><code>min_retweets:N</code></td>
+            <td>リポスト数が <code>N</code> 以上</td>
+            <td><a href="https://x.com/search?q=from%3Ashapoco+min_retweets%3A1000" target="_blank">from:shapoco min_retweets:1000</a></td>
+          </tr>
+          <tr>
+            <td><code>min_faces:N</code></td>
+            <td>いいね数が <code>N</code> 以上</td>
+            <td><a href="https://x.com/search?q=from%3Ashapoco+min_faves%3A1000" target="_blank">from:shapoco min_faves:1000</a></td>
+          </tr>
+          <tr>
+            <td><code>near:場所 within:距離km</code></td>
+            <td><code>場所</code> から <code>距離</code> km 以内</td>
+            <td>(2025/2/9: 機能してない？)</td>
+          </tr>
+          <tr>
+            <td><code>geocode:緯度,経度,距離km</code></td>
+            <td>(<code>緯度</code>, <code>経度</code>) から <code>距離</code> km 以内</td>
+            <td><a href="https://x.com/search?q=geocode%3A45.522192%2C141.936642%2C1km%20filter%3Amedia&f=live" target="_blank">geocode:45.522192,141.936642,1km filter:media</a><br>(「最新」タブでないと機能しない？)</td>
+          </tr>
+        </table>
+        <p>※1 「メディア」や「動画」には YouTube リンクも含まれる</p>
+        <h3>ユーザーID</h3>
+        <ul>
+          <li>アカウントを識別する数字。ID (screen name) を変えてもユーザーID が変わることはない。</li>
+          <li>例えば <a href="https://x.com/shapoco" target="_blank">@shapoco</a> のユーザーID は <code>858142314849378304</code>。</li>
+          <li><code>https://x.com/i/user/ユーザーID</code> はそのユーザーのプロフィールページへ転送される (<a href="https://x.com/i/user/858142314849378304" target="_blank">例</a>)。</li>
+        </ul>
+        <h4>ユーザーID を取得する方法</h4>
+        <ul>
+          <li>
+            <p>外部サービス</p>
+            <ul>
+              <li><a href="https://develop.tools/x-idcheck/" target="_blank">X(Twitter) IDチェッカー</a><br>※ なぜか取得できない場合もある</li>
+            </ul>
+          </li>
+          <li>
+            <p>ブックマークレット (PC用)</p>
+            <ol>
+              <li>
+                <p>以下のコードを URL としてブックマークレットを作成する</p>
+                <pre class="lang_js">javascript:(function(){try{const s=Array.from(document.querySelectorAll(&#39;script&#39;)).filter(elem=&gt;elem.dataset&amp;&amp;elem.dataset.testid&amp;&amp;elem.dataset.testid==&#39;UserProfileSchema-test&#39;);const j=JSON.parse(s[0].innerText);const url=`https://x.com/i/user/${j.mainEntity.identifier}#${j.mainEntity.additionalName}`;console.log(`URL: &#39;${url}&#39;`);navigator.clipboard.writeText(url).then(function(){window.alert(`URL copied to clipboard:\n${url}`);},function(){window.alert(`URL: &#39;${url}&#39;\n(Failed to copy to clipboard)`);});}catch(e){window.alert(`Failed to obtain User ID (${e})`);}})()</pre>
+              </li>
+              <li>対象ユーザのプロフィールページを開く</li>
+              <li>作成したブックマークレットを開く<br>( <code>https://x.com/i/user/&lt;user ID&gt;#&lt;screen name&gt;</code> の形式でクリップボードにコピーされる)</li>
+            </ol>
+          </li>
+        </ul>
+        <h3>メディア欄の空白は YouTube のリンク</h3>
+        <p>メディア欄にところどころある空白は YouTube のリンクの投稿。<code>from:自分のID filter:media</code> で検索すると、空白の部分に YouTube のリンクが貼られた投稿があるのが分かる。</p>
+        <p><img src="./media-tab-with-blanks.png" alt=""></p>
+        <p><!-- ## 細々したの --></p>
+
+      </main>
+      <footer>
+        Copyright &copy; Shapoco 
+      </footer>
+    </div>
+  </body>
+</html>

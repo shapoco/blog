@@ -335,6 +335,14 @@
       "url": "/2025/0204-rust-tips",
       "twitter_card_size": "summary",
       "card_image_url": "/2025/0204-rust-tips/thumbnail.png"
+    },
+    {
+      "title": "[メモ] X (旧Twitter) 備忘録",
+      "description": "X 関連の雑多なメモ。随時追加する",
+      "date": "2025/02/09",
+      "url": "/2025/0209-x-tips",
+      "twitter_card_size": "summary",
+      "card_image_url": "/image/default_card_summary.png"
     }
   ]
 }

@@ -382,6 +382,7 @@ class MdParser:
             code = ''
             while not lex.try_eat('`'):
                 code += lex.eat()
+            code = escape_for_html(code)
             return f'<code>{code}</code>'
         except Exception as ex:
             self.info(f'Inline code parse failed: {ex}')
