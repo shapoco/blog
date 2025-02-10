@@ -34,7 +34,7 @@
     </script>
 
     <link href="/style.css?128f0110" rel="stylesheet" type="text/css">
-    <script src="/style.js?73d83023"></script>
+    <script src="/style.js?f4585ba6"></script>
 
     <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
     <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
@@ -63,8 +63,43 @@
         </div>
 
         <p>Fusion360 関連の雑多なメモ。随時追加する</p>
+        <h3>三脚・雲台用のネジとネジ穴</h3>
+        <p><a href="https://qiita.com/2019Shun/items/ccba3b541a2798bcdf82" target="_blank">Fusion360で三脚・雲台用のインチネジ(W1/4)の設定 #3Dプリンタ - Qiita</a></p>
+        <h4>インストール</h4>
+        <ol>
+          <li>
+            <p>上記記事に添付された XML ファイルを <code>%LOCALAPPDATA%\Autodesk\webdeploy\production\(長い16進数)\Fusion\Server\Fusion\Configuration\ThreadData\</code> に作成する</p>
+            <ul>
+              <li><code>(長い16進数)</code> のとこはバージョンアップ時に新しく作られるっぽくて、そのたびに XML ファイルを移動させる必要があるかも</li>
+            </ul>
+          </li>
+          <li>
+            <p>上記記事では W1/4 規格 (ネジ山の角度 = 55°) で作成されているようだけど、厳密には UNC1/4 (60°) にした方がいいかも (参考記事参照)</p>
+            <pre class="lang_diff" title="WhitWorthThead(External).xml">:
+- &lt;Angle&gt;55&lt;/Angle&gt;
++ &lt;Angle&gt;60&lt;/Angle&gt;
+:
+- &lt;CTD&gt;W1/4&lt;/CTD&gt;
++ &lt;CTD&gt;UNC1/4&lt;/CTD&gt;
+:</pre>
+          </li>
+        </ol>
+        <h4>使用方法 (穴)</h4>
+        <p>穴を開けるときにネジ穴を設定する</p>
+        <ul>
+          <li>ねじ穴のタイプ: <code>ねじ穴</code></li>
+          <li>ねじのタイプ: <code>WhitWorthThead</code></li>
+          <li>モデル化: チェックする (STL や STEP にエクスポートする場合)</li>
+        </ul>
+        <p><img src="./unc1p4-ss.png" alt=""></p>
+        <h4>参考記事</h4>
+        <ul>
+          <li><a href="https://slowhome-diy.com/diy/material-comparison/make-your-own-camera-peripherals" target="_blank">カメラの三脚についてるボルトの規格｜unc1/4はw1/4で代用できる？ | スローホーム</a></li>
+        </ul>
+                  <hr>
+
         <h3>三面図の作り方</h3>
-        <p>参考: <a href="https://3d-modely.com/blog/3d-software/fusion-360-drawing/" target="_blank">Fusion 360で3Dデータから2D図面を作成する方法 | モデログ</a></p>
+        <p><a href="https://3d-modely.com/blog/3d-software/fusion-360-drawing/" target="_blank">Fusion 360で3Dデータから2D図面を作成する方法 | モデログ</a></p>
         <ul>
           <li>左上の <code>デザイン</code> → <code>図面</code> → <code>デザインから</code> → <code>OK</code> で作成開始する</li>
           <li>
@@ -80,26 +115,23 @@
             </ol>
           </li>
         </ul>
+                  <hr>
+
         <h3>モデリング時のパースをきつくする</h3>
-        <p>参考: <a href="https://forums.autodesk.com/t5/fusion-ri-ben-yu/moderingu-zhongnokamera-she-ding-pasu-nitsukimashite/m-p/10366840" target="_blank">解決済み: モデリング中のカメラ設定（パース）につきまして - Autodesk Community</a></p>
-        <ul>
-          <li>
-            <p>インストール</p>
-            <ul>
-              <li>上記回答に添付された <code>SetCameraAoV.zip</code> の中身を <code>%APPDATA%\Autodesk\Autodesk Fusion 360\API\Scripts\</code> に展開する</li>
-            </ul>
-          </li>
-          <li>
-            <p>使用方法</p>
-            <ol>
-              <li>パースビューに切り替える</li>
-              <li><code>ユーティリティ</code> → <code>アドイン</code> → <code>スクリプトとアドイン</code></li>
-              <li><code>SetCameraAoV</code> をダブルクリック → <code>はい</code></li>
-              <li>画角を入力</li>
-            </ol>
-          </li>
-        </ul>
+        <p><a href="https://forums.autodesk.com/t5/fusion-ri-ben-yu/moderingu-zhongnokamera-she-ding-pasu-nitsukimashite/m-p/10366840" target="_blank">解決済み: モデリング中のカメラ設定（パース）につきまして - Autodesk Community</a></p>
+        <h4>インストール</h4>
+        <p>上記回答に添付された <code>SetCameraAoV.zip</code> の中身を <code>%APPDATA%\Autodesk\Autodesk Fusion 360\API\Scripts\</code> に展開する</p>
+        <h4>使用方法</h4>
+        <ol>
+          <li>パースビューに切り替える</li>
+          <li><code>ユーティリティ</code> → <code>アドイン</code> → <code>スクリプトとアドイン</code></li>
+          <li><code>SetCameraAoV</code> をダブルクリック → <code>はい</code></li>
+          <li>画角を入力</li>
+        </ol>
+                  <hr>
+
         <h3>細々したの</h3>
+        <h4>操作方法</h4>
         <ul>
           <li>面と面をくっつけたり面を接地させる: <code>修正</code> → <code>位置合わせ</code></li>
         </ul>

@@ -53,6 +53,8 @@ function arrangeArticleHtml(parent) {
   const STYLE_CONST = 'color: #880;';
   const STYLE_EMBEDDED = 'color: #84c;';
   const STYLE_LITERAL = 'color: #c44;';
+  const STYLE_DIFF_ADD = 'background: #dfd; color: #080;';
+  const STYLE_DIFF_DEL = 'background: #fdd; color: #800;';
 
   // 典型的なルール
   const RULE_LITERAL_CSTYLE_DEC = { style: STYLE_LITERAL, pattern: /\b[0-9_]+(\.[0-9_]+)?(e[0-9]+)?(u?l?|l?f|)\b/i };
@@ -133,10 +135,21 @@ function arrangeArticleHtml(parent) {
     ],
   };
 
+  const langDiff = {
+    rangeRules: [
+      {style: STYLE_DIFF_ADD, start: '+ ', end: '\n', escapeChar: null},
+      {style: STYLE_DIFF_DEL, start: '- ', end: '\n', escapeChar: null},
+    ],
+    regExpRules: [],
+  };
+
   const langs = {
     cxx: langCxx,
+    cpp: langCxx,
+    'c++': langCxx,
     js: langJavaScript,
     json: langJavaScript,
+    diff: langDiff,
   };
 
   const exts = {
