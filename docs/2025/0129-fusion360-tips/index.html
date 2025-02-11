@@ -65,40 +65,63 @@
         <p>Fusion360 関連の雑多なメモ。随時追加する</p>
         <h3>三脚・雲台用のネジとネジ穴</h3>
         <p><a href="https://qiita.com/2019Shun/items/ccba3b541a2798bcdf82" target="_blank">Fusion360で三脚・雲台用のインチネジ(W1/4)の設定 #3Dプリンタ - Qiita</a></p>
-        <h4>インストール</h4>
+        <p>上記記事に記載された XML でネジ穴を作ろうとしたものの、我が家の Adventurer3 + FlashPrint のデフォルト設定ではキツすぎたので、寸法をカスタマイズしていくつか試した。</p>
+        <h4>設定ファイルのインストール</h4>
         <ol>
+          <li><a href="./unified-national-imperial-screw-thread-r1.zip">unified-national-imperial-screw-thread-r1.zip</a> をダウンロードして展開する。</li>
           <li>
-            <p>上記記事に添付された XML ファイルを <code>%LOCALAPPDATA%\Autodesk\webdeploy\production\(長い16進数)\Fusion\Server\Fusion\Configuration\ThreadData\</code> に作成する</p>
+            <p>XML ファイルを <code>%LOCALAPPDATA%\Autodesk\webdeploy\production\(長い16進数)\Fusion\Server\Fusion\Configuration\ThreadData\</code> に配置する。</p>
             <ul>
-              <li><code>(長い16進数)</code> のとこはバージョンアップ時に新しく作られるっぽくて、そのたびに XML ファイルを移動させる必要があるかも</li>
+              <li><code>%LOCALAPPDATA%</code> はエクスプローラのアドレスバーに貼り付けると <code>C:\Users\(ユーザ名)\AppData\Local</code> に勝手に置換される。</li>
+              <li><code>(長い16進数)</code> のとこはバージョンアップ時に新しく作られるっぽくて、そのたびに XML ファイルを移動させる必要があるかも。</li>
             </ul>
-          </li>
-          <li>
-            <p>上記記事では W1/4 規格 (ネジ山の角度 = 55°) で作成されているようだけど、厳密には UNC1/4 (60°) にした方がいいかも (参考記事参照)</p>
-            <pre class="lang_diff" title="WhitWorthThead(External).xml">:
-- &lt;Angle&gt;55&lt;/Angle&gt;
-+ &lt;Angle&gt;60&lt;/Angle&gt;
-:
-- &lt;CTD&gt;W1/4&lt;/CTD&gt;
-+ &lt;CTD&gt;UNC1/4&lt;/CTD&gt;
-:</pre>
           </li>
         </ol>
         <h4>使用方法 (穴)</h4>
         <p>穴を開けるときにネジ穴を設定する</p>
         <ul>
           <li>ねじ穴のタイプ: <code>ねじ穴</code></li>
-          <li>ねじのタイプ: <code>WhitWorthThead</code></li>
-          <li>モデル化: チェックする (STL や STEP にエクスポートする場合)</li>
+          <li>ねじのタイプ: <code>Unified National Imperial Screw Thread</code></li>
+          <li>サイズ: <code>1/4</code></li>
+          <li>
+            <p>クラス:</p>
+            <table>
+              <tr>
+                <th class="nowrap" style="text-align: center;">表示名</th>
+                <th>規格 (寸法)</th>
+              </tr>
+              <tr>
+                <td class="nowrap" style="text-align: center;"><code>2B</code></td>
+                <td>1/4-20 UNC 2B</td>
+              </tr>
+              <tr>
+                <td class="nowrap" style="text-align: center;"><code>1B</code></td>
+                <td>1/4-20 UNC 1B</td>
+              </tr>
+              <tr>
+                <td class="nowrap" style="text-align: center;"><code>tol0.02</code></td>
+                <td>規格外 (直径のトレランス=0.02inch)</td>
+              </tr>
+              <tr>
+                <td class="nowrap" style="text-align: center;"><code>tol0.03</code></td>
+                <td>規格外 (直径のトレランス=0.03inch)</td>
+              </tr>
+              <tr>
+                <td class="nowrap" style="text-align: center;"><code>tol0.04</code></td>
+                <td>規格外 (直径のトレランス=0.04inch)</td>
+              </tr>
+            </table>
+            <ul>
+              <li>垂直方向の穴については <code>1B</code> が良い感じだった。</li>
+              <li>水平方向や傾いた穴については <code>tol0.02</code> ～ <code>tol0.03</code> あたりが良い感じだった。</li>
+            </ul>
+          </li>
+          <li>STL や STEP へのエクスポートでネジ山を反映するには <code>モデル化</code> にチェックする</li>
         </ul>
         <p><img src="./unc1p4-ss.png" alt=""></p>
-        <h4>参考記事</h4>
-        <ul>
-          <li><a href="https://slowhome-diy.com/diy/material-comparison/make-your-own-camera-peripherals" target="_blank">カメラの三脚についてるボルトの規格｜unc1/4はw1/4で代用できる？ | スローホーム</a></li>
-        </ul>
                   <hr>
 
-        <h3>三面図の作り方</h3>
+        <h3>三面図</h3>
         <p><a href="https://3d-modely.com/blog/3d-software/fusion-360-drawing/" target="_blank">Fusion 360で3Dデータから2D図面を作成する方法 | モデログ</a></p>
         <ul>
           <li>左上の <code>デザイン</code> → <code>図面</code> → <code>デザインから</code> → <code>OK</code> で作成開始する</li>
