@@ -58,11 +58,15 @@ X 関連の雑多なメモ。随時追加する
 
 ## 細々したの
 
+### Twitter Card Validator
+
+[Card Validator | Twitter Developers](https://cards-dev.x.com/validator)
+
+プレビューは機能していないが、OGP 画像の更新自体は機能する。(2025/02/22)
+
 ### メディア欄の空白は YouTube のリンク
 
 メディア欄にところどころある空白は YouTube のリンクの投稿。
-
-![](./media-tab-with-blanks.png)
 
 `from:自分のID filter:media` で検索すると、メディア欄で空白だったところに YouTube のリンクが貼られた投稿があるのが分かる。
 
