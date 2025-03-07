@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+    <meta name="description" content="ATtiny402 への高電圧プログラミング (HVP) を行う必要が出ましたが、HVP 対応のプログラマをすぐには用意できなかったので、それまで使っていた AE-CH340E に HVP 用の回路を追加することにしました。">
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@shapoco" />
+    <meta property="og:url" content="https://blog.shapoco.net/2025/0308-updi-hvp-with-ae-ch340e/" />
+    <meta property="og:title" content="UPDI HVP のための 12V を得る方法いろいろ | シャポログ" />
+    <meta property="og:description" content="ATtiny402 への高電圧プログラミング (HVP) を行う必要が出ましたが、HVP 対応のプログラマをすぐには用意できなかったので、それまで使っていた AE-CH340E に HVP 用の回路を追加することにしました。" />
+    <meta property="og:image" content="https://blog.shapoco.net/2025/0308-updi-hvp-with-ae-ch340e/cover.jpg" />
+
+    <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+    <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171109827-1"></script>
+    <script>
+      var remoteHost = window.location.hostname;
+      if (remoteHost == "localhost") {
+        console.log(`Google Analytics disabled on: '${remoteHost}'`);
+      }
+      else {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-171109827-1');
+      }
+    </script>
+
+    <link href="/style.css?128f0110" rel="stylesheet" type="text/css">
+    <script src="/style.js?f4585ba6"></script>
+
+    <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+    <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+    <title>UPDI HVP のための 12V を得る方法いろいろ | シャポログ</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div id="root_navi"></div>
+
+      <header class="article_header">
+        <h1><a href="/">シャポログ</a></h1>
+      </header>
+      <main>
+        <h2>UPDI HVP のための 12V を得る方法いろいろ</h2>
+
+        <div class="article_info_wrap">
+          <div class="article_info">
+            2025/03/08 |
+            <a href="https://github.com/shapoco/blog/tree/main/src/article/2025/0308-updi-hvp-with-ae-ch340e/" target="_blank">記事のソース</a>
+          </div>
+          
+          <div id="shpcstamp_wrap"></div>
+          <script async src="/stamp/v1/widget.js?f2543e31"></script>
+        </div>
+
+        <p><img src="./cover.jpg" alt=""></p>
+        <p>ATtiny402 への高電圧プログラミング (HVP) を行う必要が出ましたが、HVP 対応のプログラマをすぐには用意できなかったので、それまで使っていた AE-CH340E に HVP 用の回路を追加することにしました。</p>
+        <h3>先行事例</h3>
+        <ul>
+          <li><a href="http://www.technoblogy.com/show?48MP" target="_blank">Technoblogy - Tiny UPDI-HV Programmer</a></li>
+          <li><a href="https://github.com/wagiminator/AVR-Programmer/tree/master/SerialUPDI_HV_Programmer" target="_blank">AVR-Programmer/SerialUPDI_HV_Programmer at master · wagiminator/AVR-Programmer</a></li>
+          <li><a href="https://ameblo.jp/powpher/entry-12851215518.html" target="_blank">[Part1] HVP対応のUPDI プログラマーを作成中です | トドお父さん通信</a></li>
+        </ul>
+        <h3>高電圧パルスの仕様</h3>
+        <p>詳しい仕様は <a href="https://www.microchip.com/en-us/search?searchQuery=attiny402&category=Product%20Documents|Data%20Sheets&fq=start%3D0%26rows%3D10" target="_blank">データシート</a> を参照してください。</p>
+        <p>HVP を実施するには RESET ピンに 12V のパルスを 100us ～ 1ms 入力する必要があります。</p>
+        <blockquote>The duration of the pulse is recommended in the range from 100 μs to 1 ms before tri-stating.</blockquote>
+        <p>パルスを入力するタイミングとしてはリセットの直後が推奨されています。RESET ピンを GPIO として使用する場合に MCU からの出力との衝突を避けるためでしょう。</p>
+        <p>またパルスの電圧が RESET ピンの最大入力電圧 13V を超えないように注意する必要があります。過電圧が加わると ESD 保護回路が働き、そのまま電圧が加わり続けると大きな電流が流れてピンが破損する可能性があります。</p>
+        <blockquote>
+          VRSTMAX = 13V<br>
+          Care should be taken to avoid overshoot (overvoltage) when connecting the RESET pin to a 12V source. Exposing the pin to a voltage above the rated absolute maximum can activate the pin’s ESD protection circuitry, which will remain activated until the voltage has been brought below approximately 10V. A 12V driver can keep the ESD protection in an activated state (if activated by an overvoltage condition) while driving currents through it, potentially causing permanent damage to the part.
+        </blockquote>
+        <h3>パルスの生成方法</h3>
+        <p>先行事例のように CR 回路を使ってパルスを生成する方法が簡単そうなのでこれを採用することにしました。先述のように MCU からの出力と衝突しないようにすることが望ましいですが、<del>面倒臭いので</del> GPIO として使用する場合はタイミングを保証するのが難しいので、RESET ピンは入力ピンとしてのみ使用する前提としました。</p>
+        <h3>12V の生成方法</h3>
+        <h4>DC/DC コンバータ</h4>
+        <p>チャージポンプ IC を使用する例が多いようですが、手元に無かったのでまずはその辺に転がっていた DC/DC コンバータ <a href="https://akizukidenshi.com/catalog/g/g104132/" target="_blank">MAU104</a> を試してみました。</p>
+        <p>MAU104 を使用する場合は二次側にブリーダ抵抗が必要なことに注意が必要です。MAU104 では二次側の最小電流が 1.5mA と定められており、出力電圧は 12V なので、8kΩ 以下のブリーダ抵抗が必要です。二次側が開放状態の場合、出力電圧は 12V を遙かに超える値になります。手元の個体では 25V くらいの電圧が出力されていました。</p>
+        <p>ブリーダ抵抗の必要性自体は認識していたのですが、ブレッドボード上であれこれ試しているうちに高電圧が RESET ピンに流れ込んでしまったのか、ATtiny402 を 1 個壊してしまいました。しばらくは気休めとして二次側に電流制限抵抗とツェナを追加して運用していました。</p>
+        <p><img src="./schematic_mau104.png" alt=""></p>
+        <h4>ブロッキング発振回路 + ツェナーダイオード</h4>
+        <p>他に雑に 12V を得る方法が無いか考え、しばしばジュールシーフ回路として紹介されるブロッキング発振回路も試してみました。マイクロインダクタを 2 個並べて磁気結合させてトランスにします。詳しくはググってみてください。</p>
+        <p>12V を得ること自体はできましたが、なんとなく不安定そうなので HVP に使えるかどうかは試していません。</p>
+        <p><img src="./schematic_blocking.png" alt=""></p>
+        <h4>オペアンプ + 倍電圧整流 + ツェナーダイオード</h4>
+        <p>オペアンプで発振器を構成する方法も試してみました。2 回路入りのオペアンプで差動出力の発振器を構成し、それを倍電圧整流後、ツェナーダイオードでクランプしています。十分な電圧を得るにはフルスイングタイプのオペアンプを使用する必要がありました。12V が入力側に逆流すると CH340E が壊れてしまう可能性があるため、VCC-GND 間にも 5.1V のツェナを入れて保護します。</p>
+        <p><img src="./schematic_opamp.png" alt=""></p>
+        <p>この回路をユニバーサル基板に実装して波形を確認しました。</p>
+        <p><img src="./waveform.jpg" alt=""></p>
+        <p>12V 電源としては出力インピーダンスが高いですが、HVP のパルスの電流は小さいので問題無いでしょう。</p>
+        <p>ATtiny402 への書き込みも問題無く行えました。</p>
+
+      </main>
+      <footer>
+        Copyright &copy; Shapoco 
+      </footer>
+    </div>
+  </body>
+</html>
