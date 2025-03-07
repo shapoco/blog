@@ -345,7 +345,7 @@
       "card_image_url": "/2025/0209-x-tips/thumbnail.png"
     },
     {
-      "title": "UPDI HVP のための 12V を得る方法いろいろ",
+      "title": "UPDI HVP のための 12V を得る方法の試行",
       "description": "ATtiny402 への高電圧プログラミング (HVP) を行う必要が出ましたが、HVP 対応のプログラマをすぐには用意できなかったので、それまで使っていた AE-CH340E に HVP 用の回路を追加することにしました。",
       "date": "2025/03/08",
       "url": "/2025/0308-updi-hvp-with-ae-ch340e",

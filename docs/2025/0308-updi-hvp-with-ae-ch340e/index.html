@@ -10,7 +10,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@shapoco" />
     <meta property="og:url" content="https://blog.shapoco.net/2025/0308-updi-hvp-with-ae-ch340e/" />
-    <meta property="og:title" content="UPDI HVP のための 12V を得る方法いろいろ | シャポログ" />
+    <meta property="og:title" content="UPDI HVP のための 12V を得る方法の試行 | シャポログ" />
     <meta property="og:description" content="ATtiny402 への高電圧プログラミング (HVP) を行う必要が出ましたが、HVP 対応のプログラマをすぐには用意できなかったので、それまで使っていた AE-CH340E に HVP 用の回路を追加することにしました。" />
     <meta property="og:image" content="https://blog.shapoco.net/2025/0308-updi-hvp-with-ae-ch340e/cover.jpg" />
 
@@ -39,7 +39,7 @@
     <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
     <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
 
-    <title>UPDI HVP のための 12V を得る方法いろいろ | シャポログ</title>
+    <title>UPDI HVP のための 12V を得る方法の試行 | シャポログ</title>
   </head>
 
   <body>
@@ -50,7 +50,7 @@
         <h1><a href="/">シャポログ</a></h1>
       </header>
       <main>
-        <h2>UPDI HVP のための 12V を得る方法いろいろ</h2>
+        <h2>UPDI HVP のための 12V を得る方法の試行</h2>
 
         <div class="article_info_wrap">
           <div class="article_info">
@@ -95,7 +95,7 @@
         <h4>オペアンプ + 倍電圧整流 + ツェナーダイオード</h4>
         <p>オペアンプで発振器を構成する方法も試してみました。2 回路入りのオペアンプで差動出力の発振器を構成し、それを倍電圧整流後、ツェナーダイオードでクランプしています。十分な電圧を得るにはフルスイングタイプのオペアンプを使用する必要がありました。12V が入力側に逆流すると CH340E が壊れてしまう可能性があるため、VCC-GND 間にも 5.1V のツェナを入れて保護します。</p>
         <p><img src="./schematic_opamp.png" alt=""></p>
-        <p>この回路をユニバーサル基板に実装して波形を確認しました。</p>
+        <p>この回路をユニバーサル基板に実装 (冒頭の写真) して波形を確認しました。</p>
         <p><img src="./waveform.jpg" alt=""></p>
         <p>12V 電源としては出力インピーダンスが高いですが、HVP のパルスの電流は小さいので問題無いでしょう。</p>
         <p>ATtiny402 への書き込みも問題無く行えました。</p>
