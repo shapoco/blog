@@ -56,6 +56,10 @@ X 関連の雑多なメモ。随時追加する
     2. 対象ユーザのプロフィールページを開く
     3. 作成したブックマークレットを開く<br>( `https://x.com/i/user/<user ID>#<screen name>` の形式でクリップボードにコピーされる)
 
+## 通知を送らずに引用する
+
+例えば対象ポストの URL が [https://x.com/shapoco/status/1897261591160328414](https://x.com/shapoco/status/1897261591160328414) の場合は [https://x.com/i/web/status/1897261591160328414](https://x.com/i/web/status/1897261591160328414) のような URL に整形して引用する。ポストのプレビューは表示されない。(2025/03/09)
+
 ## 細々したの
 
 ### Twitter Card Validator
