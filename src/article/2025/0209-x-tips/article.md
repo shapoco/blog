@@ -39,22 +39,35 @@ X 関連の雑多なメモ。随時追加する
 
 `https://x.com/i/user/ユーザー ID` はそのユーザーのプロフィールページへ転送される ([例](https://x.com/i/user/858142314849378304))。
 
-### ユーザー ID を取得する方法
+### 外部サービス利用してユーザー ID を取得する
 
-- 外部サービス
+- [X(Twitter) IDチェッカー](https://develop.tools/x-idcheck/)<br>※ なぜか取得できない場合もある
 
-    - [X(Twitter) IDチェッカー](https://develop.tools/x-idcheck/)<br>※ なぜか取得できない場合もある
+### プロフィールページの DOM からユーザー ID を取得する (PC用)
 
-- ブックマークレット (PC用)
+1. `data-testid="UserProfileSchema-test"` なる属性を持つ `script` 要素を見つける (複数存在する場合がある)。
+2. `innerText` を JSON としてパースする。
+3. `(JSON obj).mainEntity.additionalName` が目的の screen name に一致することを確認し、一致しない場合は次の `script` 要素を調べる。
+4. screen name が一致する場合、`(JSON obj).mainEntity.identifier` にユーザー ID が格納されている。
 
-    1. 以下のコードを URL としてブックマークレットを作成する
+上記手順をブックマークレット化した。
 
-        ```js
-        javascript:(function(){try{const sn=window.location.href.match(/x\.com\/(\w+)(\/(with_replies|media)\/?)?(\?.+)?$/)[1];const ss=Array.from(document.querySelectorAll('script')).filter(elem=>elem.dataset&&elem.dataset.testid==='UserProfileSchema-test');for(const s of ss){const e=JSON.parse(s.innerText).mainEntity;if(e.additionalName!==sn) continue;const url=`https://x.com/i/user/${e.identifier}#${sn}`;console.log(`URL: '${url}'`);navigator.clipboard.writeText(url).then(function(){window.alert(`URL copied to clipboard:\n${url}`);},function(){window.alert(`URL: '${url}'\n(Failed to copy to clipboard)`);});return;}throw new Error(`User ID not found for ${sn}.`);}catch(e){window.alert(`Failed. (${e})`);}})()
-        ```
+1. 以下のコードを URL としてブックマークレットを作成する
 
-    2. 対象ユーザのプロフィールページを開く
-    3. 作成したブックマークレットを開く<br>( `https://x.com/i/user/<user ID>#<screen name>` の形式でクリップボードにコピーされる)
+    ```js
+    javascript:(function(){try{const sn=window.location.href.match(/x\.com\/(\w+)(\/(with_replies|media)\/?)?(\?.+)?$/)[1];const ss=Array.from(document.querySelectorAll('script')).filter(elem=>elem.dataset&&elem.dataset.testid==='UserProfileSchema-test');for(const s of ss){const e=JSON.parse(s.innerText).mainEntity;if(e.additionalName!==sn) continue;const url=`https://x.com/i/user/${e.identifier}#${sn}`;console.log(`URL: '${url}'`);navigator.clipboard.writeText(url).then(function(){window.alert(`URL copied to clipboard:\n${url}`);},function(){window.alert(`URL: '${url}'\n(Failed to copy to clipboard)`);});return;}throw new Error(`User ID not found for ${sn}.`);}catch(e){window.alert(`Failed. (${e})`);}})()
+    ```
+
+2. 対象ユーザのプロフィールページを開く
+3. 作成したブックマークレットを開く<br>( `https://x.com/i/user/<user ID>#<screen name>` の形式でクリップボードにコピーされる)
+
+(2025/03/18 更新)
+
+### フォローボタンの属性からユーザー ID を得る (PC用)
+
+フォローボタン (`button` 要素) の `data-testid` 属性が正規表現 `/(\d+)-(un)?(follow|block)/` にマッチする場合、`(\d+)` の部分がユーザー ID にあたる。
+
+(2025/03/18 更新)
 
 ## 通知を送らずに引用する
 

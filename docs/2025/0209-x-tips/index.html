@@ -169,26 +169,30 @@
         <h3>ユーザー ID</h3>
         <p>アカウントを識別する数字。ID (screen name) を変えてもユーザー ID が変わることはない。例えば <a href="https://x.com/shapoco" target="_blank">@shapoco</a> のユーザー ID は <code>858142314849378304</code>。</p>
         <p><code>https://x.com/i/user/ユーザー ID</code> はそのユーザーのプロフィールページへ転送される (<a href="https://x.com/i/user/858142314849378304" target="_blank">例</a>)。</p>
-        <h4>ユーザー ID を取得する方法</h4>
+        <h4>外部サービス利用してユーザー ID を取得する</h4>
         <ul>
-          <li>
-            <p>外部サービス</p>
-            <ul>
-              <li><a href="https://develop.tools/x-idcheck/" target="_blank">X(Twitter) IDチェッカー</a><br>※ なぜか取得できない場合もある</li>
-            </ul>
-          </li>
-          <li>
-            <p>ブックマークレット (PC用)</p>
-            <ol>
-              <li>
-                <p>以下のコードを URL としてブックマークレットを作成する</p>
-                <pre class="lang_js">javascript:(function(){try{const sn=window.location.href.match(/x\.com\/(\w+)(\/(with_replies|media)\/?)?(\?.+)?$/)[1];const ss=Array.from(document.querySelectorAll(&#39;script&#39;)).filter(elem=&gt;elem.dataset&amp;&amp;elem.dataset.testid===&#39;UserProfileSchema-test&#39;);for(const s of ss){const e=JSON.parse(s.innerText).mainEntity;if(e.additionalName!==sn) continue;const url=`https://x.com/i/user/${e.identifier}#${sn}`;console.log(`URL: &#39;${url}&#39;`);navigator.clipboard.writeText(url).then(function(){window.alert(`URL copied to clipboard:\n${url}`);},function(){window.alert(`URL: &#39;${url}&#39;\n(Failed to copy to clipboard)`);});return;}throw new Error(`User ID not found for ${sn}.`);}catch(e){window.alert(`Failed. (${e})`);}})()</pre>
-              </li>
-              <li>対象ユーザのプロフィールページを開く</li>
-              <li>作成したブックマークレットを開く<br>( <code>https://x.com/i/user/&lt;user ID&gt;#&lt;screen name&gt;</code> の形式でクリップボードにコピーされる)</li>
-            </ol>
-          </li>
+          <li><a href="https://develop.tools/x-idcheck/" target="_blank">X(Twitter) IDチェッカー</a><br>※ なぜか取得できない場合もある</li>
         </ul>
+        <h4>プロフィールページの DOM からユーザー ID を取得する (PC用)</h4>
+        <ol>
+          <li><code>data-testid=&quot;UserProfileSchema-test&quot;</code> なる属性を持つ <code>script</code> 要素を見つける (複数存在する場合がある)。</li>
+          <li><code>innerText</code> を JSON としてパースする。</li>
+          <li><code>(JSON obj).mainEntity.additionalName</code> が目的の screen name に一致することを確認し、一致しない場合は次の <code>script</code> 要素を調べる。</li>
+          <li>screen name が一致する場合、<code>(JSON obj).mainEntity.identifier</code> にユーザー ID が格納されている。</li>
+        </ol>
+        <p>上記手順をブックマークレット化した。</p>
+        <ol>
+          <li>
+            <p>以下のコードを URL としてブックマークレットを作成する</p>
+            <pre class="lang_js">javascript:(function(){try{const sn=window.location.href.match(/x\.com\/(\w+)(\/(with_replies|media)\/?)?(\?.+)?$/)[1];const ss=Array.from(document.querySelectorAll(&#39;script&#39;)).filter(elem=&gt;elem.dataset&amp;&amp;elem.dataset.testid===&#39;UserProfileSchema-test&#39;);for(const s of ss){const e=JSON.parse(s.innerText).mainEntity;if(e.additionalName!==sn) continue;const url=`https://x.com/i/user/${e.identifier}#${sn}`;console.log(`URL: &#39;${url}&#39;`);navigator.clipboard.writeText(url).then(function(){window.alert(`URL copied to clipboard:\n${url}`);},function(){window.alert(`URL: &#39;${url}&#39;\n(Failed to copy to clipboard)`);});return;}throw new Error(`User ID not found for ${sn}.`);}catch(e){window.alert(`Failed. (${e})`);}})()</pre>
+          </li>
+          <li>対象ユーザのプロフィールページを開く</li>
+          <li>作成したブックマークレットを開く<br>( <code>https://x.com/i/user/&lt;user ID&gt;#&lt;screen name&gt;</code> の形式でクリップボードにコピーされる)</li>
+        </ol>
+        <p>(2025/03/18 更新)</p>
+        <h4>フォローボタンの属性からユーザー ID を得る (PC用)</h4>
+        <p>フォローボタン (<code>button</code> 要素) の <code>data-testid</code> 属性が正規表現 <code>/(\d+)-(un)?(follow|block)/</code> にマッチする場合、<code>(\d+)</code> の部分がユーザー ID にあたる。</p>
+        <p>(2025/03/18 更新)</p>
         <h3>通知を送らずに引用する</h3>
         <p>例えば対象ポストの URL が <a href="https://x.com/shapoco/status/1897261591160328414" target="_blank">https://x.com/shapoco/status/1897261591160328414</a> の場合は <a href="https://x.com/i/web/status/1897261591160328414" target="_blank">https://x.com/i/web/status/1897261591160328414</a> のような URL に整形して引用する。ポストのプレビューは表示されない。(2025/03/09)</p>
         <h3>細々したの</h3>
