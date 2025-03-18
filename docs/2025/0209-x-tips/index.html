@@ -182,7 +182,7 @@
             <ol>
               <li>
                 <p>以下のコードを URL としてブックマークレットを作成する</p>
-                <pre class="lang_js">javascript:(function(){try{const s=Array.from(document.querySelectorAll(&#39;script&#39;)).filter(elem=&gt;elem.dataset&amp;&amp;elem.dataset.testid&amp;&amp;elem.dataset.testid==&#39;UserProfileSchema-test&#39;);const j=JSON.parse(s[0].innerText);const url=`https://x.com/i/user/${j.mainEntity.identifier}#${j.mainEntity.additionalName}`;console.log(`URL: &#39;${url}&#39;`);navigator.clipboard.writeText(url).then(function(){window.alert(`URL copied to clipboard:\n${url}`);},function(){window.alert(`URL: &#39;${url}&#39;\n(Failed to copy to clipboard)`);});}catch(e){window.alert(`Failed to obtain User ID (${e})`);}})()</pre>
+                <pre class="lang_js">javascript:(function(){try{const sn=window.location.href.match(/x\.com\/(\w+)(\/(with_replies|media)\/?)?(\?.+)?$/)[1];const ss=Array.from(document.querySelectorAll(&#39;script&#39;)).filter(elem=&gt;elem.dataset&amp;&amp;elem.dataset.testid===&#39;UserProfileSchema-test&#39;);for(const s of ss){const e=JSON.parse(s.innerText).mainEntity;if(e.additionalName!==sn) continue;const url=`https://x.com/i/user/${e.identifier}#${sn}`;console.log(`URL: &#39;${url}&#39;`);navigator.clipboard.writeText(url).then(function(){window.alert(`URL copied to clipboard:\n${url}`);},function(){window.alert(`URL: &#39;${url}&#39;\n(Failed to copy to clipboard)`);});return;}throw new Error(`User ID not found for ${sn}.`);}catch(e){window.alert(`Failed. (${e})`);}})()</pre>
               </li>
               <li>対象ユーザのプロフィールページを開く</li>
               <li>作成したブックマークレットを開く<br>( <code>https://x.com/i/user/&lt;user ID&gt;#&lt;screen name&gt;</code> の形式でクリップボードにコピーされる)</li>

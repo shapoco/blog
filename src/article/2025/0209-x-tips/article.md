@@ -50,7 +50,7 @@ X 関連の雑多なメモ。随時追加する
     1. 以下のコードを URL としてブックマークレットを作成する
 
         ```js
-        javascript:(function(){try{const s=Array.from(document.querySelectorAll('script')).filter(elem=>elem.dataset&&elem.dataset.testid&&elem.dataset.testid=='UserProfileSchema-test');const j=JSON.parse(s[0].innerText);const url=`https://x.com/i/user/${j.mainEntity.identifier}#${j.mainEntity.additionalName}`;console.log(`URL: '${url}'`);navigator.clipboard.writeText(url).then(function(){window.alert(`URL copied to clipboard:\n${url}`);},function(){window.alert(`URL: '${url}'\n(Failed to copy to clipboard)`);});}catch(e){window.alert(`Failed to obtain User ID (${e})`);}})()
+        javascript:(function(){try{const sn=window.location.href.match(/x\.com\/(\w+)(\/(with_replies|media)\/?)?(\?.+)?$/)[1];const ss=Array.from(document.querySelectorAll('script')).filter(elem=>elem.dataset&&elem.dataset.testid==='UserProfileSchema-test');for(const s of ss){const e=JSON.parse(s.innerText).mainEntity;if(e.additionalName!==sn) continue;const url=`https://x.com/i/user/${e.identifier}#${sn}`;console.log(`URL: '${url}'`);navigator.clipboard.writeText(url).then(function(){window.alert(`URL copied to clipboard:\n${url}`);},function(){window.alert(`URL: '${url}'\n(Failed to copy to clipboard)`);});return;}throw new Error(`User ID not found for ${sn}.`);}catch(e){window.alert(`Failed. (${e})`);}})()
         ```
 
     2. 対象ユーザのプロフィールページを開く
