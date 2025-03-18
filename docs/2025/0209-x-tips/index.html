@@ -167,8 +167,10 @@
         </table>
         <p>※1 「メディア」や「動画」には YouTube リンクも含まれる</p>
         <h3>ユーザー ID</h3>
-        <p>アカウントを識別する数字。ID (screen name) を変えてもユーザー ID が変わることはない。例えば <a href="https://x.com/shapoco" target="_blank">@shapoco</a> のユーザー ID は <code>858142314849378304</code>。</p>
-        <p><code>https://x.com/i/user/ユーザー ID</code> はそのユーザーのプロフィールページへ転送される (<a href="https://x.com/i/user/858142314849378304" target="_blank">例</a>)。</p>
+        <p>一般的に「ID」と呼ばれているもの (<code>@shapoco</code> など) は正式には screen name という。</p>
+        <p>ユーザー ID は screen name と関係無くアカウントを一意に識別する数字。例えば <a href="https://x.com/shapoco" target="_blank">@shapoco</a> のユーザー ID は <code>858142314849378304</code>。screen name は変更できるが、ユーザー ID は変更できない。</p>
+        <p>何のためか分からないが <code>https://x.com/i/user/ユーザーID</code> がそのユーザーのプロフィールページへ転送されるようになっているので、ユーザー ID から screen name は簡単に分かる (<a href="https://x.com/i/user/858142314849378304" target="_blank">例</a>)。</p>
+        <p>screen name からユーザー ID を得るのは以前は API を使うことができたが、今は有料化されてやや難しくなっている。</p>
         <h4>外部サービス利用してユーザー ID を取得する</h4>
         <ul>
           <li><a href="https://develop.tools/x-idcheck/" target="_blank">X(Twitter) IDチェッカー</a><br>※ なぜか取得できない場合もある</li>
@@ -192,6 +194,7 @@
         <p>(2025/03/18 更新)</p>
         <h4>フォローボタンの属性からユーザー ID を得る (PC用)</h4>
         <p>フォローボタン (<code>button</code> 要素) の <code>data-testid</code> 属性が正規表現 <code>/(\d+)-(un)?(follow|block)/</code> にマッチする場合、<code>(\d+)</code> の部分がユーザー ID にあたる。</p>
+        <p>こちらの方法だと、フォロー一覧/フォロワー一覧/アカウント検索結果などのページから、そこに表示されているユーザーの ID をまとめて得られる。</p>
         <p>(2025/03/18 更新)</p>
         <h3>通知を送らずに引用する</h3>
         <p>例えば対象ポストの URL が <a href="https://x.com/shapoco/status/1897261591160328414" target="_blank">https://x.com/shapoco/status/1897261591160328414</a> の場合は <a href="https://x.com/i/web/status/1897261591160328414" target="_blank">https://x.com/i/web/status/1897261591160328414</a> のような URL に整形して引用する。ポストのプレビューは表示されない。(2025/03/09)</p>
