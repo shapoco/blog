@@ -175,7 +175,7 @@
         <ul>
           <li><a href="https://develop.tools/x-idcheck/" target="_blank">X(Twitter) IDチェッカー</a><br>※ なぜか取得できない場合もある</li>
         </ul>
-        <h4>プロフィールページの DOM からユーザー ID を取得する (PC用)</h4>
+        <h4>プロフィールページの DOM からユーザー ID を取得する (Web版)</h4>
         <ol>
           <li><code>data-testid=&quot;UserProfileSchema-test&quot;</code> なる属性を持つ <code>script</code> 要素を見つける (複数存在する場合がある)。</li>
           <li><code>innerText</code> を JSON としてパースする。</li>
@@ -192,13 +192,15 @@
           <li>作成したブックマークレットを開く<br>( <code>https://x.com/i/user/&lt;user ID&gt;#&lt;screen name&gt;</code> の形式でクリップボードにコピーされる)</li>
         </ol>
         <p>(2025/03/18 更新)</p>
-        <h4>フォローボタンの属性からユーザー ID を得る (PC用)</h4>
+        <h4>フォローボタンの属性からユーザー ID を得る (Web版)</h4>
         <p>フォローボタン (<code>button</code> 要素) の <code>data-testid</code> 属性が正規表現 <code>/(\d+)-(un)?(follow|block)/</code> にマッチする場合、<code>(\d+)</code> の部分がユーザー ID にあたる。</p>
         <p>こちらの方法だと、フォロー一覧/フォロワー一覧/アカウント検索結果などのページから、そこに表示されているユーザーの ID をまとめて得られる。</p>
         <p>(2025/03/18 更新)</p>
         <h3>通知を送らずに引用する</h3>
         <p>例えば対象ポストの URL が <a href="https://x.com/shapoco/status/1897261591160328414" target="_blank">https://x.com/shapoco/status/1897261591160328414</a> の場合は <a href="https://x.com/i/web/status/1897261591160328414" target="_blank">https://x.com/i/web/status/1897261591160328414</a> のような URL に整形して引用する。ポストのプレビューは表示されない。(2025/03/09)</p>
         <h3>細々したの</h3>
+        <h4>プロフィールの改行</h4>
+        <p>Web 版のプロフィール編集画面で改行を使うと Web 版には反映されるが、アプリでは半角スペースになる。(2025/03/19)</p>
         <h4>Twitter Card Validator</h4>
         <p><a href="https://cards-dev.x.com/validator" target="_blank">Card Validator | Twitter Developers</a></p>
         <p>プレビューは機能していないが、OGP 画像の更新自体は機能する。(2025/02/22)</p>

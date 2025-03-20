@@ -47,7 +47,7 @@ screen name からユーザー ID を得るのは以前は API を使うこと�
 
 - [X(Twitter) IDチェッカー](https://develop.tools/x-idcheck/)<br>※ なぜか取得できない場合もある
 
-### プロフィールページの DOM からユーザー ID を取得する (PC用)
+### プロフィールページの DOM からユーザー ID を取得する (Web版)
 
 1. `data-testid="UserProfileSchema-test"` なる属性を持つ `script` 要素を見つける (複数存在する場合がある)。
 2. `innerText` を JSON としてパースする。
@@ -67,7 +67,7 @@ screen name からユーザー ID を得るのは以前は API を使うこと�
 
 (2025/03/18 更新)
 
-### フォローボタンの属性からユーザー ID を得る (PC用)
+### フォローボタンの属性からユーザー ID を得る (Web版)
 
 フォローボタン (`button` 要素) の `data-testid` 属性が正規表現 `/(\d+)-(un)?(follow|block)/` にマッチする場合、`(\d+)` の部分がユーザー ID にあたる。
 
@@ -80,6 +80,10 @@ screen name からユーザー ID を得るのは以前は API を使うこと�
 例えば対象ポストの URL が [https://x.com/shapoco/status/1897261591160328414](https://x.com/shapoco/status/1897261591160328414) の場合は [https://x.com/i/web/status/1897261591160328414](https://x.com/i/web/status/1897261591160328414) のような URL に整形して引用する。ポストのプレビューは表示されない。(2025/03/09)
 
 ## 細々したの
+
+### プロフィールの改行
+
+Web 版のプロフィール編集画面で改行を使うと Web 版には反映されるが、アプリでは半角スペースになる。(2025/03/19)
 
 ### Twitter Card Validator
 
