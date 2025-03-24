@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+    <meta name="description" content="JavaScript 関連の雑多なメモ。随時追加する">
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@shapoco" />
+    <meta property="og:url" content="https://blog.shapoco.net/2025/0323-js-tips/" />
+    <meta property="og:title" content="[メモ] JavaScript 備忘録 | シャポログ" />
+    <meta property="og:description" content="JavaScript 関連の雑多なメモ。随時追加する" />
+    <meta property="og:image" content="https://blog.shapoco.net/image/default_card_summary.png" />
+
+    <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+    <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171109827-1"></script>
+    <script>
+      var remoteHost = window.location.hostname;
+      if (remoteHost == "localhost") {
+        console.log(`Google Analytics disabled on: '${remoteHost}'`);
+      }
+      else {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-171109827-1');
+      }
+    </script>
+
+    <link href="/style.css?128f0110" rel="stylesheet" type="text/css">
+    <script src="/style.js?f1737acb"></script>
+
+    <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+    <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+    <title>[メモ] JavaScript 備忘録 | シャポログ</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div id="root_navi"></div>
+
+      <header class="article_header">
+        <h1><a href="/">シャポログ</a></h1>
+      </header>
+      <main>
+        <h2>[メモ] JavaScript 備忘録</h2>
+
+        <div class="article_info_wrap">
+          <div class="article_info">
+            2025/03/23 |
+            <a href="https://github.com/shapoco/blog/tree/main/src/article/2025/0323-js-tips/" target="_blank">記事のソース</a>
+          </div>
+          
+          <div id="shpcstamp_wrap"></div>
+          <script async src="/stamp/v1/widget.js?f2543e31"></script>
+        </div>
+
+        <p>JavaScript 関連の雑多なメモ。随時追加する</p>
+        <h3>HTML要素 a と b の共通の親要素</h3>
+        <p>HTML 要素を直接的に特定するのが難しい場合に、その配下に存在することが分かっている特徴的で見つけやすい 2 つの子要素を使って目的の要素を特定する用。</p>
+        <pre class="lang_js" title="findCommonParent.js">/**
+ * 要素 a と b の共通の親要素を返す
+ * @param {HTMLElement} a
+ * @param {HTMLElement} b
+ * @param {number} maxDistance
+ * @returns {HTMLElement|null}
+ */
+function findCommonParent(a, b, maxDistance = 99999) {
+  let parents = [];
+  let distA = 0, distB = 0;
+  while (a.parentElement &amp;&amp; distA++ &lt; maxDistance) {
+    parents.push(a.parentElement);
+    a = a.parentElement;
+  }
+  while (b.parentElement &amp;&amp; distB++ &lt; maxDistance) {
+    if (parents.includes(b.parentElement)) {
+      return b.parentElement;
+    }
+    b = b.parentElement;
+  }
+  return null;
+}</pre>
+        <h3>HTML要素内の画像を alt に置き換えつつ textContent を取得する</h3>
+        <p>X (Twitter) の本文で emoji が IMG 要素になってるのを emoji に戻す用。</p>
+        <pre class="lang_js" title="getTextContentWithAlt.js">/**
+ * 画像の alt を含む textContent を返す
+ * @param {HTMLElement} elm
+ * @returns {string}
+*/
+function getTextContentWithAlt(elm) {
+  if (elm) {
+    if (elm.nodeType === Node.TEXT_NODE) {
+      return elm.nodeValue;
+    }
+    else if (elm.nodeType === Node.ELEMENT_NODE) {
+      if (elm.tagName.toLowerCase() === &#39;img&#39;) {
+        return elm.alt;
+      }
+      else if (elm.tagName.toLowerCase() === &#39;br&#39;) {
+        return &#39;\n&#39;;
+      }
+      else {
+        let text = &#39;&#39;;
+        for (let child of elm.childNodes) {
+          text += getTextContentWithAlt(child);
+        }
+        return text;
+      }
+    }
+  }
+  return &#39;&#39;;
+}</pre>
+
+      </main>
+      <footer>
+        Copyright &copy; Shapoco 
+      </footer>
+    </div>
+  </body>
+</html>

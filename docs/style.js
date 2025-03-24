@@ -123,8 +123,8 @@ function arrangeArticleHtml(parent) {
         pattern: new RegExp(
           '\\b(break|case|catch|class|const|continue|debugger|default|' +
           'delete|do|else|export|extends|false|finally|for|function|if|' +
-          'import|in|instanceof|new|null|return|super|switch|this|throw|' +
-          'true|try|typeof|var|void|while|with)\\b')
+          'import|in|instanceof|let|new|null|return|super|switch|this|' +
+          'throw|true|try|typeof|var|void|while|with)\\b')
       },
       { style: STYLE_CONST, pattern: /\b[A-Z][A-Z0-9_]*\b/ },
       RULE_LARGE_CONST_ID,
