@@ -354,7 +354,7 @@
     },
     {
       "title": "[メモ] JavaScript 備忘録",
-      "description": "JavaScript 関連の雑多なメモ。随時追加する",
+      "description": "JavaScript 関連の雑多なメモ。主に UserScript の作成時に使う。随時追加する",
       "date": "2025/03/23",
       "url": "/2025/0323-js-tips",
       "twitter_card_size": "summary",

@@ -1,6 +1,6 @@
 # [メモ] JavaScript 備忘録
 
-JavaScript 関連の雑多なメモ。随時追加する
+JavaScript 関連の雑多なメモ。主に UserScript の作成時に使う。随時追加する
 
 ## HTML要素 a と b の共通の親要素
 
@@ -63,5 +63,25 @@ function getTextContentWithAlt(elm) {
     }
   }
   return '';
+}
+```
+
+## HTML向けのエスケーピング
+
+```js:escapeForHtml.js
+/**
+ * HTML向けに特殊文字をエスケープする
+ * @param {string} s 
+ * @returns {string}
+ */
+function escapeForHtml(s) {
+  return (s
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;')
+    .replaceAll(" ", '&nbsp;')
+    .replaceAll("　", '&#x3000;'));
 }
 ```

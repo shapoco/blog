@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
     <meta name="keywords" content="シャポログ ${blog.article_keywords}">
-    <meta name="description" content="JavaScript 関連の雑多なメモ。随時追加する">
+    <meta name="description" content="JavaScript 関連の雑多なメモ。主に UserScript の作成時に使う。随時追加する">
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@shapoco" />
     <meta property="og:url" content="https://blog.shapoco.net/2025/0323-js-tips/" />
     <meta property="og:title" content="[メモ] JavaScript 備忘録 | シャポログ" />
-    <meta property="og:description" content="JavaScript 関連の雑多なメモ。随時追加する" />
+    <meta property="og:description" content="JavaScript 関連の雑多なメモ。主に UserScript の作成時に使う。随時追加する" />
     <meta property="og:image" content="https://blog.shapoco.net/2025/0323-js-tips/thumbnail.png" />
 
     <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
@@ -62,7 +62,7 @@
           <script async src="/stamp/v1/widget.js?f2543e31"></script>
         </div>
 
-        <p>JavaScript 関連の雑多なメモ。随時追加する</p>
+        <p>JavaScript 関連の雑多なメモ。主に UserScript の作成時に使う。随時追加する</p>
         <h3>HTML要素 a と b の共通の親要素</h3>
         <p>HTML 要素を直接的に特定するのが難しい場合に、その配下に存在することが分かっている特徴的で見つけやすい 2 つの子要素を使って目的の要素を特定する用。</p>
         <pre class="lang_js" title="findCommonParent.js">/**
@@ -116,6 +116,22 @@ function getTextContentWithAlt(elm) {
     }
   }
   return &#39;&#39;;
+}</pre>
+        <h3>HTML向けのエスケーピング</h3>
+        <pre class="lang_js" title="escapeForHtml.js">/**
+ * HTML向けに特殊文字をエスケープする
+ * @param {string} s
+ * @returns {string}
+ */
+function escapeForHtml(s) {
+  return (s
+    .replaceAll(&#39;&amp;&#39;, &#39;&amp;amp;&#39;)
+    .replaceAll(&#39;&lt;&#39;, &#39;&amp;lt;&#39;)
+    .replaceAll(&#39;&gt;&#39;, &#39;&amp;gt;&#39;)
+    .replaceAll(&#39;&quot;&#39;, &#39;&amp;quot;&#39;)
+    .replaceAll(&quot;&#39;&quot;, &#39;&amp;#39;&#39;)
+    .replaceAll(&quot; &quot;, &#39;&amp;nbsp;&#39;)
+    .replaceAll(&quot;　&quot;, &#39;&amp;#x3000;&#39;));
 }</pre>
 
       </main>
