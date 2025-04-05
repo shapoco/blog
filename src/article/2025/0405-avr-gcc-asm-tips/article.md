@@ -141,3 +141,14 @@ clobbered registers は呼び出し元の責任で待避するので、呼び出
 - 構造体は 2 のべき乗に切り上げる。
 
     - 例) 6 バイトの構造体は `r23:r18` に配置する (`r25:r24` はパディング)。
+
+----
+
+## 文法
+
+### プロプロセッサ
+
+ソースファイルの拡張子を大文字で `.S` にすることにより、C/C++ と同様のプリプロセッサが使用でき、`#define` などのお馴染みのマクロが使える。
+
+> You can use the gnu C compiler driver to get other "CPP" style preprocessing by giving the input file a `.S` suffix.<br>
+> [3.1 Preprocessing - Using as](https://sourceware.org/binutils/docs-2.18/as/Preprocessing.html#Preprocessing)
