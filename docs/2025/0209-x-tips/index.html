@@ -150,7 +150,7 @@
             <td><a href="https://x.com/search?q=from%3Ashapoco+min_retweets%3A1000" target="_blank">from:shapoco min_retweets:1000</a></td>
           </tr>
           <tr>
-            <td><code>min_faces:N</code></td>
+            <td><code>min_faves:N</code></td>
             <td>いいね数が <code>N</code> 以上</td>
             <td><a href="https://x.com/search?q=from%3Ashapoco+min_faves%3A1000" target="_blank">from:shapoco min_faves:1000</a></td>
           </tr>
@@ -166,9 +166,20 @@
           </tr>
         </table>
         <p>※1 「メディア」や「動画」には YouTube リンクも含まれる</p>
+        <h3>フォロワーの TL に流れないようにこっそりポストする</h3>
+        <p>フォローしていない他人へのリプライは基本的にホームタイムラインには表示されないので、凍結済みの適当なユーザー宛てに返信することで目立たないようにポストすることができる。</p>
+        <p>それっぽい ID の凍結済みユーザーの例: (2025/04/05 現在)</p>
+        <ul>
+          <li><a href="https://x.com/secret" target="_blank">@secret</a></li>
+          <li><a href="https://x.com/hidden" target="_blank">@hidden</a></li>
+          <li><a href="https://x.com/test" target="_blank">@test</a></li>
+        </ul>
+        <p>※ ポスト完全に見えなくなるわけではなく、プロフィールページの返信タブや <a href="https://x.com/search?q=from%3Ashapoco%20to%3Ahidden" target="_blank">検索</a> によって見つかる可能性もあり、また凍結された ID を後になって他の誰かが取得する可能性もあるので注意。</p>
+        <h3>通知を送らずに引用する</h3>
+        <p>例えば対象ポストの URL が <a href="https://x.com/shapoco/status/1897261591160328414" target="_blank">https://x.com/shapoco/status/1897261591160328414</a> の場合は <a href="https://x.com/i/web/status/1897261591160328414" target="_blank">https://x.com/i/web/status/1897261591160328414</a> のような URL に整形して引用する。(2025/04/05)</p>
         <h3>ユーザー ID</h3>
         <p>一般的に「ID」と呼ばれているもの (<code>@shapoco</code> など) は正式には screen name という。</p>
-        <p>ユーザー ID は screen name と関係無くアカウントを一意に識別する数字。例えば <a href="https://x.com/shapoco" target="_blank">@shapoco</a> のユーザー ID は <code>858142314849378304</code>。screen name は変更できるが、ユーザー ID は変更できない。</p>
+        <p>「ユーザー ID」は screen name と関係無くアカウントを一意に識別する数字。例えば <a href="https://x.com/shapoco" target="_blank">@shapoco</a> のユーザー ID は <code>858142314849378304</code>。screen name は変更できるが、ユーザー ID は変更できない。</p>
         <p>何のためか分からないが <code>https://x.com/i/user/ユーザーID</code> がそのユーザーのプロフィールページへ転送されるようになっているので、ユーザー ID から screen name は簡単に分かる (<a href="https://x.com/i/user/858142314849378304" target="_blank">例</a>)。</p>
         <p>screen name からユーザー ID を得るのは以前は API を使うことができたが、今は有料化されてやや難しくなっている。</p>
         <h4>外部サービス利用してユーザー ID を取得する</h4>
@@ -196,8 +207,6 @@
         <p>フォローボタン (<code>button</code> 要素) の <code>data-testid</code> 属性が正規表現 <code>/(\d+)-(un)?(follow|block)/</code> にマッチする場合、<code>(\d+)</code> の部分がユーザー ID にあたる。</p>
         <p>こちらの方法だと、フォロー一覧/フォロワー一覧/アカウント検索結果などのページから、そこに表示されているユーザーの ID をまとめて得られる。</p>
         <p>(2025/03/18 更新)</p>
-        <h3>通知を送らずに引用する</h3>
-        <p>例えば対象ポストの URL が <a href="https://x.com/shapoco/status/1897261591160328414" target="_blank">https://x.com/shapoco/status/1897261591160328414</a> の場合は <a href="https://x.com/i/web/status/1897261591160328414" target="_blank">https://x.com/i/web/status/1897261591160328414</a> のような URL に整形して引用する。ポストのプレビューは表示されない。(2025/03/09)</p>
         <h3>細々したの</h3>
         <h4>プロフィールの改行</h4>
         <p>Web 版のプロフィール編集画面で改行を使うと Web 版には反映されるが、アプリでは半角スペースになる。(2025/03/19)</p>
@@ -208,7 +217,7 @@
         <p>メディア欄にところどころある空白は YouTube のリンクの投稿。</p>
         <p><code>from:自分のID filter:media</code> で検索すると、メディア欄で空白だったところに YouTube のリンクが貼られた投稿があるのが分かる。</p>
         <h4>「自分がメンバーとなっているリスト」が数件しか表示されない (PC)</h4>
-        <p>どれかのリストを開いたあとブラウザバックすると続きが表示される</p>
+        <p>どれかのリストを開いたあとブラウザバックすると続きが表示される。バグ？</p>
 
       </main>
       <footer>

@@ -27,17 +27,33 @@ X 関連の雑多なメモ。随時追加する
 |`since:YYYY-MM-DD`|投稿日が `YYYY-MM-DD` 以降|[from:shapoco since:2025-1-1](https://x.com/search?q=from%3Ashapoco+since%3A2025-1-1)|
 |`until:YYYY-MM-DD`|投稿日が `YYYY-MM-DD` 以前|[from:shapoco until:2024-12-31](https://x.com/search?q=from%3Ashapoco+until%3A2024-12-31)|
 |`min_retweets:N`|リポスト数が `N` 以上|[from:shapoco min_retweets:1000](https://x.com/search?q=from%3Ashapoco+min_retweets%3A1000)|
-|`min_faces:N`|いいね数が `N` 以上|[from:shapoco min_faves:1000](https://x.com/search?q=from%3Ashapoco+min_faves%3A1000)|
+|`min_faves:N`|いいね数が `N` 以上|[from:shapoco min_faves:1000](https://x.com/search?q=from%3Ashapoco+min_faves%3A1000)|
 |`near:場所 within:距離km`|`場所` から `距離` km 以内|(2025/2/9: 機能してない？)|
 |`geocode:緯度,経度,距離km`|[ジオコード](https://www.geosense.co.jp/map/tool/geoconverter.php) の場所から `距離` km 以内|[geocode:45.522192,141.936642,1km filter:media](https://x.com/search?q=geocode%3A45.522192%2C141.936642%2C1km%20filter%3Amedia&f=live)<br>(「最新」タブでないと機能しない？)|
 
 ※1 「メディア」や「動画」には YouTube リンクも含まれる
 
+## フォロワーの TL に流れないようにこっそりポストする
+
+フォローしていない他人へのリプライは基本的にホームタイムラインには表示されないので、凍結済みの適当なユーザー宛てに返信することで目立たないようにポストすることができる。
+
+それっぽい ID の凍結済みユーザーの例: (2025/04/05 現在)
+
+- [@secret](https://x.com/secret)
+- [@hidden](https://x.com/hidden)
+- [@test](https://x.com/test)
+
+※ ポスト完全に見えなくなるわけではなく、プロフィールページの返信タブや [検索](https://x.com/search?q=from%3Ashapoco%20to%3Ahidden) によって見つかる可能性もあり、また凍結された ID を後になって他の誰かが取得する可能性もあるので注意。
+
+## 通知を送らずに引用する
+
+例えば対象ポストの URL が [https://x.com/shapoco/status/1897261591160328414](https://x.com/shapoco/status/1897261591160328414) の場合は [https://x.com/i/web/status/1897261591160328414](https://x.com/i/web/status/1897261591160328414) のような URL に整形して引用する。(2025/04/05)
+
 ## ユーザー ID
 
 一般的に「ID」と呼ばれているもの (`@shapoco` など) は正式には screen name という。
 
-ユーザー ID は screen name と関係無くアカウントを一意に識別する数字。例えば [@shapoco](https://x.com/shapoco) のユーザー ID は `858142314849378304`。screen name は変更できるが、ユーザー ID は変更できない。
+「ユーザー ID」は screen name と関係無くアカウントを一意に識別する数字。例えば [@shapoco](https://x.com/shapoco) のユーザー ID は `858142314849378304`。screen name は変更できるが、ユーザー ID は変更できない。
 
 何のためか分からないが `https://x.com/i/user/ユーザーID` がそのユーザーのプロフィールページへ転送されるようになっているので、ユーザー ID から screen name は簡単に分かる ([例](https://x.com/i/user/858142314849378304))。
 
@@ -75,10 +91,6 @@ screen name からユーザー ID を得るのは以前は API を使うこと�
 
 (2025/03/18 更新)
 
-## 通知を送らずに引用する
-
-例えば対象ポストの URL が [https://x.com/shapoco/status/1897261591160328414](https://x.com/shapoco/status/1897261591160328414) の場合は [https://x.com/i/web/status/1897261591160328414](https://x.com/i/web/status/1897261591160328414) のような URL に整形して引用する。ポストのプレビューは表示されない。(2025/03/09)
-
 ## 細々したの
 
 ### プロフィールの改行
@@ -99,4 +111,4 @@ Web 版のプロフィール編集画面で改行を使うと Web 版には反�
 
 ### 「自分がメンバーとなっているリスト」が数件しか表示されない (PC)
 
-どれかのリストを開いたあとブラウザバックすると続きが表示される
+どれかのリストを開いたあとブラウザバックすると続きが表示される。バグ？
