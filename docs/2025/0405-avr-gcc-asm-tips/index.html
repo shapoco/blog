@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+    <meta name="description" content="AVR 向けのアセンブラに関する雑多なメモ。随時追加する。">
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@shapoco" />
+    <meta property="og:url" content="https://blog.shapoco.net/2025/0405-avr-gcc-asm-tips/" />
+    <meta property="og:title" content="[メモ] avr-gcc アセンブラ備忘録 | シャポログ" />
+    <meta property="og:description" content="AVR 向けのアセンブラに関する雑多なメモ。随時追加する。" />
+    <meta property="og:image" content="https://blog.shapoco.net/2025/0405-avr-gcc-asm-tips/thumbnail.png" />
+
+    <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+    <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171109827-1"></script>
+    <script>
+      var remoteHost = window.location.hostname;
+      if (remoteHost == "localhost") {
+        console.log(`Google Analytics disabled on: '${remoteHost}'`);
+      }
+      else {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-171109827-1');
+      }
+    </script>
+
+    <link href="/style.css?128f0110" rel="stylesheet" type="text/css">
+    <script src="/style.js?f1737acb"></script>
+
+    <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+    <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+    <title>[メモ] avr-gcc アセンブラ備忘録 | シャポログ</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div id="root_navi"></div>
+
+      <header class="article_header">
+        <h1><a href="/">シャポログ</a></h1>
+      </header>
+      <main>
+        <h2>[メモ] avr-gcc アセンブラ備忘録</h2>
+
+        <div class="article_info_wrap">
+          <div class="article_info">
+            2025/04/05 |
+            <a href="https://github.com/shapoco/blog/tree/main/src/article/2025/0405-avr-gcc-asm-tips/" target="_blank">記事のソース</a>
+          </div>
+          
+          <div id="shpcstamp_wrap"></div>
+          <script async src="/stamp/v1/widget.js?f2543e31"></script>
+        </div>
+
+        <p>AVR 向けのアセンブラに関する雑多なメモ。随時追加する。</p>
+        <h3>参考資料</h3>
+        <p>よく参照するサイト</p>
+        <h4>公式</h4>
+        <ul>
+          <li><a href="https://ww1.microchip.com/downloads/en/DeviceDoc/40001917A.pdf" target="_blank">AVR Assembler</a></li>
+          <li><a href="https://ww1.microchip.com/downloads/en/DeviceDoc/AVR-InstructionSet-Manual-DS40002198.pdf" target="_blank">AVR Instruction Set Manual</a></li>
+        </ul>
+        <h4>コミュニティ</h4>
+        <ul>
+          <li><a href="https://gcc.gnu.org/wiki/avr-gcc" target="_blank">avr-gcc - GCC Wiki</a>: ABI の説明がある</li>
+          <li><a href="https://sourceware.org/binutils/docs-2.18/as/AVR-Syntax.html#AVR-Syntax" target="_blank">AVR Syntax - Using as</a></li>
+        </ul>
+                  <hr>
+
+        <h3>一般的な用語</h3>
+        <h4>prologue (プロローグ)</h4>
+        <p>呼び出された関数 (callee) が最初に行う処理。関数内の処理が呼び出し元 (caller) に影響しないよう、これから値を破壊 (clobber) する見込みのレジスタの待避したり、ローカル変数領域の確保など。</p>
+        <h4>epilogue (エピローグ)</h4>
+        <p>呼び出された関数 (callee) が復帰する直前に行う処理。スタックフレームの解放、破壊したレジスタの復元など。</p>
+        <h4>clobber (クロバー, クラバー)</h4>
+        <p>関数呼び出しやアセンブラの文脈では、レジスタの値を「破壊」すること。trash とか smash とかと同じ？「clobbered registers」と言った場合、関数呼び出しやインラインアセンブラによって値が破壊される可能性のあるレジスタであり、すなわち呼び出し側で事前に待避が必要であることを意味する。</p>
+                  <hr>
+
+        <h3>avr-gcc で固定用途のレジスタ</h3>
+        <h4><code>r0</code></h4>
+        <p>一時変数用のスクラッチレジスタ。アセンブラソースでは <code>__temp_reg__</code> で参照される。</p>
+        <h4><code>r1</code></h4>
+        <p>ゼロレジスタ。アセンブラソースでは <code>__zero_reg__</code> で参照される。</p>
+        <p>ハードウェア的には他の汎用レジスタと同様に機能するが、基本的には常に 0x00 を格納しておいて、定数ゼロとして使用することになっている。乗算命令 (<code>mul</code> など) の結果は <code>r1:r0</code> に格納されるので、乗算結果を使用した後はゼロクリアする必要がある。</p>
+        <h4><code>T</code> フラグ</h4>
+        <p>ステータスレジスタ (<code>SREG</code>) 内にある。<code>r0</code> と同様に一時変数として使用される。</p>
+        <h4><code>Y</code> (<code>r29:r28</code>)</h4>
+        <p>スタックフレーム内のローカル変数への間接アクセス用に使用される。</p>
+                  <hr>
+
+        <h3>関数呼び出し規約</h3>
+        <p>C 言語で適当に関数を作って <code>avr-gcc -S</code> で生成したアセンブラを眺めながらドキュメントを読むと理解しやすい。</p>
+        <h4>呼び出し側 (caller) が待避しなければならないレジスタ (clobbered registers)</h4>
+        <p>これらは callee によって破壊されるので、復帰後も caller で値を使用する場合は呼び出し前に待避しなければならない。</p>
+        <ul>
+          <li><code>r18–r25</code>: 汎用レジスタ</li>
+          <li><code>X</code>(<code>r27:r26</code>), <code>Z</code>(<code>r31:r30</code>): ポインタ</li>
+          <li><code>r0</code> (<code>__temp_reg__</code>): 一時変数用レジスタ</li>
+          <li><code>T</code>フラグ: <code>r0</code> と同様、ビット操作時の一時変数として使用</li>
+        </ul>
+        <h4>呼び出される側 (callee) が待避しなければならないレジスタ (saved registers)</h4>
+        <p>caller はこれらはのレジスタが復帰後も呼び出し前の値を維持していることを期待するので、callee で使用する場合はその前に待避し、復帰前に復元しなければならない。</p>
+        <ul>
+          <li><code>r2-r17</code>: 汎用レジスタ</li>
+          <li><code>X</code>(<code>r29:r28</code>): ポインタ</li>
+          <li><code>r1</code> (<code>__zero_reg__</code>): 値の格納に使用した場合は復帰前までにゼロクリアすること。</li>
+        </ul>
+        <h4>スタックフレーム</h4>
+        <p>スタックはアドレスの若番方向へ向かって積まれる。スタックの内容とスタックポインタ (<code>SP</code>) はアライメントされない。</p>
+        <table>
+          <tr>
+            <th class="nowrap" style="text-align: center;">アドレス</th>
+            <th class="nowrap" style="text-align: center;">サイズ [Bytes]</th>
+            <th style="text-align: center;">内容</th>
+            <th>説明</th>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">↑大</td>
+            <td class="nowrap" style="text-align: center;">≧ 0</td>
+            <td style="text-align: center;">引数</td>
+            <td>レジスタ渡しでは足りない場合に caller が積む</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;"></td>
+            <td class="nowrap" style="text-align: center;">0 または 2～3</td>
+            <td style="text-align: center;">復帰先アドレス</td>
+            <td>caller が積む。末尾呼び出しの場合は 0 のこともある</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;"></td>
+            <td class="nowrap" style="text-align: center;">≧ 0</td>
+            <td style="text-align: center;">待避されたレジスタ<br>(saved registers)</td>
+            <td>必要に応じて callee が積む</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">↓小</td>
+            <td class="nowrap" style="text-align: center;">≧ 0</td>
+            <td style="text-align: center;">ローカル変数</td>
+            <td>必要に応じて callee が確保する</td>
+          </tr>
+        </table>
+        <p>clobbered registers は呼び出し元の責任で待避するので、呼び出し元のローカル変数領域に含まれる。</p>
+        <h4>プロローグの処理</h4>
+        <ol>
+          <li>saved registers のうち自身が使用 (破壊) するものをスタックに <code>push</code> して待避する。</li>
+          <li><code>SP</code> の値を <code>Y</code> (<code>r29:r28</code>) レジスタにコピーし、ローカル変数領域のサイズ分を減算する。</li>
+          <li><code>Y</code> レジスタの値を <code>SP</code> に書き戻す。</li>
+          <li>レジスタ渡しされた引数を必要に応じてローカル変数領域にコピーする。</li>
+        </ol>
+        <p><code>SP</code> を介した間接アクセスができないので、スタック内の引数やローカル変数へのアクセスは <code>Y</code> レジスタを介して行う。</p>
+        <h4>エピローグの処理</h4>
+        <ol>
+          <li><code>Y</code> レジスタにローカル変数領域のサイズを加算して <code>SP</code> に書き戻す。</li>
+          <li>saved registers をスタックから <code>pop</code> して復元する。</li>
+          <li>戻り値をレジスタまたはスタックに配置する。</li>
+          <li>復帰する (<code>ret</code>)。</li>
+        </ol>
+        <h4>引数</h4>
+        <p>可変長でない 16 バイトまでの引数は <code>r25</code> から若番方向へ向かって確保したレジスタに配置し、それに収まらない分はスタックに積む。</p>
+        <ol>
+          <li>全ての引数のサイズを偶数に切り上げる。</li>
+          <li>
+            <p>切り上げ後の引数のサイズの合計で 16 バイトまでに収まる分はレジスタに配置する。</p>
+            <ul>
+              <li><code>r25</code> から始めて若番方向に向かって引数を配置する。</li>
+              <li>奇数サイズのレジスタは若番側 (偶数番側) にアライメントする。</li>
+              <li>16 バイトから 1 バイトでも溢れたらその引数はスタックに積まれる。1 つの引数がレジスタとスタックに泣き別れたりはしない。</li>
+            </ul>
+          </li>
+          <li>16 バイトから溢れた残りの引数は全てスタックに積む。</li>
+        </ol>
+        <p>可変長引数 (varargs) の場合は全ての引数をスタックに積む。</p>
+        <h4>戻り値</h4>
+        <p>8 バイトまでの戻り値は <code>r25</code> から若番方向に向かって確保したレジスタに配置する。</p>
+        <ul>
+          <li>
+            <p>構造体でない戻り値は引数と同様、サイズを偶数に切り上げる。</p>
+            <ul>
+              <li>例) <code>uint8_t</code> の引数は <code>r24</code> に配置する (<code>r25</code> はパディング)。</li>
+              <li>例) <code>uint32_t</code> の引数は <code>r25:r22</code> に配置する (<code>r25</code> が MSB 側)。</li>
+            </ul>
+          </li>
+          <li>
+            <p>構造体は 2 のべき乗に切り上げる。</p>
+            <ul>
+              <li>例) 6 バイトの構造体は <code>r23:r19</code> に配置する (<code>r25:r24</code> はパディング)。</li>
+            </ul>
+          </li>
+        </ul>
+
+      </main>
+      <footer>
+        Copyright &copy; Shapoco 
+      </footer>
+    </div>
+  </body>
+</html>
