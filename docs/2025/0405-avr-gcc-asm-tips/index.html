@@ -107,17 +107,17 @@
         <h4>呼び出し側 (caller) が待避しなければならないレジスタ (clobbered registers)</h4>
         <p>これらは callee によって破壊されるので、復帰後も caller で値を使用する場合は呼び出し前に待避しなければならない。</p>
         <ul>
+          <li><code>r0</code> (<code>__temp_reg__</code>): 一時変数用レジスタ</li>
           <li><code>r18–r25</code>: 汎用レジスタ</li>
           <li><code>X</code>(<code>r27:r26</code>), <code>Z</code>(<code>r31:r30</code>): ポインタ</li>
-          <li><code>r0</code> (<code>__temp_reg__</code>): 一時変数用レジスタ</li>
           <li><code>T</code>フラグ: <code>r0</code> と同様、ビット操作時の一時変数として使用</li>
         </ul>
         <h4>呼び出される側 (callee) が待避しなければならないレジスタ (saved registers)</h4>
         <p>caller はこれらはのレジスタが復帰後も呼び出し前の値を維持していることを期待するので、callee で使用する場合はその前に待避し、復帰前に復元しなければならない。</p>
         <ul>
-          <li><code>r2-r17</code>: 汎用レジスタ</li>
-          <li><code>X</code>(<code>r29:r28</code>): ポインタ</li>
           <li><code>r1</code> (<code>__zero_reg__</code>): 値の格納に使用した場合は復帰前までにゼロクリアすること。</li>
+          <li><code>r2-r17</code>: 汎用レジスタ</li>
+          <li><code>Y</code>(<code>r29:r28</code>): ポインタ</li>
         </ul>
         <h4>スタックフレーム</h4>
         <p>スタックはアドレスの若番方向へ向かって積まれる。スタックの内容とスタックポインタ (<code>SP</code>) はアライメントされない。</p>
