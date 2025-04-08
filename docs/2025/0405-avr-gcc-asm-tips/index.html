@@ -204,12 +204,86 @@
                   <hr>
 
         <h3>文法</h3>
-        <h4>プロプロセッサ</h4>
+        <h4>プリプロセッサ</h4>
         <p>ソースファイルの拡張子を大文字で <code>.S</code> にすることにより、C/C++ と同様のプリプロセッサが使用でき、<code>#define</code> などのお馴染みのマクロが使える。</p>
         <blockquote>
           You can use the gnu C compiler driver to get other "CPP" style preprocessing by giving the input file a <code>.S</code> suffix.<br>
           <a href="https://sourceware.org/binutils/docs-2.18/as/Preprocessing.html#Preprocessing" target="_blank">3.1 Preprocessing - Using as</a>
         </blockquote>
+                  <hr>
+
+        <h3>つまづいたところ</h3>
+        <h4>オペランドに指定可能なレジスタが制限されている命令</h4>
+        <table>
+          <tr>
+            <th>カテゴリ</th>
+            <th>命令</th>
+            <th>操作対象</th>
+          </tr>
+          <tr>
+            <td>Immediate 系</td>
+            <td><code>andi</code>, <code>cpi</code>, <code>ldi</code>,<br><code>ori</code>, <code>sbci</code>, <code>subi</code></td>
+            <td><code>r16</code>-<code>r31</code></td>
+          </tr>
+          <tr>
+            <td>Ser/Clear Bit 系</td>
+            <td><code>cbr</code>, <code>sbr</code>, <code>ser</code></td>
+            <td><code>r16</code>-<code>r31</code></td>
+          </tr>
+          <tr>
+            <td>Load Direct<br>from Data Space</td>
+            <td><code>lds</code></td>
+            <td>AVRrc: <code>r16</code>-<code>r31</code><br>その他: 制限なし</td>
+          </tr>
+          <tr>
+            <td>乗算</td>
+            <td><code>muls</code> (<code>mul</code> は制限なし)</td>
+            <td><code>r16</code>-<code>r31</code></td>
+          </tr>
+          <tr>
+            <td>乗算</td>
+            <td><code>mulsu</code>,<br><code>fmul</code>, <code>fmuls</code>, <code>fmulsu</code></td>
+            <td><code>r16</code>-<code>r23</code></td>
+          </tr>
+        </table>
+        <h4>ポインタレジスタと命令の使い分け</h4>
+        <p>バイト配列を舐めるのにはどれでも使えるが、要素サイズが 2 バイト以上の配列や構造体へのアクセスは <code>Y</code>、<code>Z</code> の方がやりやすい。</p>
+        <table>
+          <tr>
+            <th class="nowrap"></th>
+            <th class="nowrap" style="text-align: center;">X</th>
+            <th class="nowrap" style="text-align: center;">Y, Z</th>
+          </tr>
+          <tr>
+            <td class="nowrap">Indirect</td>
+            <td class="nowrap" style="text-align: center;"><code>ld</code>/<code>st</code></td>
+            <td class="nowrap" style="text-align: center;"><code>ldd</code>/<code>std</code></td>
+          </tr>
+          <tr>
+            <td class="nowrap">Post-increment</td>
+            <td class="nowrap" style="text-align: center;"><code>ld</code>/<code>st</code></td>
+            <td class="nowrap" style="text-align: center;"><code>ld</code>/<code>st</code></td>
+          </tr>
+          <tr>
+            <td class="nowrap">Pre-decrement</td>
+            <td class="nowrap" style="text-align: center;"><code>ld</code>/<code>st</code><br>(未検証)</td>
+            <td class="nowrap" style="text-align: center;"><code>ld</code>/<code>st</code><br>(未検証)</td>
+          </tr>
+          <tr>
+            <td class="nowrap">Displacement</td>
+            <td class="nowrap" style="text-align: center;">n/a</td>
+            <td class="nowrap" style="text-align: center;"><code>ldd</code>/<code>std</code></td>
+          </tr>
+        </table>
+        <h5>post-increment したいときは <code>ldd</code> ではなく <code>ld</code> を使う？</h5>
+        <ul>
+          <li><code>ldd rN, Z+</code> は期待した動作にならなかったが <code>ld rN, Z+</code> だと期待動作になった。</li>
+          <li>なぜだか分からず、深追いもできてない。</li>
+        </ul>
+        <h4>他</h4>
+        <ul>
+          <li><code>addi rN, hoge</code> は無いが <code>subi rN, (-hoge)</code> で同じことができる。同様に <code>adci</code> も無いので <code>sbci</code> を使う。</li>
+        </ul>
 
       </main>
       <footer>

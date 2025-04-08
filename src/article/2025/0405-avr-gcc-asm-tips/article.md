@@ -146,9 +146,43 @@ clobbered registers は呼び出し元の責任で待避するので、呼び出
 
 ## 文法
 
-### プロプロセッサ
+### プリプロセッサ
 
 ソースファイルの拡張子を大文字で `.S` にすることにより、C/C++ と同様のプリプロセッサが使用でき、`#define` などのお馴染みのマクロが使える。
 
 > You can use the gnu C compiler driver to get other "CPP" style preprocessing by giving the input file a `.S` suffix.<br>
 > [3.1 Preprocessing - Using as](https://sourceware.org/binutils/docs-2.18/as/Preprocessing.html#Preprocessing)
+
+----
+
+## つまづいたところ
+
+### オペランドに指定可能なレジスタが制限されている命令
+
+|カテゴリ|命令|操作対象|
+|:--|:--|:--|
+|Immediate 系|`andi`, `cpi`, `ldi`,<br>`ori`, `sbci`, `subi`|`r16`-`r31`|
+|Ser/Clear Bit 系|`cbr`, `sbr`, `ser`|`r16`-`r31`|
+|Load Direct<br>from Data Space|`lds`|AVRrc: `r16`-`r31`<br>その他: 制限なし|
+|乗算|`muls` (`mul` は制限なし)|`r16`-`r31`|
+|乗算|`mulsu`,<br>`fmul`, `fmuls`, `fmulsu`|`r16`-`r23`|
+
+### ポインタレジスタと命令の使い分け
+
+バイト配列を舐めるのにはどれでも使えるが、要素サイズが 2 バイト以上の配列や構造体へのアクセスは `Y`、`Z` の方がやりやすい。
+
+||X|Y, Z|
+|:--|:--:|:--:|
+|Indirect|`ld`/`st`|`ldd`/`std`|
+|Post-increment|`ld`/`st`|`ld`/`st`|
+|Pre-decrement|`ld`/`st`<br>(未検証)|`ld`/`st`<br>(未検証)|
+|Displacement|n/a|`ldd`/`std`|
+
+#### post-increment したいときは `ldd` ではなく `ld` を使う？
+
+- `ldd rN, Z+` は期待した動作にならなかったが `ld rN, Z+` だと期待動作になった。
+- なぜだか分からず、深追いもできてない。
+
+### 他
+
+- `addi rN, hoge` は無いが `subi rN, (-hoge)` で同じことができる。同様に `adci` も無いので `sbci` を使う。
