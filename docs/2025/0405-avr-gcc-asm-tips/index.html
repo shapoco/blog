@@ -71,13 +71,14 @@
         </ul>
         <h4>コミュニティ</h4>
         <ul>
-          <li><a href="https://gcc.gnu.org/wiki/avr-gcc" target="_blank">avr-gcc - GCC Wiki</a>: ABI の説明がある</li>
+          <li><a href="http://elm-chan.org/docs/avrlib/asm_gcc.html" target="_blank">ELM - アセンブラ関数の書き方(avr-gcc)</a></li>
+          <li><a href="https://gcc.gnu.org/wiki/avr-gcc" target="_blank">avr-gcc - GCC Wiki</a>  ABI の説明がある</li>
           <li><a href="https://sourceware.org/binutils/docs-2.18/as/AVR-Syntax.html#AVR-Syntax" target="_blank">AVR Syntax - Using as</a></li>
         </ul>
                   <hr>
 
-        <h3>一般的な用語</h3>
-        <p>AVR は関係無い</p>
+        <h3>用語メモ</h3>
+        <p>AVR は関係無い。</p>
         <h4>prologue (プロローグ)</h4>
         <p>呼び出された関数 (callee) が最初に行う処理。関数内の処理が呼び出し元 (caller) に影響しないよう、これから値を破壊 (clobber) する見込みのレジスタの待避したり、ローカル変数領域の確保など。</p>
         <h4>epilogue (エピローグ)</h4>
@@ -86,25 +87,25 @@
         <p>関数呼び出しやアセンブラの文脈では、レジスタの値を「破壊」すること。trash とか smash とかと同じ？「clobbered registers」と言った場合、関数呼び出しやインラインアセンブラによって値が破壊される可能性のあるレジスタであり、すなわち呼び出し側で事前に待避が必要であることを意味する。</p>
                   <hr>
 
-        <h3>AVR で固定用途のレジスタ</h3>
-        <h4><code>r0</code></h4>
+        <h3>ABI</h3>
+        <h4>固定用途のレジスタ</h4>
+        <h5><code>r0</code></h5>
         <p>一時変数用のスクラッチレジスタ。アセンブラソースでは <code>__temp_reg__</code> で参照される。</p>
         <p>乗算命令 (<code>mul</code> など) の計算結果の格納にも使われる。</p>
-        <h4><code>r1</code></h4>
+        <h5><code>r1</code></h5>
         <p>ゼロレジスタ。アセンブラソースでは <code>__zero_reg__</code> で参照される。</p>
         <p>ハードウェア的には他の汎用レジスタと同様に機能するが、基本的には常に 0x00 を格納しておいて、定数ゼロとして使用することになっている。</p>
         <p>乗算命令の計算結果の格納にも使われるので、乗算の後はゼロクリアする必要がある。</p>
-        <h4><code>T</code> フラグ</h4>
+        <p>手書きアセンブラで乗算命令を頻繁に使用する場合は <code>r1:r0</code> 以外をゼロレジスタとして使った方が命令数は少なくなる。</p>
+        <h5><code>T</code> フラグ</h5>
         <p>ステータスレジスタ (<code>SREG</code>) 内にある。<code>r0</code> と同様に一時変数として使用される。</p>
-        <h4><code>Y</code> (<code>r29:r28</code>)</h4>
+        <h5><code>Y</code> (<code>r29:r28</code>)</h5>
         <p>スタックフレーム内のローカル変数への間接アクセス用に使用される。</p>
-        <h4><code>r8</code>～<code>r25</code></h4>
+        <h5><code>r8</code>～<code>r25</code></h5>
         <p>固定用途ではないが、引数をレジスタで渡す際はこの範囲内で使用される。</p>
-                  <hr>
-
-        <h3>関数呼び出し規約</h3>
+        <h4>関数呼び出し</h4>
         <p>C 言語で適当に関数を作って <code>avr-gcc -S</code> で生成したアセンブラを眺めながらドキュメントを読むと理解しやすい。</p>
-        <h4>呼び出し側 (caller) が待避しなければならないレジスタ (clobbered registers)</h4>
+        <h5>呼び出し側 (caller) が待避しなければならないレジスタ (clobbered registers)</h5>
         <p>これらは callee によって破壊されるので、復帰後も caller で値を使用する場合は呼び出し前に待避しなければならない。</p>
         <ul>
           <li><code>r0</code> (<code>__temp_reg__</code>): 一時変数用レジスタ</li>
@@ -112,7 +113,7 @@
           <li><code>X</code>(<code>r27:r26</code>), <code>Z</code>(<code>r31:r30</code>): ポインタ</li>
           <li><code>T</code>フラグ: <code>r0</code> と同様、ビット操作時の一時変数として使用</li>
         </ul>
-        <h4>呼び出される側 (callee) が待避しなければならないレジスタ (saved registers)</h4>
+        <h5>呼び出される側 (callee) が待避しなければならないレジスタ (saved registers)</h5>
         <p>caller はこれらはのレジスタが復帰後も呼び出し前の値を維持していることを期待するので、callee で使用する場合はその前に待避し、復帰前に復元しなければならない。</p>
         <ul>
           <li><code>r1</code> (<code>__zero_reg__</code>): 値の格納に使用した場合は復帰前までにゼロクリアすること。</li>
@@ -276,10 +277,7 @@
           </tr>
         </table>
         <h5>post-increment したいときは <code>ldd</code> ではなく <code>ld</code> を使う？</h5>
-        <ul>
-          <li><code>ldd rN, Z+</code> は期待した動作にならなかったが <code>ld rN, Z+</code> だと期待動作になった。</li>
-          <li>なぜだか分からず、深追いもできてない。</li>
-        </ul>
+        <p><code>ldd rN, Z+</code> は期待した動作にならなかったが <code>ld rN, Z+</code> だと期待動作になった。理由は分からない。深追いもできてない。</p>
         <h4>他</h4>
         <ul>
           <li><code>addi rN, hoge</code> は無いが <code>subi rN, (-hoge)</code> で同じことができる。同様に <code>adci</code> も無いので <code>sbci</code> を使う。</li>
