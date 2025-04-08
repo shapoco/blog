@@ -361,8 +361,8 @@
       "card_image_url": "/2025/0323-js-tips/thumbnail.png"
     },
     {
-      "title": "[メモ] avr-gcc アセンブラ備忘録",
-      "description": "AVR 向けのアセンブラに関する雑多なメモ。随時追加する。",
+      "title": "[メモ] avr-gcc アセンブラ / ABI 備忘録",
+      "description": "avr-gcc 向けのアセンブラと ABI に関する雑多なメモ。随時追加する。",
       "date": "2025/04/05",
       "url": "/2025/0405-avr-gcc-asm-tips",
       "twitter_card_size": "summary",
