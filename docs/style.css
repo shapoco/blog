@@ -295,6 +295,7 @@ header h1 a {
 .link_card h4 {
     font-size: 100%;
     margin: 0px 0px 0.5ex 0px;
+    background: transparent;
     padding: 0px;
 }
 
