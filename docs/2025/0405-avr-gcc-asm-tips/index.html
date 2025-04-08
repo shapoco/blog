@@ -212,34 +212,36 @@
           <tr>
             <th>カテゴリ</th>
             <th>命令</th>
-            <th>指定可能な範囲</th>
+            <th class="nowrap">指定可能な範囲</th>
           </tr>
           <tr>
             <td>Immediate 系</td>
-            <td><code>andi</code>, <code>cpi</code>, <code>ldi</code>,<br><code>ori</code>, <code>sbci</code>, <code>subi</code></td>
-            <td><code>r16</code>-<code>r31</code></td>
+            <td><code>andi</code>, <code>cpi</code>, <code>ldi</code>, <code>ori</code>, <code>sbci</code>, <code>subi</code></td>
+            <td class="nowrap"><code>r16</code>-<code>r31</code></td>
           </tr>
           <tr>
-            <td>Ser/Clear Bit 系</td>
+            <td>Set Bit/Clear Bit</td>
             <td><code>cbr</code>, <code>sbr</code>, <code>ser</code></td>
-            <td><code>r16</code>-<code>r31</code></td>
+            <td class="nowrap"><code>r16</code>-<code>r31</code></td>
           </tr>
           <tr>
-            <td>Load Direct<br>from Data Space</td>
+            <td>直接メモリアクセス</td>
             <td><code>lds</code></td>
-            <td>AVRrc: <code>r16</code>-<code>r31</code><br>その他: 制限なし</td>
+            <td class="nowrap"><code>r16</code>-<code>r31</code> (※2)</td>
+          </tr>
+          <tr>
+            <td>乗算 (※1)</td>
+            <td><code>muls</code></td>
+            <td class="nowrap"><code>r16</code>-<code>r31</code></td>
           </tr>
           <tr>
             <td>乗算</td>
-            <td><code>muls</code> (<code>mul</code> は制限なし)</td>
-            <td><code>r16</code>-<code>r31</code></td>
-          </tr>
-          <tr>
-            <td>乗算</td>
-            <td><code>mulsu</code>,<br><code>fmul</code>, <code>fmuls</code>, <code>fmulsu</code></td>
-            <td><code>r16</code>-<code>r23</code></td>
+            <td><code>mulsu</code>, <code>fmul</code>, <code>fmuls</code>, <code>fmulsu</code></td>
+            <td class="nowrap"><code>r16</code>-<code>r23</code></td>
           </tr>
         </table>
+        <p>※1) <code>mul</code> は制限無いが、他の乗算命令には制限がある。</p>
+        <p>※2) AVRrc のみ制限あり。他のアーキテクチャでは制限なし。</p>
         <h4>ポインタレジスタと命令の使い分け</h4>
         <p>単に配列を舐めるのには <code>X</code>～<code>Z</code> のどれでも使えるが、配列を Read-Modify-Write したり構造体へアクセスするには displacement addressing ができる <code>Y</code>、<code>Z</code> の方が使いやすい。<code>Y</code> は通常はローカル変数へのアクセスに使われる。</p>
         <table>

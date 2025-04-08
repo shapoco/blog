@@ -158,11 +158,15 @@ clobbered registers は呼び出し元の責任で待避するので、呼び出
 
 |カテゴリ|命令|指定可能な範囲|
 |:--|:--|:--|
-|Immediate 系|`andi`, `cpi`, `ldi`,<br>`ori`, `sbci`, `subi`|`r16`-`r31`|
-|Ser/Clear Bit 系|`cbr`, `sbr`, `ser`|`r16`-`r31`|
-|Load Direct<br>from Data Space|`lds`|AVRrc: `r16`-`r31`<br>その他: 制限なし|
-|乗算|`muls` (`mul` は制限なし)|`r16`-`r31`|
-|乗算|`mulsu`,<br>`fmul`, `fmuls`, `fmulsu`|`r16`-`r23`|
+|Immediate 系|`andi`, `cpi`, `ldi`, `ori`, `sbci`, `subi`|`r16`-`r31`|
+|Set Bit/Clear Bit|`cbr`, `sbr`, `ser`|`r16`-`r31`|
+|直接メモリアクセス|`lds`|`r16`-`r31` (※2)|
+|乗算 (※1)|`muls`|`r16`-`r31`|
+|乗算|`mulsu`, `fmul`, `fmuls`, `fmulsu`|`r16`-`r23`|
+
+※1) `mul` は制限無いが、他の乗算命令には制限がある。
+
+※2) AVRrc のみ制限あり。他のアーキテクチャでは制限なし。
 
 ### ポインタレジスタと命令の使い分け
 
