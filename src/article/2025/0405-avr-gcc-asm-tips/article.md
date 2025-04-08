@@ -172,19 +172,19 @@ clobbered registers は呼び出し元の責任で待避するので、呼び出
 
 ### ポインタレジスタと命令の使い分け
 
-バイト配列を舐めるのにはどれでも使えるが、要素サイズが 2 バイト以上の配列や構造体へのアクセスは `Y`、`Z` の方がやりやすい。
+単に配列を舐めるのにはどれでも使えるが、配列を Read-Modify-Write したり構造体へアクセスするには displacement addressing ができる `Y`、`Z` の方が使いやすい。
 
 ||X|Y, Z|
 |:--|:--:|:--:|
 |Indirect|`ld`/`st`|`ldd`/`std`|
 |Post-increment|`ld`/`st`|`ld`/`st`|
 |Pre-decrement|`ld`/`st`<br>(未検証)|`ld`/`st`<br>(未検証)|
-|Displacement|n/a|`ldd`/`std`|
+|Displacement|不可|`ldd`/`std`|
 
 #### post-increment したいときは `ldd` ではなく `ld` を使う？
 
 `ldd rN, Z+` は期待した動作にならなかったが `ld rN, Z+` だと期待動作になった。理由は分からない。深追いもできてない。
 
-### 他
+### その他
 
 - `addi rN, hoge` は無いが `subi rN, (-hoge)` で同じことができる。同様に `adci` も無いので `sbci` を使う。

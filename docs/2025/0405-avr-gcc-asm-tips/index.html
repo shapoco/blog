@@ -248,7 +248,7 @@
           </tr>
         </table>
         <h4>ポインタレジスタと命令の使い分け</h4>
-        <p>バイト配列を舐めるのにはどれでも使えるが、要素サイズが 2 バイト以上の配列や構造体へのアクセスは <code>Y</code>、<code>Z</code> の方がやりやすい。</p>
+        <p>単に配列を舐めるのにはどれでも使えるが、配列を Read-Modify-Write したり構造体へアクセスするには displacement addressing ができる <code>Y</code>、<code>Z</code> の方が使いやすい。</p>
         <table>
           <tr>
             <th class="nowrap"></th>
@@ -272,13 +272,13 @@
           </tr>
           <tr>
             <td class="nowrap">Displacement</td>
-            <td class="nowrap" style="text-align: center;">n/a</td>
+            <td class="nowrap" style="text-align: center;">不可</td>
             <td class="nowrap" style="text-align: center;"><code>ldd</code>/<code>std</code></td>
           </tr>
         </table>
         <h5>post-increment したいときは <code>ldd</code> ではなく <code>ld</code> を使う？</h5>
         <p><code>ldd rN, Z+</code> は期待した動作にならなかったが <code>ld rN, Z+</code> だと期待動作になった。理由は分からない。深追いもできてない。</p>
-        <h4>他</h4>
+        <h4>その他</h4>
         <ul>
           <li><code>addi rN, hoge</code> は無いが <code>subi rN, (-hoge)</code> で同じことができる。同様に <code>adci</code> も無いので <code>sbci</code> を使う。</li>
         </ul>
