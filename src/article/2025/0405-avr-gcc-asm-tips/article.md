@@ -150,7 +150,7 @@ clobbered registers は呼び出し元の責任で待避するので、呼び出
 > You can use the gnu C compiler driver to get other "CPP" style preprocessing by giving the input file a `.S` suffix.<br>
 > [3.1 Preprocessing - Using as](https://sourceware.org/binutils/docs-2.18/as/Preprocessing.html#Preprocessing)
 
-`#include` も使えるので、C/C++ 側で使う定数を定義したファイルを共通化できる。
+`#include` も使えるので、C/C++ 側と定数の定義を共通化できる。
 
 ## つまづいたところ
 
