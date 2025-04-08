@@ -222,6 +222,8 @@ code {
     border-radius: 5px;
     background: #eee;
     padding: 0px 5px;
+    color: #246;
+    font-weight: bold;
 }
 
 .top_header {

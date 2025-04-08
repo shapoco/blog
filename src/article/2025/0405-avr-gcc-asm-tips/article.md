@@ -145,10 +145,12 @@ clobbered registers は呼び出し元の責任で待避するので、呼び出
 
 ### プリプロセッサ
 
-ソースファイルの拡張子を大文字で `.S` にすることにより、C/C++ と同様のプリプロセッサが使用でき、`#define` などのお馴染みのマクロが使える。
+ソースファイルの拡張子を大文字で `.S` にすることにより、C/C++ と同様のプリプロセッサが使用でき、`#define`、`#ifdef`、`#if` などのお馴染みのマクロが使える。
 
 > You can use the gnu C compiler driver to get other "CPP" style preprocessing by giving the input file a `.S` suffix.<br>
 > [3.1 Preprocessing - Using as](https://sourceware.org/binutils/docs-2.18/as/Preprocessing.html#Preprocessing)
+
+`#include` も使えるので、C/C++ 側で使う定数を定義したファイルを共通化できる。
 
 ## つまづいたところ
 

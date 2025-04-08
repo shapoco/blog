@@ -33,7 +33,7 @@
       }
     </script>
 
-    <link href="/style.css?96eccdad" rel="stylesheet" type="text/css">
+    <link href="/style.css?82ba467e" rel="stylesheet" type="text/css">
     <script src="/style.js?f1737acb"></script>
 
     <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
@@ -200,11 +200,12 @@
         </ul>
         <h3>文法</h3>
         <h4>プリプロセッサ</h4>
-        <p>ソースファイルの拡張子を大文字で <code>.S</code> にすることにより、C/C++ と同様のプリプロセッサが使用でき、<code>#define</code> などのお馴染みのマクロが使える。</p>
+        <p>ソースファイルの拡張子を大文字で <code>.S</code> にすることにより、C/C++ と同様のプリプロセッサが使用でき、<code>#define</code>、<code>#ifdef</code>、<code>#if</code> などのお馴染みのマクロが使える。</p>
         <blockquote>
           You can use the gnu C compiler driver to get other "CPP" style preprocessing by giving the input file a <code>.S</code> suffix.<br>
           <a href="https://sourceware.org/binutils/docs-2.18/as/Preprocessing.html#Preprocessing" target="_blank">3.1 Preprocessing - Using as</a>
         </blockquote>
+        <p><code>#include</code> も使えるので、C/C++ 側で使う定数を定義したファイルを共通化できる。</p>
         <h3>つまづいたところ</h3>
         <h4>オペランドに指定可能なレジスタが制限されている命令</h4>
         <table>
