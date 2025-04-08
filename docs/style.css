@@ -33,6 +33,14 @@ footer {
     color: #888;
 }
 
+h1, h2, h3, h4,
+p, ul, ol, blockquote,
+.article_info, .link_card {
+    margin: 2ex 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
 h1 {
     font-size: 180%;
 }
@@ -43,20 +51,19 @@ h2 {
 
 h3 {
     font-size: 140%;
-    border-bottom: solid 1px #ccc;
+    background: #e8e8e8;
+    border-radius: 5px;
+    padding: 0 0.5em;
 }
 
 h4 {
     font-size: 120%;
-    border-bottom: solid 1px #eee;
+    border-bottom: solid 2px #ddd;
 }
 
-h1, h2, h3, h4,
-p, ul, ol, blockquote,
-.article_info, .link_card {
-    margin: 2ex 0px;
-    padding: 0px;
-    box-sizing: border-box;
+h5 {
+    font-size: 100%;
+    border-bottom: solid 1px #eee;
 }
 
 ul, ol {
@@ -91,7 +98,10 @@ blockquote blockquote:last-child {
 
 blockquote {
     border-left: solid 5px #ccc;
+    background: #f8f8f8;
+    border-radius: 5px;
     padding: 1ex 1em;
+    font-style: italic;
 }
 
 blockquote.note {
@@ -212,7 +222,6 @@ code {
     border-radius: 5px;
     background: #eee;
     padding: 0px 5px;
-    color: #040;
 }
 
 .top_header {

@@ -33,7 +33,7 @@
       }
     </script>
 
-    <link href="/style.css?128f0110" rel="stylesheet" type="text/css">
+    <link href="/style.css?ebe9370d" rel="stylesheet" type="text/css">
     <script src="/style.js?f1737acb"></script>
 
     <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
@@ -75,8 +75,6 @@
           <li><a href="https://gcc.gnu.org/wiki/avr-gcc" target="_blank">avr-gcc - GCC Wiki</a>  ABI の説明がある</li>
           <li><a href="https://sourceware.org/binutils/docs-2.18/as/AVR-Syntax.html#AVR-Syntax" target="_blank">AVR Syntax - Using as</a></li>
         </ul>
-                  <hr>
-
         <h3>用語メモ</h3>
         <p>AVR は直接関係無い。</p>
         <h4>prologue (プロローグ)</h4>
@@ -85,24 +83,22 @@
         <p>呼び出された関数 (callee) が復帰する直前に行う処理。スタックフレームの解放、破壊したレジスタの復元など。</p>
         <h4>clobber (クロバー, クラバー)</h4>
         <p>関数呼び出しやアセンブラの文脈では、レジスタの値を「破壊」すること。trash とか smash とかと同じ？「clobbered registers」と言った場合、関数呼び出しやインラインアセンブラによって値が破壊される可能性のあるレジスタであり、すなわち呼び出し側で事前に待避が必要であることを意味する。</p>
-                  <hr>
-
         <h3>ABI</h3>
         <p>C 言語で適当に関数を作って <code>avr-gcc -S</code> で生成されたアセンブラを眺めながらドキュメントを読むと理解しやすい。</p>
         <h4>レジスタの用途</h4>
-        <h5><code>r0</code></h5>
+        <h5>r0</h5>
         <p>一時変数用のスクラッチレジスタ。アセンブラソースでは <code>__temp_reg__</code> で参照される。</p>
         <p>乗算命令 (<code>mul</code> など) の計算結果の格納にも使われる。</p>
-        <h5><code>r1</code></h5>
+        <h5>r1</h5>
         <p>ゼロレジスタ。アセンブラソースでは <code>__zero_reg__</code> で参照される。</p>
         <p>ハードウェア的には他の汎用レジスタと同様に機能するが、基本的には常に 0x00 を格納しておいて、定数ゼロとして使用することになっている。</p>
         <p>乗算命令の計算結果の格納にも使われるので、乗算の後はゼロクリアする必要がある。</p>
         <p>手書きアセンブラで乗算命令を頻繁に使用する場合は <code>r1:r0</code> 以外をゼロレジスタとして使った方が命令数は少なくなる。</p>
-        <h5><code>T</code> フラグ</h5>
+        <h5>T フラグ</h5>
         <p>ステータスレジスタ (<code>SREG</code>) 内にある。<code>r0</code> と同様に一時変数として使用される。</p>
-        <h5><code>Y</code> (<code>r29:r28</code>)</h5>
+        <h5>Y (<code>r29:r28</code>)</h5>
         <p>スタックフレーム内のローカル変数への間接アクセス用に使用される。</p>
-        <h5><code>r8</code>～<code>r25</code></h5>
+        <h5>r8～r25</h5>
         <p>関数の中では固定用途ではないが、引数をレジスタで渡す際はこの範囲内で使用される。</p>
         <h4>関数呼び出し</h4>
         <h5>呼び出し側 (caller) が待避しなければならないレジスタ (clobbered registers)</h5>
@@ -158,7 +154,7 @@
         <h4>プロローグの処理</h4>
         <ol>
           <li>saved registers のうち自身が使用 (破壊) するものをスタックに <code>push</code> して待避する。</li>
-          <li><code>SP</code> の値を <code>Y</code> (<code>r29:r28</code>) レジスタにコピーし、ローカル変数領域のサイズ分を減算する。</li>
+          <li><code>SP</code> の値を <code>Y</code> レジスタにコピーし、ローカル変数領域のサイズ分を減算する。</li>
           <li><code>Y</code> レジスタの値を <code>SP</code> に書き戻す。</li>
           <li>レジスタ渡しされた引数を必要に応じてローカル変数領域にコピーする。</li>
         </ol>
@@ -202,8 +198,6 @@
             </ul>
           </li>
         </ul>
-                  <hr>
-
         <h3>文法</h3>
         <h4>プリプロセッサ</h4>
         <p>ソースファイルの拡張子を大文字で <code>.S</code> にすることにより、C/C++ と同様のプリプロセッサが使用でき、<code>#define</code> などのお馴染みのマクロが使える。</p>
@@ -211,15 +205,13 @@
           You can use the gnu C compiler driver to get other "CPP" style preprocessing by giving the input file a <code>.S</code> suffix.<br>
           <a href="https://sourceware.org/binutils/docs-2.18/as/Preprocessing.html#Preprocessing" target="_blank">3.1 Preprocessing - Using as</a>
         </blockquote>
-                  <hr>
-
         <h3>つまづいたところ</h3>
         <h4>オペランドに指定可能なレジスタが制限されている命令</h4>
         <table>
           <tr>
             <th>カテゴリ</th>
             <th>命令</th>
-            <th>操作対象</th>
+            <th>指定可能な範囲</th>
           </tr>
           <tr>
             <td>Immediate 系</td>
@@ -248,10 +240,10 @@
           </tr>
         </table>
         <h4>ポインタレジスタと命令の使い分け</h4>
-        <p>単に配列を舐めるのにはどれでも使えるが、配列を Read-Modify-Write したり構造体へアクセスするには displacement addressing ができる <code>Y</code>、<code>Z</code> の方が使いやすい。</p>
+        <p>単に配列を舐めるのには <code>X</code>～<code>Z</code> のどれでも使えるが、配列を Read-Modify-Write したり構造体へアクセスするには displacement addressing ができる <code>Y</code>、<code>Z</code> の方が使いやすい。<code>Y</code> は通常はローカル変数へのアクセスに使われる。</p>
         <table>
           <tr>
-            <th class="nowrap"></th>
+            <th class="nowrap">アドレッシング</th>
             <th class="nowrap" style="text-align: center;">X</th>
             <th class="nowrap" style="text-align: center;">Y, Z</th>
           </tr>
