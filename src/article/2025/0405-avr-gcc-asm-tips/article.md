@@ -174,14 +174,14 @@ clobbered registers は呼び出し元の責任で待避するので、呼び出
 
 |アドレッシング|X|Y, Z|
 |:--|:--:|:--:|
-|Indirect|`ld`/`st`|`ldd`/`std`|
+|Indirect|`ld`/`st`|`ld`/`st`|
 |Post-increment|`ld`/`st`|`ld`/`st`|
 |Pre-decrement|`ld`/`st`<br>(未検証)|`ld`/`st`<br>(未検証)|
 |Displacement|不可|`ldd`/`std`|
 
-#### post-increment したいときは `ldd` ではなく `ld` を使う？
+#### `ld rN, Z+` と `ldd rN, Z+` は違う？
 
-`ldd rN, Z+` は期待した動作にならなかったが `ld rN, Z+` だと期待動作になった。理由は分からない。深追いもできてない。
+post-increment を期待して `ldd rN, Z+` と書いたところ期待動作にならなかったが `ld rN, Z+` だと期待動作になった。理由は分からない。深追いもできてない。
 
 ### その他
 

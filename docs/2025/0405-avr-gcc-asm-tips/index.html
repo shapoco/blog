@@ -253,7 +253,7 @@
           <tr>
             <td class="nowrap">Indirect</td>
             <td class="nowrap" style="text-align: center;"><code>ld</code>/<code>st</code></td>
-            <td class="nowrap" style="text-align: center;"><code>ldd</code>/<code>std</code></td>
+            <td class="nowrap" style="text-align: center;"><code>ld</code>/<code>st</code></td>
           </tr>
           <tr>
             <td class="nowrap">Post-increment</td>
@@ -271,8 +271,8 @@
             <td class="nowrap" style="text-align: center;"><code>ldd</code>/<code>std</code></td>
           </tr>
         </table>
-        <h5>post-increment したいときは <code>ldd</code> ではなく <code>ld</code> を使う？</h5>
-        <p><code>ldd rN, Z+</code> は期待した動作にならなかったが <code>ld rN, Z+</code> だと期待動作になった。理由は分からない。深追いもできてない。</p>
+        <h5><code>ld rN, Z+</code> と <code>ldd rN, Z+</code> は違う？</h5>
+        <p>post-increment を期待して <code>ldd rN, Z+</code> と書いたところ期待動作にならなかったが <code>ld rN, Z+</code> だと期待動作になった。理由は分からない。深追いもできてない。</p>
         <h4>その他</h4>
         <ul>
           <li><code>addi rN, hoge</code> は無いが <code>subi rN, (-hoge)</code> で同じことができる。同様に <code>adci</code> も無いので <code>sbci</code> を使う。</li>
