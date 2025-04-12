@@ -367,6 +367,14 @@
       "url": "/2025/0405-avr-gcc-asm-tips",
       "twitter_card_size": "summary",
       "card_image_url": "/2025/0405-avr-gcc-asm-tips/thumbnail.png"
+    },
+    {
+      "title": "MFM集",
+      "description": "MFM集。随時追加する。",
+      "date": "2025/04/12",
+      "url": "/2025/0412-mfm",
+      "twitter_card_size": "summary",
+      "card_image_url": "/image/default_card_summary.png"
     }
   ]
 }

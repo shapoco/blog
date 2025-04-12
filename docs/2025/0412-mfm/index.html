@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-    <meta name="keywords" content="シャポログ">
-    <meta name="description" content="シャポコのブログ">
+    <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+    <meta name="description" content="MFM集。随時追加する。">
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@shapoco" />
-    <meta property="og:url" content="https://blog.shapoco.net/" />
-    <meta property="og:title" content="シャポログ" />
-    <meta property="og:description" content="シャポコのブログ" />
-    <meta property="og:image" content="https://blog.shapoco.net/image/cover.png" />
+    <meta property="og:url" content="https://blog.shapoco.net/2025/0412-mfm/" />
+    <meta property="og:title" content="MFM集 | シャポログ" />
+    <meta property="og:description" content="MFM集。随時追加する。" />
+    <meta property="og:image" content="https://blog.shapoco.net/image/default_card_summary.png" />
 
     <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
     <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
@@ -39,40 +39,40 @@
     <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
     <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
 
-    <title>シャポログ</title>
+    <title>MFM集 | シャポログ</title>
   </head>
 
   <body>
     <div id="container">
       <div id="root_navi"></div>
 
-      <header class="top_header">
-        <h1>シャポログ</h1>
+      <header class="article_header">
+        <h1><a href="/">シャポログ</a></h1>
       </header>
       <main>
-        <h2>記事一覧</h2>
-        <article id="articles" class="article_list">
-          <p>記事一覧を読み込んでいます...</p>
-        </article>
-        <script>
-          fetch('/index.json?be767519')
-            .then(response => response.json())
-            .then(json_obj => { 
-              html = '';
-              json_obj.articles.reverse().forEach(a => {
-                html += genenerateArticleLinkCard(a);
-              });
-              document.querySelector('#articles').innerHTML = html;
-            })
-            .catch(error => {
-              document.querySelector('#articles').innerHTML = '<p>⚠ 記事の読み込みに失敗しました。</p>';
-            });
-        </script>
+        <h2>MFM集</h2>
+
+        <div class="article_info_wrap">
+          <div class="article_info">
+            2025/04/12 |
+            <a href="https://github.com/shapoco/blog/tree/main/src/article/2025/0412-mfm/" target="_blank">記事のソース</a>
+          </div>
+          
+          <div id="shpcstamp_wrap"></div>
+          <script async src="/stamp/v1/widget.js?f2543e31"></script>
+        </div>
+
+        <p>MFM集。随時追加する。</p>
+        <h3>PlayStation2 のアレ</h3>
+        <p>
+          <pre id="article_mfm_ps2"></pre>
+          <script src="./mfm_ps2.js?cb15bc0e"></script>
+        </p>
+
       </main>
       <footer>
         Copyright &copy; Shapoco 
       </footer>
     </div>
   </body>
-
 </html>
