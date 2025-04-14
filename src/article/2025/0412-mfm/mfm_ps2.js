@@ -25,4 +25,7 @@ for (let j = 0; j < M; j++) {
 }
 const SPC = '　　　　　　　　　　　　　　　　　　　　　　　　';
 s = `<center>\$[bg.color=002 ${SPC}\n\n\n\n${s}\n$[position.x=4,y=-5 $[scale.x=1.25 **$[fg.color=0cf ブラウザ]\n$[fg.color=888 システム設定]**]]\n${SPC}]</center>`;
-document.querySelector('#article_mfm_ps2').textContent = s;
+
+const div = document.querySelector('#article_mfm_ps2');
+div.querySelector('pre').textContent = s;
+arrangeArticleHtml(div);

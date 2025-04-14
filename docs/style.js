@@ -30,7 +30,7 @@ function arrangeArticleHtml(parent) {
     if (a.textContent) {
       for (var rule of linkDecorationRules) {
         const matches = rule.patterns.filter(p => {
-          return typeof(p) == 'string' ?
+          return typeof (p) == 'string' ?
             a.href.startsWith(p) :
             !!a.href.match(p);
         });
@@ -55,6 +55,9 @@ function arrangeArticleHtml(parent) {
   const STYLE_LITERAL = 'color: #c44;';
   const STYLE_DIFF_ADD = 'background: #dfd; color: #080;';
   const STYLE_DIFF_DEL = 'background: #fdd; color: #800;';
+  const STYLE_MFM_CMD = 'color: #84c;';
+  const STYLE_CUSTOM_EMOJI = 'color: #c84;';
+  const STYLE_HTML_TAG = 'color: #44c;';
 
   // 典型的なルール
   const RULE_LITERAL_CSTYLE_DEC = { style: STYLE_LITERAL, pattern: /\b[0-9_]+(\.[0-9_]+)?(e[0-9]+)?(u?l?|l?f|)\b/i };
@@ -62,14 +65,17 @@ function arrangeArticleHtml(parent) {
   const RULE_LITERAL_CSTYLE_OCT = { style: STYLE_LITERAL, pattern: /\b0[0-7]+u?l?\b/i };
   const RULE_LITERAL_CSTYLE_BIN = { style: STYLE_LITERAL, pattern: /\b0b[01]+u?l?\b/i };
   const RULE_LARGE_CONST_ID = { style: STYLE_CONST, pattern: /\b[A-Z][A-Z0-9_]*\b/ };
+  const RULE_CUSTOM_EMOJI = { style: STYLE_CUSTOM_EMOJI, pattern: /:\w+:/ };
+  const RULE_HTML_TAG = { style: STYLE_HTML_TAG, pattern: /<[^>]+>/ };
 
+  // C++
   const langCxx = {
     rangeRules: [
-      {style: STYLE_COMMENT, start: '//', end: '\n', escapeChar: null},
-      {style: STYLE_COMMENT, start: '/*', end: '*/', escapeChar: null},
-      {style: STYLE_STRING, start: "'", end: "'", escapeChar: '\\'},
-      {style: STYLE_STRING, start: '"', end: '"', escapeChar: '\\'},
-      {style: STYLE_MACRO, start: '#', end: '\n', escapeChar: '\\'},
+      { style: STYLE_COMMENT, start: '//', end: '\n', escapeChar: null },
+      { style: STYLE_COMMENT, start: '/*', end: '*/', escapeChar: null },
+      { style: STYLE_STRING, start: "'", end: "'", escapeChar: '\\' },
+      { style: STYLE_STRING, start: '"', end: '"', escapeChar: '\\' },
+      { style: STYLE_MACRO, start: '#', end: '\n', escapeChar: '\\' },
     ],
     regExpRules: [
       {
@@ -93,6 +99,7 @@ function arrangeArticleHtml(parent) {
     ],
   };
 
+  // Arduinoスケッチ
   const langIno = Object.assign({}, langCxx);
   langIno.regExpRules.push({
     style: STYLE_EMBEDDED,
@@ -110,12 +117,13 @@ function arrangeArticleHtml(parent) {
       'LiquidCrystal|SD|File)\\b')
   });
 
+  // JavaScript
   const langJavaScript = {
     rangeRules: [
-      {style: STYLE_COMMENT, start: '//', end: '\n', escapeChar: null},
-      {style: STYLE_COMMENT, start: '/*', end: '*/', escapeChar: null},
-      {style: STYLE_STRING, start: "'", end: "'", escapeChar: '\\'},
-      {style: STYLE_STRING, start: '"', end: '"', escapeChar: '\\'},
+      { style: STYLE_COMMENT, start: '//', end: '\n', escapeChar: null },
+      { style: STYLE_COMMENT, start: '/*', end: '*/', escapeChar: null },
+      { style: STYLE_STRING, start: "'", end: "'", escapeChar: '\\' },
+      { style: STYLE_STRING, start: '"', end: '"', escapeChar: '\\' },
     ],
     regExpRules: [
       {
@@ -135,12 +143,24 @@ function arrangeArticleHtml(parent) {
     ],
   };
 
+  // diff
   const langDiff = {
     rangeRules: [
-      {style: STYLE_DIFF_ADD, start: '+ ', end: '\n', escapeChar: null},
-      {style: STYLE_DIFF_DEL, start: '- ', end: '\n', escapeChar: null},
+      { style: STYLE_DIFF_ADD, start: '+ ', end: '\n', escapeChar: null },
+      { style: STYLE_DIFF_DEL, start: '- ', end: '\n', escapeChar: null },
     ],
     regExpRules: [],
+  };
+
+  // MFM (Markup language For Misskey)
+  const langMfm = {
+    rangeRules: [],
+    regExpRules: [
+      { style: STYLE_MFM_CMD, pattern: /\$\[[\w\.,=-]+/ },
+      { style: STYLE_MFM_CMD, pattern: /\]/ },
+      RULE_CUSTOM_EMOJI,
+      RULE_HTML_TAG,
+    ],
   };
 
   const langs = {
@@ -150,6 +170,7 @@ function arrangeArticleHtml(parent) {
     js: langJavaScript,
     json: langJavaScript,
     diff: langDiff,
+    mfm: langMfm,
   };
 
   const exts = {
@@ -167,7 +188,7 @@ function arrangeArticleHtml(parent) {
         break;
       }
     }
-    
+
     if (!lang) {
       // 言語から選択
       for (var langName in langs) {
@@ -301,7 +322,7 @@ class SimpleLexer {
       return false;
     }
   }
-        
+
   expect(key) {
     if (this.tryEat(key)) {
       return key;
@@ -314,7 +335,7 @@ class SimpleLexer {
   peek(n = 1) {
     return this.input.substring(this.pos, this.pos + n);
   }
-        
+
   eat(n = 1) {
     if (this.pos + n > this.input.length) {
       throw new Error('Unexpected EOS');

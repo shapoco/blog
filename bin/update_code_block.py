@@ -19,7 +19,7 @@ def main() -> None:
     out_md = ''
     work_md = in_md
     while len(work_md) > 0:
-        mstart = re.search(r'^([　 \t]*)```([^:]+)?(:[^\s]+)?[　 \t]*\r?\n', work_md, flags=re.MULTILINE)
+        mstart = re.search(r'^([　 \t]*)```([^:\r\n]+)?(:[^\s]+)?[　 \t\r\n]*\r?\n', work_md, flags=re.MULTILINE)
         if not mstart:
             break
         
@@ -33,7 +33,7 @@ def main() -> None:
         
         work_md = work_md[mstart.end(0):]
         
-        mend = re.search(r'^' + indent + r'```[　 \t]*\r?\n', work_md, flags=re.MULTILINE)
+        mend = re.search(r'^' + indent + r'```[　 \t\r\n]*\r?\n', work_md, flags=re.MULTILINE)
         if not mend:
             raise Exception(f'End of code block not found: "{title}" (lang={lang})')
         
