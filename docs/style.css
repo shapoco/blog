@@ -101,7 +101,6 @@ blockquote {
     background: #f8f8f8;
     border-radius: 5px;
     padding: 1ex 1em;
-    font-style: italic;
 }
 
 blockquote.note {

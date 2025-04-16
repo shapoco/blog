@@ -1,6 +1,27 @@
-# MFM集
+# [メモ] MFM集
 
 MFM集。随時追加する。MFM は Markup language For Misskey の略らしい。
+
+## 正方形の運動 (2025/04/16)
+
+spin と position を入れ子にしまくれば任意の軌道を描けるような気がしたけど数学力が足りなかった。
+
+[Misskey.io の投稿](https://misskey.io/notes/a6n3t6duesot00si)
+
+<div id="article_mfm_square"><pre class="lang_mfm"></pre></div>
+<script src="./mfm_square.js"></script>
+
+## 直線運動 (2025/04/16)
+
+[あめきなこさんの投稿](https://misskey.io/notes/a6mzf7rwt1g504f7) より。
+
+> 直線往復運動のMFM覚えると楽しいよ
+> 
+> ```mfm
+> $[spin.speed=Xs $[position.x=Y $[spin.speed=(X÷2)s,left $[position.x=Y $[spin.speed=Xs 任意の絵文字]]]]]
+> ```
+>
+> X＝往復スピード Y＝往復距離
 
 ## PlayStation2 のアレ (2025/4/12)
 

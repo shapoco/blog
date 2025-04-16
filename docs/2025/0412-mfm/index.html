@@ -10,7 +10,7 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@shapoco" />
     <meta property="og:url" content="https://blog.shapoco.net/2025/0412-mfm/" />
-    <meta property="og:title" content="MFM集 | シャポログ" />
+    <meta property="og:title" content="[メモ] MFM集 | シャポログ" />
     <meta property="og:description" content="MFM集。随時追加する。MFM は Markup language For Misskey の略らしい。" />
     <meta property="og:image" content="https://blog.shapoco.net/2025/0412-mfm/thumbnail.png" />
 
@@ -33,13 +33,13 @@
       }
     </script>
 
-    <link href="/style.css?82ba467e" rel="stylesheet" type="text/css">
+    <link href="/style.css?db82c4e4" rel="stylesheet" type="text/css">
     <script src="/style.js?ab23fd39"></script>
 
     <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
     <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
 
-    <title>MFM集 | シャポログ</title>
+    <title>[メモ] MFM集 | シャポログ</title>
   </head>
 
   <body>
@@ -50,7 +50,7 @@
         <h1><a href="/">シャポログ</a></h1>
       </header>
       <main>
-        <h2>MFM集</h2>
+        <h2>[メモ] MFM集</h2>
 
         <div class="article_info_wrap">
           <div class="article_info">
@@ -63,6 +63,20 @@
         </div>
 
         <p>MFM集。随時追加する。MFM は Markup language For Misskey の略らしい。</p>
+        <h3>正方形の運動 (2025/04/16)</h3>
+        <p>spin と position を入れ子にしまくれば任意の軌道を描けるような気がしたけど数学力が足りなかった。</p>
+        <p><a href="https://misskey.io/notes/a6n3t6duesot00si" target="_blank">Misskey.io の投稿</a></p>
+        <p>
+          <div id="article_mfm_square"><pre class="lang_mfm"></pre></div>
+          <script src="./mfm_square.js?4b4fbab3"></script>
+        </p>
+        <h3>直線運動 (2025/04/16)</h3>
+        <p><a href="https://misskey.io/notes/a6mzf7rwt1g504f7" target="_blank">あめきなこさんの投稿</a> より。</p>
+        <blockquote>
+          <p>直線往復運動のMFM覚えると楽しいよ</p>
+          <pre class="lang_mfm">$[spin.speed=Xs $[position.x=Y $[spin.speed=(X÷2)s,left $[position.x=Y $[spin.speed=Xs 任意の絵文字]]]]]</pre>
+          <p>X＝往復スピード Y＝往復距離</p>
+        </blockquote>
         <h3>PlayStation2 のアレ (2025/4/12)</h3>
         <p><a href="https://misskey.io/notes/a6hnnmxqmgg10fk9" target="_blank">Misskey.io の投稿</a></p>
         <p>
