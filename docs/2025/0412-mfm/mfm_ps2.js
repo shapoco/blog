@@ -1,3 +1,5 @@
+(function () {
+
 function round(n, m) {
     const P = Math.round(Math.pow(10, m));
     return Math.round(n * P) / P;
@@ -29,3 +31,5 @@ s = `<center>\$[bg.color=002 ${SPC}\n\n\n\n${s}\n$[position.x=4,y=-5 $[scale.x=1
 const div = document.querySelector('#article_mfm_ps2');
 div.querySelector('pre').textContent = s;
 arrangeArticleHtml(div);
+
+})();
