@@ -11,6 +11,11 @@ spin と position を入れ子にしまくれば任意の軌道を描けるよ�
 <div id="article_mfm_square"><pre class="lang_mfm"></pre></div>
 <script src="./mfm_square.js"></script>
 
+<!-- うまくいかなかったので保留
+## 等速直線運動 (2025/04/16)
+<div id="article_mfm_uniform_linear"><pre class="lang_mfm"></pre></div>
+<script src="./mfm_uniform_linear.js"></script> -->
+
 ## 直線運動 (2025/04/16)
 
 [あめきなこさんの投稿](https://misskey.io/notes/a6mzf7rwt1g504f7) より。
