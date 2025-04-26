@@ -81,6 +81,9 @@
       this.addButton.innerHTML = '<span class="shpcstamp_emoji">➕</span>追加';
       stampContainer.appendChild(this.addButton);
       this.addButton.addEventListener('click', async (evt) => {
+        if (commentWindow && commentWindow.isShown()) {
+          commentWindow.hide();
+        }
         if (emojiPicker && emojiPicker.isShown()) {
           emojiPicker.hide();
         }
@@ -193,6 +196,9 @@
     }
 
     async onStampClicked(button) {
+      if (emojiPicker && emojiPicker.isShown()) {
+        emojiPicker.hide();
+      }
       if (commentWindow && commentWindow.isShown() && commentWindow.ownerButton == button) {
         commentWindow.hide();
       }
