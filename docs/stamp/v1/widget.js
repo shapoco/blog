@@ -801,7 +801,7 @@
 
   function getStampSendDescription() {
     const numStampSent = Object.values(stamps).filter(item => item.sent).length;
-    return `あと ${maxStampCount - numStampSent} 個追加できます。コメントは任意で、内容は公開されます。`;
+    return `あと ${maxStampCount - numStampSent} 個送信できます。コメントは任意で、内容は公開されます。`;
   }
 
   /**
