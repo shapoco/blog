@@ -23,6 +23,7 @@ X 関連の雑多なメモ。随時追加する
 |`filter:images`|画像付き|[from:shapoco filter:images](https://x.com/search?q=from%3Ashapoco+filter%3Aimages)|
 |`filter:videos`|動画付き (※1)|[from:shapoco filter:videos](https://x.com/search?q=from%3Ashapoco+filter%3Avideos)|
 |`filter:links`|メディア (※1) またはリンク付き|[from:shapoco filter:links](https://x.com/search?q=from%3Ashapoco+filter%3Alinks)|
+|`list:リストID`|リスト内から検索 (※2)|[list:858198697032564736 カレーうどん](https://x.com/search?q=list%3A858198697032564736%20%E3%82%AB%E3%83%AC%E3%83%BC%E3%81%86%E3%81%A9%E3%82%93&src=typed_query&f=live)|
 |`lang:言語コード`|[言語コード](https://so-zou.jp/web-app/tech/data/code/language.htm) による言語指定|[lang:ja](https://x.com/search?q=lang%3Aja), [lang:en](https://x.com/search?q=lang%3Aen)|
 |`since:YYYY-MM-DD`|投稿日が `YYYY-MM-DD` 以降|[from:shapoco since:2025-1-1](https://x.com/search?q=from%3Ashapoco+since%3A2025-1-1)|
 |`until:YYYY-MM-DD`|投稿日が `YYYY-MM-DD` 以前|[from:shapoco until:2024-12-31](https://x.com/search?q=from%3Ashapoco+until%3A2024-12-31)|
@@ -32,6 +33,9 @@ X 関連の雑多なメモ。随時追加する
 |`geocode:緯度,経度,距離km`|[ジオコード](https://www.geosense.co.jp/map/tool/geoconverter.php) の場所から `距離` km 以内|[geocode:45.522192,141.936642,1km filter:media](https://x.com/search?q=geocode%3A45.522192%2C141.936642%2C1km%20filter%3Amedia&f=live)<br>(「最新」タブでないと機能しない？)|
 
 ※1 「メディア」や「動画」には YouTube リンクも含まれる
+
+※2 リスト ID はリストの URL の末尾の数字の部分<br>
+例) [https://x.com/i/lists/858198697032564736](https://x.com/i/lists/858198697032564736) のリスト ID: `858198697032564736`
 
 ## フォロワーの TL に流れないようにこっそりポストする
 
