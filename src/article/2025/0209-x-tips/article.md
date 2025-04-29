@@ -23,7 +23,7 @@ X 関連の雑多なメモ。随時追加する
 |`filter:images`|画像付き|[from:shapoco filter:images](https://x.com/search?q=from%3Ashapoco+filter%3Aimages)|
 |`filter:videos`|動画付き (※1)|[from:shapoco filter:videos](https://x.com/search?q=from%3Ashapoco+filter%3Avideos)|
 |`filter:links`|メディア (※1) またはリンク付き|[from:shapoco filter:links](https://x.com/search?q=from%3Ashapoco+filter%3Alinks)|
-|`list:リストID`|リスト内から検索 (※2)|[list:858198697032564736 カレーうどん](https://x.com/search?q=list%3A858198697032564736%20%E3%82%AB%E3%83%AC%E3%83%BC%E3%81%86%E3%81%A9%E3%82%93&src=typed_query&f=live)|
+|`list:リストID`|リスト内から検索 (※2, ※3)|[list:858198697032564736 カレーうどん](https://x.com/search?q=list%3A858198697032564736%20%E3%82%AB%E3%83%AC%E3%83%BC%E3%81%86%E3%81%A9%E3%82%93&src=typed_query&f=live)|
 |`lang:言語コード`|[言語コード](https://so-zou.jp/web-app/tech/data/code/language.htm) による言語指定|[lang:ja](https://x.com/search?q=lang%3Aja), [lang:en](https://x.com/search?q=lang%3Aen)|
 |`since:YYYY-MM-DD`|投稿日が `YYYY-MM-DD` 以降|[from:shapoco since:2025-1-1](https://x.com/search?q=from%3Ashapoco+since%3A2025-1-1)|
 |`until:YYYY-MM-DD`|投稿日が `YYYY-MM-DD` 以前|[from:shapoco until:2024-12-31](https://x.com/search?q=from%3Ashapoco+until%3A2024-12-31)|
@@ -36,6 +36,8 @@ X 関連の雑多なメモ。随時追加する
 
 ※2 リスト ID はリストの URL の末尾の数字の部分<br>
 例) [https://x.com/i/lists/858198697032564736](https://x.com/i/lists/858198697032564736) のリスト ID: `858198697032564736`
+
+※3 ときどき無関係なポストも混ざる模様
 
 ## フォロワーの TL に流れないようにこっそりポストする
 
