@@ -2,6 +2,31 @@
 
 MFM集。随時追加する。MFM は Markup language For Misskey の略らしい。
 
+## こうしてこの世界に新たなトリビアが生まれた (2025/07/04)
+
+「トリビアの泉」のコーナー「トリビアの種」の最後のアレ
+
+[Misskey.io の投稿](https://misskey.io/notes/a9sc1bcv3gfs01yn)
+
+```mfm
+<center>$[position.y=11 $[scale.x=1.5,y=2 $[font.serif <i>**$[position.x=-0.05 $[scale.x=0.2,y=0.2 $[blur $[scale.x=5,y=5 $[fg.color=f00 こうしてこの世界にまた一つ
+新たなトリビアが生まれた]]]]]
+$[position.x=-0.05,y=-2.7 $[scale.x=0.2,y=0.2 $[blur $[scale.x=5,y=5 $[fg.color=f00 こうしてこの世界にまた一つ
+新たなトリビアが生まれた]]]]]
+$[position.x=-0.05,y=-5.4 $[scale.x=0.2,y=0.2 $[blur $[scale.x=5,y=5 $[fg.color=f00 こうしてこの世界にまた一つ
+新たなトリビアが生まれた]]]]]
+$[position.x=-0.05,y=-8.1 $[fg.color=000 こうしてこの世界にまた一つ
+新たなトリビアが生まれた]]
+$[position.x=0.05,y=-10.8 $[fg.color=000 こうしてこの世界にまた一つ
+新たなトリビアが生まれた]]
+$[position.y=-13.52 $[fg.color=000 こうしてこの世界にまた一つ
+新たなトリビアが生まれた]]
+$[position.y=-16.18 $[fg.color=000 こうしてこの世界にまた一つ
+新たなトリビアが生まれた]]
+$[position.y=-18.9 $[fg.color=fff こうしてこの世界にまた一つ
+新たなトリビアが生まれた]]**</i>]]]</center>
+```
+
 ## 正方形の運動 (2025/04/16)
 
 spin と position を入れ子にしまくれば任意の軌道を描けるような気がしたけど数学力が足りなかった。

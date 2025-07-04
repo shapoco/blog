@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+    <meta name="description" content="MCU の入力保護ダイオードについて調べている過程で LED の光起電力について思い出し、 もしかして GPIO に繋がった LED に強烈な光を浴びせれば MCU が起動してしてしまうのでは、と思って試してみました。">
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@shapoco" />
+    <meta property="og:url" content="https://blog.shapoco.net/2025/0607-can-leds-photovoltaic-power-mcus/" />
+    <meta property="og:title" content="GPIO に繋がった LED に爆光を浴びせると MCU が起動することがある | シャポログ" />
+    <meta property="og:description" content="MCU の入力保護ダイオードについて調べている過程で LED の光起電力について思い出し、 もしかして GPIO に繋がった LED に強烈な光を浴びせれば MCU が起動してしてしまうのでは、と思って試してみました。" />
+    <meta property="og:image" content="https://blog.shapoco.net/image/default_card_summary.png" />
+
+    <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+    <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171109827-1"></script>
+    <script>
+      var remoteHost = window.location.hostname;
+      if (remoteHost == "localhost") {
+        console.log(`Google Analytics disabled on: '${remoteHost}'`);
+      }
+      else {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-171109827-1');
+      }
+    </script>
+
+    <link href="/style.css?2d26bd8f" rel="stylesheet" type="text/css">
+    <script src="/style.js?ab23fd39"></script>
+
+    <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+    <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+    <title>GPIO に繋がった LED に爆光を浴びせると MCU が起動することがある | シャポログ</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div id="root_navi"></div>
+
+      <header class="article_header">
+        <h1><a href="/">シャポログ</a></h1>
+      </header>
+      <main>
+        <h2>GPIO に繋がった LED に爆光を浴びせると MCU が起動することがある</h2>
+
+        <div class="article_info_wrap">
+          <div class="article_info">
+            2025/06/07 |
+            <a href="https://github.com/shapoco/blog/tree/main/src/article/2025/0607-can-leds-photovoltaic-power-mcus/" target="_blank">記事のソース</a>
+          </div>
+          
+          <div id="shpcstamp_wrap"></div>
+          <script async src="/stamp/v1/widget.js?c3a04a7d"></script>
+        </div>
+
+        <p>
+          MCU の入力保護ダイオードについて調べている過程で LED の光起電力について思い出し、
+          もしかして GPIO に繋がった LED に強烈な光を浴びせれば MCU が起動してしてしまうのでは、と思って試してみました。
+        </p>
+        <p>「やってみたらこうなった」というレベルのもので、危険性や対策の必要性を煽る意図はありません。</p>
+        <blockquote class="warning">
+          この実験では強い紫外線を発するパワー UV-LED を使用していますが、
+          もし再現を行う場合は UV カットに対応した遮光メガネ等を使用して目を保護してください。
+        </blockquote>
+        <h3>結論から書くと</h3>
+        <p>
+          限られた条件のもとで、MCU の GPIO に接続された LED に強烈な光や紫外線が当たると、
+          LED の光起電力が保護ダイオードを通じて MCU の電源ラインに電圧を与え、MCU が起動することがあります。
+        </p>
+        <p>
+          ただし、MCU の GPIO に接続されるような小容量の LED の光起電力は非常に小さいため、
+          それによって何か重大な問題が起こるケースは少なそうです。
+        </p>
+        <h3>LED の光起電力とは</h3>
+        <p>半導体である LED は、フォトダイオードや太陽電池といった他の半導体素子と同様、光を浴びると電圧を出力する「光起電力」という性質を持っています。LED の光起電力は微弱ですが、意図しない光起電力は回路の誤動作の原因になるため注意すべきこととされます。</p>
+        <ul>
+          <li><a href="https://led-ld.nichia.co.jp/api/data/spec/tech/SP-QR-C2-220237-J_LED%20Photovoltaic%20Effect.pdf" target="_blank">LED の光起電力について - 日亜化学工業</a></li>
+        </ul>
+        <p>一般的に LED は発光素子として知られているため「逆に光を浴びせると電気を生む」というのは多くの人にとって意外性があり、たびたび電子工作ネタにもなっています。センサとして使うことで例えばマトリクス LED に絵を描いたり、簡易的なイメージセンサにしたりできます。</p>
+        <ul>
+          <li><a href="https://nahitafu.cocolog-nifty.com/nahitafu/2009/10/led-0fa5.html" target="_blank">LED光センサアレイ: なひたふJTAG日記</a></li>
+        </ul>
+        <p>光起電力は素子によって大きく異なります。光起電力が発生するには素子のエネルギーギャップよりも大きなエネルギーの、つまり波長の短い光が必要です。光源のスペクトルだけでなくレンズの吸収スペクトルも影響するでしょうから、光起電力を評価するのは簡単ではなさそうです。なんとなく順方向電圧 (V<sub>F</sub>) が高い LED の方が発生する電圧も高い傾向があるような気はします。</p>
+        <p>手元の 5mm の砲弾型青色 LED <a href="https://akizukidenshi.com/catalog/g/g101004/" target="_blank">OSUB5161P</a> に対して、至近距離からパワー LED の光を浴びせて電圧を測ってみました。全て 600mA で駆動しています。</p>
+        <p><img src="./meas_th_circuit.svg" alt=""></p>
+        <p>パワーLED:</p>
+        <table>
+          <tr>
+            <th class="nowrap" style="text-align: center;">色</th>
+            <th class="nowrap" style="text-align: center;">型番</th>
+            <th class="nowrap" style="text-align: center;">V<sub>F</sub> [V]</th>
+            <th class="nowrap" style="text-align: center;">ピーク波長 [nm]</th>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">緑</td>
+            <td class="nowrap" style="text-align: center;"><a href="https://akizukidenshi.com/catalog/g/g106772/" target="_blank">OSG5XNE3C1E</a></td>
+            <td class="nowrap" style="text-align: center;">3.3</td>
+            <td class="nowrap" style="text-align: center;">525</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">青</td>
+            <td class="nowrap" style="text-align: center;"><a href="https://akizukidenshi.com/catalog/g/g107458/" target="_blank">OSB5XNE3C1E</a></td>
+            <td class="nowrap" style="text-align: center;">3.8</td>
+            <td class="nowrap" style="text-align: center;">470</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">紫外</td>
+            <td class="nowrap" style="text-align: center;"><a href="https://akizukidenshi.com/catalog/g/g113883/" target="_blank">OSV1XME3E1E</a></td>
+            <td class="nowrap" style="text-align: center;">4.0</td>
+            <td class="nowrap" style="text-align: center;">365</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">白</td>
+            <td class="nowrap" style="text-align: center;"><a href="https://akizukidenshi.com/catalog/g/g108956/" target="_blank">OSW4XNE3C1S</a></td>
+            <td class="nowrap" style="text-align: center;">3.8</td>
+            <td class="nowrap" style="text-align: center;">-</td>
+          </tr>
+        </table>
+        <p>測定結果 [V]:</p>
+        <table>
+          <tr>
+            <th class="nowrap" style="text-align: center;">色</th>
+            <th class="nowrap" style="text-align: center;">R<sub>L</sub>=開放</th>
+            <th class="nowrap" style="text-align: center;">R<sub>L</sub>=1MΩ</th>
+            <th class="nowrap" style="text-align: center;">R<sub>L</sub>=100kΩ</th>
+            <th class="nowrap" style="text-align: center;">R<sub>L</sub>=10kΩ</th>
+            <th class="nowrap" style="text-align: center;">R<sub>L</sub>=1kΩ</th>
+            <th class="nowrap" style="text-align: center;">R<sub>L</sub>=100Ω</th>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">緑</td>
+            <td class="nowrap" style="text-align: center;">1.79</td>
+            <td class="nowrap" style="text-align: center;">0.27</td>
+            <td class="nowrap" style="text-align: center;">0.02</td>
+            <td class="nowrap" style="text-align: center;">0.00</td>
+            <td class="nowrap" style="text-align: center;">0.00</td>
+            <td class="nowrap" style="text-align: center;">0.00</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">青</td>
+            <td class="nowrap" style="text-align: center;">2.34</td>
+            <td class="nowrap" style="text-align: center;">2.34</td>
+            <td class="nowrap" style="text-align: center;">2.33</td>
+            <td class="nowrap" style="text-align: center;">1.82</td>
+            <td class="nowrap" style="text-align: center;">0.17</td>
+            <td class="nowrap" style="text-align: center;">0.02</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">紫外</td>
+            <td class="nowrap" style="text-align: center;">2.39</td>
+            <td class="nowrap" style="text-align: center;">2.39</td>
+            <td class="nowrap" style="text-align: center;">2.39</td>
+            <td class="nowrap" style="text-align: center;">2.39</td>
+            <td class="nowrap" style="text-align: center;">1.30</td>
+            <td class="nowrap" style="text-align: center;">0.13</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">白</td>
+            <td class="nowrap" style="text-align: center;">2.23</td>
+            <td class="nowrap" style="text-align: center;">2.23</td>
+            <td class="nowrap" style="text-align: center;">2.12</td>
+            <td class="nowrap" style="text-align: center;">0.29</td>
+            <td class="nowrap" style="text-align: center;">0.03</td>
+            <td class="nowrap" style="text-align: center;">0.00</td>
+          </tr>
+        </table>
+        <p><img src="./meas_th_chart.svg" alt=""></p>
+        <p>
+          1kΩ 程度の負荷でも電圧が大きく低下していることから、電源としてはインピーダンスが高いことが分かります。
+          また、受光側 LED のピーク波長よりも長い波長の光に対してはほとんど起電力が無いことが分かります。
+          白色 LED は青色 LED に蛍光体をかぶせたものであるため、蛍光を経て光量が少なくなるほか、
+          波長が広い範囲に分散するため、起電力に寄与する光量が少ないことが伺えます。
+        </p>
+        <h3>GPIO の保護ダイオードとは</h3>
+        <p>一般的に、MCU の GPIO には端子を静電気や過電圧から守るための保護ダイオードが挿入されています。</p>
+        <ul>
+          <li><a href="https://edn.itmedia.co.jp/edn/articles/1712/27/news011.html" target="_blank">汎用I/Oの構造はどうなっているの？　使い方は？：Q&Aで学ぶマイコン講座（39） - EDN Japan</a></li>
+        </ul>
+        <p>手元にあったマイコン <a href="https://akizukidenshi.com/catalog/g/g130009/" target="_blank">ATtiny402</a> に対し、テスターのダイオード測定レンジを使って各 GPIO 端子から VCC へ向かう保護ダイオードの順方向電圧 (V<sub>F</sub>) を測ってみました。当然ダイオード以外の回路も入っていますし、保護ダイオードも単なるスイッチングダイオードとは限らないのでこの方法で正確な値は測れません。あくまで参考値です。</p>
+        <table>
+          <tr>
+            <th class="nowrap" style="text-align: center;">ピン番号</th>
+            <th class="nowrap">端子機能</th>
+            <th class="nowrap" style="text-align: center;">V<sub>F</sub> [V]</th>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">2</td>
+            <td class="nowrap">PA6</td>
+            <td class="nowrap" style="text-align: center;">0.50</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">3</td>
+            <td class="nowrap">PA7</td>
+            <td class="nowrap" style="text-align: center;">0.51</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">4</td>
+            <td class="nowrap">PA1</td>
+            <td class="nowrap" style="text-align: center;">0.51</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">5</td>
+            <td class="nowrap">PA2</td>
+            <td class="nowrap" style="text-align: center;">0.51</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">6</td>
+            <td class="nowrap">PA0 (UPDI)</td>
+            <td class="nowrap" style="text-align: center;">(open)</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">7</td>
+            <td class="nowrap">PA3</td>
+            <td class="nowrap" style="text-align: center;">0.51</td>
+          </tr>
+        </table>
+        <p>PA0 では V<sub>F</sub> は表示されませんでした。PA0 は高電圧プログラミング (HVP) にも使用されるため、ダイオードによる単純な保護ではないことが分かります。</p>
+        <h3>LED の光起電力で MCU が起動することの確認</h3>
+        <p>システムが電源から分離されて電源ラインのインピーダンスが高くなっている状態で GPIO に電圧が印加されると、保護ダイオードを通じて電流が電源ラインへ逆流し、電圧によっては MCU のパワーオンリセット (POR) やブラウンアウトリセット (BOR) が解除され、プログラムが走り出す場合があります。</p>
+        <p>GPIO に接続された電源のインピーダンスが高い場合は MCU の起動により一気に電圧降下して再び POR や BOR がかかりますが、リセットがかかると再び電源電圧が上昇し、何も対策しなければリセットと起動を反復することになります。電源のインピーダンスが十分に低ければ、MCU は動作を続けます。</p>
+        <h4>パワー UV-LED を使用して起動</h4>
+        <p>
+          次のような構成で「Lチカ」を動作させることができました。受光用の LED は本来は表示用であるという想定で
+          直列に電流制限抵抗を挿入しています。VCC には 100uF 程度以上の大容量コンデンサを接続しないと、
+          起動してもリセットを繰り返す状況になりました。
+        </p>
+        <p><img src="blink_th_circuit.svg" alt=""></p>
+        <p>消費電力に関連するヒューズ設定は次の通りです。</p>
+        <table>
+          <tr>
+            <th class="nowrap">バイト</th>
+            <th class="nowrap">ビット</th>
+            <th>説明</th>
+            <th class="nowrap">値</th>
+          </tr>
+          <tr>
+            <td class="nowrap">BODCFG</td>
+            <td class="nowrap">LVL</td>
+            <td>BOD レベル</td>
+            <td class="nowrap">0x0 (1.8V)</td>
+          </tr>
+          <tr>
+            <td class="nowrap"></td>
+            <td class="nowrap">SAMPFREQ</td>
+            <td>BOD サンプリング周波数</td>
+            <td class="nowrap">0x0 (1kHz)</td>
+          </tr>
+          <tr>
+            <td class="nowrap"></td>
+            <td class="nowrap">ACTIVE</td>
+            <td>動作中の BOD</td>
+            <td class="nowrap">0x1 (有効)</td>
+          </tr>
+          <tr>
+            <td class="nowrap"></td>
+            <td class="nowrap">SLEEP</td>
+            <td>スリープ中の BOD</td>
+            <td class="nowrap">0x1 (有効)</td>
+          </tr>
+          <tr>
+            <td class="nowrap">OSCCFG</td>
+            <td class="nowrap">OSCLOCK</td>
+            <td>キャリブレーションレジスタアクセス</td>
+            <td class="nowrap">0x0 (許可)</td>
+          </tr>
+          <tr>
+            <td class="nowrap"></td>
+            <td class="nowrap">FREQSEL</td>
+            <td>内部クロック周波数選択</td>
+            <td class="nowrap">0x1 (16MHz)</td>
+          </tr>
+          <tr>
+            <td class="nowrap">SYSCFG1</td>
+            <td class="nowrap">SUT</td>
+            <td>スタートアップ遅延時間</td>
+            <td class="nowrap">0x7 (64ms)</td>
+          </tr>
+        </table>
+        <p>
+          プログラムを以下に示します。
+          単純な L チカプログラムですが、システムクロックのプリスケーラがデフォルトでは
+          x1/6 に設定されており、そのままでは消費電力が大きすぎるので、
+          起動してすぐに最も遅い設定 (x1/64, 250kHz) にしています。
+        </p>
+        <pre class="lang_cpp" title="blink.cpp">#define F_CPU (250000)
+
+#include &lt;avr/io.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;util/delay.h&gt;
+
+static constexpr uint8_t PORT_LED = 2;
+
+int main() {
+  _PROTECTED_WRITE(CLKCTRL.MCLKCTRLB, CLKCTRL_PDIV_64X_gc | CLKCTRL_PEN_bm);
+
+  PORTA_DIRSET = (1 &lt;&lt; PORT_LED);
+
+  while (true) {
+    _delay_ms(500);
+    PORTA_OUTTGL = (1 &lt;&lt; PORT_LED);
+  }
+
+  return 0;
+}</pre>
+        <p>いくつかのクロック周波数で電源 (VCC) の電圧を測ってみました。</p>
+        <table>
+          <tr>
+            <th class="nowrap" style="text-align: center;">クロック源</th>
+            <th class="nowrap" style="text-align: center;">プリスケーラ</th>
+            <th class="nowrap" style="text-align: center;">CPU 周波数 [Hz]</th>
+            <th style="text-align: center;">VCC 電圧 [V]<br>LED 消灯中/点灯中</th>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">OSC20M (16MHz)</td>
+            <td class="nowrap" style="text-align: center;">x1/2</td>
+            <td class="nowrap" style="text-align: center;">8M</td>
+            <td style="text-align: center;">(起動せず)</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">OSC20M (16MHz)</td>
+            <td class="nowrap" style="text-align: center;">x1/8</td>
+            <td class="nowrap" style="text-align: center;">2M</td>
+            <td style="text-align: center;">1.82 / (BOR)</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">OSC20M (16MHz)</td>
+            <td class="nowrap" style="text-align: center;">x1/64</td>
+            <td class="nowrap" style="text-align: center;">250k</td>
+            <td style="text-align: center;">1.87 / 1.83</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">OSCULP32K</td>
+            <td class="nowrap" style="text-align: center;">無効</td>
+            <td class="nowrap" style="text-align: center;">32.768k</td>
+            <td style="text-align: center;">1.96 / 1.87</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">OSCULP32K</td>
+            <td class="nowrap" style="text-align: center;">x1/8</td>
+            <td class="nowrap" style="text-align: center;">4.096k</td>
+            <td style="text-align: center;">1.96 / 1.87</td>
+          </tr>
+        </table>
+        <p>
+          クロック周波数が遅いほど消費電力が小さくなり、BOR はかかりにくくなりました。
+          クロックを十分を遅くした場合の LED 消灯時の VCC 電圧は、受光側 LED の開放電圧 (2.39V) から
+          保護ダイオードの V<sub>F</sub> (0.51V) を差し引いたものと近い値になっています。
+        </p>
+        <p>動作の様子を示します。この動画ではアルミパイプを外した状態で動かしています。</p>
+        <p><video controls><source src="https://www.shapoco.net/media/2025/20250608_led_back_emf_single.mp4" type="video/mp4" /></video></p>
+        <p>アルミパイプは数cm 程度まで伸ばすことができました。クロック周波数を 32.768kHz にするとアルミパイプ無しでも動作しましたが、発光側と受光側の LED はピッタリくっつける必要があり、1cm でも離すと動かなくなりました。</p>
+        <p><img src="./blink_extend.jpg" alt=""></p>
+        <h4>集光ミラーを使用した遠距離からの起動</h4>
+        <p>(気が向いたら追記するかも)</p>
+        <h4>太陽光を利用して起動</h4>
+        <p>
+          受光用 LED を 9 個に増やすと太陽光でも起動できました。
+          受光用 LED は昼間の直射日光に正確に指向する必要がありました。
+          また、発光用の LED の電流制限抵抗は 1kΩ では消費電流が多すぎたため、4.7kΩ にしました。
+        </p>
+        <p><img src="./blink_th_solar.svg" alt=""></p>
+        <p><video controls><source src="https://www.shapoco.net/media/2025/20250605_led_back_emf_sun.mp4" type="video/mp4" /></video></p>
+        <p>
+          薄雲がかかったり日が傾くと起電力が弱くなり、MCU が起動する電圧に達しませんでした。
+          集光すれば少ない LED でも起動できそうですが、太陽光を下手に集光すると LED が燃えそうな気がします。
+          受光用 LED を増やすこともできますが「本来は表示用を想定している」という前提に立つと
+          闇雲に増やすのはズルいのでやってません (9 個でもズルい気がしますが)。
+        </p>
+        <h4>表面実装 LED での受光</h4>
+        <p>(気が向いたら追記するかも)</p>
+        <h3>これで何ができるのか</h3>
+        <p>
+          先に述べた通り光起電力は微弱なので、アクチュエータなどを直接駆動することはできませんが、
+          トランジスタ、FET、フォトカプラなどを駆動したり、他のデバイスと通信したりはできます。
+        </p>
+        <p>(気が向いたら追記するかも)</p>
+                  <hr>
+
+
+      </main>
+      <footer>
+        Copyright &copy; Shapoco 
+      </footer>
+    </div>
+  </body>
+</html>
