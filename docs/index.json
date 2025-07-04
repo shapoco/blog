@@ -377,7 +377,7 @@
       "card_image_url": "/2025/0412-mfm/thumbnail.png"
     },
     {
-      "title": "GPIO に繋がった LED に爆光を浴びせると MCU が起動することがある",
+      "title": "[執筆中] GPIO に繋がった LED に爆光を浴びせると MCU が起動することがある",
       "description": "MCU の入力保護ダイオードについて調べている過程で LED の光起電力について思い出し、 もしかして GPIO に繋がった LED に強烈な光を浴びせれば MCU が起動してしてしまうのでは、と思って試してみました。",
       "date": "2025/06/07",
       "url": "/2025/0607-can-leds-photovoltaic-power-mcus",

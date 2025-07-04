@@ -1,4 +1,7 @@
-# GPIO に繋がった LED に爆光を浴びせると MCU が起動することがある
+# [執筆中] GPIO に繋がった LED に爆光を浴びせると MCU が起動することがある
+
+> [!CAUTION]
+> これは書きかけの記事です。内容は正確でないことがあります。
 
 MCU の入力保護ダイオードについて調べている過程で LED の光起電力について思い出し、
 もしかして GPIO に繋がった LED に強烈な光を浴びせれば MCU が起動してしてしまうのでは、と思って試してみました。
@@ -157,6 +160,8 @@ int main() {
 
 (気が向いたら追記するかも)
 
+<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">3Dプリントした楕円面ミラーでパワーUV-LED の紫外線を 15cm 先の青色LED に集中させて光起電力で Lチカできた <a href="https://twitter.com/hashtag/shapolab?src=hash&amp;ref_src=twsrc%5Etfw">#shapolab</a> <a href="https://t.co/1VX3bNrdwp">pic.twitter.com/1VX3bNrdwp</a></p>&mdash; シャポコ🌵 (@shapoco) <a href="https://twitter.com/shapoco/status/1934612133133812148?ref_src=twsrc%5Etfw">June 16, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
 ### 太陽光を利用して起動
 
 受光用 LED を 9 個に増やすと太陽光でも起動できました。
@@ -173,6 +178,8 @@ int main() {
 闇雲に増やすのはズルいのでやってません (9 個でもズルい気がしますが)。
 
 ### 表面実装 LED での受光
+
+集光により 3528 metric の高輝度青色 LED `LK-1BL` 1 個で起動できましたが、2012 metric の `OSB50805` 1 個では電流が足りず起動できませんでした。
 
 (気が向いたら追記するかも)
 

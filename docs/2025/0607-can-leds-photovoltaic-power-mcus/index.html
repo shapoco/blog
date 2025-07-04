@@ -10,7 +10,7 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@shapoco" />
     <meta property="og:url" content="https://blog.shapoco.net/2025/0607-can-leds-photovoltaic-power-mcus/" />
-    <meta property="og:title" content="GPIO に繋がった LED に爆光を浴びせると MCU が起動することがある | シャポログ" />
+    <meta property="og:title" content="[執筆中] GPIO に繋がった LED に爆光を浴びせると MCU が起動することがある | シャポログ" />
     <meta property="og:description" content="MCU の入力保護ダイオードについて調べている過程で LED の光起電力について思い出し、 もしかして GPIO に繋がった LED に強烈な光を浴びせれば MCU が起動してしてしまうのでは、と思って試してみました。" />
     <meta property="og:image" content="https://blog.shapoco.net/image/default_card_summary.png" />
 
@@ -39,7 +39,7 @@
     <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
     <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
 
-    <title>GPIO に繋がった LED に爆光を浴びせると MCU が起動することがある | シャポログ</title>
+    <title>[執筆中] GPIO に繋がった LED に爆光を浴びせると MCU が起動することがある | シャポログ</title>
   </head>
 
   <body>
@@ -50,7 +50,7 @@
         <h1><a href="/">シャポログ</a></h1>
       </header>
       <main>
-        <h2>GPIO に繋がった LED に爆光を浴びせると MCU が起動することがある</h2>
+        <h2>[執筆中] GPIO に繋がった LED に爆光を浴びせると MCU が起動することがある</h2>
 
         <div class="article_info_wrap">
           <div class="article_info">
@@ -62,6 +62,7 @@
           <script async src="/stamp/v1/widget.js?c3a04a7d"></script>
         </div>
 
+        <blockquote class="caution">これは書きかけの記事です。内容は正確でないことがあります。</blockquote>
         <p>
           MCU の入力保護ダイオードについて調べている過程で LED の光起電力について思い出し、
           もしかして GPIO に繋がった LED に強烈な光を浴びせれば MCU が起動してしてしまうのでは、と思って試してみました。
@@ -361,6 +362,7 @@ int main() {
         <p><img src="./blink_extend.jpg" alt=""></p>
         <h4>集光ミラーを使用した遠距離からの起動</h4>
         <p>(気が向いたら追記するかも)</p>
+        <p><blockquote class="twitter-tweet"><p lang="ja" dir="ltr">3Dプリントした楕円面ミラーでパワーUV-LED の紫外線を 15cm 先の青色LED に集中させて光起電力で Lチカできた <a href="https://twitter.com/hashtag/shapolab?src=hash&amp;ref_src=twsrc%5Etfw">#shapolab</a> <a href="https://t.co/1VX3bNrdwp">pic.twitter.com/1VX3bNrdwp</a></p>&mdash; シャポコ🌵 (@shapoco) <a href="https://twitter.com/shapoco/status/1934612133133812148?ref_src=twsrc%5Etfw">June 16, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
         <h4>太陽光を利用して起動</h4>
         <p>
           受光用 LED を 9 個に増やすと太陽光でも起動できました。
@@ -376,6 +378,7 @@ int main() {
           闇雲に増やすのはズルいのでやってません (9 個でもズルい気がしますが)。
         </p>
         <h4>表面実装 LED での受光</h4>
+        <p>集光により 3528 metric の高輝度青色 LED <code>LK-1BL</code> 1 個で起動できましたが、2012 metric の <code>OSB50805</code> 1 個では電流が足りず起動できませんでした。</p>
         <p>(気が向いたら追記するかも)</p>
         <h3>これで何ができるのか</h3>
         <p>
