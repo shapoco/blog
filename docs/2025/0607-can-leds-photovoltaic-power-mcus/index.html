@@ -358,6 +358,8 @@ int main() {
         </p>
         <p>なお、前記のプログラムでは受光用の LED を制御していませんが、受光用 LED を点灯させるために GPIO を High にドライブすると、流入する電流は保護ダイオードではなく駆動用の FET を逆流して電源ラインに流れるようになります。FET のオン抵抗分の電圧降下は生じますが、その値は小さいので Vcc 電圧は入力電圧とほぼ同じになります。逆に GPIO を Low にドライブすると、電流は GND に吸い込まれてしまい、やがてパスコンの電圧が低下すると BOR がかかります。</p>
         <p><img src="./gpio_driving.svg" alt=""></p>
+        <p>また、LED をローサイドでドライブする場合も、電流の向きは変わりますが同じことが起こります。</p>
+        <p><img src="./low_side_drive.svg" alt=""></p>
         <p>動作の様子を示します。この動画ではアルミパイプを外した状態で動かしています。</p>
         <p><video controls><source src="https://www.shapoco.net/media/2025/20250608_led_back_emf_single.mp4" type="video/mp4" /></video></p>
         <p>アルミパイプは数cm 程度まで伸ばすことができました。</p>

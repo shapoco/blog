@@ -152,6 +152,10 @@ int main() {
 
 ![](./gpio_driving.svg)
 
+また、LED をローサイドでドライブする場合も、電流の向きは変わりますが同じことが起こります。
+
+![](./low_side_drive.svg)
+
 動作の様子を示します。この動画ではアルミパイプを外した状態で動かしています。
 
 ![](https://www.shapoco.net/media/2025/20250608_led_back_emf_single.mp4)
