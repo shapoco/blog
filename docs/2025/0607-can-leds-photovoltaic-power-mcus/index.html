@@ -62,7 +62,7 @@
           <script async src="/stamp/v1/widget.js?c3a04a7d"></script>
         </div>
 
-        <blockquote class="caution">これは書きかけの記事です。内容は正確でないことがあります。</blockquote>
+        <blockquote class="caution">これは書きかけの記事です。内容は正確でない可能性があります。</blockquote>
         <p>
           MCU の入力保護ダイオードについて調べている過程で LED の光起電力について思い出し、
           もしかして GPIO に繋がった LED に強烈な光を浴びせれば MCU が起動してしてしまうのでは、と思って試してみました。
@@ -312,7 +312,6 @@ int main() {
 
   return 0;
 }</pre>
-        <p>このプログラムでは受光用の LED を制御していません。受光用 LED を消灯させるために GPIO を Low にドライブするプログラムになっていると、光起電力による電荷が GND に吸い込まれて MCU はリセットされてしまいます。</p>
         <p>いくつかのクロック周波数で電源 (VCC) の電圧を測ってみました。</p>
         <table>
           <tr>
@@ -357,10 +356,13 @@ int main() {
           クロックを十分を遅くした場合の LED 消灯時の VCC 電圧は、受光側 LED の開放電圧 (2.39V) から
           保護ダイオードの V<sub>F</sub> (0.51V) を差し引いたものと近い値になっています。
         </p>
+        <p>なお、前記のプログラムでは受光用の LED を制御していませんが、受光用 LED を点灯させるために GPIO を High にドライブすると、流入する電流は保護ダイオードではなく駆動用の FET を逆流して電源ラインに流れるようになります。FET のオン抵抗分の電圧降下は生じますが、その値は小さいので Vcc 電圧は入力電圧とほぼ同じになります。逆に GPIO を Low にドライブすると、電流は GND に吸い込まれてしまい、やがてパスコンの電圧が低下すると BOR がかかります。</p>
+        <p><img src="./gpio_driving.svg" alt=""></p>
         <p>動作の様子を示します。この動画ではアルミパイプを外した状態で動かしています。</p>
         <p><video controls><source src="https://www.shapoco.net/media/2025/20250608_led_back_emf_single.mp4" type="video/mp4" /></video></p>
-        <p>アルミパイプは数cm 程度まで伸ばすことができました。クロック周波数を 32.768kHz にするとアルミパイプ無しでも動作しましたが、発光側と受光側の LED はピッタリくっつける必要があり、1cm でも離すと動かなくなりました。</p>
+        <p>アルミパイプは数cm 程度まで伸ばすことができました。</p>
         <p><img src="./blink_extend.jpg" alt=""></p>
+        <p>クロック周波数を 32.768kHz にするとアルミパイプ無しでも動作しましたが、発光側と受光側の LED はピッタリくっつける必要があり、1cm でも離すと動かなくなりました。</p>
         <h4>集光ミラーを使用した遠距離からの起動</h4>
         <p>(気が向いたら追記するかも)</p>
         <p><blockquote class="twitter-tweet"><p lang="ja" dir="ltr">3Dプリントした楕円面ミラーでパワーUV-LED の紫外線を 15cm 先の青色LED に集中させて光起電力で Lチカできた <a href="https://twitter.com/hashtag/shapolab?src=hash&amp;ref_src=twsrc%5Etfw">#shapolab</a> <a href="https://t.co/1VX3bNrdwp">pic.twitter.com/1VX3bNrdwp</a></p>&mdash; シャポコ🌵 (@shapoco) <a href="https://twitter.com/shapoco/status/1934612133133812148?ref_src=twsrc%5Etfw">June 16, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
