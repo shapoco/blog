@@ -383,6 +383,14 @@
       "url": "/2025/0607-can-leds-photovoltaic-power-mcus",
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2025/0607-can-leds-photovoltaic-power-mcus/cover.jpg"
+    },
+    {
+      "title": "秋月で売ってる3WパワーLEDドライバモジュールは調光ができる",
+      "description": "秋月電子で販売されている 定電流方式ハイパワーLEDドライバーモジュール OSMR16-W1213 に載っている IC には調光機能があり、電圧または PWM で調光することができ、最小構成ではボリュームを 1 個追加するだけで調光機能付きのライトを作ることができます。",
+      "date": "2025/07/10",
+      "url": "/2025/0710-osmr16-w1213-dim",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2025/0710-osmr16-w1213-dim/cover.jpg"
     }
   ]
 }

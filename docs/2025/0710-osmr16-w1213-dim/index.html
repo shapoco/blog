@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+    <meta name="description" content="秋月電子で販売されている 定電流方式ハイパワーLEDドライバーモジュール OSMR16-W1213 に載っている IC には調光機能があり、電圧または PWM で調光することができ、最小構成ではボリュームを 1 個追加するだけで調光機能付きのライトを作ることができます。">
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@shapoco" />
+    <meta property="og:url" content="https://blog.shapoco.net/2025/0710-osmr16-w1213-dim/" />
+    <meta property="og:title" content="秋月で売ってる3WパワーLEDドライバモジュールは調光ができる | シャポログ" />
+    <meta property="og:description" content="秋月電子で販売されている 定電流方式ハイパワーLEDドライバーモジュール OSMR16-W1213 に載っている IC には調光機能があり、電圧または PWM で調光することができ、最小構成ではボリュームを 1 個追加するだけで調光機能付きのライトを作ることができます。" />
+    <meta property="og:image" content="https://blog.shapoco.net/2025/0710-osmr16-w1213-dim/cover.jpg" />
+
+    <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+    <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171109827-1"></script>
+    <script>
+      var remoteHost = window.location.hostname;
+      if (remoteHost == "localhost") {
+        console.log(`Google Analytics disabled on: '${remoteHost}'`);
+      }
+      else {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-171109827-1');
+      }
+    </script>
+
+    <link href="/style.css?2d26bd8f" rel="stylesheet" type="text/css">
+    <script src="/style.js?ab23fd39"></script>
+
+    <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+    <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+    <title>秋月で売ってる3WパワーLEDドライバモジュールは調光ができる | シャポログ</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div id="root_navi"></div>
+
+      <header class="article_header">
+        <h1><a href="/">シャポログ</a></h1>
+      </header>
+      <main>
+        <h2>秋月で売ってる3WパワーLEDドライバモジュールは調光ができる</h2>
+
+        <div class="article_info_wrap">
+          <div class="article_info">
+            2025/07/10 |
+            <a href="https://github.com/shapoco/blog/tree/main/src/article/2025/0710-osmr16-w1213-dim/" target="_blank">記事のソース</a>
+          </div>
+          
+          <div id="shpcstamp_wrap"></div>
+          <script async src="/stamp/v1/widget.js?c3a04a7d"></script>
+        </div>
+
+        <p><img src="./cover.jpg" alt=""></p>
+        <p>秋月電子で販売されている <a href="https://akizukidenshi.com/catalog/g/g104790/" target="_blank">定電流方式ハイパワーLEDドライバーモジュール OSMR16-W1213</a> に載っている IC には調光機能があり、電圧または PWM で調光することができ、最小構成ではボリュームを 1 個追加するだけで調光機能付きのライトを作ることができます。</p>
+        <blockquote class="warning">
+          この記事では秋月の 3W パワー LED を使用していますが、
+          LED を直視すると危険ですので製作の際は注意してください。
+        </blockquote>
+        <p>余談ですが、秋月の商品ページには「3WタイプのLEDを1個点灯させるモジュール」とありますが、このモジュールは定電流制御モジュールなので LED は 1 個である必要はなく、電源電圧の許す限り直列接続できます。</p>
+        <h3>搭載されている IC と調光機能</h3>
+        <p><a href="https://akizukidenshi.com/catalog/g/g104790/" target="_blank">OSMR16-W1213 の商品ページ</a> には参考資料として CL6807 と PT4205 のデータシートが載っていますが、今回実際に購入してみたところ載っていたのは PT4119 という IC でした。いずれもピン配置は同じのようです。</p>
+        <p>で、OSMR16-W1213 のデータシートには記載がありませんが、これらの IC には DIM または ADJ という名称で調光用の端子が出ていて、このピンを使って電圧制御または PWM にて調光できるようです。</p>
+        <p><img src="./dim_pin.png" alt=""></p>
+        <p>ADJ/DIM ピンの仕様は IC によって微妙に異なる箇所もありますが、概ね同じです。</p>
+        <table>
+          <tr>
+            <th class="nowrap"></th>
+            <th class="nowrap"></th>
+            <th class="nowrap" style="text-align: center;">CL6807</th>
+            <th class="nowrap" style="text-align: center;">PT4205</th>
+            <th class="nowrap" style="text-align: center;">PT4119</th>
+            <th class="nowrap" style="text-align: center;">単位</th>
+          </tr>
+          <tr>
+            <td class="nowrap"></td>
+            <td class="nowrap">ピン名</td>
+            <td class="nowrap" style="text-align: center;">ADJ</td>
+            <td class="nowrap" style="text-align: center;">DIM</td>
+            <td class="nowrap" style="text-align: center;">DIM</td>
+            <td class="nowrap" style="text-align: center;"></td>
+          </tr>
+          <tr>
+            <td class="nowrap">絶対定格</td>
+            <td class="nowrap">入力電圧 (min)</td>
+            <td class="nowrap" style="text-align: center;">-0.3</td>
+            <td class="nowrap" style="text-align: center;">-0.3</td>
+            <td class="nowrap" style="text-align: center;">-0.3</td>
+            <td class="nowrap" style="text-align: center;">V</td>
+          </tr>
+          <tr>
+            <td class="nowrap"></td>
+            <td class="nowrap">入力電圧 (max)</td>
+            <td class="nowrap" style="text-align: center;">6</td>
+            <td class="nowrap" style="text-align: center;">30</td>
+            <td class="nowrap" style="text-align: center;">6</td>
+            <td class="nowrap" style="text-align: center;">V</td>
+          </tr>
+          <tr>
+            <td class="nowrap">電気的仕様</td>
+            <td class="nowrap">開放電圧 (typ)</td>
+            <td class="nowrap" style="text-align: center;">(不明)</td>
+            <td class="nowrap" style="text-align: center;">5</td>
+            <td class="nowrap" style="text-align: center;">5</td>
+            <td class="nowrap" style="text-align: center;">V</td>
+          </tr>
+        </table>
+        <h3>電圧による制御</h3>
+        <p>ADJ/DIM の電圧で調光を行う場合、2 つの方法があります。</p>
+        <ul>
+          <li>外部から ADJ/DIM に 0.5V ～ 2.5V の範囲の電圧を入力する</li>
+          <li>ADJ/DIM の電圧が 0.5V ～ 2.5V の範囲になるように抵抗を外付けする <strong>(PT4205/PT4119 のみ)</strong></li>
+        </ul>
+        <p>後者の場合、ADJ/DIM の電圧はそれらのピンの漏れ電流×抵抗値になります。これが 0.5V ～ 2.5V の範囲になるように抵抗値を計算すればいいわけですが、ボリュームで調光しようとすると欲しい抵抗値のものを手に入れるのが難しい上、載っている IC によって値が異なるのでロバストな方法とは言えません。</p>
+        <table>
+          <tr>
+            <th class="nowrap"></th>
+            <th class="nowrap" style="text-align: center;">PT4205</th>
+            <th class="nowrap" style="text-align: center;">PT4119</th>
+            <th class="nowrap" style="text-align: center;">単位</th>
+          </tr>
+          <tr>
+            <td class="nowrap">漏れ電流</td>
+            <td class="nowrap" style="text-align: center;">21 (typ)</td>
+            <td class="nowrap" style="text-align: center;">25 (typ)</td>
+            <td class="nowrap" style="text-align: center;">μA</td>
+          </tr>
+          <tr>
+            <td class="nowrap">抵抗の範囲</td>
+            <td class="nowrap" style="text-align: center;">23.8k～119k</td>
+            <td class="nowrap" style="text-align: center;">20k～100k</td>
+            <td class="nowrap" style="text-align: center;">Ω</td>
+          </tr>
+        </table>
+        <p>外部から電圧を入力する場合は次のような回路でできそうです。この場合は複数のモジュールを同時に調光することができます。</p>
+        <p><img src="./dc_ctrl_schematic.svg" alt=""></p>
+        <p>光の強さに対する人間の視覚の応答が線形でないことを考慮すると、ボリュームは A カーブの方がいいかもしれません。スイッチ付きにすると使い勝手がいいですが、スイッチの電流容量には注意が必要です。</p>
+        <p>R1 は ADJ/DIM 最大電圧を 2.5V に制約するためのものですが、電源電圧が ADJ/DIM の絶対最大定格よりも高い場合は必須となります。R2 は無くても動きますが、適切に算出された値の抵抗を挿入することで ADJ/DIM の最小電圧を 0.5V にオフセットします。</p>
+        <p>R1 と R2 の値は次のように算出できます。(厳密には ADJ/DIM の漏れ電流も考慮する必要がありますが、まぁ…ええやろ)</p>
+        <pre>Vmin = 0.5                              # ADJ/DIM 最小電圧
+Vmax = 2.5                              # ADJ/DIM 最大電圧
+Vcc = 6                                 # 電源電圧
+VR1 = 10k                               # ボリュームの抵抗値
+Rtotal = VR1 * Vcc / (Vmax-Vmin) = 30k  # 抵抗値の合計
+R2 = Rtotal * Vmin / Vcc = 2.5k         # R2 抵抗値
+R1 = Rtotal - VR1 - R2 = 17.5k          # R1 抵抗値</pre>
+        <p>C1、C2 も無くても動きますが、特にボリュームとモジュールの距離が長い場合や、モジュールを複数繋ぐ場合には付けておきたくなります。C1 = 1μF、C2 = 0.1μF といったところでしょうか。</p>
+        <p>Vcc = 6V、VR1 = 10kΩ、R1 = 15kΩ、R2 = 2.2kΩ として実際に試してみました。なおモジュールの電源入力にはダイオードブリッジが実装されていますが、今回はその後段に直接電源ラインを配線しました。</p>
+        <p><img src="./dc_ctrl_wiring.jpg" alt=""></p>
+        <p>動作の様子を示します。</p>
+        <p><video controls><source src="https://www.shapoco.net/media/2025/20250710_osmr16_w1213_dc_ctrl.mp4" type="video/mp4" /></video></p>
+        <p>今回買ったモジュールに載っていたのは PT4119 ですが、見かけ上の調光レンジは 2:1 か 3:2 といったところで、あまり制御レンジは広くないようです。R2 を外してみても、ADJ/DIM の電圧がある閾値を上回るといきなりフルパワーの半分くらいで光る感じです。最も暗いときの消費電流は 100mA、最も明るいときで 680mA 程度でした。</p>
+        <p>なお、CL6807 のデータシートでは 0～100％ の範囲で電流を制御できると書かれていました。電圧で制御するならそっちの IC の方が良さそうです。</p>
+        <h3>PWM による制御</h3>
+        <p>PWM で制御する場合は、ADJ/DIM に数百 Hz ～ 20kHz ほどの周波数の PWM 波形を入力します。PWM 周波数が低いほど暗くすることができますが、少なくとも PT4119 では 10kHz くらい以上にしないと動画撮影時にフリッカが出ました。他の IC ではどうだか分かりません。</p>
+        <table>
+          <tr>
+            <th class="nowrap"></th>
+            <th class="nowrap"></th>
+            <th class="nowrap" style="text-align: center;">CL6807</th>
+            <th class="nowrap" style="text-align: center;">PT4205</th>
+            <th class="nowrap" style="text-align: center;">PT4119</th>
+            <th class="nowrap" style="text-align: center;">単位</th>
+          </tr>
+          <tr>
+            <td class="nowrap">コントラスト最大時</td>
+            <td class="nowrap">PWM 周波数</td>
+            <td class="nowrap" style="text-align: center;">500</td>
+            <td class="nowrap" style="text-align: center;">100</td>
+            <td class="nowrap" style="text-align: center;">100</td>
+            <td class="nowrap" style="text-align: center;">Hz</td>
+          </tr>
+          <tr>
+            <td class="nowrap"></td>
+            <td class="nowrap">コントラスト</td>
+            <td class="nowrap" style="text-align: center;">100:1</td>
+            <td class="nowrap" style="text-align: center;">(不明)</td>
+            <td class="nowrap" style="text-align: center;">5000:1</td>
+            <td class="nowrap" style="text-align: center;"></td>
+          </tr>
+          <tr>
+            <td class="nowrap">コントラスト最小時</td>
+            <td class="nowrap">PWM 周波数</td>
+            <td class="nowrap" style="text-align: center;">20k</td>
+            <td class="nowrap" style="text-align: center;">20k</td>
+            <td class="nowrap" style="text-align: center;">20k</td>
+            <td class="nowrap" style="text-align: center;">Hz</td>
+          </tr>
+          <tr>
+            <td class="nowrap"></td>
+            <td class="nowrap">コントラスト</td>
+            <td class="nowrap" style="text-align: center;">5:1</td>
+            <td class="nowrap" style="text-align: center;">(不明)</td>
+            <td class="nowrap" style="text-align: center;">25:1</td>
+            <td class="nowrap" style="text-align: center;"></td>
+          </tr>
+        </table>
+        <p>PWM 波形はマイコンで生成することもできますが、単に照明として使うのであればソフトウェア的な保守のいらない方法がいいのではと思い、タイマー IC の 555 で組んでみました。</p>
+        <p><img src="./pwm_ctrl_schematic.svg" alt=""></p>
+        <p>動作の様子を示します。</p>
+        <p><video controls><source src="https://www.shapoco.net/media/2025/20250710_osmr16_w1213_pwm_ctrl.mp4" type="video/mp4" /></video></p>
+        <p>電圧制御に比べて遙かに広いレンジで明るさを制御できています。PWM の周期がウニョウニョ変動していますが、調光の用途としては問題無いと思います。最も暗いときの消費電流は 10mA 未満、中くらいで 30mA 程度、最大で 500mA 程度でした。</p>
+        <p>なんとなく PWM 制御の方が IC の違いを受けにくくて良さそうな気がします。</p>
+
+      </main>
+      <footer>
+        Copyright &copy; Shapoco 
+      </footer>
+    </div>
+  </body>
+</html>
