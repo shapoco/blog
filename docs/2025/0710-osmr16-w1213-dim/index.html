@@ -93,7 +93,7 @@
             <td class="nowrap" style="text-align: center;"></td>
           </tr>
           <tr>
-            <td class="nowrap">絶対定格</td>
+            <td class="nowrap">絶対最大定格</td>
             <td class="nowrap">入力電圧 (min)</td>
             <td class="nowrap" style="text-align: center;">-0.3</td>
             <td class="nowrap" style="text-align: center;">-0.3</td>
@@ -132,13 +132,13 @@
             <th class="nowrap" style="text-align: center;">単位</th>
           </tr>
           <tr>
-            <td class="nowrap">漏れ電流</td>
-            <td class="nowrap" style="text-align: center;">21 (typ)</td>
-            <td class="nowrap" style="text-align: center;">25 (typ)</td>
+            <td class="nowrap">漏れ電流 (typ)</td>
+            <td class="nowrap" style="text-align: center;">21</td>
+            <td class="nowrap" style="text-align: center;">25</td>
             <td class="nowrap" style="text-align: center;">μA</td>
           </tr>
           <tr>
-            <td class="nowrap">抵抗の範囲</td>
+            <td class="nowrap">計算上の抵抗の範囲</td>
             <td class="nowrap" style="text-align: center;">23.8k～119k</td>
             <td class="nowrap" style="text-align: center;">20k～100k</td>
             <td class="nowrap" style="text-align: center;">Ω</td>
@@ -207,7 +207,7 @@ R1 = Rtotal - VR1 - R2 = 17.5k          # R1 抵抗値</pre>
             <td class="nowrap" style="text-align: center;"></td>
           </tr>
         </table>
-        <p>PWM 波形はマイコンで生成することもできますが、単に照明として使うのであればソフトウェア的な保守のいらない方法がいいのではと思い、タイマー IC の 555 で組んでみました。</p>
+        <p>PWM 波形はマイコンで生成することもできますが、単に照明として使うのであればソフトウェア的な保守のいらない方法がいいのではと思い、タイマー IC の 555 で組んでみました。これもボリュームは A カーブの方がいいと思います。</p>
         <p><img src="./pwm_ctrl_schematic.svg" alt=""></p>
         <p>動作の様子を示します。</p>
         <p><video controls><source src="https://www.shapoco.net/media/2025/20250710_osmr16_w1213_pwm_ctrl.mp4" type="video/mp4" /></video></p>
