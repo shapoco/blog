@@ -33,6 +33,11 @@ footer {
     color: #888;
 }
 
+footer a {
+    color: #888;
+    text-emphasis: underline;
+}
+
 h1, h2, h3, h4,
 p, ul, ol, blockquote,
 .article_info, .link_card {
