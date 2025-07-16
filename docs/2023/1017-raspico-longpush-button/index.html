@@ -66,6 +66,7 @@
         <blockquote class="note">
           <ul>
             <li>2024/09/29 : Raspberry Pi Pico2 でも同じ回路で動作することを確認しました。</li>
+            <li>2025/07/16 : SMD を使用した場合のレイアウトを追記しました。</li>
           </ul>
         </blockquote>
         <h3>概要</h3>
@@ -97,15 +98,16 @@
           入るという仕組みです。
         </p>
         <p>Q1 がオンになる前に SW1 を解放すれば通常のリセット (再起動) となります。</p>
-        <p>
-          BOOTSELピンは Pico でも Pico2 でも裏面の TP6 に出ています。
-          少々不格好ですがここから引き出すのが簡単です。
-        </p>
-        <h3>実装例</h3>
+        <p>BOOTSEL は BOOTSEL スイッチに接続してもよいですが、Pico でも Pico2 でも裏面の TP6 に繋ぐ方がはんだ付けが簡単です。</p>
+        <h3>実装例 (スルーホール部品)</h3>
         <p>Raspberry Pi Pico でも Pico2 でも接続方法は同じです。</p>
         <p><img src="./layout.png" alt=""></p>
         <p><img src="./pico_long_push_button_front.jpg" alt=""></p>
         <p><img src="./pico_long_push_button_back.jpg" alt=""></p>
+        <h3>実装例 (SMD)</h3>
+        <p>表面実装部品を使用する場合は、例えば次のように実装できます。</p>
+        <p><img src="./smd_layout.png" alt=""></p>
+        <p><img src="./smd_pic.jpg" alt=""></p>
         <h3>動作波形</h3>
         <h4>クリック時</h4>
         <p>RUN の立ち上がり時に BOOTSEL がバタついていますが、これはチャタリング等ではなく、ラズピコ自身によるドライブのようです。</p>

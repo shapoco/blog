@@ -4,6 +4,7 @@
 
 > [!NOTE]
 > - 2024/09/29 : Raspberry Pi Pico2 でも同じ回路で動作することを確認しました。
+> - 2025/07/16 : SMD を使用した場合のレイアウトを追記しました。
 
 ## 概要
 
@@ -37,10 +38,9 @@ Q1 がオンになると BOOTSELピンがプルダウンされます。
 
 Q1 がオンになる前に SW1 を解放すれば通常のリセット (再起動) となります。
 
-BOOTSELピンは Pico でも Pico2 でも裏面の TP6 に出ています。
-少々不格好ですがここから引き出すのが簡単です。
+BOOTSEL は BOOTSEL スイッチに接続してもよいですが、Pico でも Pico2 でも裏面の TP6 に繋ぐ方がはんだ付けが簡単です。
 
-## 実装例
+## 実装例 (スルーホール部品)
 
 Raspberry Pi Pico でも Pico2 でも接続方法は同じです。
 
@@ -49,6 +49,14 @@ Raspberry Pi Pico でも Pico2 でも接続方法は同じです。
 ![](./pico_long_push_button_front.jpg)
 
 ![](./pico_long_push_button_back.jpg)
+
+## 実装例 (SMD)
+
+表面実装部品を使用する場合は、例えば次のように実装できます。
+
+![](./smd_layout.png)
+
+![](./smd_pic.jpg)
 
 ## 動作波形
 
