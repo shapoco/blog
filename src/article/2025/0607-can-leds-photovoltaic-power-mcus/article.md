@@ -203,4 +203,6 @@ int main() {
 
 ## 関連情報
 
+- [「Raspberry Pi 5」に強い光を照射すると強制終了するデスフラッシュ現象を確認したので詳細を共有します - GIGAZINE](https://gigazine.net/news/20231027-raspberry-pi-5-flash-reboot/)
+- [ツェナーダイオードに光を当てると電圧が発生する #RaspberryPi - Qiita](https://qiita.com/riris4488/items/4b782dd4e6fba62b0e2a)
 - たかTube さん: [似たような現象ですが、自己点滅LEDをティッシュで覆うと点滅が止まります](https://x.com/TakaTube_4649/status/1946346880537133419)
