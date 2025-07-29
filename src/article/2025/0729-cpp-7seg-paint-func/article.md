@@ -265,7 +265,7 @@ void setDigitSize(uint8_t size);
 
 ### AVR の PROGMEM を使用する
 
-AVR の場合は `seg7.hpp` をインクルードする前に `SEG7_USE_PROGMEM` を定義すると、7 セグデコード用のテーブルが Flash ROM に配置されます。Flash ROM を参照する命令が増えるため ROM 消費量が若干増えますが、RAM 消費は若干節約できます。
+AVR の場合は `seg7.hpp` をインクルードする前またはコンパイルオプションにて `SEG7_USE_PROGMEM` を定義すると、7 セグデコード用のテーブルが Flash ROM に配置されます。Flash ROM を参照する命令が増えるため ROM 消費量が若干増えますが、RAM 消費は若干節約できます。
 
 ```c++:main.cpp
 #define SEG7_INCLUDE_IMPL
@@ -277,7 +277,7 @@ AVR の場合は `seg7.hpp` をインクルードする前に `SEG7_USE_PROGMEM`
 
 デフォルトでは `pos_t` は `int16_t` として定義されています。
 
-値の精度が足りない場合や逆に削減したい場合は、`seg7.hpp` をインクルードする前に `SEG7_POS_TYPE` を定義することで型を変更できます。
+ディスプレイ解像度が低く int8_t や uin8_t で十分な場合は、`seg7.hpp` をインクルードする前またはコンパイルオプションにて `SEG7_POS_TYPE` を定義することで型を変更できます。
 
 ```c++
 #define SEG7_INCLUDE_IMPL
@@ -288,7 +288,7 @@ AVR の場合は `seg7.hpp` をインクルードする前に `SEG7_USE_PROGMEM`
 
 ### 文字サイズを固定する
 
-文字サイズを変更する必要が無い場合は、`seg7.hpp` をインクルードする前またはコンパイルオプションにて `SEG7_FIXED_SIZE` を定義することで固定できます。これにより若干コードサイズを削減できます。`setDigitSize()` は使用できなくなります。
+文字サイズを変更する必要が無い場合は、`seg7.hpp` をインクルードする前またはコンパイルオプションにて `SEG7_FIXED_SIZE` を定義することで固定できます。これにより若干コードサイズを削減できます。`setDigitSize()` は削除されて使用できなくなります。
 
 ```c++
 #define SEG7_INCLUDE_IMPL
