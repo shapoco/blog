@@ -265,7 +265,7 @@ void setDigitSize(uint8_t size);
 
 ### AVR の PROGMEM を使用する
 
-AVR の場合は次のように `SEG7_USE_PROGMEM` を定義してからインクルードすると、デコード用のテーブルが Flash ROM に配置され RAM 消費を若干節約できますが、プログラムメモリから読み出す命令が増えるため Flash の消費量は増えます。
+AVR の場合は `seg7.hpp` をインクルードする前に `SEG7_USE_PROGMEM` を定義すると、7 セグデコード用のテーブルが Flash ROM に配置されます。Flash ROM を参照する命令が増えるため ROM 消費量が若干増えますが、RAM 消費は若干節約できます。
 
 ```c++:main.cpp
 #define SEG7_INCLUDE_IMPL

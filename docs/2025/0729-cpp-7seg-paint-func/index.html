@@ -325,7 +325,7 @@ SEG7_FUNC_MOD void seg7::fillRect(seg7::pos_t x, seg7::pos_t y, uint8_t w,
         </table>
         <h3>チューニング</h3>
         <h4>AVR の PROGMEM を使用する</h4>
-        <p>AVR の場合は次のように <code>SEG7_USE_PROGMEM</code> を定義してからインクルードすると、デコード用のテーブルが Flash ROM に配置され RAM 消費を若干節約できますが、プログラムメモリから読み出す命令が増えるため Flash の消費量は増えます。</p>
+        <p>AVR の場合は <code>seg7.hpp</code> をインクルードする前に <code>SEG7_USE_PROGMEM</code> を定義すると、7 セグデコード用のテーブルが Flash ROM に配置され RAM 消費を若干節約できますが、Flash ROM を参照する命令が増えるため Flash の消費量は増えます。</p>
         <pre class="lang_cxx" title="main.cpp">#define SEG7_INCLUDE_IMPL
 #define SEG7_INCLUDE_AS_STATIC
 #define SEG7_USE_PROGMEM
