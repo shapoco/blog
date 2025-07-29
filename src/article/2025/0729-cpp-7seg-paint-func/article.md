@@ -159,7 +159,7 @@ static void seg7::fillRect(seg7::pos_t x, seg7::pos_t y, uint8_t w, uint8_t h,
 }
 ```
 
-`pos_t` は座標値の型、`color_t` は `fillRect()` に渡される色の型です。
+`pos_t` は座標値の型、`col_t` は `fillRect()` に渡される色の型です。
 
 AVR の場合は次のように `SEG7_USE_PROGMEM` を定義してからインクルードすると、7 セグデコーダなどが Flash ROM に配置されることにより ROM/RAM 容量を若干節約できます。
 
@@ -220,7 +220,7 @@ pos_t drawHex32(
     pos_t x,
     pos_t y,
     uint8_t size,
-    color_t col,
+    col_t col,
     uint32_t num
 );
 
