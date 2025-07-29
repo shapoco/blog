@@ -391,6 +391,14 @@
       "url": "/2025/0710-osmr16-w1213-dim",
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2025/0710-osmr16-w1213-dim/cover.jpg"
+    },
+    {
+      "title": "[C++] デバッグ用 7 セグ描画関数",
+      "description": "少ない RAM/ROM で 7 セグで 16 進数を表示するための関数です。シリアル I/F などの文字出力機能は無いけど画面表示はできる、という場合に使えます。",
+      "date": "2025/07/29",
+      "url": "/2025/0729-embedded-tips",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2025/0729-embedded-tips/cover.jpg"
     }
   ]
 }

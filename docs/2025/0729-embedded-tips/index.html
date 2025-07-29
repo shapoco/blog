@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+    <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+    <meta name="description" content="少ない RAM/ROM で 7 セグで 16 進数を表示するための関数です。シリアル I/F などの文字出力機能は無いけど画面表示はできる、という場合に使えます。">
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@shapoco" />
+    <meta property="og:url" content="https://blog.shapoco.net/2025/0729-embedded-tips/" />
+    <meta property="og:title" content="[C++] デバッグ用 7 セグ描画関数 | シャポログ" />
+    <meta property="og:description" content="少ない RAM/ROM で 7 セグで 16 進数を表示するための関数です。シリアル I/F などの文字出力機能は無いけど画面表示はできる、という場合に使えます。" />
+    <meta property="og:image" content="https://blog.shapoco.net/2025/0729-embedded-tips/cover.jpg" />
+
+    <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+    <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171109827-1"></script>
+    <script>
+      var remoteHost = window.location.hostname;
+      if (remoteHost == "localhost") {
+        console.log(`Google Analytics disabled on: '${remoteHost}'`);
+      }
+      else {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-171109827-1');
+      }
+    </script>
+
+    <link href="/style.css?53bac25e" rel="stylesheet" type="text/css">
+    <script src="/style.js?ab23fd39"></script>
+
+    <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+    <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+    <title>[C++] デバッグ用 7 セグ描画関数 | シャポログ</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div id="root_navi"></div>
+
+      <header class="article_header">
+        <h1><a href="/">シャポログ</a></h1>
+      </header>
+      <main>
+        <h2>[C++] デバッグ用 7 セグ描画関数</h2>
+
+        <div class="article_info_wrap">
+          <div class="article_info">
+            2025/07/29 |
+            <a href="https://github.com/shapoco/blog/tree/main/src/article/2025/0729-embedded-tips/" target="_blank">記事のソース</a>
+          </div>
+          
+          <div id="shpcstamp_wrap"></div>
+          <script async src="/stamp/v1/widget.js?c3a04a7d"></script>
+        </div>
+
+        <p><img src="./cover.jpg" alt=""></p>
+        <p>少ない RAM/ROM で 7 セグで 16 進数を表示するための関数です。シリアル I/F などの文字出力機能は無いけど画面表示はできる、という場合に使えます。</p>
+        <p>長方形を塗りつぶす関数があらかじめ必要です。</p>
+        <h3>ソースコード</h3>
+        <pre class="lang_cxx" title="seg7.hpp">#pragma once
+#include &lt;stdint.h&gt;
+
+#ifdef SEG7_USE_PROGMEM
+#include &lt;avr/pgmspace.h&gt;
+#endif
+
+#ifndef PROGMEM
+#define PROGMEM
+#endif
+
+#ifndef pgm_read_byte
+#define pgm_read_byte(addr) (*(const uint8_t*)(addr))
+#endif
+
+#ifdef SEG7_INCLUDE_AS_STATIC
+#define SEG7_FUNC_PREFIX static
+#else
+#define SEG7_FUNC_PREFIX
+#endif
+
+#ifndef SEG7_POS_TYPE
+#define SEG7_POS_TYPE int16_t
+#endif
+
+#ifndef SEG7_COL_TYPE
+#define SEG7_COL_TYPE uint16_t
+#endif
+
+namespace seg7 {
+
+using pos_t = SEG7_POS_TYPE;
+using col_t = SEG7_COL_TYPE;
+
+static constexpr uint8_t SEG7_NEG_SIGN = 16;
+static constexpr uint8_t SEG7_DOT_MASK = 0x80;
+
+SEG7_FUNC_PREFIX void fillRect(pos_t x, pos_t y, uint8_t w, uint8_t h,
+                               col_t col);
+
+#ifdef SEG7_INCLUDE_IMPL
+static const uint8_t SEG7_LUT[] PROGMEM = {
+    0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7d, 0x07, 0x7f, 0x6f, 0x77, 0x7c,
+    0x58, 0x5e, 0x79, 0x71, 0x40, 0x01, 0x1d, 0x5d, 0x81, 0x58, 0x18, 0x41};
+#endif
+
+SEG7_FUNC_PREFIX pos_t drawDigit(pos_t x, pos_t y, uint8_t size, col_t col,
+                                 uint8_t dig)
+#ifdef SEG7_INCLUDE_IMPL
+{
+  uint8_t seg = pgm_read_byte(&amp;SEG7_LUT[dig &amp; 0x01f]);
+  for (uint8_t iseg = 0; iseg &lt; 7; iseg++) {
+    if (seg &amp; 1) {
+      uint8_t pos = pgm_read_byte(&amp;SEG7_LUT[17 + iseg]);
+      pos_t segX = x + size * (pos &amp; 0x07);
+      pos_t segY = y + size * ((pos &gt;&gt; 4) &amp; 0x0f);
+      bool vertical = 0 != (pos &amp; 0x08);
+      uint8_t segW = vertical ? size : size * 4;
+      uint8_t segH = vertical ? size * 3 : size;
+      fillRect(segX, segY, segW, segH, col);
+    }
+    seg &gt;&gt;= 1;
+  }
+  if (dig &amp; SEG7_DOT_MASK) {
+    fillRect(x + size * 7, y + 8 * size, size * 2, size * 2, col);
+    x += size * 2;
+  }
+  return x + size * 8;
+}
+#else
+    ;
+#endif
+
+SEG7_FUNC_PREFIX pos_t drawString(pos_t x, pos_t y, uint8_t size, col_t col,
+                                  const uint8_t* digs, uint8_t len)
+#ifdef SEG7_INCLUDE_IMPL
+{
+  for (uint8_t idig = 0; idig &lt; len; idig++) {
+    x = drawDigit(x, y, size, col, digs[idig]);
+  }
+  return x;
+}
+#else
+    ;
+#endif
+
+SEG7_FUNC_PREFIX pos_t drawHex32(pos_t x, pos_t y, uint8_t size, col_t col,
+                                 uint32_t num)
+#ifdef SEG7_INCLUDE_IMPL
+
+{
+  constexpr uint8_t NUM_DIGS = sizeof(num) * 2;
+  uint8_t digs[NUM_DIGS];
+  for (int8_t i = NUM_DIGS - 1; i &gt;= 0; i--) {
+    digs[i] = num &amp; 0x0F;
+    num &gt;&gt;= 4;
+  }
+  return drawString(x, y, size, col, digs, NUM_DIGS);
+}
+#else
+    ;
+#endif
+
+SEG7_FUNC_PREFIX pos_t drawDec32(pos_t x, pos_t y, uint8_t size, col_t col,
+                                 int32_t num, int8_t dotPos
+#ifdef SEG7_INCLUDE_IMPL
+) {
+  // sizeof(T) * log(256) / log(10) + 1
+  constexpr uint8_t NUM_DIGS = (sizeof(num) * 616 + 255) / 256 + 1;
+  bool neg = num &lt; 0;
+  if (neg) num = -num;
+  uint8_t digs[NUM_DIGS];
+  uint8_t i = NUM_DIGS;
+  do {
+    digs[--i] = num % 10;
+    num /= 10;
+    if (dotPos-- == 0) {
+      digs[i] |= SEG7_DOT_MASK;
+    }
+  } while (num &gt; 0 || dotPos &gt;= 0);
+  if (neg) {
+    digs[--i] = SEG7_NEG_SIGN;
+  }
+  return drawString(x, y, size, col, digs + i, NUM_DIGS - i);
+}
+#else
+= -1);
+#endif
+
+}  // namespace seg7</pre>
+        <h3>プロジェクトへの追加方法</h3>
+        <h4>単一のモジュールから呼び出す場合</h4>
+        <p>ひとつの C++ ソースコードの中だけで使いたい場合は、次のようにしてインクルードすると、最適化が最大限効くように全ての関数定義が static 関数としてインクルードされます。長方形描画関数 <code>fillRect()</code> の実装は含まれませんので、アプリ側で static 関数として適当に定義します。</p>
+        <pre class="lang_cxx" title="main.cpp">#define SEG7_INCLUDE_IMPL
+#define SEG7_INCLUDE_AS_STATIC
+#include &lt;seg7.hpp&gt;
+
+// 長方形描画関数は自分で定義
+static void seg7::fillRect(seg7::pos_t x, seg7::pos_t y, uint8_t w, uint8_t h,
+                           seg7::col_t color) {
+  display.fillRect(x, y, w, h, color);
+}</pre>
+        <p><code>pos_t</code> は座標値の型、<code>color_t</code> は <code>fillRect()</code> に渡される色の型です。</p>
+        <p>AVR の場合は次のように <code>SEG7_USE_PROGMEM</code> を定義してからインクルードすると、7 セグデコーダなどが Flash ROM に配置されることにより ROM/RAM 容量を若干節約できます。</p>
+        <pre class="lang_cxx" title="main.cpp">#define SEG7_INCLUDE_IMPL
+#define SEG7_INCLUDE_AS_STATIC
+#define SEG7_USE_PROGMEM
+#include &lt;seg7.hpp&gt;
+
+// 以下略</pre>
+        <h4>複数のモジュールから呼び出す場合</h4>
+        <p>複数モジュールから参照するために独立したモジュールとしてコンパイルする場合は、次のようなソースコードを追加し、アプリ側のインクルードは何もマクロを付けずに行います。<code>fillRect()</code> はアプリ側で非 static な関数として定義します。<code>SEG7_USE_PROGMEM</code> は追加した cpp 側で定義します。</p>
+        <pre class="lang_cxx" title="seg7.cpp">#define SEG7_INCLUDE_IMPL
+// AVR の場合は SEG7_USE_PROGMEM を追加:
+// #define SEG7_USE_PROGMEM
+#include &quot;seg7.hpp&quot;</pre>
+        <pre class="lang_cxx" title="main.cpp">#include &lt;seg7.hpp&gt;
+
+// 長方形描画関数は非 static で定義
+void seg7::fillRect(seg7::pos_t x, seg7::pos_t y, uint8_t w, uint8_t h,
+                           seg7::col_t color) {
+  display.fillRect(x, y, w, h, color);
+}</pre>
+        <h4>座標値や色の型を変更する</h4>
+        <p>デフォルトでは <code>pos_t</code> は <code>int16_t</code> として、<code>col_t</code> は <code>uint16_t</code> として定義されています。</p>
+        <p><code>seg7.hpp</code> をインクルードする前に <code>SEG7_POS_TYPE</code> や <code>SEG7_COL_TYPE</code> を定義することにより、それぞれの型を変更できます。</p>
+        <pre class="lang_cxx">#define SEG7_INCLUDE_IMPL
+#define SEG7_INCLUDE_AS_STATIC
+#define SEG7_POS_TYPE int8_t
+#define SEG7_COL_TYPE uint8_t
+#include &lt;seg7.hpp&gt;</pre>
+        <h3>使用方法</h3>
+        <h4>16進描画関数</h4>
+        <pre class="lang_cxx">pos_t drawHex32(
+    pos_t x,
+    pos_t y,
+    uint8_t size,
+    color_t col,
+    uint32_t num
+);</pre>
+        <table>
+          <tr>
+            <th class="nowrap">引数</th>
+            <th>説明</th>
+          </tr>
+          <tr>
+            <td class="nowrap"><code>x</code>, <code>y</code></td>
+            <td>7 セグ数字列の左上隅の座標</td>
+          </tr>
+          <tr>
+            <td class="nowrap"><code>size</code></td>
+            <td>7 セグ数字列の大きさ。1 が最小。高さ 8×<code>size</code>px で描画される</td>
+          </tr>
+          <tr>
+            <td class="nowrap"><code>col</code></td>
+            <td><code>fillRect()</code> に渡される色</td>
+          </tr>
+          <tr>
+            <td class="nowrap"><code>num</code></td>
+            <td>表示する数字</td>
+          </tr>
+        </table>
+        <h4>10進描画関数</h4>
+        <pre class="lang_cxx">pos_t drawDec32(
+    pos_t x,
+    pos_t y,
+    uint8_t size,
+    col_t col,
+    int32_t num,
+    int8_t dotPos
+);</pre>
+        <table>
+          <tr>
+            <th class="nowrap">引数</th>
+            <th>説明</th>
+          </tr>
+          <tr>
+            <td class="nowrap"><code>x</code>, <code>y</code></td>
+            <td><code>drawHex32</code> と同じ</td>
+          </tr>
+          <tr>
+            <td class="nowrap"><code>size</code></td>
+            <td><code>drawHex32</code> と同じ</td>
+          </tr>
+          <tr>
+            <td class="nowrap"><code>col</code></td>
+            <td><code>drawHex32</code> と同じ</td>
+          </tr>
+          <tr>
+            <td class="nowrap"><code>num</code></td>
+            <td><code>drawHex32</code> と同じ</td>
+          </tr>
+          <tr>
+            <td class="nowrap"><code>dotPos</code></td>
+            <td>省略可。10 進表示に小数点を追加する場合に小数点以下の桁数を指定</td>
+          </tr>
+        </table>
+        <h3>フットプリント</h3>
+        <p>ATtiny85 + avr-g++ では次のような感じでした</p>
+        <table>
+          <tr>
+            <th class="nowrap" style="text-align: center;"><code>INCLUDE_IMPL</code></th>
+            <th class="nowrap" style="text-align: center;"><code>USE_PROGMEM</code></th>
+            <th class="nowrap" style="text-align: center;"><code>drawHex32</code></th>
+            <th class="nowrap" style="text-align: center;"><code>drawDec32</code></th>
+            <th style="text-align: center;">Flash ROM 使用量 [Bytes]</th>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">✔</td>
+            <td class="nowrap" style="text-align: center;">✔</td>
+            <td class="nowrap" style="text-align: center;">✔</td>
+            <td class="nowrap" style="text-align: center;"></td>
+            <td style="text-align: center;">272</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">✔</td>
+            <td class="nowrap" style="text-align: center;">✔</td>
+            <td class="nowrap" style="text-align: center;"></td>
+            <td class="nowrap" style="text-align: center;">✔</td>
+            <td style="text-align: center;">458</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">✔</td>
+            <td class="nowrap" style="text-align: center;">✔</td>
+            <td class="nowrap" style="text-align: center;">✔</td>
+            <td class="nowrap" style="text-align: center;">✔</td>
+            <td style="text-align: center;">488</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;">✔</td>
+            <td class="nowrap" style="text-align: center;"></td>
+            <td class="nowrap" style="text-align: center;">✔</td>
+            <td class="nowrap" style="text-align: center;">✔</td>
+            <td style="text-align: center;">588</td>
+          </tr>
+          <tr>
+            <td class="nowrap" style="text-align: center;"></td>
+            <td class="nowrap" style="text-align: center;">✔</td>
+            <td class="nowrap" style="text-align: center;">✔</td>
+            <td class="nowrap" style="text-align: center;">✔</td>
+            <td style="text-align: center;">990</td>
+          </tr>
+        </table>
+
+      </main>
+      <footer>
+        <span class="nowrap">
+          Copyright &copy; <a href="https://x.com/shapoco/" target="_blank">Shapoco</a>,
+        </span>
+        <span class="nowrap">
+          Powered by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
+        </span>
+      </footer>
+    </div>
+  </body>
+</html>
