@@ -226,7 +226,7 @@ static void seg7::fillRect(seg7::pos_t x, seg7::pos_t y, uint8_t w, uint8_t h,
 
 // 長方形描画関数は非 static で定義
 void seg7::fillRect(seg7::pos_t x, seg7::pos_t y, uint8_t w, uint8_t h,
-                           seg7::col_t color) {
+                    seg7::col_t color) {
   display.fillRect(x, y, w, h, color);
 }</pre>
         <h4>座標値や色の型を変更する</h4>
@@ -239,7 +239,7 @@ void seg7::fillRect(seg7::pos_t x, seg7::pos_t y, uint8_t w, uint8_t h,
 #include &lt;seg7.hpp&gt;</pre>
         <h3>使用方法</h3>
         <h4>16進描画関数</h4>
-        <pre class="lang_cxx">pos_t drawHex32(
+        <pre class="lang_cxx">pos_t seg7::drawHex32(
     pos_t x,
     pos_t y,
     uint8_t size,
@@ -273,7 +273,7 @@ void seg7::fillRect(seg7::pos_t x, seg7::pos_t y, uint8_t w, uint8_t h,
           </tr>
         </table>
         <h4>10進描画関数</h4>
-        <pre class="lang_cxx">pos_t drawDec32(
+        <pre class="lang_cxx">pos_t seg7::drawDec32(
     pos_t x,
     pos_t y,
     uint8_t size,

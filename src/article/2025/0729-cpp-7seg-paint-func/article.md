@@ -190,7 +190,7 @@ AVR の場合は次のように `SEG7_USE_PROGMEM` を定義してからイン�
 
 // 長方形描画関数は非 static で定義
 void seg7::fillRect(seg7::pos_t x, seg7::pos_t y, uint8_t w, uint8_t h,
-                           seg7::col_t color) {
+                    seg7::col_t color) {
   display.fillRect(x, y, w, h, color);
 }
 
@@ -216,7 +216,7 @@ void seg7::fillRect(seg7::pos_t x, seg7::pos_t y, uint8_t w, uint8_t h,
 ### 16進描画関数
 
 ```c++
-pos_t drawHex32(
+pos_t seg7::drawHex32(
     pos_t x,
     pos_t y,
     uint8_t size,
@@ -237,7 +237,7 @@ pos_t drawHex32(
 ### 10進描画関数
 
 ```c++
-pos_t drawDec32(
+pos_t seg7::drawDec32(
     pos_t x,
     pos_t y,
     uint8_t size,
