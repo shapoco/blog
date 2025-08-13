@@ -1,68 +1,69 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-    <meta name="keywords" content="シャポログ ${blog.article_keywords}">
-    <meta name="description" content="mixi2 のプロフィールのリンクを X など他の SNS で投稿したときに表示されるリンクカード画像 (OGP 画像) をカスタマイズする方法です。">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@shapoco" />
-    <meta property="og:url" content="https://blog.shapoco.net/2024/1216-mixi2-custom-profile-ogp/" />
-    <meta property="og:title" content="X に mixi2 プロフィールを共有した時のリンクカードを任意の画像にする | シャポログ" />
-    <meta property="og:description" content="mixi2 のプロフィールのリンクを X など他の SNS で投稿したときに表示されるリンクカード画像 (OGP 画像) をカスタマイズする方法です。" />
-    <meta property="og:image" content="https://blog.shapoco.net/2024/1216-mixi2-custom-profile-ogp/cover.png" />
+  <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+  <meta name="description" content="mixi2 のプロフィールのリンクを X など他の SNS で投稿したときに表示されるリンクカード画像 (OGP 画像) をカスタマイズする方法です。">
 
-    <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
-    <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
-    <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@shapoco" />
+  <meta property="og:url" content="https://blog.shapoco.net/2024/1216-mixi2-custom-profile-ogp/" />
+  <meta property="og:title" content="X に mixi2 プロフィールを共有した時のリンクカードを任意の画像にする | シャポログ" />
+  <meta property="og:description" content="mixi2 のプロフィールのリンクを X など他の SNS で投稿したときに表示されるリンクカード画像 (OGP 画像) をカスタマイズする方法です。" />
+  <meta property="og:image" content="https://blog.shapoco.net/2024/1216-mixi2-custom-profile-ogp/cover.png" />
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171109827-1"></script>
-    <script>
-      var remoteHost = window.location.hostname;
-      if (remoteHost == "localhost") {
-        console.log(`Google Analytics disabled on: '${remoteHost}'`);
-      }
-      else {
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'UA-171109827-1');
-      }
-    </script>
+  <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+  <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
 
-    <link href="/style.css?53bac25e" rel="stylesheet" type="text/css">
-    <script src="/style.js?ab23fd39"></script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KJ53WNQ22G"></script>
+  <script>
+    var remoteHost = window.location.hostname;
+    if (remoteHost == "localhost") {
+      console.log(`Google Analytics disabled on: '${remoteHost}'`);
+    }
+    else {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-KJ53WNQ22G');
+    }
+  </script>
 
-    <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
-    <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+  <link href="/style.css?53bac25e" rel="stylesheet" type="text/css">
+  <script src="/style.js?ab23fd39"></script>
 
-    <title>X に mixi2 プロフィールを共有した時のリンクカードを任意の画像にする | シャポログ</title>
-  </head>
+  <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+  <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
 
-  <body>
-    <div id="container">
-      <div id="root_navi"></div>
+  <title>X に mixi2 プロフィールを共有した時のリンクカードを任意の画像にする | シャポログ</title>
+</head>
 
-      <header class="article_header">
-        <h1><a href="/">シャポログ</a></h1>
-      </header>
-      <main>
-        <h2>X に mixi2 プロフィールを共有した時のリンクカードを任意の画像にする</h2>
+<body>
+  <div id="container">
+    <div id="root_navi"></div>
 
-        <div class="article_info_wrap">
-          <div class="article_info">
-            2024/12/16 |
-            <a href="https://github.com/shapoco/blog/tree/main/src/article/2024/1216-mixi2-custom-profile-ogp/" target="_blank">記事のソース</a>
-          </div>
-          
-          <div id="shpcstamp_wrap"></div>
-          <script async src="/stamp/v1/widget.js?c3a04a7d"></script>
+    <header class="article_header">
+      <h1><a href="/">シャポログ</a></h1>
+    </header>
+    <main>
+      <h2>X に mixi2 プロフィールを共有した時のリンクカードを任意の画像にする</h2>
+
+      <div class="article_info_wrap">
+        <div class="article_info">
+          2024/12/16 |
+          <a href="https://github.com/shapoco/blog/tree/main/src/article/2024/1216-mixi2-custom-profile-ogp/" target="_blank">記事のソース</a>
         </div>
 
-        <p>mixi2 のプロフィールのリンクを X など他の SNS で投稿したときに表示されるリンクカード画像 (OGP 画像) をカスタマイズする方法です。</p>
+        <div id="shpcstamp_wrap"></div>
+        <script async src="/stamp/v1/widget.js?c3a04a7d"></script>
+      </div>
+
+              <p>mixi2 のプロフィールのリンクを X など他の SNS で投稿したときに表示されるリンクカード画像 (OGP 画像) をカスタマイズする方法です。</p>
         <h3>mixi2 のプロフィールを共有したときに表示される画像</h3>
         <p>2024/12/16 現在、mixi2 のプロフィールの URL (<code>https://mixi.social/@ユーザーID</code>) を X で投稿すると、下図のようにプロフィール画像の中央付近を拡大したものが OGP 画像として使用されます。</p>
         <p><img src="./ss_profile_link_share.png" alt=""></p>
@@ -91,15 +92,16 @@
         <p>もしかするとあなたがこの記事を読んでいる時点ではキャッシュの期限が切れて mixi2 のプロフィールアイコンと同じ画像になっているかもしれません。</p>
         <p><blockquote class="twitter-tweet" data-media-max-width="560"><p lang="ja" dir="ltr">mixi2 アカウント<a href="https://t.co/gSrimJFgab">https://t.co/gSrimJFgab</a></p>&mdash; シャポコ🌵 (@shapoco) <a href="https://twitter.com/shapoco/status/1868654948403327275?ref_src=twsrc%5Etfw">December 16, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
 
-      </main>
-      <footer>
-        <span class="nowrap">
-          Copyright &copy; <a href="https://x.com/shapoco/" target="_blank">Shapoco</a>,
-        </span>
-        <span class="nowrap">
-          Powered by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
-        </span>
-      </footer>
-    </div>
-  </body>
+    </main>
+    <footer>
+      <span class="nowrap">
+        Copyright &copy; <a href="https://x.com/shapoco/" target="_blank">Shapoco</a>,
+      </span>
+      <span class="nowrap">
+        Powered by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
+      </span>
+    </footer>
+  </div>
+</body>
+
 </html>

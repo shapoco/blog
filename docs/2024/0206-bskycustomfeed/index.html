@@ -1,68 +1,69 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-    <meta name="keywords" content="シャポログ ${blog.article_keywords}">
-    <meta name="description" content="イラストや写真等を公開するアカウントの場合、それしか投稿してなければ 「メディア欄を見て」でいいかと思いますが、それ以外の日常の写真や ゲームのスクリーンショットなども投稿する場合、自作品だけを まとめたページが欲しくなります。Bluesky にはいわゆるハッシュタグは ありませんが(※1)、「カスタムフィード」を使えば、特定のキーワードを 含むポストをまとめることができます。">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:site" content="@shapoco" />
-    <meta property="og:url" content="https://blog.shapoco.net/2024/0206-bskycustomfeed/" />
-    <meta property="og:title" content="SkyFeed を使って Bluesky で自作品のフィードを公開する | シャポログ" />
-    <meta property="og:description" content="イラストや写真等を公開するアカウントの場合、それしか投稿してなければ 「メディア欄を見て」でいいかと思いますが、それ以外の日常の写真や ゲームのスクリーンショットなども投稿する場合、自作品だけを まとめたページが欲しくなります。Bluesky にはいわゆるハッシュタグは ありませんが(※1)、「カスタムフィード」を使えば、特定のキーワードを 含むポストをまとめることができます。" />
-    <meta property="og:image" content="https://blog.shapoco.net/2024/0206-bskycustomfeed/thumbnail.png" />
+  <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+  <meta name="description" content="イラストや写真等を公開するアカウントの場合、それしか投稿してなければ 「メディア欄を見て」でいいかと思いますが、それ以外の日常の写真や ゲームのスクリーンショットなども投稿する場合、自作品だけを まとめたページが欲しくなります。Bluesky にはいわゆるハッシュタグは ありませんが(※1)、「カスタムフィード」を使えば、特定のキーワードを 含むポストをまとめることができます。">
 
-    <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
-    <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
-    <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@shapoco" />
+  <meta property="og:url" content="https://blog.shapoco.net/2024/0206-bskycustomfeed/" />
+  <meta property="og:title" content="SkyFeed を使って Bluesky で自作品のフィードを公開する | シャポログ" />
+  <meta property="og:description" content="イラストや写真等を公開するアカウントの場合、それしか投稿してなければ 「メディア欄を見て」でいいかと思いますが、それ以外の日常の写真や ゲームのスクリーンショットなども投稿する場合、自作品だけを まとめたページが欲しくなります。Bluesky にはいわゆるハッシュタグは ありませんが(※1)、「カスタムフィード」を使えば、特定のキーワードを 含むポストをまとめることができます。" />
+  <meta property="og:image" content="https://blog.shapoco.net/2024/0206-bskycustomfeed/thumbnail.png" />
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171109827-1"></script>
-    <script>
-      var remoteHost = window.location.hostname;
-      if (remoteHost == "localhost") {
-        console.log(`Google Analytics disabled on: '${remoteHost}'`);
-      }
-      else {
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'UA-171109827-1');
-      }
-    </script>
+  <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+  <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
 
-    <link href="/style.css?53bac25e" rel="stylesheet" type="text/css">
-    <script src="/style.js?ab23fd39"></script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KJ53WNQ22G"></script>
+  <script>
+    var remoteHost = window.location.hostname;
+    if (remoteHost == "localhost") {
+      console.log(`Google Analytics disabled on: '${remoteHost}'`);
+    }
+    else {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-KJ53WNQ22G');
+    }
+  </script>
 
-    <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
-    <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+  <link href="/style.css?53bac25e" rel="stylesheet" type="text/css">
+  <script src="/style.js?ab23fd39"></script>
 
-    <title>SkyFeed を使って Bluesky で自作品のフィードを公開する | シャポログ</title>
-  </head>
+  <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+  <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
 
-  <body>
-    <div id="container">
-      <div id="root_navi"></div>
+  <title>SkyFeed を使って Bluesky で自作品のフィードを公開する | シャポログ</title>
+</head>
 
-      <header class="article_header">
-        <h1><a href="/">シャポログ</a></h1>
-      </header>
-      <main>
-        <h2>SkyFeed を使って Bluesky で自作品のフィードを公開する</h2>
+<body>
+  <div id="container">
+    <div id="root_navi"></div>
 
-        <div class="article_info_wrap">
-          <div class="article_info">
-            2024/02/06 |
-            <a href="https://github.com/shapoco/blog/tree/main/src/article/2024/0206-bskycustomfeed/" target="_blank">記事のソース</a>
-          </div>
-          
-          <div id="shpcstamp_wrap"></div>
-          <script async src="/stamp/v1/widget.js?c3a04a7d"></script>
+    <header class="article_header">
+      <h1><a href="/">シャポログ</a></h1>
+    </header>
+    <main>
+      <h2>SkyFeed を使って Bluesky で自作品のフィードを公開する</h2>
+
+      <div class="article_info_wrap">
+        <div class="article_info">
+          2024/02/06 |
+          <a href="https://github.com/shapoco/blog/tree/main/src/article/2024/0206-bskycustomfeed/" target="_blank">記事のソース</a>
         </div>
 
-        <p><img src="./cover.png" alt=""></p>
+        <div id="shpcstamp_wrap"></div>
+        <script async src="/stamp/v1/widget.js?c3a04a7d"></script>
+      </div>
+
+              <p><img src="./cover.png" alt=""></p>
         <blockquote class="note">※1) 2024年2月 にハッシュタグが使えるようになりました。</blockquote>
         <h3>はじめに</h3>
         <p>
@@ -232,15 +233,16 @@
           <li><a href="https://misskey.io/notes/9pjazn5btxyv05qe" target="_blank">Bluesky で自分のイラスト作品等を「フィード」にまとめる手順を記事にしました</a></li>
         </ul>
 
-      </main>
-      <footer>
-        <span class="nowrap">
-          Copyright &copy; <a href="https://x.com/shapoco/" target="_blank">Shapoco</a>,
-        </span>
-        <span class="nowrap">
-          Powered by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
-        </span>
-      </footer>
-    </div>
-  </body>
+    </main>
+    <footer>
+      <span class="nowrap">
+        Copyright &copy; <a href="https://x.com/shapoco/" target="_blank">Shapoco</a>,
+      </span>
+      <span class="nowrap">
+        Powered by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
+      </span>
+    </footer>
+  </div>
+</body>
+
 </html>
