@@ -27,9 +27,7 @@ AQM0802 の電源電圧範囲は 3.1V～3.5V と狭く、電圧が低すぎる�
 
 ## プログラム
 
-GitHub に公開しました。
-
-起動直後にクロック源を内蔵 32.768 kHz に切り替え、あとはひたすら LCD にアニメーションを表示するプログラムです。
+GitHub に上げました。起動直後にクロック源を内蔵 32.768 kHz に切り替え、あとはひたすら LCD にアニメーションを表示するプログラムです。
 
 [avr-playground](https://github.com/shapoco/avr-playground/tree/main/tiny0/tiny402_aqm0802_lp)
 
