@@ -399,6 +399,14 @@
       "url": "/2025/0729-cpp-7seg-paint-func",
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2025/0729-cpp-7seg-paint-func/cover.jpg"
+    },
+    {
+      "title": "GPIO に繋がった圧電スピーカーに強い振動を与えると MCU が起動することがある",
+      "description": "MCU の GPIO に付属する ESD 保護ダイオードは、トポロジ的にはダイオードブリッジを形成しているため、2 つの GPIO に交流信号が入力されると整流作用とパスコンによる平滑により電源ラインに電圧が供給され、MCU が起動する可能性があります。",
+      "date": "2025/08/22",
+      "url": "/2025/0822-piezo-speaker-powers-mcu",
+      "twitter_card_size": "summary",
+      "card_image_url": "/2025/0822-piezo-speaker-powers-mcu/thumbnail.jpg"
     }
   ]
 }

@@ -69,6 +69,7 @@
           もしかして GPIO に繋がった LED に強烈な光を浴びせれば MCU が起動してしてしまうのでは、と思って試してみました。
         </p>
         <p>「やってみたらこうなった」というレベルのもので、危険性や対策の必要性を煽る意図はありません。</p>
+        <blockquote class="warning">ESD 保護ダイオードは主に製品製造時の静電気から素子を守るためのもので、定常的に電流を流すことは想定されていません。</blockquote>
         <blockquote class="warning">
           この実験では強い紫外線を発するパワー UV-LED を使用していますが、
           もし再現を行う場合は UV カットに対応した遮光メガネ等を使用して目を保護してください。
@@ -398,6 +399,7 @@ int main() {
           <li><a href="https://gigazine.net/news/20231027-raspberry-pi-5-flash-reboot/" target="_blank">「Raspberry Pi 5」に強い光を照射すると強制終了するデスフラッシュ現象を確認したので詳細を共有します - GIGAZINE</a></li>
           <li><a href="https://qiita.com/riris4488/items/4b782dd4e6fba62b0e2a" target="_blank">ツェナーダイオードに光を当てると電圧が発生する #RaspberryPi - Qiita</a></li>
           <li>たかTube さん: <a href="https://x.com/TakaTube_4649/status/1946346880537133419" target="_blank">似たような現象ですが、自己点滅LEDをティッシュで覆うと点滅が止まります</a></li>
+          <li><a href="../0822-piezo-speaker-powers-mcu/">GPIO に繋がった圧電スピーカーに強い振動を与えると MCU が起動することがある</a></li>
         </ul>
 
     </main>
