@@ -75,9 +75,4 @@ MCU と LCD が通信するときにプルアップ抵抗が電流を吸い込�
 
 - [圧電サウンダ、圧電振動板 (他励振タイプ) の駆動回路例を教えてください。 | 発音部品に関するよくあるご質問 | 村田製作所](https://www.murata.com/ja-jp/support/faqs/sound/sounder/char/sch0001)
 - [GPIO に繋がった LED に爆光を浴びせると MCU が起動することがある](../0607-can-leds-photovoltaic-power-mcus)
-- SNS 投稿
-
-    - [X (Twitter)](https://x.com/shapoco/status/1958810613221843335)
-    - [Misskey.io](https://misskey.io/notes/abq60k15s161044r)
-    - [Bluesky](https://bsky.app/profile/shapoco.net/post/3lwy3mjeiak2w)
-    - [mixi2](https://mixi.social/@shapoco/posts/06fc40df-e5a8-4a57-bfd7-2a46dff7b762)
+- SNS 投稿: [X (Twitter)](https://x.com/shapoco/status/1958810613221843335), [Misskey.io](https://misskey.io/notes/abq60k15s161044r), [Bluesky](https://bsky.app/profile/shapoco.net/post/3lwy3mjeiak2w), [mixi2](https://mixi.social/@shapoco/posts/06fc40df-e5a8-4a57-bfd7-2a46dff7b762)
