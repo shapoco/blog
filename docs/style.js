@@ -23,6 +23,9 @@ function arrangeArticleHtml(parent) {
     { patterns: ['https://www.nicovideo.jp/'], iconSrc: '/image/icon32_niconico.png' },
     { patterns: ['https://akizukidenshi.com/'], iconSrc: '/image/icon32_akizukidenshi.png' },
     { patterns: ['https://www.switch-science.com/'], iconSrc: '/image/icon32_switch-science.png' },
+    { patterns: ['https://qiita.com/'], iconSrc: '/image/icon32_qiita.png' },
+    { patterns: ['https://zenn.dev/'], iconSrc: '/image/icon32_zenn.png' },
+    { patterns: ['https://scrapbox.io/'], iconSrc: '/image/icon32_scrapbox.png' },
     { patterns: [/https:\/\/([\w-]+\.)?booth\.pm\//], iconSrc: '/image/icon32_booth.png' },
   ];
   parent.querySelectorAll('a').forEach(a => {
