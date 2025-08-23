@@ -102,35 +102,38 @@ blockquote blockquote:last-child {
 }
 
 blockquote {
-    border-left: solid 5px #ccc;
-    background: #f8f8f8;
+    background-color: #eee;
+    background-image: url("/image/quote.svg");
+    background-repeat: no-repeat;
+    background-size: 30px auto;
+    background-position: 0px 0px;
     border-radius: 5px;
-    padding: 1ex 1em;
+    padding: 10px 10px 10px 40px;
 }
 
 blockquote.note {
-    border-left-color: #08f;
-    background: #def;
+    background-color: #def;
+    background-image: url("/image/quote_note.svg");
 }
 
 blockquote.tip {
-    border-left-color: #0c0;
-    background: #ded;
+    background-color: #ded;
+    background-image: url("/image/quote_tip.svg");
 }
 
 blockquote.important {
-    border-left-color: #80c;
-    background: #edf;
+    background-color: #edf;
+    background-image: url("/image/quote_important.svg");
 }
 
 blockquote.warning {
-    border-left-color: #c80;
-    background: #fff8d0;
+    background-color: #fdd;
+    background-image: url("/image/quote_warning.svg");
 }
 
 blockquote.caution {
-    border-left-color: #c00;
-    background: #fdd;
+    background-color: #f8f0d0;
+    background-image: url("/image/quote_caution.svg");
 }
 
 table {

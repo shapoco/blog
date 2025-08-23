@@ -34,7 +34,7 @@
     }
   </script>
 
-  <link href="/style.css?53bac25e" rel="stylesheet" type="text/css">
+  <link href="/style.css?9d858962" rel="stylesheet" type="text/css">
   <script src="/style.js?ab23fd39"></script>
 
   <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
@@ -64,7 +64,7 @@
       </div>
 
               <p>MCU の GPIO に付属する ESD 保護ダイオードは、トポロジ的にはダイオードブリッジを形成しているため、2 つの GPIO に交流信号が入力されると整流作用とパスコンによる平滑により電源ラインに電圧が供給され、意図せず MCU が起動する可能性があります。</p>
-        <blockquote class="warning">ESD 保護ダイオードは主に製品製造時の静電気から素子を守るためのもので、定常的に電流を流すことは想定されていません。</blockquote>
+        <blockquote class="caution">ESD 保護ダイオードは主に製品製造時の静電気から素子を守るためのもので、定常的に電流を流すことは想定されていません。</blockquote>
         <h3>GPIO に交流信号が入力されるケース</h3>
         <p>今回は GPIO に圧電スピーカーを直結して駆動しているケースを想定してみました。</p>
         <p>やりがちですが、圧電スピーカーに衝撃を与えると開放状態では 100V 以上の高電圧が発生します。MCU 内部にも保護ダイオードがありますが、それらは主に製造時の静電気から素子を守るためのもので耐久性は弱いので、GPIO でドライブする場合は圧電スピーカーと並列に TVS 等を接続すべきです。</p>
