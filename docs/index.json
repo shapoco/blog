@@ -407,6 +407,14 @@
       "url": "/2025/0822-piezo-speaker-powers-mcu",
       "twitter_card_size": "summary",
       "card_image_url": "/2025/0822-piezo-speaker-powers-mcu/thumbnail.png"
+    },
+    {
+      "title": "SSD1306/SSD1309 用画像→配列コンバータ",
+      "description": "画像データを SSD1306/SSD1309 用の C 言語配列に変換する Web ツールです。",
+      "date": "2025/08/24",
+      "url": "/2025/0824-image2array",
+      "twitter_card_size": "summary",
+      "card_image_url": "/2025/0824-image2array/thumbnail.jpg"
     }
   ]
 }

@@ -5,15 +5,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-  <meta name="keywords" content="シャポログ">
-  <meta name="description" content="シャポコのブログ">
+  <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+  <meta name="description" content="画像データを SSD1306/SSD1309 用の C 言語配列に変換する Web ツールです。">
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:site" content="@shapoco" />
-  <meta property="og:url" content="https://blog.shapoco.net/" />
-  <meta property="og:title" content="シャポログ" />
-  <meta property="og:description" content="シャポコのブログ" />
-  <meta property="og:image" content="https://blog.shapoco.net/image/cover.png" />
+  <meta property="og:url" content="https://blog.shapoco.net/2025/0824-image2array/" />
+  <meta property="og:title" content="SSD1306/SSD1309 用画像→配列コンバータ | シャポログ" />
+  <meta property="og:description" content="画像データを SSD1306/SSD1309 用の C 言語配列に変換する Web ツールです。" />
+  <meta property="og:image" content="https://blog.shapoco.net/2025/0824-image2array/thumbnail.jpg" />
 
   <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
   <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
@@ -40,35 +40,36 @@
   <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
   <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
 
-  <title>シャポログ</title>
+  <title>SSD1306/SSD1309 用画像→配列コンバータ | シャポログ</title>
 </head>
 
 <body>
   <div id="container">
     <div id="root_navi"></div>
 
-    <header class="top_header">
-      <h1>シャポログ</h1>
+    <header class="article_header">
+      <h1><a href="/">シャポログ</a></h1>
     </header>
     <main>
-      <h2>記事一覧</h2>
-      <article id="articles" class="article_list">
-        <p>記事一覧を読み込んでいます...</p>
-      </article>
-      <script>
-        fetch('/index.json?cc8cb5c6')
-          .then(response => response.json())
-          .then(json_obj => {
-            html = '';
-            json_obj.articles.reverse().forEach(a => {
-              html += genenerateArticleLinkCard(a);
-            });
-            document.querySelector('#articles').innerHTML = html;
-          })
-          .catch(error => {
-            document.querySelector('#articles').innerHTML = '<p>⚠ 記事の読み込みに失敗しました。</p>';
-          });
-      </script>
+      <h2>SSD1306/SSD1309 用画像→配列コンバータ</h2>
+
+      <div class="article_info_wrap">
+        <div class="article_info">
+          2025/08/24 |
+          <a href="https://github.com/shapoco/blog/tree/main/src/article/2025/0824-image2array/" target="_blank">記事のソース</a>
+        </div>
+
+        <div id="shpcstamp_wrap"></div>
+        <script async src="/stamp/v1/widget.js?c3a04a7d"></script>
+      </div>
+
+              <p>画像データを SSD1306/SSD1309 用の C 言語配列に変換する Web ツールです。</p>
+        <p>画像はブラウザ上で処理されます。どこかに送信されることはありません。</p>
+        <p>
+          <div id="article_image2arrayContainer"></div>
+          <script src="./image2array.js?1511618c"></script>
+        </p>
+
     </main>
     <footer>
       <span class="nowrap">
