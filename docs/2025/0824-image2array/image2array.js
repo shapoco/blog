@@ -10,9 +10,13 @@
   const contrastBox = document.createElement('input');
   const invertBox = document.createElement('input');
   const binaryCanvas = document.createElement('canvas');
+  const binarizationErrorBox = document.createElement('span');
+  const addressingBox = document.createElement('select');
   const codeColsBox = document.createElement('input');
   const indentBox = document.createElement('select');
   const arrayCode = document.createElement('pre');
+  const codeGenErrorBox = document.createElement('p');
+  const copyButton = document.createElement('button');
 
   let binarizeTimeoutId = -1;
   let generateCodeTimeoutId = -1;
@@ -166,6 +170,9 @@
       binaryCanvas.style.border = "1px solid #444";
       binaryCanvas.style.backgroundColor = "#444";
       p.appendChild(binaryCanvas);
+      binarizationErrorBox.style.color = "red";
+      binarizationErrorBox.style.display = "none";
+      p.appendChild(binarizationErrorBox);
       container.appendChild(p);
     }
 
@@ -177,6 +184,17 @@
 
     {
       const p = document.createElement('p');
+
+      {
+        const span = createNoWrap();
+        span.appendChild(document.createTextNode("アドレッシング: "));
+        addressingBox.innerHTML = `
+        <option value="h" selected>Horizontal</option>
+        <option value="v">Vertical</option>
+      `;
+        span.appendChild(addressingBox);
+        p.appendChild(span);
+      }
 
       {
         const span = createNoWrap();
@@ -218,7 +236,19 @@
       arrayCode.id = "arrayCode";
       arrayCode.classList.add('lang_cpp');
       div.appendChild(arrayCode);
+      codeGenErrorBox.style.textAlign = "center";
+      codeGenErrorBox.style.color = "red";
+      codeGenErrorBox.style.display = "none";
+      div.appendChild(codeGenErrorBox);
       container.appendChild(div);
+    }
+
+    {
+      const p = document.createElement('p');
+      p.style.textAlign = "right";
+      copyButton.textContent = "コードをコピー";
+      p.appendChild(copyButton);
+      container.appendChild(p);
     }
 
     // ファイル選択
@@ -254,6 +284,11 @@
         }
       }
     });
+
+    copyButton.addEventListener('click', () => {
+      if (!arrayCode.textContent) return;
+      navigator.clipboard.writeText(arrayCode.textContent);
+    });
   }
 
   /**
@@ -285,122 +320,138 @@
   }
 
   function binarize() {
-    const origCtx = origCanvas.getContext('2d', { willReadFrequently: true });
+    try {
+      const origCtx = origCanvas.getContext('2d', { willReadFrequently: true });
 
-    let outWidth = origCanvas.width;
-    let outHeight = origCanvas.height;
+      let outWidth = origCanvas.width;
+      let outHeight = origCanvas.height;
 
-    // 出力サイズ決定
-    if (widthBox.value && heightBox.value) {
-      outWidth = parseInt(widthBox.value);
-      outHeight = parseInt(heightBox.value);
-      widthBox.placeholder = "";
-      heightBox.placeholder = "";
-    }
-    else if (widthBox.value) {
-      outWidth = parseInt(widthBox.value);
-      outHeight = Math.ceil(origCanvas.height * (outWidth / origCanvas.width));
-      widthBox.placeholder = "";
-      heightBox.placeholder = "(" + outHeight + ")";
-    }
-    else if (heightBox.value) {
-      outHeight = parseInt(heightBox.value);
-      outWidth = Math.ceil(origCanvas.width * (outHeight / origCanvas.height));
-      widthBox.placeholder = "(" + outWidth + ")";
-      heightBox.placeholder = "";
-    }
-    else {
-      widthBox.placeholder = "(" + outWidth + ")";
-      heightBox.placeholder = "(" + outHeight + ")";
-    }
+      // 出力サイズ決定
+      if (widthBox.value && heightBox.value) {
+        outWidth = parseInt(widthBox.value);
+        outHeight = parseInt(heightBox.value);
+        widthBox.placeholder = "";
+        heightBox.placeholder = "";
+      }
+      else if (widthBox.value) {
+        outWidth = parseInt(widthBox.value);
+        outHeight = Math.ceil(origCanvas.height * (outWidth / origCanvas.width));
+        widthBox.placeholder = "";
+        heightBox.placeholder = "(" + outHeight + ")";
+      }
+      else if (heightBox.value) {
+        outHeight = parseInt(heightBox.value);
+        outWidth = Math.ceil(origCanvas.width * (outHeight / origCanvas.height));
+        widthBox.placeholder = "(" + outWidth + ")";
+        heightBox.placeholder = "";
+      }
+      else {
+        if (outWidth > 256 || outHeight > 256) {
+          const max = Math.max(outWidth, outHeight);
+          outWidth = Math.floor(outWidth * (256 / max));
+          outHeight = Math.floor(outHeight * (256 / max));
+        }
+        widthBox.placeholder = "(" + outWidth + ")";
+        heightBox.placeholder = "(" + outHeight + ")";
+      }
 
-    // リサイズ
-    const outCtx = binaryCanvas.getContext('2d', { willReadFrequently: true });
-    binaryCanvas.width = outWidth;
-    binaryCanvas.height = outHeight;
-    outCtx.drawImage(origCanvas, 0, 0, outWidth, outHeight);
-    const outImageData = outCtx.getImageData(0, 0, outWidth, outHeight);
-    const outRgbData = outImageData.data;
-    const grayData = new Float32Array(outRgbData.length / 4);
+      // リサイズ
+      const outCtx = binaryCanvas.getContext('2d', { willReadFrequently: true });
+      binaryCanvas.width = outWidth;
+      binaryCanvas.height = outHeight;
+      outCtx.drawImage(origCanvas, 0, 0, outWidth, outHeight);
+      const outImageData = outCtx.getImageData(0, 0, outWidth, outHeight);
+      const outRgbData = outImageData.data;
+      const grayData = new Float32Array(outRgbData.length / 4);
 
-    // グレースケール化
-    let min = 255;
-    let max = 0;
-    let avg = 0;
-    for (let i = 0; i < grayData.length; i++) {
-      const r = outRgbData[i * 4];
-      const g = outRgbData[i * 4 + 1];
-      const b = outRgbData[i * 4 + 2];
-      let gray = (0.299 * r + 0.587 * g + 0.114 * b) / 255 * 2 - 1;
-      grayData[i] = gray;
-      avg += gray;
-      min = Math.min(min, gray);
-      max = Math.max(max, gray);
-    }
-    avg /= grayData.length;
+      // グレースケール化
+      let min = 255;
+      let max = 0;
+      let avg = 0;
+      for (let i = 0; i < grayData.length; i++) {
+        const r = outRgbData[i * 4];
+        const g = outRgbData[i * 4 + 1];
+        const b = outRgbData[i * 4 + 2];
+        let gray = (0.299 * r + 0.587 * g + 0.114 * b) / 255 * 2 - 1;
+        grayData[i] = gray;
+        avg += gray;
+        min = Math.min(min, gray);
+        max = Math.max(max, gray);
+      }
+      avg /= grayData.length;
 
-    // オフセット決定
-    let offset = 0;
-    if (offsetBox.value) {
-      offset = parseFloat(offsetBox.value) / 255;
-      offsetBox.placeholder = "";
-    }
-    else {
-      offset = -avg;
-      offsetBox.placeholder = "(" + Math.round(offset * 255) + ")";
-    }
+      // オフセット決定
+      let offset = 0;
+      if (offsetBox.value) {
+        offset = parseFloat(offsetBox.value) / 255;
+        offsetBox.placeholder = "";
+      }
+      else {
+        offset = -avg;
+        offsetBox.placeholder = "(" + Math.round(offset * 255) + ")";
+      }
 
-    // コントラスト決定
-    let contrast = 1;
-    if (contrastBox.value) {
-      contrast = parseInt(contrastBox.value) / 100;
-      contrastBox.placeholder = "";
-    } else {
-      if (max > min) contrast = 2 / (max - min);
-      contrastBox.placeholder = "(" + Math.round(contrast * 100) + ")";
-    }
+      // コントラスト決定
+      let contrast = 1;
+      if (contrastBox.value) {
+        contrast = parseInt(contrastBox.value) / 100;
+        contrastBox.placeholder = "";
+      } else {
+        if (max > min) contrast = 2 / (max - min);
+        contrastBox.placeholder = "(" + Math.round(contrast * 100) + ")";
+      }
 
-    for (let i = 0; i < grayData.length; i++) {
-      grayData[i] = (grayData[i] + offset) * contrast;
-    }
+      for (let i = 0; i < grayData.length; i++) {
+        grayData[i] = (grayData[i] + offset) * contrast;
+      }
 
-    const diffusion = ditherBox.value === 'diffusion';
-    const invert = invertBox.checked;
+      const diffusion = ditherBox.value === 'diffusion';
+      const invert = invertBox.checked;
 
-    // 二値化
-    binaryData = new Uint8Array(outWidth * outHeight);
-    for (let y = 0; y < outHeight; y++) {
-      for (let x = 0; x < outWidth; x++) {
-        const i = (y * outWidth + x);
-        const gray = grayData[i];
-        const binary = gray < 0 ? -1 : 1;
+      // 二値化
+      binaryData = new Uint8Array(outWidth * outHeight);
+      for (let y = 0; y < outHeight; y++) {
+        for (let x = 0; x < outWidth; x++) {
+          const i = (y * outWidth + x);
+          const gray = grayData[i];
+          const binary = gray < 0 ? -1 : 1;
 
-        let outBinary = binary <= 0 ? 0 : 255;
-        if (invert) outBinary = 255 - outBinary;
-        binaryData[i] = outBinary;
-        outRgbData[i * 4] = outRgbData[i * 4 + 1] = outRgbData[i * 4 + 2] = outBinary;
+          let outBinary = binary <= 0 ? 0 : 255;
+          if (invert) outBinary = 255 - outBinary;
+          binaryData[i] = outBinary;
+          outRgbData[i * 4] = outRgbData[i * 4 + 1] = outRgbData[i * 4 + 2] = outBinary;
 
-        if (diffusion) {
-          const error = gray - binary;
-          if (x < outWidth - 1) {
-            grayData[i + 1] += error * 7 / 16;
-          }
-          if (y < outHeight - 1) {
-            if (x > 0) {
-              grayData[i + outWidth - 1] += error * 3 / 16;
-            }
-            grayData[i + outWidth] += error * 5 / 16;
+          if (diffusion) {
+            const error = gray - binary;
             if (x < outWidth - 1) {
-              grayData[i + outWidth + 1] += error * 1 / 16;
+              grayData[i + 1] += error * 7 / 16;
+            }
+            if (y < outHeight - 1) {
+              if (x > 0) {
+                grayData[i + outWidth - 1] += error * 3 / 16;
+              }
+              grayData[i + outWidth] += error * 5 / 16;
+              if (x < outWidth - 1) {
+                grayData[i + outWidth + 1] += error * 1 / 16;
+              }
             }
           }
         }
       }
+
+      outCtx.putImageData(outImageData, 0, 0);
+
+      binaryCanvas.style.display = "inline-block";
+      binarizationErrorBox.style.display = "none";
+
+      generateCode();
     }
-
-    outCtx.putImageData(outImageData, 0, 0);
-
-    generateCode();
+    catch (error) {
+      binaryCanvas.style.display = "none";
+      arrayCode.style.display = "none";
+      binarizationErrorBox.style.display = "inline";
+      binarizationErrorBox.textContent = error.message;
+    }
   }
 
   function requestGenerateCode() {
@@ -416,37 +467,51 @@
   function generateCode() {
     if (!binaryData) {
       arrayCode.textContent = "";
+      arrayCode.style.display = "none";
       return;
     }
 
-    // 列数決定
-    let arrayCols = 16;
-    if (codeColsBox.value) {
-      arrayCols = parseInt(codeColsBox.value);
-      codeColsBox.placeholder = "";
-    } else {
-      codeColsBox.placeholder = "(" + arrayCols + ")";
-    }
+    try {
 
-    // インデント決定
-    let indent = "  ";
-    switch (indentBox.value) {
-      case "sp2": indent = "  "; break;
-      case "sp4": indent = "    "; break;
-      case "tab": indent = "\t"; break;
-      default:
-        throw new Error("Unknown indent type");
-    }
+      // アドレッシング
+      const vertical = addressingBox.value === 'v';
 
-    const width = binaryCanvas.width;
-    const height = binaryCanvas.height;
-    const rows = Math.ceil(height / 8);
+      // 列数決定
+      let arrayCols = 16;
+      if (codeColsBox.value) {
+        arrayCols = parseInt(codeColsBox.value);
+        codeColsBox.placeholder = "";
+      } else {
+        codeColsBox.placeholder = "(" + arrayCols + ")";
+      }
 
-    const arrayData = new Uint8Array(rows * width);
+      // インデント決定
+      let indent = "  ";
+      switch (indentBox.value) {
+        case "sp2": indent = "  "; break;
+        case "sp4": indent = "    "; break;
+        case "tab": indent = "\t"; break;
+        default:
+          throw new Error("Unknown indent type");
+      }
 
-    // バイト配列化
-    for (let row = 0; row < rows; row++) {
-      for (let x = 0; x < width; x++) {
+      const width = binaryCanvas.width;
+      const height = binaryCanvas.height;
+      const rows = Math.ceil(height / 8);
+
+      const arrayData = new Uint8Array(rows * width);
+
+      // バイト配列化
+      for (let i = 0; i < width * rows; i++) {
+        let x, row;
+        if (vertical) {
+          x = Math.floor(i / rows);
+          row = i % rows;
+        } else {
+          x = i % width;
+          row = Math.floor(i / width);
+        }
+
         let byte = 0;
         for (let bit = 0; bit < 8; bit++) {
           y = row * 8 + bit;
@@ -454,27 +519,34 @@
           const i = (y * width + x);
           byte |= ((binaryData[i] >= 128) ? 1 : 0) << bit;
         }
-        arrayData[row * width + x] = byte;
+        arrayData[i] = byte;
       }
-    }
 
-    // コード生成
-    let code = "";
-    code += `// size = ${arrayData.length}\n`;
-    code += "const uint8_t imageArray[] = {\n";
-    for (let i = 0; i < arrayData.length; i++) {
-      if (i % arrayCols == 0) code += indent;
-      code += "0x" + arrayData[i].toString(16).padStart(2, '0') + ",";
-      if ((i + 1) % arrayCols == 0 || i + 1 == arrayData.length) {
-        code += "\n";
+      // コード生成
+      let code = "";
+      code += `// ${width}x${height}px, ${vertical ? 'Vertical' : 'Horizontal'} Adressing, ${arrayData.length} Bytes\n`;
+      code += "const uint8_t imageArray[] = {\n";
+      for (let i = 0; i < arrayData.length; i++) {
+        if (i % arrayCols == 0) code += indent;
+        code += "0x" + arrayData[i].toString(16).padStart(2, '0') + ",";
+        if ((i + 1) % arrayCols == 0 || i + 1 == arrayData.length) {
+          code += "\n";
+        }
+        else {
+          code += " ";
+        }
       }
-      else {
-        code += " ";
-      }
-    }
-    code += "};";
-    arrayCode.textContent = code;
+      code += "};";
 
+      arrayCode.textContent = code;
+      arrayCode.style.display = "block";
+      codeGenErrorBox.style.display = "none";
+    }
+    catch (error) {
+      arrayCode.style.display = "none";
+      codeGenErrorBox.textContent = error.message;
+      codeGenErrorBox.style.display = "block";
+    }
   }
 
   main();
