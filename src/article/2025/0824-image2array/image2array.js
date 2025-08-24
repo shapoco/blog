@@ -467,7 +467,8 @@
   function generateCode() {
     if (!binaryData) {
       arrayCode.textContent = "";
-      arrayCode.style.display = "none";
+      arrayCode.style.display = "block";
+      codeGenErrorBox.style.display = "none";
       return;
     }
 
