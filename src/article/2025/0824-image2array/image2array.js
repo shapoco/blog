@@ -33,7 +33,7 @@
   function main() {
 
     {
-      const h = document.createElement('h4');
+      const h = document.createElement('h3');
       h.textContent = "画像の読み込み";
       container.appendChild(h);
     }
@@ -60,7 +60,7 @@
     }
 
     {
-      const h = document.createElement('h4');
+      const h = document.createElement('h3');
       h.textContent = "オリジナル画像";
       container.appendChild(h);
     }
@@ -77,7 +77,7 @@
     }
 
     {
-      const h = document.createElement('h4');
+      const h = document.createElement('h3');
       h.textContent = "2値化";
       container.appendChild(h);
     }
@@ -177,7 +177,7 @@
     }
 
     {
-      const h = document.createElement('h4');
+      const h = document.createElement('h3');
       h.textContent = "配列コード";
       container.appendChild(h);
     }
