@@ -1,14 +1,10 @@
-# SSD1306/SSD1309 用画像→配列コンバータ
+# LCD/OLED用画像→配列コンバータ
 
 ![](./cover.jpg)
 
-画像データを SSD1306/SSD1309 用の C 言語配列に変換するツールです。処理はブラウザ上で行われます。どこかに送信されることはありません。
+画像データを LCD や OLED 用の C/C++ 配列コードに変換するツールです。処理はブラウザ上で行われます。どこかに送信されることはありません。
 
-## 主な対応ディスプレイ
-
-SSD1306, SSD1309, Nokia PCD8544
-
-他にあればお知らせ下さい。
+Adafruit/Lovyan GFX 等で使用可能な RGB565 形式の画像のほか、SSD1306、SSD1309、Nokia PCD8544 といった縦 8 ピクセルを 1 バイトとする白黒ディスプレイに直接転送可能な形式のデータも作成できます。
 
 <div id="article_image2arrayContainer"></div>
 <script src="./image2array.js"></script>

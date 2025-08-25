@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
   <meta name="keywords" content="シャポログ ${blog.article_keywords}">
-  <meta name="description" content="画像データを SSD1306/SSD1309 用の C 言語配列に変換するツールです。処理はブラウザ上で行われます。どこかに送信されることはありません。">
+  <meta name="description" content="画像データを LCD や OLED 用の C/C++ 配列コードに変換するツールです。処理はブラウザ上で行われます。どこかに送信されることはありません。">
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@shapoco" />
   <meta property="og:url" content="https://blog.shapoco.net/2025/0824-image2array/" />
-  <meta property="og:title" content="SSD1306/SSD1309 用画像→配列コンバータ | シャポログ" />
-  <meta property="og:description" content="画像データを SSD1306/SSD1309 用の C 言語配列に変換するツールです。処理はブラウザ上で行われます。どこかに送信されることはありません。" />
+  <meta property="og:title" content="LCD/OLED用画像→配列コンバータ | シャポログ" />
+  <meta property="og:description" content="画像データを LCD や OLED 用の C/C++ 配列コードに変換するツールです。処理はブラウザ上で行われます。どこかに送信されることはありません。" />
   <meta property="og:image" content="https://blog.shapoco.net/2025/0824-image2array/cover.jpg" />
 
   <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
@@ -40,7 +40,7 @@
   <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
   <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
 
-  <title>SSD1306/SSD1309 用画像→配列コンバータ | シャポログ</title>
+  <title>LCD/OLED用画像→配列コンバータ | シャポログ</title>
 </head>
 
 <body>
@@ -51,7 +51,7 @@
       <h1><a href="/">シャポログ</a></h1>
     </header>
     <main>
-      <h2>SSD1306/SSD1309 用画像→配列コンバータ</h2>
+      <h2>LCD/OLED用画像→配列コンバータ</h2>
 
       <div class="article_info_wrap">
         <div class="article_info">
@@ -64,13 +64,11 @@
       </div>
 
               <p><img src="./cover.jpg" alt=""></p>
-        <p>画像データを SSD1306/SSD1309 用の C 言語配列に変換するツールです。処理はブラウザ上で行われます。どこかに送信されることはありません。</p>
-        <h3>主な対応ディスプレイ</h3>
-        <p>SSD1306, SSD1309, Nokia PCD8544</p>
-        <p>他にあればお知らせ下さい。</p>
+        <p>画像データを LCD や OLED 用の C/C++ 配列コードに変換するツールです。処理はブラウザ上で行われます。どこかに送信されることはありません。</p>
+        <p>Adafruit/Lovyan GFX 等で使用可能な RGB565 形式の画像のほか、SSD1306、SSD1309、Nokia PCD8544 といった縦 8 ピクセルを 1 バイトとする白黒ディスプレイに直接転送可能な形式のデータも作成できます。</p>
         <p>
           <div id="article_image2arrayContainer"></div>
-          <script src="./image2array.js?1d5f5c2e"></script>
+          <script src="./image2array.js?ae8f4e58"></script>
         </p>
         <h3>関連情報</h3>
         <ul>
