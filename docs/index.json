@@ -410,7 +410,7 @@
     },
     {
       "title": "SSD1306/SSD1309 用画像→配列コンバータ",
-      "description": "画像データを SSD1306/SSD1309 用の C 言語配列に変換する Web ツールです。",
+      "description": "画像データを SSD1306/SSD1309 用の C 言語配列に変換するツールです。処理はブラウザ上で行われます。どこかに送信されることはありません。",
       "date": "2025/08/24",
       "url": "/2025/0824-image2array",
       "twitter_card_size": "summary_large_image",
