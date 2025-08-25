@@ -410,7 +410,7 @@
     },
     {
       "title": "LCD/OLED用画像→配列コンバータ",
-      "description": "画像データを LCD や OLED 用の C/C++ 配列コードに変換するツールです。処理はブラウザ上で行われます。どこかに送信されることはありません。",
+      "description": "画像データを LCD や OLED 用の C/C++ 配列コードに変換するツールです。Adafruit/Lovyan GFX 等で使用可能な RGB565 形式の画像のほか、SSD1306、SSD1309、Nokia PCD8544 といった縦 8 ピクセルを 1 バイトとする白黒ディスプレイに直接転送可能な形式のデータも作成できます。",
       "date": "2025/08/24",
       "url": "/2025/0824-image2array",
       "twitter_card_size": "summary_large_image",
