@@ -120,7 +120,6 @@
       p.style.textAlign = "center";
       trimCanvas.style.maxWidth = "100%";
       trimCanvas.style.boxSizing = "border-box";
-      trimCanvas.style.border = "1px solid #444";
       trimCanvas.style.backgroundColor = "#444";
       p.appendChild(trimCanvas);
       container.appendChild(p);
@@ -423,6 +422,7 @@
     trimR = origCanvas.width;
     trimB = origCanvas.height;
     requestUpdateTrimCanvas();
+    requestBinarize();
   }
 
   function getViewArea() {
@@ -551,8 +551,8 @@
     try {
       const origCtx = origCanvas.getContext('2d', { willReadFrequently: true });
 
-      const srcW = trimR - trimL;
-      const srcH = trimB - trimT;
+      const srcW = Math.round(trimR - trimL);
+      const srcH = Math.round(trimB - trimT);
       let outW = srcW;
       let outH = srcH;
 
@@ -585,131 +585,142 @@
         heightBox.placeholder = "(" + outH + ")";
       }
 
-      // リサイズ
-      const outCtx = binaryCanvas.getContext('2d', { willReadFrequently: true });
-      binaryCanvas.width = outW;
-      binaryCanvas.height = outH;
+      // トリミングの適用
       {
-        const srcX0 = (trimL + trimR) / 2;
-        const srcY0 = (trimT + trimB) / 2;
-        const srcAspect = srcW / srcH;
-        const outAspect = outW / outH;
-        let scaleX, scaleY;
-        switch (scalingMethodBox.value) {
-          case "zoom":
-            if (srcAspect > outAspect) {
-              scaleX = scaleY = outH / srcH;
-            } else {
-              scaleX = scaleY = outW / srcW;
-            }
-            break;
-          case "fit":
-            if (srcAspect > outAspect) {
-              scaleX = scaleY = outW / srcW;
-            } else {
-              scaleX = scaleY = outH / srcH;
-            }
-            break;
-          case "stretch":
-            scaleX = outW / srcW;
-            scaleY = outH / srcH;
-            break;
-          default:
-            throw new Error("Unknown scaling method");
-        }
-        const dx = outW / 2 + (trimL - srcX0) * scaleX;
-        const dy = outH / 2 + (trimT - srcY0) * scaleY;
-        const dw = srcW * scaleX;
-        const dh = srcH * scaleY;
-        outCtx.fillStyle = bgColorBox.value;
-        outCtx.fillRect(0, 0, outW, outH);
-        outCtx.drawImage(origCanvas, trimL, trimT, srcW, srcH, dx, dy, dw, dh);
-      }
-      const outImageData = outCtx.getImageData(0, 0, outW, outH);
-      const outRgbData = outImageData.data;
-      const grayData = new Float32Array(outRgbData.length / 4);
-
-      // グレースケール化
-      let min = 255;
-      let max = 0;
-      let avg = 0;
-      for (let i = 0; i < grayData.length; i++) {
-        const r = outRgbData[i * 4];
-        const g = outRgbData[i * 4 + 1];
-        const b = outRgbData[i * 4 + 2];
-        let gray = (0.299 * r + 0.587 * g + 0.114 * b) / 255 * 2 - 1;
-        grayData[i] = gray;
-        avg += gray;
-        min = Math.min(min, gray);
-        max = Math.max(max, gray);
-      }
-      avg /= grayData.length;
-
-      // オフセット決定
-      let offset = 0;
-      if (offsetBox.value) {
-        offset = parseFloat(offsetBox.value) / 255;
-        offsetBox.placeholder = "";
-      }
-      else {
-        offset = -avg;
-        offsetBox.placeholder = "(" + Math.round(offset * 255) + ")";
-      }
-
-      // コントラスト決定
-      let contrast = 1;
-      if (contrastBox.value) {
-        contrast = parseInt(contrastBox.value) / 100;
-        contrastBox.placeholder = "";
-      } else {
-        if (max > min) contrast = 2 / (max - min);
-        contrastBox.placeholder = "(" + Math.round(contrast * 100) + ")";
-      }
-
-      for (let i = 0; i < grayData.length; i++) {
-        grayData[i] = (grayData[i] + offset) * contrast;
-      }
-
-      const diffusion = ditherBox.value === 'diffusion';
-      const invert = invertBox.checked;
-
-      // 二値化
-      binaryData = new Uint8Array(outW * outH);
-      for (let y = 0; y < outH; y++) {
-        for (let x = 0; x < outW; x++) {
-          const i = (y * outW + x);
-          const gray = grayData[i];
-          const binary = gray < 0 ? -1 : 1;
-
-          let outBinary = binary <= 0 ? 0 : 255;
-          if (invert) outBinary = 255 - outBinary;
-          binaryData[i] = outBinary;
-          outRgbData[i * 4] = outRgbData[i * 4 + 1] = outRgbData[i * 4 + 2] = outBinary;
-
-          if (diffusion) {
-            const error = gray - binary;
-            if (x < outW - 1) {
-              grayData[i + 1] += error * 7 / 16;
-            }
-            if (y < outH - 1) {
-              if (x > 0) {
-                grayData[i + outW - 1] += error * 3 / 16;
+        const outCtx = binaryCanvas.getContext('2d', { willReadFrequently: true });
+        binaryCanvas.width = outW;
+        binaryCanvas.height = outH;
+        {
+          const srcX0 = (trimL + trimR) / 2;
+          const srcY0 = (trimT + trimB) / 2;
+          const srcAspect = srcW / srcH;
+          const outAspect = outW / outH;
+          let scaleX, scaleY;
+          switch (scalingMethodBox.value) {
+            case "zoom":
+              if (srcAspect > outAspect) {
+                scaleX = scaleY = outH / srcH;
+              } else {
+                scaleX = scaleY = outW / srcW;
               }
-              grayData[i + outW] += error * 5 / 16;
+              break;
+            case "fit":
+              if (srcAspect > outAspect) {
+                scaleX = scaleY = outW / srcW;
+              } else {
+                scaleX = scaleY = outH / srcH;
+              }
+              break;
+            case "stretch":
+              scaleX = outW / srcW;
+              scaleY = outH / srcH;
+              break;
+            default:
+              throw new Error("Unknown scaling method");
+          }
+          const dx = outW / 2 + (trimL - srcX0) * scaleX;
+          const dy = outH / 2 + (trimT - srcY0) * scaleY;
+          const dw = srcW * scaleX;
+          const dh = srcH * scaleY;
+          outCtx.fillStyle = bgColorBox.value;
+          outCtx.fillRect(0, 0, outW, outH);
+          outCtx.drawImage(origCanvas, trimL, trimT, srcW, srcH, dx, dy, dw, dh);
+        }
+      }
+
+      // 量子化の適用
+      {
+        const outCtx = binaryCanvas.getContext('2d', { willReadFrequently: true });
+        const outImageData = outCtx.getImageData(0, 0, outW, outH);
+        const srcRgbData = outImageData.data;
+        const outRgbData = new Uint8Array(srcRgbData.length);
+        const grayData = new Float32Array(srcRgbData.length / 4);
+
+        // グレースケール化
+        let min = 255;
+        let max = 0;
+        let avg = 0;
+        for (let i = 0; i < grayData.length; i++) {
+          const r = srcRgbData[i * 4];
+          const g = srcRgbData[i * 4 + 1];
+          const b = srcRgbData[i * 4 + 2];
+          let gray = (0.299 * r + 0.587 * g + 0.114 * b) / 255 * 2 - 1;
+          grayData[i] = gray;
+          avg += gray;
+          min = Math.min(min, gray);
+          max = Math.max(max, gray);
+        }
+        avg /= grayData.length;
+
+        // オフセット決定
+        let offset = 0;
+        if (offsetBox.value) {
+          offset = parseFloat(offsetBox.value) / 255;
+          offsetBox.placeholder = "";
+        }
+        else {
+          offset = -avg;
+          offsetBox.placeholder = "(" + Math.round(offset * 255) + ")";
+        }
+
+        // コントラスト決定
+        let contrast = 1;
+        if (contrastBox.value) {
+          contrast = parseInt(contrastBox.value) / 100;
+          contrastBox.placeholder = "";
+        } else {
+          if (max > min) contrast = 2 / (max - min);
+          contrastBox.placeholder = "(" + Math.round(contrast * 100) + ")";
+        }
+
+        for (let i = 0; i < grayData.length; i++) {
+          grayData[i] = (grayData[i] + offset) * contrast;
+        }
+
+        const diffusion = ditherBox.value === 'diffusion';
+        const invert = invertBox.checked;
+
+        // 二値化
+        binaryData = new Uint8Array(outW * outH);
+        for (let y = 0; y < outH; y++) {
+          for (let x = 0; x < outW; x++) {
+            const i = (y * outW + x);
+            const gray = grayData[i];
+            const binary = gray < 0 ? -1 : 1;
+
+            let outBinary = binary <= 0 ? 0 : 255;
+            if (invert) outBinary = 255 - outBinary;
+            binaryData[i] = outBinary;
+            outRgbData[i * 4] = outRgbData[i * 4 + 1] = outRgbData[i * 4 + 2] = outBinary;
+            outRgbData[i * 4 + 3] = 255;
+
+            if (diffusion) {
+              const error = gray - binary;
               if (x < outW - 1) {
-                grayData[i + outW + 1] += error * 1 / 16;
+                grayData[i + 1] += error * 7 / 16;
+              }
+              if (y < outH - 1) {
+                if (x > 0) {
+                  grayData[i + outW - 1] += error * 3 / 16;
+                }
+                grayData[i + outW] += error * 5 / 16;
+                if (x < outW - 1) {
+                  grayData[i + outW + 1] += error * 1 / 16;
+                }
               }
             }
           }
         }
+
+        outImageData.data.set(outRgbData);
+        outCtx.putImageData(outImageData, 0, 0);
+
+        binaryCanvas.style.display = "inline-block";
+        binarizationErrorBox.style.display = "none";
+
+        generateCode();
       }
 
-      outCtx.putImageData(outImageData, 0, 0);
-
-      binaryCanvas.style.display = "inline-block";
-      binarizationErrorBox.style.display = "none";
-
-      generateCode();
     }
     catch (error) {
       binaryCanvas.style.display = "none";
