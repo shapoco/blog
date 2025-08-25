@@ -145,7 +145,7 @@
     rgb111: "RGB111",
     gray4: "Gray4",
     gray2: "Gray2",
-    bw: "Black/White",
+    bw: "B/W",
   }, "rgb565");
   const widthBox = makeTextBox("", "(auto)", 4);
   const heightBox = makeTextBox("", "(auto)", 4);
