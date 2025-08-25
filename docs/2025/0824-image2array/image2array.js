@@ -1,26 +1,111 @@
 (function () {
+
+  function toElementArray(children = []) {
+    for (let i = 0; i < children.length; i++) {
+      if (typeof children[i] === "string") {
+        children[i] = document.createTextNode(children[i]);
+      }
+    }
+    return children;
+  }
+
+  function createHeader(text) {
+    const h = document.createElement('h3');
+    h.textContent = text;
+    return h;
+  }
+
+  function createParagraph(children = []) {
+    const p = document.createElement('p');
+    toElementArray(children).forEach(child => p.appendChild(child));
+    return p;
+  }
+
+  function createNoWrap(children = []) {
+    const span = document.createElement('span');
+    span.style.whiteSpace = "nowrap";
+    span.style.display = "inline-block";
+    span.style.marginRight = "10px";
+    toElementArray(children).forEach(child => span.appendChild(child));
+    return span;
+  }
+
+  function makeTextBox(value = "", placeholder = "", maxLength = 100) {
+    const input = document.createElement('input');
+    input.type = "text";
+    input.value = value;
+    input.placeholder = placeholder;
+    input.style.width = "50px";
+    input.style.textAlign = "right";
+    input.maxLength = maxLength;
+    return input;
+  }
+
+  function makeSelectBox(dict = {}, defaultValue = "") {
+    const select = document.createElement('select');
+    for (const [value, label] of Object.entries(dict)) {
+      const option = document.createElement('option');
+      option.value = value;
+      option.textContent = label;
+      select.appendChild(option);
+    }
+    select.value = defaultValue;
+    return select;
+  }
+
+  function makeCheckBox(labelText) {
+    const label = document.createElement('label');
+    const checkbox = document.createElement('input');
+    checkbox.type = "checkbox";
+    label.appendChild(checkbox);
+    label.appendChild(document.createTextNode(labelText));
+    return checkbox;
+  }
+
+  function makeButton(text = "") {
+    const button = document.createElement('button');
+    button.textContent = text;
+    return button;
+  }
+
+
+
   const container = document.querySelector('#article_image2arrayContainer');
-  const fileBox = document.createElement('input');
+  const hiddenFileBox = document.createElement('input');
   const dropTarget = document.createElement('div');
   const origCanvas = document.createElement('canvas');
-  const bgColorBox = document.createElement('input');
-  const resetTrimButton = document.createElement('button');
+  const bgColorBox = makeTextBox("#000");
+  const resetTrimButton = makeButton("トリミングをリセット");
   const trimCanvas = document.createElement('canvas');
-  const widthBox = document.createElement('input');
-  const heightBox = document.createElement('input');
-  const scalingMethodBox = document.createElement('select');
-  const offsetBox = document.createElement('input');
-  const ditherBox = document.createElement('select');
-  const contrastBox = document.createElement('input');
-  const invertBox = document.createElement('input');
+  const widthBox = makeTextBox("", "(auto)", 4);
+  const heightBox = makeTextBox("", "(auto)", 4);
+  const scalingMethodBox = makeSelectBox({
+    zoom: "ズーム",
+    fit: "フィット",
+    stretch: "ストレッチ",
+  }, "zoom");
+  const offsetBox = makeTextBox("0", "(auto)", 5);
+  const ditherBox = makeSelectBox({
+    none: "なし",
+    diffusion: "誤差拡散",
+  }, "diffusion");
+  const contrastBox = makeTextBox("100", "(auto)", 5);
+  const invertBox = makeCheckBox("明度反転");
   const binaryCanvas = document.createElement('canvas');
   const binarizationErrorBox = document.createElement('span');
-  const addressingBox = document.createElement('select');
-  const codeColsBox = document.createElement('input');
-  const indentBox = document.createElement('select');
+  const addressingBox = makeSelectBox({
+    h: "Horizontal",
+    v: "Vertical",
+  }, "h");
+  const codeColsBox = makeTextBox("16", "", 3);
+  const indentBox = makeSelectBox({
+    sp2: "スペース x2",
+    sp4: "スペース x4",
+    tab: "タブ",
+  }, "sp2");
   const arrayCode = document.createElement('pre');
   const codeGenErrorBox = document.createElement('p');
-  const copyButton = document.createElement('button');
+  const copyButton = makeButton("コードをコピー");
 
   let updateTrimCanvasTimeoutId = -1;
   let binarizeTimeoutId = -1;
@@ -39,68 +124,41 @@
   }
   trimUiState = TrimState.IDLE;
 
-  function createNoWrap() {
-    const span = document.createElement('span');
-    span.style.whiteSpace = "nowrap";
-    span.style.display = "inline-block";
-    span.style.marginRight = "10px";
-    return span;
-  }
-
   function main() {
 
-    {
-      const h = document.createElement('h3');
-      h.textContent = "画像の読み込み";
-      container.appendChild(h);
-    }
+    container.appendChild(createHeader("画像の読み込み"));
 
     {
-      const p = document.createElement('p');
-      p.style.textAlign = "center";
-      fileBox.type = "file";
-      fileBox.accept = "image/*";
-      p.appendChild(fileBox);
-      p.appendChild(document.createElement('br'));
-      p.appendChild(document.createTextNode("または"));
-      p.appendChild(document.createElement('br'));
-      dropTarget.textContent = "ここにドロップ / 貼り付け";
+      // 「ファイルが選択されていません」の表示が邪魔なので button で wrap する
+      hiddenFileBox.type = "file";
+      hiddenFileBox.accept = "image/*";
+      hiddenFileBox.style.display = "none";
+      const fileBrowseButton = makeButton("ファイルを選択");
+      fileBrowseButton.addEventListener('click', () => {
+        hiddenFileBox.click();
+      });
+
       dropTarget.style.width = "100%";
-      dropTarget.style.height = "100px";
+      dropTarget.style.padding = "50px 0px 50px 0px";
       dropTarget.style.boxSizing = "border-box";
       dropTarget.style.borderRadius = "5px";
       dropTarget.style.backgroundColor = "#eee";
       dropTarget.style.textAlign = "center";
-      dropTarget.style.lineHeight = "100px";
-      p.appendChild(dropTarget);
+      dropTarget.appendChild(fileBrowseButton);
+      dropTarget.appendChild(document.createTextNode(" またはここにドロップ / 貼り付け"));
+
+      const p = createParagraph([dropTarget]);
+      p.style.textAlign = "center";
       container.appendChild(p);
     }
 
+    container.appendChild(createHeader("トリミング"));
+
     {
-      const h = document.createElement('h3');
-      h.textContent = "トリミング";
-      container.appendChild(h);
-    }
-    {
-      const p = document.createElement('p');
-
-      {
-        const span = createNoWrap();
-        span.appendChild(document.createTextNode("透明部分の背景色: "));
-        bgColorBox.type = "text";
-        bgColorBox.value = "#000";
-        bgColorBox.style.width = "60px";
-        span.appendChild(bgColorBox);
-        p.appendChild(span);
-      }
-
-      {
-        const span = createNoWrap();
-        resetTrimButton.textContent = "トリミングをリセット";
-        span.appendChild(resetTrimButton);
-        p.appendChild(span);
-      }
-
+      const p = createParagraph([
+        createNoWrap(["透明部分の背景色: ", bgColorBox]),
+        createNoWrap([resetTrimButton]),
+      ]);
       container.appendChild(p);
 
       p.querySelectorAll('input, button').forEach((el) => {
@@ -116,102 +174,25 @@
     }
 
     {
-      const p = document.createElement('p');
-      p.style.textAlign = "center";
       trimCanvas.style.maxWidth = "100%";
       trimCanvas.style.boxSizing = "border-box";
       trimCanvas.style.backgroundColor = "#444";
-      p.appendChild(trimCanvas);
+      const p = createParagraph([trimCanvas]);
+      p.style.textAlign = "center";
       container.appendChild(p);
     }
 
-    {
-      const h = document.createElement('h3');
-      h.textContent = "2値化";
-      container.appendChild(h);
-    }
+    container.appendChild(createHeader("2値化"));
 
     {
-      const p = document.createElement('p');
-
-      {
-        const span = createNoWrap();
-        span.appendChild(document.createTextNode("出力サイズ: "));
-        widthBox.type = "text";
-        widthBox.maxLength = 4;
-        widthBox.placeholder = "(none)";
-        widthBox.style.width = "60px";
-        span.appendChild(widthBox);
-        span.appendChild(document.createTextNode(" x "));
-        heightBox.type = "text";
-        heightBox.maxLength = 4;
-        heightBox.placeholder = "(none)";
-        heightBox.style.width = "60px";
-        span.appendChild(heightBox);
-        span.appendChild(document.createTextNode(" px"));
-        p.appendChild(span);
-      }
-
-      {
-        const span = createNoWrap();
-        span.appendChild(document.createTextNode("拡縮方法: "));
-        scalingMethodBox.innerHTML = `
-        <option value="zoom" selected>ズーム</option>
-        <option value="fit">フィット</option>
-        <option value="stretch">ストレッチ</option>
-      `;
-        span.appendChild(scalingMethodBox);
-        p.appendChild(span);
-      }
-
-      {
-        const span = createNoWrap();
-        span.appendChild(document.createTextNode("明度オフセット: "));
-        offsetBox.type = "text";
-        offsetBox.value = "0";
-        offsetBox.maxLength = 5;
-        offsetBox.placeholder = "(auto)";
-        offsetBox.style.width = "60px";
-        span.appendChild(offsetBox);
-        p.appendChild(span);
-      }
-
-      {
-        const span = createNoWrap();
-        span.appendChild(document.createTextNode("コントラスト: "));
-        contrastBox.type = "text";
-        contrastBox.value = "100";
-        contrastBox.maxLength = 5;
-        contrastBox.placeholder = "(100)";
-        contrastBox.style.width = "60px";
-        span.appendChild(contrastBox);
-        span.appendChild(document.createTextNode("%"));
-        p.appendChild(span);
-      }
-
-      {
-        const span = createNoWrap();
-        span.appendChild(document.createTextNode("ディザ: "));
-        ditherBox.innerHTML = `
-        <option value="none">なし</option>
-        <option value="diffusion" selected>誤差拡散</option>
-      `;
-        span.appendChild(ditherBox);
-        p.appendChild(span);
-      }
-
-      {
-        const span = createNoWrap();
-        invertBox.type = "checkbox";
-        invertBox.id = "invertBox";
-        span.appendChild(invertBox);
-        const label = document.createElement('label');
-        label.htmlFor = invertBox.id;
-        label.appendChild(document.createTextNode("反転"));
-        span.appendChild(label);
-        p.appendChild(span);
-      }
-
+      const p = createParagraph([
+        createNoWrap(["出力サイズ: ", widthBox, " x ", heightBox, " px",]),
+        createNoWrap(["拡縮方法: ", scalingMethodBox]),
+        createNoWrap(["明度オフセット: ", offsetBox]),
+        createNoWrap(["コントラスト: ", contrastBox, "%"]),
+        createNoWrap(["ディザリング: ", ditherBox]),
+        createNoWrap([invertBox.parentNode]),
+      ]);
       container.appendChild(p);
 
       p.querySelectorAll('input, select').forEach((el) => {
@@ -225,61 +206,28 @@
     }
 
     {
-      const p = document.createElement('p');
-      p.style.textAlign = "center";
       binaryCanvas.style.maxWidth = "100%";
       binaryCanvas.style.boxSizing = "border-box";
       binaryCanvas.style.border = "1px solid #444";
       binaryCanvas.style.backgroundColor = "#444";
-      p.appendChild(binaryCanvas);
       binarizationErrorBox.style.color = "red";
       binarizationErrorBox.style.display = "none";
-      p.appendChild(binarizationErrorBox);
+      const p = createParagraph([
+        binaryCanvas,
+        binarizationErrorBox
+      ]);
+      p.style.textAlign = "center";
       container.appendChild(p);
     }
 
-    {
-      const h = document.createElement('h3');
-      h.textContent = "コード生成";
-      container.appendChild(h);
-    }
+    container.appendChild(createHeader("コード生成"));
 
     {
-      const p = document.createElement('p');
-
-      {
-        const span = createNoWrap();
-        span.appendChild(document.createTextNode("アドレッシング: "));
-        addressingBox.innerHTML = `
-        <option value="h" selected>Horizontal</option>
-        <option value="v">Vertical</option>
-      `;
-        span.appendChild(addressingBox);
-        p.appendChild(span);
-      }
-
-      {
-        const span = createNoWrap();
-        span.appendChild(document.createTextNode("列数: "));
-        codeColsBox.type = "text";
-        codeColsBox.value = "16";
-        codeColsBox.maxLength = 3;
-        codeColsBox.style.width = "60px";
-        span.appendChild(codeColsBox);
-        p.appendChild(span);
-      }
-
-      {
-        const span = createNoWrap();
-        span.appendChild(document.createTextNode("インデント: "));
-        indentBox.innerHTML = `
-        <option value="sp2" selected>スペース x2</option>
-        <option value="sp4">スペース x4</option>
-        <option value="tab">タブ</option>
-      `;
-        span.appendChild(indentBox);
-        p.appendChild(span);
-      }
+      const p = createParagraph([
+        createNoWrap(["アドレッシング: ", addressingBox]),
+        createNoWrap(["列数: ", codeColsBox]),
+        createNoWrap(["インデント: ", indentBox])
+      ]);
 
       container.appendChild(p);
 
@@ -306,15 +254,15 @@
     }
 
     {
-      const p = document.createElement('p');
+      const p = createParagraph([
+        copyButton
+      ]);
       p.style.textAlign = "right";
-      copyButton.textContent = "コードをコピー";
-      p.appendChild(copyButton);
       container.appendChild(p);
     }
 
     // ファイル選択
-    fileBox.addEventListener('change', (e) => {
+    hiddenFileBox.addEventListener('change', (e) => {
       loadFile(e.target.files[0]);
     });
 
@@ -350,7 +298,7 @@
     // トリミング操作
     trimCanvas.addEventListener('pointermove', (e) => {
       if (trimUiState == TrimState.IDLE) {
-        switch (viewToTrimState(e.offsetX, e.offsetY)) {
+        switch (trimViewToNextState(e.offsetX, e.offsetY)) {
           case TrimState.DRAG_LEFT: trimCanvas.style.cursor = "w-resize"; break;
           case TrimState.DRAG_TOP: trimCanvas.style.cursor = "n-resize"; break;
           case TrimState.DRAG_RIGHT: trimCanvas.style.cursor = "e-resize"; break;
@@ -359,7 +307,7 @@
         }
       }
       else {
-        const { x, y } = posToWorld(e.offsetX, e.offsetY);
+        const { x, y } = trimViewToWorld(e.offsetX, e.offsetY);
         switch (trimUiState) {
           case TrimState.DRAG_LEFT: trimL = Math.min(x, trimR - 1); break;
           case TrimState.DRAG_TOP: trimT = Math.min(y, trimB - 1); break;
@@ -371,8 +319,8 @@
       }
     });
     trimCanvas.addEventListener('pointerdown', (e) => {
-      if (viewToTrimState(e.offsetX, e.offsetY) != TrimState.IDLE) {
-        trimUiState = viewToTrimState(e.offsetX, e.offsetY);
+      if (trimViewToNextState(e.offsetX, e.offsetY) != TrimState.IDLE) {
+        trimUiState = trimViewToNextState(e.offsetX, e.offsetY);
         trimCanvas.style.cursor = "grabbing";
         trimCanvas.setPointerCapture(e.pointerId);
       }
@@ -416,6 +364,7 @@
     reader.readAsDataURL(file);
   }
 
+  // トリミングのリセット
   function resetTrim() {
     trimL = 0;
     trimT = 0;
@@ -425,7 +374,8 @@
     requestBinarize();
   }
 
-  function getViewArea() {
+  // トリミングUIのビュー領域の取得
+  function getTrimViewArea() {
     const margin = 20;
     const canvasW = trimCanvas.width;
     const canvasH = trimCanvas.height;
@@ -436,25 +386,28 @@
     return { viewX0, viewY0, viewW, viewH };
   }
 
-  function posToView(x, y) {
-    const { viewX0, viewY0, viewW, viewH } = getViewArea();
+  // トリミングUIのワールド座標をビュー座標に変換
+  function trimWorldToView(x, y) {
+    const { viewX0, viewY0, viewW, viewH } = getTrimViewArea();
     return {
       x: viewX0 + (x - worldX0) * zoom,
       y: viewY0 + (y - worldY0) * zoom
     };
   }
 
-  function posToWorld(x, y) {
-    const { viewX0, viewY0, viewW, viewH } = getViewArea();
+  // トリミングUIのビュー座標をワールド座標に変換
+  function trimViewToWorld(x, y) {
+    const { viewX0, viewY0, viewW, viewH } = getTrimViewArea();
     return {
       x: (x - viewX0) / zoom + worldX0,
       y: (y - viewY0) / zoom + worldY0
     };
   }
 
-  function viewToTrimState(x, y) {
-    const { x: trimViewL, y: trimViewT } = posToView(trimL, trimT);
-    const { x: trimViewR, y: trimViewB } = posToView(trimR, trimB);
+  // ポイントされているビュー座標からトリミングUIの次の状態を取得
+  function trimViewToNextState(x, y) {
+    const { x: trimViewL, y: trimViewT } = trimWorldToView(trimL, trimT);
+    const { x: trimViewR, y: trimViewB } = trimWorldToView(trimR, trimB);
     if (Math.abs(x - trimViewL) < 10) return TrimState.DRAG_LEFT;
     if (Math.abs(x - trimViewR) < 10) return TrimState.DRAG_RIGHT;
     if (Math.abs(y - trimViewT) < 10) return TrimState.DRAG_TOP;
@@ -479,19 +432,16 @@
     trimCanvas.width = rect.width;
     trimCanvas.height = Math.ceil(rect.width / 2);
 
-    const ctx = trimCanvas.getContext('2d', { willReadFrequently: true });
-
     const canvasW = trimCanvas.width;
     const canvasH = trimCanvas.height;
 
     const origW = origCanvas.width;
     const origH = origCanvas.height;
 
-    ctx.clearRect(0, 0, canvasW, canvasH);
-
-    const { viewX0, viewY0, viewW, viewH } = getViewArea();
+    const { viewX0, viewY0, viewW, viewH } = getTrimViewArea();
 
     if (trimUiState == TrimState.IDLE) {
+      // ビューに触れていない間に座標系を調整
       const worldL = Math.min(trimL, 0);
       const worldR = Math.max(trimR, origW);
       const worldT = Math.min(trimT, 0);
@@ -510,36 +460,45 @@
       }
     }
 
-    const { x: trimViewL, y: trimViewT } = posToView(trimL, trimT);
-    const { x: trimViewR, y: trimViewB } = posToView(trimR, trimB);
+    const { x: trimViewL, y: trimViewT } = trimWorldToView(trimL, trimT);
+    const { x: trimViewR, y: trimViewB } = trimWorldToView(trimR, trimB);
+
+    const ctx = trimCanvas.getContext('2d', { willReadFrequently: true });
+    ctx.clearRect(0, 0, canvasW, canvasH);
 
     ctx.fillStyle = bgColorBox.value;
     ctx.fillRect(trimViewL, trimViewT, trimViewR - trimViewL, trimViewB - trimViewT);
 
-    const imgX = viewX0 - worldX0 * zoom;
-    const imgY = viewY0 - worldY0 * zoom;
-    const imgW = origCanvas.width * zoom;
-    const imgH = origCanvas.height * zoom;
-    ctx.drawImage(origCanvas, imgX, imgY, imgW, imgH);
+    // 画像描画
+    {
+      const dx = viewX0 - worldX0 * zoom;
+      const dy = viewY0 - worldY0 * zoom;
+      const dw = origCanvas.width * zoom;
+      const dh = origCanvas.height * zoom;
+      ctx.drawImage(origCanvas, dx, dy, dw, dh);
+    }
 
-    const lineWidth = 3;
-    ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-    ctx.fillRect(trimViewL - lineWidth - 2, 0, lineWidth + 4, canvasH);
-    ctx.fillRect(0, trimViewT - lineWidth - 2, canvasW, lineWidth + 4);
-    ctx.fillRect(trimViewR - 2, 0, lineWidth + 4, canvasH);
-    ctx.fillRect(0, trimViewB - 2, canvasW, lineWidth + 4);
-    ctx.fillStyle = "#08F";
-    ctx.fillRect(trimViewL - lineWidth, 0, lineWidth, canvasH);
-    ctx.fillRect(0, trimViewT - lineWidth, canvasW, lineWidth);
-    ctx.fillRect(trimViewR, 0, lineWidth, canvasH);
-    ctx.fillRect(0, trimViewB, canvasW, lineWidth);
+    // トリミングのガイド線描画
+    {
+      const lineWidth = 3;
+      ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+      ctx.fillRect(trimViewL - lineWidth - 2, 0, lineWidth + 4, canvasH);
+      ctx.fillRect(0, trimViewT - lineWidth - 2, canvasW, lineWidth + 4);
+      ctx.fillRect(trimViewR - 2, 0, lineWidth + 4, canvasH);
+      ctx.fillRect(0, trimViewB - 2, canvasW, lineWidth + 4);
+      ctx.fillStyle = "#FFF";
+      ctx.fillRect(trimViewL - lineWidth, 0, lineWidth, canvasH);
+      ctx.fillRect(0, trimViewT - lineWidth, canvasW, lineWidth);
+      ctx.fillRect(trimViewR, 0, lineWidth, canvasH);
+      ctx.fillRect(0, trimViewB, canvasW, lineWidth);
+    }
   }
 
   function requestBinarize() {
     if (binarizeTimeoutId >= 0) return;
     binarizeTimeoutId = setTimeout(() => {
       binarize();
-    }, 500);
+    }, 300);
   }
 
   function binarize() {
@@ -590,6 +549,18 @@
         const outCtx = binaryCanvas.getContext('2d', { willReadFrequently: true });
         binaryCanvas.width = outW;
         binaryCanvas.height = outH;
+
+        {
+          // 自動拡大表示
+          const rect = container.getBoundingClientRect();
+          const viewW = rect.width - 2; // 枠線分を引く
+          const viewH = Math.ceil(viewW / 2);
+          const zoom = Math.floor(Math.min(viewW / outW, viewH / outH));
+          binaryCanvas.style.width = `${outW * zoom - 2}px`;
+          binaryCanvas.style.height = 'auto';
+          binaryCanvas.style.imageRendering = 'pixelated';
+        }
+
         {
           const srcX0 = (trimL + trimR) / 2;
           const srcY0 = (trimT + trimB) / 2;
@@ -737,7 +708,7 @@
     generateCodeTimeoutId = setTimeout(() => {
       generateCode();
       generateCodeTimeoutId = -1;
-    }, 500);
+    }, 300);
   }
 
   function generateCode() {
