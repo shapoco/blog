@@ -152,6 +152,7 @@
   const contrastBox = makeTextBox("100", "(auto)", 5);
   const invertBox = makeCheckBox("階調反転");
   const presetRgb565Be = makePresetButton("rgb565_be", "RGB565-BE", "各種 16bit カラー液晶");
+  const presetRgb332 = makePresetButton("rgb332", "RGB332", "各種 GFX ライブラリ");
   const presetBwVpLf = makePresetButton("bw_vp_lf", "白黒 縦パッキング", "SSD1306/1309, 他...");
   const presetBwHpMf = makePresetButton("bw_hp_mf", "白黒 横パッキング", "SHARPメモリ液晶, 他...");
   const formatBox = makeSelectBox({
@@ -317,6 +318,7 @@
         "選んでください: ",
         document.createElement("br"),
         presetRgb565Be, " ",
+        presetRgb332, " ",
         presetBwVpLf, " ",
         presetBwHpMf,
         document.createElement("br"),
@@ -657,9 +659,10 @@
 
   function loadPreset(name) {
     const PRESETS = {
+      rgb565_be: { fmt: "rgb565", chOrder: "msbRed", byteOrder: "be", addrDir: "hori" },
+      rgb332: { fmt: "rgb332", chOrder: "msbRed", addrDir: "hori" },
       bw_vp_lf: { fmt: "bw", pixOrder: "lsb1st", packDir: "vert", addrDir: "hori" },
       bw_hp_mf: { fmt: "bw", pixOrder: "msb1st", packDir: "hori", addrDir: "hori" },
-      rgb565_be: { fmt: "rgb565", chOrder: "msbRed", byteOrder: "be", addrDir: "hori" },
     };
     if (!(name in PRESETS)) {
       throw new Error(`Unknown preset: ${name}`);
@@ -723,8 +726,8 @@
         scalingMethodBox.disabled = true;
       }
       else {
-        if (outW > 128 || outH > 64) {
-          const scale = Math.min(128 / outW, 64 / outH);
+        if (outW > 256 || outH > 256) {
+          const scale = Math.min(256 / outW, 256 / outH);
           outW = Math.floor(outW * scale);
           outH = Math.floor(outH * scale);
         }
@@ -929,28 +932,26 @@
                 previewData[i * 4 + ch] = Math.round(out * 255 / range);
               }
 
-              if (diffusion) {
-                // 誤差拡散法の適用
-                const error = normIn - normOut;
+              let error = normIn - normOut;
 
-                let deno = 0;
-                if (x < outW - 1) deno += 7;
-                if (y < outH - 1) {
-                  if (x > 0) deno += 3;
-                  deno += 5;
-                  if (y < outH - 1) deno += 1;
-                }
+              error *= 0.99; // 減衰
+              
+              if (-0.01 < error && error < 0.01) {
+                // 小さな誤差は無視する
+                error = 0;
+              }
 
+              if (diffusion && error != 0) {
                 if (x < outW - 1) {
-                  norm[i + 1] += error * 7 / deno;
+                  norm[i + 1] += error * 7 / 16;
                 }
                 if (y < outH - 1) {
                   if (x > 0) {
-                    norm[i + outW - 1] += error * 3 / deno;
+                    norm[i + outW - 1] += error * 3 / 16;
                   }
-                  norm[i + outW] += error * 5 / deno;
+                  norm[i + outW] += error * 5 / 16;
                   if (x < outW - 1) {
-                    norm[i + outW + 1] += error * 1 / deno;
+                    norm[i + outW + 1] += error * 1 / 16;
                   }
                 }
               } // if diffusion
