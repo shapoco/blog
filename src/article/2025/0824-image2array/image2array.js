@@ -18,6 +18,22 @@
       this.colorSpace = ColorSpace.GRAYSCALE;
       this.channelDepth = [1];
     }
+
+    toString() {
+      let ret = "";
+      switch (this.colorSpace) {
+        case ColorSpace.GRAYSCALE:
+          if (this.channelDepth[0] == 1) {
+            return "B/W";
+          } else {
+            return "Gray" + this.channelDepth[0];
+          }
+        case ColorSpace.RGB:
+          return "RGB" + this.channelDepth.join("");
+        default:
+          throw new Error("Unknown color space");
+      }
+    }
   }
 
   function toElementArray(children = []) {
@@ -1125,9 +1141,28 @@
         }
       } // for packIndex
 
+
+
       // コード生成
       let code = "";
-      code += `// ${width}x${height}px, ${vertAddr ? 'Vertical' : 'Horizontal'} Adressing, ${arrayData.length} Bytes\n`;
+      code += `// ${width}x${height}px, ${imageCacheFormat.toString()}\n`;
+      {
+        code += `// `;
+        if (!channelOrderBox.disabled) {
+          code += (msbRed ? "R->G->B" : "B->G->R") + ", ";
+        }
+        if (!pixelOrderBox.disabled) {
+          code += (msb1st ? "MSB" : "LSB") + " First, ";
+        }
+        if (!byteOrderBox.disabled) {
+          code += (bigEndian ? "Big" : "Little") + " Endian, ";
+        }
+        if (!packingBox.disabled) {
+          code += (vertPack ? "Vertical" : "Horizontal") + " Packing, ";
+        }
+        code += `${vertAddr ? 'Vertical' : 'Horizontal'} Adressing\n`;
+      }
+      code += `// ${arrayData.length} Bytes\n`;
       code += "const uint8_t imageArray[] = {\n";
       for (let i = 0; i < arrayData.length; i++) {
         if (i % arrayCols == 0) code += indent;
