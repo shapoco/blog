@@ -550,11 +550,12 @@
 
         {
           // 自動拡大表示
+          const borderWidth = 1;
           const rect = container.getBoundingClientRect();
-          const viewW = rect.width - 2; // 枠線分を引く
+          const viewW = rect.width - (borderWidth * 2);
           const viewH = Math.ceil(viewW / 2);
           const zoom = Math.floor(Math.min(viewW / outW, viewH / outH));
-          binaryCanvas.style.width = `${outW * zoom - 2}px`;
+          binaryCanvas.style.width = `${outW * zoom + (borderWidth * 2)}px`;
           binaryCanvas.style.height = 'auto';
           binaryCanvas.style.imageRendering = 'pixelated';
         }
