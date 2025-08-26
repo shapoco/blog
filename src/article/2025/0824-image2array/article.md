@@ -1,4 +1,4 @@
-# Arrayfy: 画像を配列に変換君
+# 画像を配列に変換君 (Arrayfy)
 
 ![](./cover.jpg)
 
