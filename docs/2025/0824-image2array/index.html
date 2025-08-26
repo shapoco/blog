@@ -11,7 +11,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@shapoco" />
   <meta property="og:url" content="https://blog.shapoco.net/2025/0824-image2array/" />
-  <meta property="og:title" content="LCD/OLED用画像→配列コンバータ | シャポログ" />
+  <meta property="og:title" content="Arrayfy: 画像を配列に変換君 | シャポログ" />
   <meta property="og:description" content="画像データを LCD や OLED 用の C/C++ 配列コードに変換するツールです。Adafruit/Lovyan GFX 等で使用可能な RGB565 形式の画像のほか、SSD1306、SSD1309、Nokia PCD8544 といった縦 8 ピクセルを 1 バイトとする白黒ディスプレイに直接転送可能な形式のデータも作成できます。" />
   <meta property="og:image" content="https://blog.shapoco.net/2025/0824-image2array/cover.jpg" />
 
@@ -40,7 +40,7 @@
   <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
   <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
 
-  <title>LCD/OLED用画像→配列コンバータ | シャポログ</title>
+  <title>Arrayfy: 画像を配列に変換君 | シャポログ</title>
 </head>
 
 <body>
@@ -51,7 +51,7 @@
       <h1><a href="/">シャポログ</a></h1>
     </header>
     <main>
-      <h2>LCD/OLED用画像→配列コンバータ</h2>
+      <h2>Arrayfy: 画像を配列に変換君</h2>
 
       <div class="article_info_wrap">
         <div class="article_info">
@@ -65,72 +65,7 @@
 
               <p><img src="./cover.jpg" alt=""></p>
         <p>画像データを LCD や OLED 用の C/C++ 配列コードに変換するツールです。Adafruit/Lovyan GFX 等で使用可能な RGB565 形式の画像のほか、SSD1306、SSD1309、Nokia PCD8544 といった縦 8 ピクセルを 1 バイトとする白黒ディスプレイに直接転送可能な形式のデータも作成できます。</p>
-        <p>処理はブラウザ上で行われます。どこかに送信されることはありません。</p>
-        <p>
-          <div id="article_image2arrayContainer"></div>
-          <script src="./image2array.js?d262b386"></script>
-        </p>
-        <h3>実機確認実績</h3>
-        <table>
-          <tr>
-            <th class="nowrap" style="text-align: center;">形式</th>
-            <th class="nowrap" style="text-align: center;">確認状況</th>
-            <th>確認環境</th>
-          </tr>
-          <tr>
-            <td class="nowrap" style="text-align: center;">RGB565</td>
-            <td class="nowrap" style="text-align: center;">✔</td>
-            <td>Lovyan GFX + GC9A01</td>
-          </tr>
-          <tr>
-            <td class="nowrap" style="text-align: center;">RGB555</td>
-            <td class="nowrap" style="text-align: center;"></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="nowrap" style="text-align: center;">RGB332</td>
-            <td class="nowrap" style="text-align: center;">✔</td>
-            <td>Lovyan GFX + GC9A01</td>
-          </tr>
-          <tr>
-            <td class="nowrap" style="text-align: center;">RGB111</td>
-            <td class="nowrap" style="text-align: center;"></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="nowrap" style="text-align: center;">Gray4</td>
-            <td class="nowrap" style="text-align: center;"></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="nowrap" style="text-align: center;">Gray2</td>
-            <td class="nowrap" style="text-align: center;"></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td class="nowrap" style="text-align: center;">B/W</td>
-            <td class="nowrap" style="text-align: center;">✔</td>
-            <td>自作コード + SSD1306</td>
-          </tr>
-        </table>
-        <h3>更新履歴</h3>
-        <table>
-          <tr>
-            <th class="nowrap" style="text-align: center;">バージョン</th>
-            <th class="nowrap" style="text-align: center;">日付</th>
-            <th class="nowrap">内容</th>
-          </tr>
-          <tr>
-            <td class="nowrap" style="text-align: center;">1.0</td>
-            <td class="nowrap" style="text-align: center;">2025/08/24</td>
-            <td class="nowrap">初版 (白黒のみ)</td>
-          </tr>
-          <tr>
-            <td class="nowrap" style="text-align: center;">1.1</td>
-            <td class="nowrap" style="text-align: center;">2025/08/25</td>
-            <td class="nowrap">カラー、グレスケ対応</td>
-          </tr>
-        </table>
+        <blockquote class="note">機能が増えてきたので <a href="https://shapoco.github.io/arrayfy/" target="_blank">こちら</a> に移動しました。</blockquote>
         <h3>関連情報</h3>
         <ul>
           <li>SNS 投稿: <a href="https://twitter.com/shapoco/status/1959545672195334379" target="_blank">X (Twitter)</a>, <a href="https://misskey.io/notes/abt1kd6k7bz606co" target="_blank">Misskey.io</a>, <a href="https://bsky.app/profile/shapoco.net/post/3lx55tzffsk2f" target="_blank">Bluesky</a>, <a href="https://mixi.social/@shapoco/posts/d736bb2f-4df6-4f2c-854c-8a9a000839c6" target="_blank">mixi2</a></li>
