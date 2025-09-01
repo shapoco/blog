@@ -415,6 +415,14 @@
       "url": "/2025/0824-image2array",
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2025/0824-image2array/cover.jpg"
+    },
+    {
+      "title": "ILI9488 LCDモジュールの8色モードの謎挙動",
+      "description": "AliExpress と Amazon で 480x320px の LCD モジュールを買ったのですが、ILI9488 の 8 色モードを試そうとしたところ謎の挙動に悩まされたので記録として残しておきます。",
+      "date": "2025/09/01",
+      "url": "/2025/0901-ili9488-8color-wired-behavior",
+      "twitter_card_size": "summary",
+      "card_image_url": "/2025/0901-ili9488-8color-wired-behavior/thumbnail.jpg"
     }
   ]
 }
