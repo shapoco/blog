@@ -7,7 +7,7 @@
   const API_URL_BASE = DEBUG_MODE ?
     `${window.location.href.match(LOCALHOST_PATTERN)[1]}/stamp/v${API_VERSION}` :
     `https://www.shapoco.net/stamp/v${API_VERSION}`;
-  const URL_POSTFIX = '20250426145500';
+  const URL_POSTFIX = '20250912010100';
   const COOKIE_KEY = 'ShapocoNetStamp_clientId';
 
   const CLASS_STAMP_BUTTON = 'shpcstamp_stamp';
@@ -367,26 +367,33 @@
       const emoji = this.ownerButton.dataset.emoji;
 
       this.sendButton.innerHTML = sent ?
-        `<span class="shpcstamp_emoji">${replaceCustomEmoji(emoji)}</span>スタンプを解除` :
-        `<span class="shpcstamp_emoji">${replaceCustomEmoji(emoji)}</span>スタンプを送信`;
+        `スタンプ<span class="shpcstamp_emoji">${replaceCustomEmoji(emoji)}</span>を解除` :
+        `スタンプ<span class="shpcstamp_emoji">${replaceCustomEmoji(emoji)}</span>を送る`;
       this.commentBoxCtrl.clear();
 
       let numComments = 0;
 
       this.commentListDiv.innerHTML = '';
-      const cts = comments.filter(entry => entry.emoji == emoji);
+      const cts = comments.filter(entry => entry.emoji == emoji).slice().reverse();
       this.commentTitleBar.innerHTML = `${cts.length} 件のコメント`;
       if (cts.length > 0) {
         const ul = document.createElement('ul');
         for (const entry of cts) {
           const li = document.createElement('li');
-          li.innerHTML = escapeForHtml(entry.comment);
+          if (entry.author) {
+            li.classList.add('shpcstamp_comment_author');
+            li.innerHTML = escapeForHtml(`[管理者] ${entry.comment}`);
+          }
+          else {
+            li.innerHTML = escapeForHtml(entry.comment);
+          }
           ul.appendChild(li);
           numComments += 1;
         }
         this.commentListDiv.appendChild(ul);
         this.commentTitleBar.style.display = 'block';
         this.commentListDiv.style.display = 'block';
+        this.commentListDiv.scrollTop = this.commentListDiv.scrollHeight;
       }
       else {
         this.commentTitleBar.style.display = 'none';
@@ -564,7 +571,7 @@
           this.emojiList.innerHTML = '通信エラー';
         }
       }
-      
+
       this.stampDescDiv.textContent = getStampSendDescription();
 
       // カテゴリの選択肢を生成
@@ -638,7 +645,7 @@
       // コメント入力欄
       this.textarea = document.createElement('textarea');
       this.textarea.style.width = '100%';
-      this.textarea.placeholder = '(コメントなし)';
+      this.textarea.placeholder = 'ここにコメントも書けます。\n内容は公開されます。空欄 OK。';
       this.textarea.rows = 3;
       this.container.appendChild(this.textarea);
 
@@ -807,7 +814,15 @@
 
   function getStampSendDescription() {
     const numStampSent = Object.values(stamps).filter(item => item.sent).length;
-    return `あと ${maxStampCount - numStampSent} 個送信できます。コメントは任意で、他の人からも見えます。`;
+    if (numStampSent == 0) {
+      return `スタンプは ${maxStampCount} 個まで送れます。`;
+    }
+    else if (numStampSent < maxStampCount) {
+      return `スタンプはあと ${maxStampCount - numStampSent} 個送れます。`;
+    }
+    else {
+      return `スタンプはもう送れません。`;
+    }
   }
 
   /**
