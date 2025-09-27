@@ -120,6 +120,11 @@
         <h3>既にリセットボタンが搭載されたボードに追加する場合</h3>
         <p>RUN 端子に既にリセットボタンが接続されていて前記の回路を接続できない場合は、以下のような回路を外付けすることにより、リセットボタンを「長押し書き込みボタン化」することができます。まあただの遅延回路です。</p>
         <p><img src="./circuit_additional_discrete.png" alt=""></p>
+        <h3>ダブルクリックで書き込みモードにする (RP2350)</h3>
+        <p>RP2350 の OTP レジスタにより、リセットボタンのダブルクリックで書き込みモードに入れるようにすることができます。</p>
+        <p>OTP 領域にある <code>DOUBLE_TAP</code> ビットを有効にした状態でリセットが素早く 2 回入力されると、<code>POWMAN_CHIP_RESET_DOUBLE_TAP</code> ビットによってブートローダーがこれを検知して書き込みモードに入ります。</p>
+        <p>(thx: <a href="https://x.com/wren6991/status/1971395643345424857" target="_blank">Luke Wren さん</a>)</p>
+        <p><img src="./ds_boot_flags1.png" alt=""></p>
         <h3>関連リンク</h3>
         <ul>
           <li><a href="https://x.com/shapoco/status/1835247604898345384" target="_blank">クリックでリセット、長押しで書き込みモードになるボタン、ラズピコ2 でも動いた</a></li>
