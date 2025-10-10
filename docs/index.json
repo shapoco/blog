@@ -431,6 +431,14 @@
       "url": "/2025/1005-hakkuroo",
       "twitter_card_size": "summary",
       "card_image_url": "/2025/1005-hakkuroo/thumbnail.jpg"
+    },
+    {
+      "title": "VLConfig: ディスプレイの点滅でデバイスに設定を書き込む",
+      "description": "IoT デバイスのような、リッチな入力インタフェースを持たないデバイスに対し、WiFi 設定等を書き込むためのプロトコルと C++ ライブラリを作りました。",
+      "date": "2025/10/10",
+      "url": "/2025/1010-vlconfig",
+      "twitter_card_size": "summary",
+      "card_image_url": "/2025/1010-vlconfig/thumbnail.jpg"
     }
   ]
 }

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+  <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+  <meta name="description" content="IoT デバイスのような、リッチな入力インタフェースを持たないデバイスに対し、WiFi 設定等を書き込むためのプロトコルと C++ ライブラリを作りました。">
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@shapoco" />
+  <meta property="og:url" content="https://blog.shapoco.net/2025/1010-vlconfig/" />
+  <meta property="og:title" content="VLConfig: ディスプレイの点滅でデバイスに設定を書き込む | シャポログ" />
+  <meta property="og:description" content="IoT デバイスのような、リッチな入力インタフェースを持たないデバイスに対し、WiFi 設定等を書き込むためのプロトコルと C++ ライブラリを作りました。" />
+  <meta property="og:image" content="https://blog.shapoco.net/2025/1010-vlconfig/thumbnail.jpg" />
+
+  <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+  <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KJ53WNQ22G"></script>
+  <script>
+    var remoteHost = window.location.hostname;
+    if (remoteHost == "localhost") {
+      console.log(`Google Analytics disabled on: '${remoteHost}'`);
+    }
+    else {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-KJ53WNQ22G');
+    }
+  </script>
+
+  <link href="/style.css?0ec49c72" rel="stylesheet" type="text/css">
+  <script src="/style.js?5ea9e62c"></script>
+
+  <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+  <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+  <title>VLConfig: ディスプレイの点滅でデバイスに設定を書き込む | シャポログ</title>
+</head>
+
+<body>
+  <div id="container">
+    <div id="root_navi"></div>
+
+    <header class="article_header">
+      <h1><a href="/">シャポログ</a></h1>
+    </header>
+    <main>
+      <h2>VLConfig: ディスプレイの点滅でデバイスに設定を書き込む</h2>
+
+      <div class="article_info_wrap">
+        <div class="article_info">
+          2025/10/10 |
+          <a href="https://github.com/shapoco/blog/tree/main/src/article/2025/1010-vlconfig/" target="_blank">記事のソース</a>
+        </div>
+
+        <div id="shpcstamp_wrap"></div>
+        <script async src="/stamp/v1/widget.js?4fe6d3e3"></script>
+      </div>
+
+              <p>IoT デバイスのような、リッチな入力インタフェースを持たないデバイスに対し、WiFi 設定等を書き込むためのプロトコルと C++ ライブラリを作りました。</p>
+        <h3>動作の様子</h3>
+        <p><iframe width="560" height="315" src="https://www.youtube.com/embed/GITFharvHWY?si=IT4DUiYEcTCEbnF4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></p>
+        <h3>リポジトリ</h3>
+        <ul>
+          <li><a href="https://github.com/shapoco/vlconfig" target="_blank">VLConfig</a></li>
+          <li><a href="https://github.com/shapoco/vlconfig-arduino" target="_blank">VLConfig for Arduino Platform</a></li>
+        </ul>
+        <h3>プロトコル</h3>
+        <p>送信側では設定内容を Key Value Pair にし、それを <a href="https://www.rfc-editor.org/rfc/rfc8949" target="_blank">CBOR</a> にエンコードし、4b/5b 変換、シリアル化して画面の点滅に変換します。</p>
+        <p>受信側は光センサで明暗の変化を検出し、5b/4b 変換して CBOR オブジェクトを復元します。</p>
+        <p>CRC32 による誤り検出はありますが訂正は無いので、送信失敗時はやり直す必要があります。</p>
+        <p><img src="./protocol_stack.svg" alt=""></p>
+        <h3>送信ツール</h3>
+        <p>送信はブラウザから行います。</p>
+        <ul>
+          <li><a href="https://shapoco.github.io/vlconfig/#demo" target="_blank">デモページ</a></li>
+        </ul>
+        <p>フォームの項目は、URL のハッシュ部分に JSON 風の文字列を与えることで指定できます。</p>
+        <ul>
+          <li>例: <a href="https://shapoco.github.io/vlconfig/#form:%7Bt%3AWiFi%20Setup%2Ce%3A%5B%7Bk%3As%2Ct%3At%2Cl%3ASSID%7D%2C%7Bk%3Ap%2Ct%3Ap%2Cl%3APassword%7D%5D%7D" target="_blank">https://shapoco.github.io/vlconfig/#form:{t:WiFi%20Setup,e:[{k:s,t:t,l:SSID},{k:p,t:p,l:Password}]}</a></li>
+        </ul>
+        <pre>https://shapoco.github.io/vlconfig/#form:{
+    t:タイトル,
+    e:[
+        {k:キー, t:タイプ, l:ラベル, v:デフォルト値},
+        {k:キー, t:タイプ, l:ラベル, v:デフォルト値},
+        {k:キー, t:タイプ, l:ラベル, v:デフォルト値},
+                        :
+                        :
+    ]
+}</pre>
+        <ul>
+          <li><code>キー</code>: CBOR オブジェクトのキーとして使用されます。</li>
+          <li>
+            <p><code>タイプ</code>: 形式 (今後追加するかも)。</p>
+            <table>
+              <tr>
+                <th class="nowrap" style="text-align: center;">設定値</th>
+                <th class="nowrap">UI</th>
+                <th class="nowrap">CBOR 形式</th>
+              </tr>
+              <tr>
+                <td class="nowrap" style="text-align: center;"><code>t</code></td>
+                <td class="nowrap">テキストボックス</td>
+                <td class="nowrap">テキスト文字列</td>
+              </tr>
+              <tr>
+                <td class="nowrap" style="text-align: center;"><code>p</code></td>
+                <td class="nowrap">パスワードボックス</td>
+                <td class="nowrap">テキスト文字列</td>
+              </tr>
+              <tr>
+                <td class="nowrap" style="text-align: center;"><code>i</code></td>
+                <td class="nowrap">IP アドレス</td>
+                <td class="nowrap">バイト列</td>
+              </tr>
+              <tr>
+                <td class="nowrap" style="text-align: center;"><code>n</code></td>
+                <td class="nowrap">数値入力</td>
+                <td class="nowrap">整数値</td>
+              </tr>
+              <tr>
+                <td class="nowrap" style="text-align: center;"><code>c</code></td>
+                <td class="nowrap">チェックボックス</td>
+                <td class="nowrap">真偽値</td>
+              </tr>
+            </table>
+          </li>
+          <li><code>ラベル</code>: UI のラベル。</li>
+          <li><code>デフォルト値</code>: 入力欄に予め設定する値 (省略可)。</li>
+        </ul>
+        <p>URL を短くするため、<code>[</code>、<code>]</code>、<code>{</code>、<code>}</code>、<code>:</code>、<code>,</code> のうちいずれも含まない文字列リテラルについてはダブルクォーテーション (<code>&quot;</code>) を省略できます。</p>
+        <p>送信ボタンを押すと、<code>キー</code> の値とフォームの入力値のペアが CBOR オブジェクトとして送信されます。</p>
+        <h3>受信回路</h3>
+        <h4>ADC を使用する場合</h4>
+        <p>ADC 入力が空いていれば、次のようにするのが簡単です。ある程度の信号振幅が得られればセンサは何でもいいです。ディスプレイによっては輝度が PWM 制御されているため、C1 で平滑化する必要があります。</p>
+        <p><img src="./schematic_input_with_adc.svg" alt=""></p>
+        <h4>デジタル入力を使用する場合</h4>
+        <p>デジタル入力を使用する場合は、明暗を判別する回路を外付けする必要があります。DC オフセットを検出してそれと比較する構成にすると、環境やデバイス特性の違いに対してある程度ロバストになります。</p>
+        <p><img src="./schematic_input_with_gpio.svg" alt=""></p>
+        <h3>受信ソフトウェア</h3>
+        <p>受信処理はライブラリ化されています。ライブラリ自体は特定のプラットフォームに依存しません。その代わり ADC 入力処理やサンプリングタイミングの保証はユーザ側で行う必要があります。</p>
+        <h4>デモプログラム</h4>
+        <ul>
+          <li><a href="https://github.com/shapoco/vlconfig/tree/main/cpp/example/pico" target="_blank">Raspberry Pi Pico</a></li>
+          <li><a href="https://github.com/shapoco/vlconfig-arduino" target="_blank">Arduino プラットフォーム</a></li>
+        </ul>
+        <h4>ライブラリ使用方法</h4>
+        <ol>
+          <li>
+            <p>設定項目リストを <code>vlcfg::ConfigEntry</code> の配列として定義します。配列の最後の要素はゼロ埋めして配列の終端を示します。</p>
+            <pre class="lang_cxx">const char *KEY_TEXT = &quot;t&quot;;
+const char *KEY_PASS = &quot;p&quot;;
+const char *KEY_NUMBER = &quot;n&quot;;
+const char *KEY_IP_ADDR = &quot;i&quot;;
+const char *KEY_LED_ON = &quot;l&quot;;
+char text_buff[32 + 1];
+char pass_buff[32 + 1];
+int32_t number_buff;
+uint8_t ip_buff[6];
+uint8_t bool_buff;
+vlcfg::ConfigEntry configEntries[] = {
+    {KEY_TEXT, text_buff, vlcfg::ValueType::TEXT_STR, sizeof(text_buff)},
+    {KEY_PASS, pass_buff, vlcfg::ValueType::TEXT_STR, sizeof(pass_buff)},
+    {KEY_NUMBER, &amp;number_buff, vlcfg::ValueType::INT, sizeof(number_buff)},
+    {KEY_IP_ADDR, ip_buff, vlcfg::ValueType::BYTE_STR, sizeof(ip_buff)},
+    {KEY_LED_ON, &amp;bool_buff, vlcfg::ValueType::BOOLEAN, sizeof(bool_buff)},
+    {nullptr, nullptr, vlcfg::ValueType::NONE, 0},  // terminator
+};</pre>
+          </li>
+          <li>
+            <p><code>vlcfg::Receiver</code> をインスタンスします。コンストラクタの引数には CBOR オブジェクトのバッファサイズを指定します。</p>
+            <pre class="lang_cxx">vlcfg::Receiver receiver(256);</pre>
+          </li>
+          <li>
+            <p>受信開始時に <code>vlcfg::Receiver::init()</code> をコールします。</p>
+            <pre class="lang_cxx">receiver.init(configEntries);</pre>
+          </li>
+          <li>
+            <p>可能な限り正確に 10 ミリ秒間隔で ADC 値を取得し、<code>vlcfg::Receiver::update()</code> をコールします。</p>
+            <pre class="lang_cxx">vlcfg::RxState rx_state;
+auto ret = receiver.update(adc_read(), &amp;rx_state);</pre>
+            <p><code>rx_state</code> が <code>vlcfg::RxState::COMPLETED</code> になったら受信完了です。<code>rx_state</code> が <code>vlcfg::RxState::ERROR</code> になるか、<code>ret</code> が <code>vlcfg::Result::SUCCESS</code> 以外になったら受信失敗です。</p>
+          </li>
+          <li>
+            <p>受信されたデータは設定項目リストに指定したバッファ変数に格納されます。</p>
+            <p>入力フォームで空欄にした項目は送受信されません。ある項目が送受信されたかどうかは <code>vlcfg::ConfigEntry::was_received()</code> メソッドで分かります。</p>
+          </li>
+        </ol>
+        <p>詳細はデモプログラムを参照してください。</p>
+
+    </main>
+    <footer>
+      <span class="nowrap">
+        Copyright &copy; <a href="https://x.com/shapoco/" target="_blank">Shapoco</a>,
+      </span>
+      <span class="nowrap">
+        Powered by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
+      </span>
+    </footer>
+  </div>
+</body>
+
+</html>
