@@ -155,22 +155,25 @@
         <ol>
           <li>
             <p>設定項目リストを <code>vlcfg::ConfigEntry</code> の配列として定義します。配列の最後の要素はゼロ埋めして配列の終端を示します。</p>
-            <pre class="lang_cxx">const char *KEY_TEXT = &quot;t&quot;;
+            <pre class="lang_cxx">// 設定項目のキー
+const char *KEY_TEXT = &quot;t&quot;;
 const char *KEY_PASS = &quot;p&quot;;
 const char *KEY_NUMBER = &quot;n&quot;;
 const char *KEY_IP_ADDR = &quot;i&quot;;
 const char *KEY_LED_ON = &quot;l&quot;;
+// 設定値が格納されるバッファ変数
 char text_buff[32 + 1];
 char pass_buff[32 + 1];
 int32_t number_buff;
 uint8_t ip_buff[6];
 uint8_t bool_buff;
+// 設定項目リスト
 vlcfg::ConfigEntry configEntries[] = {
-    {KEY_TEXT, text_buff, vlcfg::ValueType::TEXT_STR, sizeof(text_buff)},
-    {KEY_PASS, pass_buff, vlcfg::ValueType::TEXT_STR, sizeof(pass_buff)},
-    {KEY_NUMBER, &amp;number_buff, vlcfg::ValueType::INT, sizeof(number_buff)},
-    {KEY_IP_ADDR, ip_buff, vlcfg::ValueType::BYTE_STR, sizeof(ip_buff)},
-    {KEY_LED_ON, &amp;bool_buff, vlcfg::ValueType::BOOLEAN, sizeof(bool_buff)},
+    {KEY_TEXT   , text_buff   , vlcfg::ValueType::TEXT_STR, sizeof(text_buff)  },
+    {KEY_PASS   , pass_buff   , vlcfg::ValueType::TEXT_STR, sizeof(pass_buff)  },
+    {KEY_NUMBER , &amp;number_buff, vlcfg::ValueType::INT     , sizeof(number_buff)},
+    {KEY_IP_ADDR, ip_buff     , vlcfg::ValueType::BYTE_STR, sizeof(ip_buff)    },
+    {KEY_LED_ON , &amp;bool_buff  , vlcfg::ValueType::BOOLEAN , sizeof(bool_buff)  },
     {nullptr, nullptr, vlcfg::ValueType::NONE, 0},  // terminator
 };</pre>
           </li>

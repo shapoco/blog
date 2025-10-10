@@ -90,22 +90,25 @@ ADC 入力が空いていれば、次のようにするのが簡単です。あ�
 1. 設定項目リストを `vlcfg::ConfigEntry` の配列として定義します。配列の最後の要素はゼロ埋めして配列の終端を示します。
 
     ```c++
+    // 設定項目のキー
     const char *KEY_TEXT = "t";
     const char *KEY_PASS = "p";
     const char *KEY_NUMBER = "n";
     const char *KEY_IP_ADDR = "i";
     const char *KEY_LED_ON = "l";
+    // 設定値が格納されるバッファ変数
     char text_buff[32 + 1];
     char pass_buff[32 + 1];
     int32_t number_buff;
     uint8_t ip_buff[6];
     uint8_t bool_buff;
+    // 設定項目リスト
     vlcfg::ConfigEntry configEntries[] = {
-        {KEY_TEXT, text_buff, vlcfg::ValueType::TEXT_STR, sizeof(text_buff)},
-        {KEY_PASS, pass_buff, vlcfg::ValueType::TEXT_STR, sizeof(pass_buff)},
-        {KEY_NUMBER, &number_buff, vlcfg::ValueType::INT, sizeof(number_buff)},
-        {KEY_IP_ADDR, ip_buff, vlcfg::ValueType::BYTE_STR, sizeof(ip_buff)},
-        {KEY_LED_ON, &bool_buff, vlcfg::ValueType::BOOLEAN, sizeof(bool_buff)},
+        {KEY_TEXT   , text_buff   , vlcfg::ValueType::TEXT_STR, sizeof(text_buff)  },
+        {KEY_PASS   , pass_buff   , vlcfg::ValueType::TEXT_STR, sizeof(pass_buff)  },
+        {KEY_NUMBER , &number_buff, vlcfg::ValueType::INT     , sizeof(number_buff)},
+        {KEY_IP_ADDR, ip_buff     , vlcfg::ValueType::BYTE_STR, sizeof(ip_buff)    },
+        {KEY_LED_ON , &bool_buff  , vlcfg::ValueType::BOOLEAN , sizeof(bool_buff)  },
         {nullptr, nullptr, vlcfg::ValueType::NONE, 0},  // terminator
     };
     ```
