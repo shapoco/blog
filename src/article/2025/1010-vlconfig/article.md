@@ -13,11 +13,11 @@ IoT デバイスのような、リッチな入力インタフェースを持た�
 
 ## プロトコル
 
-送信側では設定内容を Key Value Pair にし、それを [CBOR](https://www.rfc-editor.org/rfc/rfc8949) にエンコードし、4b/5b 変換、シリアル化して画面の点滅に変換します。
+送信側では設定内容を Key Value Pair にし、それを [CBOR](https://www.rfc-editor.org/rfc/rfc8949) にエンコードし、4b/5b 変換、シリアル化して画面を点滅させます。
 
 受信側は光センサで明暗の変化を検出し、5b/4b 変換して CBOR オブジェクトを復元します。
 
-CRC32 による誤り検出はありますが訂正は無いので、送信失敗時はやり直す必要があります。
+CRC32 による誤り検出はありますが訂正は無いので、エラー発生時は最初から送信し直す必要があります。
 
 ![](./protocol_stack.svg)
 
@@ -131,6 +131,8 @@ ADC 入力が空いていれば、次のようにするのが簡単です。あ�
     vlcfg::RxState rx_state;
     auto ret = receiver.update(adc_read(), &rx_state);
     ```
+
+    デジタル入力を使用する場合はデジタル値を適当な振幅のアナログ値に変換して引数に与えます (例: Low=0, High=2048)。
 
     `rx_state` が `vlcfg::RxState::COMPLETED` になったら受信完了です。`rx_state` が `vlcfg::RxState::ERROR` になるか、`ret` が `vlcfg::Result::SUCCESS` 以外になったら受信失敗です。
 
