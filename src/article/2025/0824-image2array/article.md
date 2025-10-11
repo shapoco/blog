@@ -1,6 +1,6 @@
 # 画像を配列に変換君 (Arrayfy)
 
-![](./cover.jpg)
+![](./display.jpg)
 
 画像データを LCD や OLED 用の C/C++ 配列コードに変換するツールです。Adafruit/Lovyan GFX 等で使用可能な RGB565 形式の画像のほか、SSD1306、SSD1309、Nokia PCD8544 といった縦 8 ピクセルを 1 バイトとする白黒ディスプレイに直接転送可能な形式のデータも作成できます。
 
