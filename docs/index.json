@@ -439,6 +439,14 @@
       "url": "/2025/1010-vlconfig",
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2025/1010-vlconfig/cover.png"
+    },
+    {
+      "title": "RC Combinator: 合成抵抗計算機",
+      "description": "E 系列の抵抗を組み合わせて目的の抵抗値に近い合成抵抗のトポロジを得るツールを作ってみました。",
+      "date": "2025/10/17",
+      "url": "/2025/1017-rc-comb",
+      "twitter_card_size": "summary",
+      "card_image_url": "/2025/1017-rc-comb/thumbnail.png"
     }
   ]
 }
