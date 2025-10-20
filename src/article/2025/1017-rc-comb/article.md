@@ -1,4 +1,4 @@
-# RC Combinator: 合成抵抗計算機
+# RC Combinator: 合成抵抗探索ツール
 
 ![](./title.png)
 
