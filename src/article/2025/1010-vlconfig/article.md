@@ -141,3 +141,13 @@ ADC 入力が空いていれば、次のようにするのが簡単です。あ�
     入力フォームで空欄にした項目は送受信されません。ある項目が送受信されたかどうかは `vlcfg::ConfigEntry::was_received()` メソッドで分かります。
 
 詳細はデモプログラムを参照してください。
+
+## 応用
+
+- [作りかけてた時計に、スマホの画面の点滅で WiFi と NTP の設定を書き込める機能を付けた](https://x.com/shapoco/status/1987208032707850605)
+
+## SNS 投降
+
+- [X (Twitter)](https://x.com/shapoco/status/1976593650911248689)
+- [Misskey.io](https://misskey.io/notes/ado8ofmtxrqt0bnp)
+- [Bluesky](https://bsky.app/profile/shapoco.net/post/3m2tfxjac7c2g)
