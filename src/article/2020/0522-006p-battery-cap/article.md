@@ -4,7 +4,7 @@
 
 006P・PP3・6LR61用のバッテリーカバーです。 端子を覆うことで短絡を防止します。 各端子の位置に穴が開いていますので、カバーを付けた状態で電圧を確認できます。
 
-ダウンロード: [Battery Cover for 006P/PP3/6LR61 by shapoco - Thingiverse](https://www.thingiverse.com/thing:4380299)
+ダウンロード: [Battery Cover for 006P/PP3/6LR61](https://github.com/shapoco/jigs/tree/main/electronics/006p-cover)
 
 ## 関連リンク
 
