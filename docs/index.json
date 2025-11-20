@@ -9,14 +9,6 @@
       "card_image_url": "/image/default_card_summary.png"
     },
     {
-      "title": "[メモ] ESP32 DevKitCをブレッドボードで扱いやすくする",
-      "description": "ESP32 DevKitCはボードそのものは使いやすいが、幅が広く、ピンヘッダが太いため ブレッドボードでのプロトタイピングには向かないようだ。 そこで、2列のピンソケットを使ってブレッドボードと簡単に接続できるようにしてみた。 手順は以下の通り。",
-      "date": "2018/02/02",
-      "url": "/2018/0202-esp32devkitc4breadboard",
-      "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2018/0202-esp32devkitc4breadboard/cover.jpg"
-    },
-    {
       "title": "[メモ] ボリュームの端子を曲げてはならない",
       "description": "ボリュームを狭い空間に押し込むために端子をこのように内側に曲げたところ、真ん中の端子が接触不良を起こして壊れてしまった。2個試したが、全く同じ壊れ方をした。端子の根元に力がかからないように、端子だけをつまんで曲げてみたつもりだったがダメだった。全てのボリュームに該当するのかは分からないが、端子は曲げてはいけないようなので注意されたい。",
       "date": "2018/02/14",
@@ -177,14 +169,6 @@
       "card_image_url": "/2023/0824-usb-arc-lighter/cover.jpg"
     },
     {
-      "title": "スマホで火花放電を撮るときのブツブツ音対策",
-      "description": "スマホで火花放電を撮ると、ブツブツ、ブリブリ、という音が入って耳障りに なってしまいます。",
-      "date": "2023/08/26",
-      "url": "/2023/0826-smartphone-puchipuchi-bag",
-      "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2023/0826-smartphone-puchipuchi-bag/cover.jpg"
-    },
-    {
       "title": "ラズピコに「長押し書き込みボタン」を追加する (pico2対応)",
       "description": "Raspberry Pi Pico のデバッグには picoprobe が便利ですが、作る物や環境によっては 繋いだままにできない場合もあります。しかしプログラムを書き込むたびに BOOTSELボタンを押しながら USBケーブルを差し込むのはちょっと面倒です。",
       "date": "2023/10/17",
@@ -289,14 +273,6 @@
       "card_image_url": "/2024/1208-sg90-shaft-dimension/thumbnail.jpg"
     },
     {
-      "title": "X に mixi2 プロフィールを共有した時のリンクカードを任意の画像にする",
-      "description": "mixi2 のプロフィールのリンクを X など他の SNS で投稿したときに表示されるリンクカード画像 (OGP 画像) をカスタマイズする方法です。",
-      "date": "2024/12/16",
-      "url": "/2024/1216-mixi2-custom-profile-ogp",
-      "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2024/1216-mixi2-custom-profile-ogp/cover.png"
-    },
-    {
       "title": "XProAutoTop: XPro の「新しいポストを表示」を自動的にクリックする UserScript",
       "description": "XPro (旧TweetDeck) でことある毎に現れて TL の読み込みを止めてしまう「新しいポストを表示」のボタンを自動的にクリックする Greasemonkey UserScript を書きました。",
       "date": "2024/12/29",
@@ -311,14 +287,6 @@
       "url": "/2025/0103-mandelbrot-border-tracing",
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2025/0103-mandelbrot-border-tracing/cover.png"
-    },
-    {
-      "title": "XParodyLabelHider: X の Web 版で「パロディアカウント」ラベルを非表示にする UserScript",
-      "description": "イマイチ誰の役に立っているのかよく分からない X の「パロディアカウント」ラベルを Web 版と XPro (旧 TweetDeck) で非表示にする UserScript を書いてみました。",
-      "date": "2025/01/24",
-      "url": "/2025/0124-x-parody-label-hider",
-      "twitter_card_size": "summary",
-      "card_image_url": "/2025/0124-x-parody-label-hider/thumbnail.png"
     },
     {
       "title": "[メモ] Fusion360 備忘録",
@@ -406,7 +374,7 @@
       "date": "2025/08/22",
       "url": "/2025/0822-piezo-speaker-powers-mcu",
       "twitter_card_size": "summary",
-      "card_image_url": "/2025/0822-piezo-speaker-powers-mcu/thumbnail.png"
+      "card_image_url": "/2025/0822-piezo-speaker-powers-mcu/thumbnail.jpg"
     },
     {
       "title": "画像を配列に変換君 (Arrayfy)",

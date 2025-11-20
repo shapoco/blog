@@ -19,6 +19,8 @@ def main() -> None:
     
     for dir_path in glob.glob('src/article/*/*'):
         a = Article(dir_path)
+        if a.hidden:
+            continue
         json_obj['articles'].append({
             'title': a.title,
             'description': a.description,

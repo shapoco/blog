@@ -13,6 +13,7 @@ class Article:
         self.github_url = f'https://github.com/shapoco/blog/tree/main/{dir_path}/'
         self.twitter_card_size = 'summary'
         self.card_image_url = '/image/default_card_summary.png'
+        self.hidden = os.path.isfile(f'{dir_path}/.hidden')
 
         # 日付
         m = re.search(r'/(\d{4})/?(\d{2})/?(\d{2})-[^/]+$', dir_path)
