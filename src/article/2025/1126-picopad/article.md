@@ -231,9 +231,8 @@ Waveshare の [2inch LCD Display Module](https://www.waveshare.com/2inch-lcd-mod
 
 ### microSD カードからの起動
 
-正確には microSD カードから Pico の Flash にアプリを転送し、
+内部的には microSD カードから Pico の Flash にアプリを転送し、
 Flash から起動する流れになります。
 
-2 回目以降は電源投入時にブートメニューが表示されるので、
-↑↓キーで UF2 を選んで A ボタンで起動します。
+電源投入時にブートメニューが表示されるので、↑↓キーで UF2 を選んで A ボタンで起動します。
 ブートメニューで Y ボタンを押すと、前回 Flash に転送されたアプリが起動します。
