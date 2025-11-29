@@ -229,7 +229,7 @@ Waveshare の [2inch LCD Display Module](https://www.waveshare.com/2inch-lcd-mod
     ![](./sdcard_image_links.png)
 
 2. BOOTSEL ボタンを押しながら PicoPad を PC に接続します (マスストレージデバイスとして認識されます)。
-3. microSD カードイメージの中の適当な UF2 (例: `GAME/TETRIS.UF2`) のどれかを PC から書き込みます。
+3. microSD カードイメージの中の適当な UF2 のどれか (例: `LOADER.UF2`) を PC から書き込みます。
 
 ### microSD カードからの起動
 
@@ -238,5 +238,4 @@ Flash から起動する流れになります。
 
 2 回目以降は電源投入時にブートメニューが表示されるので、
 ↑↓キーで UF2 を選んで A ボタンで起動します。
-
 ブートメニューで Y ボタンを押すと、前回 Flash に転送されたアプリが起動します。
