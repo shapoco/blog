@@ -175,9 +175,7 @@ Pico の VSYS や 3V3OUT はリプル (変動) が大きく、
 ### LCD
 
 Waveshare の [2inch LCD Display Module](https://www.waveshare.com/2inch-lcd-module.htm)
-から Pico 用のピンソケットとスイッチを除去してディスプレイだけにしました。
-
-ホットエアが無いと綺麗に除去するのは結構難しいです。
+から Pico 用のピンソケットとスイッチを除去してディスプレイと LDO だけにしました。ホットエアが無いと綺麗に除去するのは結構難しいです。
 
 ### 基板
 
