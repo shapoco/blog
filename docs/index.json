@@ -415,6 +415,14 @@
       "url": "/2025/1017-rc-comb",
       "twitter_card_size": "summary",
       "card_image_url": "/2025/1017-rc-comb/thumbnail.png"
+    },
+    {
+      "title": "通販で部品を集めて「PicoPad」の互換機を作る",
+      "description": "オープンソースのゲーミングコンソール「PicoPad」の互換機を 通販で手に入る部品で作ってみました。",
+      "date": "2025/11/26",
+      "url": "/2025/1126-picopad",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2025/1126-picopad/cover.jpg"
     }
   ]
 }

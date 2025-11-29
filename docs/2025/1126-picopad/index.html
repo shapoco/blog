@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+  <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+  <meta name="description" content="オープンソースのゲーミングコンソール「PicoPad」の互換機を 通販で手に入る部品で作ってみました。">
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@shapoco" />
+  <meta property="og:url" content="https://blog.shapoco.net/2025/1126-picopad/" />
+  <meta property="og:title" content="通販で部品を集めて「PicoPad」の互換機を作る | シャポログ" />
+  <meta property="og:description" content="オープンソースのゲーミングコンソール「PicoPad」の互換機を 通販で手に入る部品で作ってみました。" />
+  <meta property="og:image" content="https://blog.shapoco.net/2025/1126-picopad/cover.jpg" />
+
+  <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+  <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KJ53WNQ22G"></script>
+  <script>
+    var remoteHost = window.location.hostname;
+    if (remoteHost == "localhost") {
+      console.log(`Google Analytics disabled on: '${remoteHost}'`);
+    }
+    else {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-KJ53WNQ22G');
+    }
+  </script>
+
+  <link href="/style.css?0ec49c72" rel="stylesheet" type="text/css">
+  <script src="/style.js?5ea9e62c"></script>
+
+  <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+  <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+  <title>通販で部品を集めて「PicoPad」の互換機を作る | シャポログ</title>
+</head>
+
+<body>
+  <div id="container">
+    <div id="root_navi"></div>
+
+    <header class="article_header">
+      <h1><a href="/">シャポログ</a></h1>
+    </header>
+    <main>
+      <h2>通販で部品を集めて「PicoPad」の互換機を作る</h2>
+
+      <div class="article_info_wrap">
+        <div class="article_info">
+          2025/11/26 |
+          <a href="https://github.com/shapoco/blog/tree/main/src/article/2025/1126-picopad/" target="_blank">記事のソース</a>
+        </div>
+
+        <div id="shpcstamp_wrap"></div>
+        <script async src="/stamp/v1/widget.js?4fe6d3e3"></script>
+      </div>
+
+              <p><img src="./cover.jpg" alt=""></p>
+        <p>
+          オープンソースのゲーミングコンソール「<a href="https://picopad.eu/en/" target="_blank">PicoPad</a>」の互換機を
+          通販で手に入る部品で作ってみました。
+        </p>
+        <blockquote class="note">
+          現物合わせで場当たり的に作ったので誰でも再現できるレシピにはなっていません。
+          あくまで参考程度にしてください。
+        </blockquote>
+        <h3>PicoPad とは</h3>
+        <p>
+          PicoPad は Pajenicko 氏による Raspberry Pi Pico をベースとした
+          オープンソースのゲーミングコンソールです。
+          DIY キットが販売されており、C/C++、Circuit Python、MicroPython でのプログラミング可能で、
+          公式サイトでは「STEM 教育に最適」であるとされています。
+        </p>
+        <p>
+          独自のブートローダにより SD カードからバイナリを起動可能なので、
+          いちいち PC に繋いでプログラムを書き換える必要はありません。
+          公式の SD カードイメージにはゲームを含む多数のサンプルソフトウェアが収録されています。
+        </p>
+        <p>
+          ゲームボーイやファミコンのエミュレータも公開されており、
+          シンプルにレトロゲームコンソールとして使うこともできます。
+        </p>
+        <p>
+          なお、独自ブートローダに対応したバイナリを C/C++ で作成する場合は、基本的に
+          Raspberry Pi 公式の Pico SDK ではなく Miroslav Nemecek 氏による独自の SDK である
+          <a href="https://github.com/Panda381/PicoLibSDK" target="_blank">PicoLibSDK</a>
+          を用いた開発となる点に注意が必要です。
+        </p>
+        <p>詳細な回路図は <a href="https://github.com/Pajenicko/Picopad/blob/main/hardware/schematics/" target="_blank">公式リポジトリ</a> で参照できます。回路図から構成図を起こすと以下のようになります。</p>
+        <p><img src="./hw-block-diagram.png" alt=""></p>
+        <p>
+          色々繋がっていますが、最低限緑色の部分があれば
+          PC から UF2 を書き込むことで起動は可能です。
+        </p>
+        <h3>自作について</h3>
+        <p>今回は通販で手に入るモジュールを組み合わせて互換機を自作してみました。</p>
+        <p>なお、日本でのより本格的な自作例として下記のようなものがあります。</p>
+        <ul>
+          <li><a href="https://burariweb.info/electronic-work/game-emulator-picoplay2350.html" target="_blank">PicopadをベースにRP2350で動かす自作ゲームエミュレータ『PicoPlay2350』の製作 | ぶらり＠web走り書き</a></li>
+        </ul>
+        <h3>主な部品</h3>
+        <h4>Raspberry Pi Pico 2 W</h4>
+        <p>
+          サンプルプログラムや SDK は Pico 用と Pico 2 用の両方が公開されていますので
+          どちらでも使用できます。今回は将来的に WiFi 対応することも考慮して
+          Pico 2 W を使用することにしました。
+        </p>
+        <h4>LCD</h4>
+        <p>
+          LCD は ST7789 コントローラを搭載した QVGA 液晶を使うことになっています。
+          簡単に組み立てるなら Waveshare の <a href="https://www.waveshare.com/2inch-lcd-module.htm" target="_blank">2inch LCD Display Module</a> を使うのが良さそうです。
+          Amazon や Aliexpress でも同じものが手に入ります。
+        </p>
+        <p>
+          今回はできるだけ小さく作りたかったので、同じ Waveshare でネジ穴の無い
+          <a href="https://www.waveshare.com/product/raspberry-pi/boards-kits/raspberry-pi-pico-cat/pico-lcd-2.htm" target="_blank">2inch LCD Display Module for Raspberry Pi Pico</a> を
+          <a href="https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-6F3F" target="_blank">せんごくネット通販</a>
+          で購入し、ピンソケットとスイッチを強引に取り去って使用しました。
+        </p>
+        <h4>キーパッド</h4>
+        <p>キーパッドについては、汎用のタクトスイッチを使うことができます。</p>
+        <p>
+          ゲームコンソールとして使うことをを考えるとクリック感が無いボタンの方が
+          いいと思ったので、手元にあった
+          <a href="https://www.amazon.co.jp/dp/B0CK7Y7JXH" target="_blank">Switch用スーパーミニコントローラー</a>
+          を分解して部品を流用することにしました。
+        </p>
+        <p>なお、<a href="https://www.amazon.co.jp/s?k=%E5%B0%8E%E9%9B%BB+%E3%82%B4%E3%83%A0+%E3%83%91%E3%83%83%E3%83%89" target="_blank">導電ゴム接点単体で入手</a> することも可能です。</p>
+        <p><img src="./gamepad.jpg" alt=""></p>
+        <h4>バッテリーと充電コントローラ</h4>
+        <p>バッテリーと充電コントローラまわりは以下のものを購入しました。</p>
+        <ul>
+          <li>充電コントローラIC: <a href="https://akizukidenshi.com/catalog/g/g113288/" target="_blank">MCP73831-2ATI/OT</a></li>
+          <li>バッテリー: <a href="https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-4YZL" target="_blank">DTP502535(PHR) 400mAh</a></li>
+          <li>ショットキーバリアダイオード: <a href="https://akizukidenshi.com/catalog/g/g101398/" target="_blank">RB160M-30TR</a></li>
+        </ul>
+        <p>充電コントローラについては出来合いのモジュール (例: <a href="ミニリチウムイオン電池充電器モジュール">ミニリチウムイオン電池充電器モジュール</a> ) を使うこともできます。</p>
+        <p>
+          充電時に Raspberry Pico からバッテリーへの逆流を防ぐためのダイオードが必要です。
+          スイッチングダイオードでは電圧降下が大きすぎて LCD のバックライトが
+          ちらついたりするので、ショットキーバリアダイオードを使用します。
+        </p>
+        <blockquote class="note">
+          バッテリーは無くても外部給電で動きます。
+          工作初心者の場合、裸のリポ電池の取り扱いはリスクも伴うので、
+          乾電池を使ったり、外部給電を前提とするのもアリだと思います。
+        </blockquote>
+        <h4>スピーカー</h4>
+        <p>公式の回路図は圧電スピーカーを使用する前提の回路になっています。</p>
+        <p><img src="./buzzer-driver.png" alt=""></p>
+        <p>今回はもう少し力強く鳴らしたかったのでダイナミックスピーカーを使用することにしました。</p>
+        <p>
+          公式の回路の圧電スピーカーをマグネチックスピーカーに置き換えても鳴るには鳴りますが、
+          大きな電流が流れてスピーカーとトランジスタが発熱し、もしかすると壊れるかもしれないので
+          回路の変更が必要です (後述)。
+        </p>
+        <p>
+          また、ソフトウェアでの音量調節が起動時にしかできないのが少し不便なので
+          物理ボリュームも追加することにしました。
+        </p>
+        <ul>
+          <li>スピーカー: <a href="https://akizukidenshi.com/catalog/g/g112495/" target="_blank">マイクロスピーカー 8 Ω</a></li>
+          <li>パワーアンプ: <a href="https://akizukidenshi.com/catalog/g/g117849/" target="_blank">HT82V73A</a></li>
+          <li>ボリューム: <a href="https://akizukidenshi.com/catalog/g/g114734/" target="_blank">10 kΩ Aカーブ</a></li>
+          <li>3.3V シリーズレギュレータ: <a href="https://www.digikey.jp/ja/products/detail/richtek-usa-inc/RT9193-33GB/2470048" target="_blank">RT9193-33GB</a></li>
+          <li>インバータ: <a href="https://akizukidenshi.com/catalog/g/g117602/" target="_blank">74AHC1G04W5</a></li>
+        </ul>
+        <h4>microSD カード</h4>
+        <p>
+          SPI モードで使用可能な microSD カードが必要です。
+          最近のカードだと使えないものがあるかもしれません。
+        </p>
+        <p>今回は以下のものを使用しました。</p>
+        <ul>
+          <li><a href="https://www.amazon.co.jp/dp/B07CD9QYNM/" target="_blank">Transcend microSDHCカード 32GB 3D TLC UHS-I Class10 TS32GUSD300S</a></li>
+        </ul>
+        <h4>その他</h4>
+        <ul>
+          <li>microSD スロット: <a href="https://akizukidenshi.com/catalog/g/g105488/" target="_blank">DIP化キット</a></li>
+          <li>電源スイッチ: <a href="https://akizukidenshi.com/catalog/g/g102627/" target="_blank">IS-2235</a></li>
+          <li>ユーザー LED: 手元にあった青色のチップ LED</li>
+          <li>充電状態 LED: 手元にあった赤色のチップ LED</li>
+          <li>抵抗/コンデンサ: 少々</li>
+          <li>リセットスイッチ/拡張ポート: ゲームコンソールとして使うだけなら不要</li>
+        </ul>
+        <h3>回路</h3>
+        <p>
+          概ね <a href="https://github.com/Pajenicko/Picopad/blob/main/hardware/schematics/" target="_blank">公式の回路図</a>
+          と同じですが、バッテリー充電回路とオーディオ出力については
+          下記のようにアレンジしました。
+        </p>
+        <p><img src="./schematic.png" alt=""></p>
+        <h4>バッテリー充電回路</h4>
+        <p>
+          充電回路は充電制御 IC (U1) のデータシートと
+          スイッチサイエンスのモジュールの回路を参考にしました。
+        </p>
+        <h4>オーディオ出力</h4>
+        <p>ダイナミックスピーカーを力強く鳴らすためにパワーアンプ (U4) を使用しました。</p>
+        <p>
+          ボリュームによる音量調節とパワーアンプのアナログ入力のために
+          Pico からの PWM 出力をローパスフィルタ (R3/C6) で
+          平滑化してアナログ信号にします。R4 はボリューム最大時に音割れしない程度に調節しました。
+        </p>
+        <p>
+          Pico の VSYS や 3V3OUT はリプル (変動) が大きく、
+          そのままオーディオの電源として使うと音声出力にノイズが乗ってしまいますので、
+          シリーズレギュレーター (U2) を使ってオーディオ用の電源 (AVCC) を作ります。
+        </p>
+        <p>
+          また、PWM 信号自体にも Pico のノイズが乗っており、
+          それをそのまま平滑して増幅するとノイズも一緒に増幅されてしまいますので
+          インバーター (U3) を通して綺麗なデジタル信号にします。
+        </p>
+        <p>このへんのノイズ対策をしないと、ジャリジャリキーキー鳴ってしまいます。</p>
+        <h4>その他</h4>
+        <p>
+          上記以外は基本的にオリジナルの回路と同じですが、
+          拡張ポートについては今回は省略しました。
+        </p>
+        <h3>組み立て</h3>
+        <h4>LCD</h4>
+        <p>
+          Waveshare の <a href="https://www.waveshare.com/2inch-lcd-module.htm" target="_blank">2inch LCD Display Module</a>
+          から Pico 用のピンソケットとスイッチを除去してディスプレイだけにしました。
+        </p>
+        <p>ホットエアが無いと綺麗に除去するのは結構難しいです。</p>
+        <h4>基板</h4>
+        <p>ユニバーサル基板を適当なサイズに切り、そこに LCD、Pico、MicroSD 基板、バッテリーを貼り付けました。電源スイッチ、ボリューム、LED はユニバーサル基板に実装しました。</p>
+        <p><img src="./assembly.jpg" alt=""></p>
+        <h4>キーパッド</h4>
+        <p>キーパッドはゲームコントローラのゴム接点を流用しました。</p>
+        <p>
+          基板側の接点は銅箔テープを貼り、ゴムパッドがズレないように
+          <a href="https://github.com/shapoco/jigs/blob/main/special/picopad/r1/stl/pivot.stl" target="_blank">ガイド</a>
+          を貼り付けました。
+          接点の接触を良くするため、導電ゴムが接触する部分を鉛筆でゴシゴシしておきました。
+        </p>
+        <p>
+          キートップもゲームパッドから流用するつもりでしたが、
+          高さが足りなかったので結局 3D プリントしました。
+        </p>
+        <p>右側のボタンは下右左上の順に ABXY に割り当てます。</p>
+        <p><img src="./keypad.jpg" alt=""></p>
+        <h4>パワーアンプ基板</h4>
+        <p>パワーアンプ基板は後から別基板を追加しました。</p>
+        <h4>ケース</h4>
+        <p>ケースは中身が一通り出来上がってからそれに合わせて <a href="https://github.com/shapoco/jigs/tree/main/special/picopad" target="_blank">CadQuery で設計</a> して、3D プリントしました。</p>
+        <p>
+          ネジ止めするスペースが無いのでケースは爪で噛み合うようにし、
+          ダンボールをクッションにして基板を裏から押さえつけるようにしました。
+        </p>
+        <p><img src="./3dmodel.png" alt=""></p>
+        <h4>組み立ての様子</h4>
+        <p><video controls><source src="https://www.shapoco.net/media/2025/20251123_picopad.mp4" type="video/mp4" /></video></p>
+        <h3>起動</h3>
+        <h4>初回</h4>
+        <p>一度起動した後は独自ブートローダを使って microSD カードからアプリを起動できますが、一番最初はそのブートローダを含んだ UF2 を PC から書き込む必要があります。</p>
+        <ol>
+          <li>
+            <p><a href="https://www.breatharian.eu/hw/picolibsdk/index_en.html" target="_blank">PicoLibSDK のサイト</a> に SD カード内のファイルをまとめた zip ファイルがあるので、それを展開して microSD カードに書き込んでおきます。</p>
+            <p><img src="./sdcard_image_links.png" alt=""></p>
+          </li>
+          <li>BOOTSEL ボタンを押しながら PicoPad を PC に接続します (マスストレージデバイスとして認識されます)。</li>
+          <li>microSD カードイメージの中の適当な UF2 (例: <code>GAME/TETRIS.UF2</code>) のどれかを PC から書き込みます。</li>
+        </ol>
+        <h4>microSD カードからの起動</h4>
+        <p>
+          正確には microSD カードから Pico の Flash にアプリを転送し、
+          Flash から起動する流れになります。
+        </p>
+        <p>
+          2 回目以降は電源投入時にブートメニューが表示されるので、
+          ↑↓キーで UF2 を選んで A ボタンで起動します。
+        </p>
+        <p>ブートメニューで Y ボタンを押すと、前回 Flash に転送されたアプリが起動します。</p>
+
+    </main>
+    <footer>
+      <span class="nowrap">
+        Copyright &copy; <a href="https://x.com/shapoco/" target="_blank">Shapoco</a>,
+      </span>
+      <span class="nowrap">
+        Powered by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
+      </span>
+    </footer>
+  </div>
+</body>
+
+</html>
