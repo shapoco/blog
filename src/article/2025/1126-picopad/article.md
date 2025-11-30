@@ -11,15 +11,18 @@
 
 ## PicoPad とは
 
-PicoPad は Pajenicko 氏による Raspberry Pi Pico をベースとした
+PicoPad はチェコの Pájeníčko による Raspberry Pi Pico をベースとした
 オープンソースのゲーミングコンソールです。
-DIY キットが販売されており、C/C++、Circuit Python、MicroPython でのプログラミング可能で、
+[完成品や周辺パーツ](https://pajenicko.cz/picopad) が販売されており、
+C/C++、Circuit Python、MicroPython でのプログラミング可能で、
 公式サイトでは「STEM 教育に最適」であるとされています。
 
 独自のブートローダにより SD カードからバイナリを起動可能なので、
 いちいち PC に繋いでプログラムを書き換える必要はありません。
-公式の SD カードイメージにはゲームを含む多数のサンプルソフトウェアが収録されています。
+公式の SD カードイメージにはゲームを含む多数の
+コンパイル済みサンプルアプリが収録されており、すぐに遊ぶことができます。
 
+TinyJoyPad 向けゲームの PicoPad 移植版や
 ゲームボーイやファミコンのエミュレータも公開されており、
 シンプルにレトロゲームコンソールとして使うこともできます。
 
@@ -174,8 +177,7 @@ Pico の VSYS や 3V3OUT はリプル (変動) が大きく、
 
 ### LCD
 
-Waveshare の [2inch LCD Display Module](https://www.waveshare.com/2inch-lcd-module.htm)
-から Pico 用のピンソケットとスイッチを除去してディスプレイと LDO だけにしました。ホットエアが無いと綺麗に除去するのは結構難しいです。
+Waveshare の 2 インチディスプレイから Pico 用のピンソケットとスイッチを除去してディスプレイと LDO だけにしました。ホットエアが無いと綺麗に除去するのは結構難しいです。
 
 ### 基板
 
@@ -220,19 +222,24 @@ Waveshare の [2inch LCD Display Module](https://www.waveshare.com/2inch-lcd-mod
 
 ### 初回
 
-一度起動した後は独自ブートローダを使って microSD カードからアプリを起動できますが、一番最初はそのブートローダを含んだ UF2 を PC から書き込む必要があります。
+一度起動した後は PicoLibSDK の独自ブートローダを使って microSD カードからアプリを起動できますが、一番最初はそのブートローダを含んだ UF2 を PC から書き込む必要があります。
 
-1. [PicoLibSDK のサイト](https://www.breatharian.eu/hw/picolibsdk/index_en.html) に SD カード内のファイルをまとめた zip ファイルがあるので、それを展開して microSD カードに書き込んでおきます。
+1. [PicoLibSDK のサイト](https://www.breatharian.eu/hw/picolibsdk/index_en.html) に SD カード内のファイルをまとめた zip ファイルがあるので、それをダウンロードして展開しておきます。
 
     ![](./sdcard_image_links.png)
 
-2. BOOTSEL ボタンを押しながら PicoPad を PC に接続します (マスストレージデバイスとして認識されます)。
-3. microSD カードイメージの中の適当な UF2 のどれか (例: `LOADER.UF2`) を PC から書き込みます。
+2. 展開した SD カードデータ一式を microSD カードにコピーし、PicoPad にセットしておきます。
+3. BOOTSEL ボタンを押しながら PicoPad を PC に接続します (マスストレージデバイスとして認識されます)。
+4. 先ほど展開した SD カードデータの中にある UF2 のどれか (例: `LOADER.UF2`) を PicoPad に書き込みます。
+
+青いブートメニューまたは「Going To Sleep ...」という表示が出たら書き込み完了です。
 
 ### microSD カードからの起動
 
-内部的には microSD カードから Pico の Flash にアプリを転送し、
-Flash から起動する流れになります。
+1. USB ケーブル接続時は、どれかのボタンを 2 回押すとブートメニューが表示されます。USB を接続していない状態では、電源投入と同時にブートメニューが表示されます。
+2. ブートメニューが表示されたら、↑↓キーでアプリの UF2 を選んで A ボタンで起動します。
 
-電源投入時にブートメニューが表示されるので、↑↓キーで UF2 を選んで A ボタンで起動します。
+内部的には microSD カードから Pico の Flash にアプリを転送し、
+Flash からアプリを起動する動きになります。
+
 ブートメニューで Y ボタンを押すと、前回 Flash に転送されたアプリが起動します。
