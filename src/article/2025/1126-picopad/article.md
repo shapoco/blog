@@ -116,7 +116,7 @@ Amazon や Aliexpress でも同じものが手に入ります。
 - スピーカー: [マイクロスピーカー 8 Ω](https://akizukidenshi.com/catalog/g/g112495/)
 - パワーアンプ: [HT82V73A](https://akizukidenshi.com/catalog/g/g117849/)
 - ボリューム: [10 kΩ Aカーブ](https://akizukidenshi.com/catalog/g/g114734/)
-- 3.3V シリーズレギュレータ: [RT9193-33GB](https://www.digikey.jp/ja/products/detail/richtek-usa-inc/RT9193-33GB/2470048)
+- 3.3V シリーズレギュレータ: [RT9080-33GJ5](https://akizukidenshi.com/catalog/g/g129588/)
 - インバータ: [74AHC1G04W5](https://akizukidenshi.com/catalog/g/g117602/)
 
 ### microSD カード
