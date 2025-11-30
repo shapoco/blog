@@ -12,7 +12,7 @@
 ## PicoPad とは
 
 PicoPad はチェコの Pájeníčko による Raspberry Pi Pico をベースとした
-オープンソースのゲーミングコンソールです。
+オープンソース (GPL-3.0) のゲーミングコンソールです。
 [完成品や周辺パーツ](https://pajenicko.cz/picopad) が販売されており、
 C/C++、Circuit Python、MicroPython でのプログラミング可能で、
 公式サイトでは「STEM 教育に最適」であるとされています。
