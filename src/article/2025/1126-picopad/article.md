@@ -147,7 +147,7 @@ SPI モードで使用可能な microSD カードが必要です。
 
 ### バッテリー充電回路
 
-充電回路は充電制御 IC (U1) のデータシートと
+充電回路は充電制御 IC (MCP73831) のデータシートと
 スイッチサイエンスのモジュールの回路を参考にしました。
 
 ### オーディオ出力
@@ -205,6 +205,13 @@ Waveshare の 2 インチディスプレイから Pico 用のピンソケット�
 
 パワーアンプ基板は後から別基板を追加しました。
 
+パワーアンプ IC (HT82V73A) は裏面にも GND パッドがあるので
+[それに対応した変換基板](https://akizukidenshi.com/catalog/g/g115952)
+を使用しました。表面のレジストをナイフ等で削って
+GND パッドに繋がる銅箔を露出させると良い感じに表面のみで実装できます。
+
+![](./power-amp.png)
+
 ### ケース
 
 ケースは中身が一通り出来上がってからそれに合わせて [CadQuery で設計](https://github.com/shapoco/jigs/tree/main/special/picopad) して、3D プリントしました。
@@ -226,7 +233,7 @@ Waveshare の 2 インチディスプレイから Pico 用のピンソケット�
 
 1. [PicoLibSDK のサイト](https://www.breatharian.eu/hw/picolibsdk/index_en.html) に SD カード内のファイルをまとめた zip ファイルがあるので、それをダウンロードして展開しておきます。
 
-    ![](./sdcard_image_links.png)
+    ![](./sdcard-image-links.png)
 
 2. 展開した SD カードデータ一式を microSD カードにコピーし、PicoPad にセットしておきます。
 3. BOOTSEL ボタンを押しながら PicoPad を PC に接続します (マスストレージデバイスとして認識されます)。

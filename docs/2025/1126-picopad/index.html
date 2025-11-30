@@ -203,7 +203,7 @@
         <p><img src="./schematic.png" alt=""></p>
         <h4>バッテリー充電回路</h4>
         <p>
-          充電回路は充電制御 IC (U1) のデータシートと
+          充電回路は充電制御 IC (MCP73831) のデータシートと
           スイッチサイエンスのモジュールの回路を参考にしました。
         </p>
         <h4>オーディオ出力</h4>
@@ -251,6 +251,13 @@
         <p><img src="./keypad.jpg" alt=""></p>
         <h4>パワーアンプ基板</h4>
         <p>パワーアンプ基板は後から別基板を追加しました。</p>
+        <p>
+          パワーアンプ IC (HT82V73A) は裏面にも GND パッドがあるので
+          <a href="https://akizukidenshi.com/catalog/g/g115952" target="_blank">それに対応した変換基板</a>
+          を使用しました。表面のレジストをナイフ等で削って
+          GND パッドに繋がる銅箔を露出させると良い感じに表面のみで実装できます。
+        </p>
+        <p><img src="./power-amp.png" alt=""></p>
         <h4>ケース</h4>
         <p>ケースは中身が一通り出来上がってからそれに合わせて <a href="https://github.com/shapoco/jigs/tree/main/special/picopad" target="_blank">CadQuery で設計</a> して、3D プリントしました。</p>
         <p>
@@ -266,7 +273,7 @@
         <ol>
           <li>
             <p><a href="https://www.breatharian.eu/hw/picolibsdk/index_en.html" target="_blank">PicoLibSDK のサイト</a> に SD カード内のファイルをまとめた zip ファイルがあるので、それをダウンロードして展開しておきます。</p>
-            <p><img src="./sdcard_image_links.png" alt=""></p>
+            <p><img src="./sdcard-image-links.png" alt=""></p>
           </li>
           <li>展開した SD カードデータ一式を microSD カードにコピーし、PicoPad にセットしておきます。</li>
           <li>BOOTSEL ボタンを押しながら PicoPad を PC に接続します (マスストレージデバイスとして認識されます)。</li>
