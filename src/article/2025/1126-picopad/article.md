@@ -252,3 +252,10 @@ GND パッドに繋がる銅箔を露出させると良い感じに表面のみ�
 Flash からアプリを起動する動きになります。
 
 ブートメニューで Y ボタンを押すと、前回 Flash に転送されたアプリが起動します。
+
+## SNS 投稿
+
+- [X (Twitter)](https://x.com/shapoco/status/1994717881997955230)
+- [Misskey.io](https://misskey.io/notes/afnq87gglfcu06iy)
+- [Bluesky](https://bsky.app/profile/shapoco.net/post/3m6r7jdbxyk2e)
+- [mixi2](https://mixi.social/@shapoco/posts/f1f586c9-0d78-4e51-9339-f2d1bedadd86)
