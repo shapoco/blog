@@ -253,6 +253,112 @@ Flash からアプリを起動する動きになります。
 
 ブートメニューで Y ボタンを押すと、前回 Flash に転送されたアプリが起動します。
 
+## NES エミュレータのビルド (Linux/WSL2)
+
+PicoLibSDK にはファミコン (NES) エミュレータ含まれています。
+特に説明が見当たりませんが [InfoNES](https://github.com/jay-kumogata/InfoNES)
+ベースのエミュレータのようです。ROM 毎に UF2 を作成する方式なので、遊ぶには自前でビルドする必要があります。
+
+### Windows
+
+Windows ではビルド環境をセットアップした後で PicoLibSDK のリポジトリ配下の
+`EMU/NES/samples/` の配下にNES ファイルを配置して `c_all_samples.bat`
+を叩くことでビルドできる…ように見えます (自分では試してません)。
+
+### Linux
+
+Linux 用のビルドスクリプトは用意されていませんが、
+Windows 用のバッチファイルを参考にシェルスクリプトを起こすことで
+WSL2 でビルドできました。
+
+1. GCC がインストールされていない場合はインストールしておきます。
+2. Pico2 ではなく Pico 用にビルドする場合はスクリプト中の `DEVICE=picopad20` を
+    `DEVICE=picopad10` に書き換えてください。
+3. 後述の `build_nes.sh` を適当なディレクトリに保存し、実行権限を付与します。
+4. 同じディレクトリに `nes_rom` という名前のディレクトリを作成し、
+    その配下に NES ファイルをまとめて配置します。
+5. `./build_nes.sh` を実行します。
+
+`nes_uf2` というディレクトリ配下に ROM と同じ名前で UF2 が作成されます。
+
+```sh:build_nes.sh
+#!/bin/bash
+
+set -eu
+
+DEVICE=picopad20
+
+# ROM ファイルをリストアップ
+pushd nes_rom
+  NES_DIR=`pwd`
+  NES_LIST=`ls -1 *.nes`
+popd
+
+UF2_DIR=`pwd`/nes_uf2
+mkdir -p "${UF2_DIR}"
+
+mkdir -p nes_build
+pushd nes_build
+  if [ ! -e PicoLibSDK ]; then
+    # PicoLibSDK をクローン
+    git clone https://github.com/Panda381/PicoLibSDK
+  fi
+  pushd PicoLibSDK
+    # スクリプトに実行権限を付与
+    find . -type f -name "*.sh" -exec chmod +x {} \;
+    
+    # 必要なツールをビルド
+    pushd _tools/elf2uf2
+      g++ -o elf2uf2 main.cpp
+    popd
+    pushd _tools/PicoPadLoaderCrc
+      g++ -o LoaderCrc LoaderCrc.cpp
+    popd
+    pushd PicoPad/EMU/NES/NESprep
+      g++ -o NESprep NESprep.cpp
+    popd
+    pushd PicoPad/EMU/NES/NESprep/MapperNo
+      g++ -o MapperNo MapperNo.cpp
+    popd
+    
+    pushd PicoPad/EMU/NES
+      set +e
+      ./d.sh
+      set -e
+      
+      # ROM 毎に UF2 を作成
+      for nes_filename in $NES_LIST; do
+        nes_path="${NES_DIR}/${nes_filename}"
+        nes_title=`basename "${nes_filename}" .nes`
+        
+        # 古いファイルを削除
+        rm -f \
+          src/program.cpp \
+          src/setup.h
+        rm -f \
+          build/program.o \
+          build/main.o \
+          build/InfoNES.o \
+          build/K6502_rw.o
+        
+        # ソースコード生成
+        ./NESprep/NESprep "${nes_path}" src/program.cpp ${nes_title}
+        cp setup.h src/setup.h
+        
+        # ビルド
+        ./c.sh ${DEVICE}
+        
+        # ファイルをコピー
+        cp NES.uf2 "${UF2_DIR}/${nes_title}.uf2"
+      done
+    popd
+  popd
+popd
+
+```
+
+ROM ファイルはご自身で、合法的に用意してくださいね。
+
 ## SNS 投稿
 
 - [X (Twitter)](https://x.com/shapoco/status/1994717881997955230)

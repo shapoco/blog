@@ -50,6 +50,7 @@ function arrangeArticleHtml(parent) {
 
   // コードブロックのマークアップ
   const STYLE_KEYWORD = 'color: #44c;';
+  const STYLE_VARIABLE = 'color: #c84;';
   const STYLE_STRING = 'color: #c44;';
   const STYLE_COMMENT = 'color: #080; font-style: italic;';
   const STYLE_MACRO = 'color: #c48;';
@@ -70,6 +71,7 @@ function arrangeArticleHtml(parent) {
   const RULE_LARGE_CONST_ID = { style: STYLE_CONST, pattern: /\b[A-Z][A-Z0-9_]*\b/ };
   const RULE_CUSTOM_EMOJI = { style: STYLE_CUSTOM_EMOJI, pattern: /:\w+:/ };
   const RULE_HTML_TAG = { style: STYLE_HTML_TAG, pattern: /<[^>]+>/ };
+  const RULE_VARIABLE_SHELL = { style: STYLE_VARIABLE, pattern: /\$[@a-zA-Z0-9_]*\b|\$\{[@a-zA-Z0-9_]*\}/ };
 
   // C++
   const langCxx = {
@@ -146,6 +148,26 @@ function arrangeArticleHtml(parent) {
     ],
   };
 
+  // ShellScript
+  const langShell = {
+    rangeRules: [
+      { style: STYLE_COMMENT, start: '#', end: '\n', escapeChar: '\\' },
+      { style: STYLE_STRING, start: "'", end: "'", escapeChar: '\\' },
+      { style: STYLE_STRING, start: '`', end: '`', escapeChar: '\\' },
+      { style: STYLE_STRING, start: '"', end: '"', escapeChar: '\\' },
+    ],
+    regExpRules: [
+      {
+        style: STYLE_KEYWORD,
+        pattern: new RegExp(
+          '\\b(case|cd|cp|do|done|echo|esac|export|exit|fi|find|for|grep|' +
+          'if|mv|mkdir|' +
+          'pushd|popd|return|rm|set|then|unset)\\b')
+      },
+      RULE_VARIABLE_SHELL,
+    ],
+  };
+
   // diff
   const langDiff = {
     rangeRules: [
@@ -172,6 +194,8 @@ function arrangeArticleHtml(parent) {
     'c++': langCxx,
     js: langJavaScript,
     json: langJavaScript,
+    sh: langShell,
+    bash: langShell,
     diff: langDiff,
     mfm: langMfm,
   };

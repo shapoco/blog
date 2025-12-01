@@ -35,7 +35,7 @@
   </script>
 
   <link href="/style.css?0ec49c72" rel="stylesheet" type="text/css">
-  <script src="/style.js?5ea9e62c"></script>
+  <script src="/style.js?0fd56873"></script>
 
   <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
   <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
@@ -291,6 +291,111 @@
           Flash からアプリを起動する動きになります。
         </p>
         <p>ブートメニューで Y ボタンを押すと、前回 Flash に転送されたアプリが起動します。</p>
+        <h3>NES エミュレータのビルド (Linux/WSL2)</h3>
+        <p>
+          PicoLibSDK にはファミコン (NES) エミュレータ含まれています。
+          特に説明が見当たりませんが <a href="https://github.com/jay-kumogata/InfoNES" target="_blank">InfoNES</a>
+          ベースのエミュレータのようです。ROM 毎に UF2 を作成する方式なので、遊ぶには自前でビルドする必要があります。
+        </p>
+        <h4>Windows</h4>
+        <p>
+          Windows ではビルド環境をセットアップした後で PicoLibSDK のリポジトリ配下の
+          <code>EMU/NES/samples/</code> の配下にNES ファイルを配置して <code>c_all_samples.bat</code>
+          を叩くことでビルドできる…ように見えます (自分では試してません)。
+        </p>
+        <h4>Linux</h4>
+        <p>
+          Linux 用のビルドスクリプトは用意されていませんが、
+          Windows 用のバッチファイルを参考にシェルスクリプトを起こすことで
+          WSL2 でビルドできました。
+        </p>
+        <ol>
+          <li>GCC がインストールされていない場合はインストールしておきます。</li>
+          <li>
+            Pico2 ではなく Pico 用にビルドする場合はスクリプト中の <code>DEVICE=picopad20</code> を
+            <code>DEVICE=picopad10</code> に書き換えてください。
+          </li>
+          <li>後述の <code>build_nes.sh</code> を適当なディレクトリに保存し、実行権限を付与します。</li>
+          <li>
+            同じディレクトリに <code>nes_rom</code> という名前のディレクトリを作成し、
+            その配下に NES ファイルをまとめて配置します。
+          </li>
+          <li><code>./build_nes.sh</code> を実行します。</li>
+        </ol>
+        <p><code>nes_uf2</code> というディレクトリ配下に ROM と同じ名前で UF2 が作成されます。</p>
+        <pre class="lang_sh" title="build_nes.sh">#!/bin/bash
+
+set -eu
+
+DEVICE=picopad20
+
+# ROM ファイルをリストアップ
+pushd nes_rom
+  NES_DIR=`pwd`
+  NES_LIST=`ls -1 *.nes`
+popd
+
+UF2_DIR=`pwd`/nes_uf2
+mkdir -p &quot;${UF2_DIR}&quot;
+
+mkdir -p nes_build
+pushd nes_build
+  if [ ! -e PicoLibSDK ]; then
+    # PicoLibSDK をクローン
+    git clone https://github.com/Panda381/PicoLibSDK
+  fi
+  pushd PicoLibSDK
+    # スクリプトに実行権限を付与
+    find . -type f -name &quot;*.sh&quot; -exec chmod +x {} \;
+
+    # 必要なツールをビルド
+    pushd _tools/elf2uf2
+      g++ -o elf2uf2 main.cpp
+    popd
+    pushd _tools/PicoPadLoaderCrc
+      g++ -o LoaderCrc LoaderCrc.cpp
+    popd
+    pushd PicoPad/EMU/NES/NESprep
+      g++ -o NESprep NESprep.cpp
+    popd
+    pushd PicoPad/EMU/NES/NESprep/MapperNo
+      g++ -o MapperNo MapperNo.cpp
+    popd
+
+    pushd PicoPad/EMU/NES
+      set +e
+      ./d.sh
+      set -e
+
+      # ROM 毎に UF2 を作成
+      for nes_filename in $NES_LIST; do
+        nes_path=&quot;${NES_DIR}/${nes_filename}&quot;
+        nes_title=`basename &quot;${nes_filename}&quot; .nes`
+
+        # 古いファイルを削除
+        rm -f \
+          src/program.cpp \
+          src/setup.h
+        rm -f \
+          build/program.o \
+          build/main.o \
+          build/InfoNES.o \
+          build/K6502_rw.o
+
+        # ソースコード生成
+        ./NESprep/NESprep &quot;${nes_path}&quot; src/program.cpp ${nes_title}
+        cp setup.h src/setup.h
+
+        # ビルド
+        ./c.sh ${DEVICE}
+
+        # ファイルをコピー
+        cp NES.uf2 &quot;${UF2_DIR}/${nes_title}.uf2&quot;
+      done
+    popd
+  popd
+popd</pre>
+        <p>ROM ファイルはご自身で、合法的に用意してくださいね。</p>
         <h3>SNS 投稿</h3>
         <ul>
           <li><a href="https://x.com/shapoco/status/1994717881997955230" target="_blank">X (Twitter)</a></li>
