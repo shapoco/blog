@@ -294,14 +294,11 @@
         <h3>NES エミュレータのビルド (Linux/WSL2)</h3>
         <p><img src="./infones.jpg" alt=""></p>
         <p>
-          PicoLibSDK にはファミコン (NES) エミュレータ含まれています。
+          PicoLibSDK にはファミコン (NES) エミュレータも含まれています。
           特に説明が見当たりませんが <a href="https://github.com/jay-kumogata/InfoNES" target="_blank">InfoNES</a>
           ベースのエミュレータのようです。ROM 毎に UF2 を作成する方式なので、遊ぶには自前でビルドする必要があります。
         </p>
-        <p>
-          タイトルにもよるかもしれませんが、フレームレートはあまり高くないようです (体感 20~
-          30 FPS くらい？)。
-        </p>
+        <p>タイトルにもよるかもしれませんが、フレームレートはあまり高くないようです (体感 20 FPS くらい？)。</p>
         <h4>Windows</h4>
         <p>
           Windows ではビルド環境をセットアップした後で PicoLibSDK のリポジトリ配下の
@@ -326,8 +323,8 @@
             その配下に NES ファイルをまとめて配置します。
           </li>
           <li><code>./build_nes.sh</code> を実行します。</li>
+          <li><code>nes_uf2/</code> というディレクトリ配下に ROM と同じ名前で UF2 が作成されます。</li>
         </ol>
-        <p><code>nes_uf2</code> というディレクトリ配下に ROM と同じ名前で UF2 が作成されます。</p>
         <pre class="lang_sh" title="build_nes.sh">#!/bin/bash
 
 set -eu

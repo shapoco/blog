@@ -257,7 +257,7 @@ Flash からアプリを起動する動きになります。
 
 ![](./infones.jpg)
 
-PicoLibSDK にはファミコン (NES) エミュレータ含まれています。
+PicoLibSDK にはファミコン (NES) エミュレータも含まれています。
 特に説明が見当たりませんが [InfoNES](https://github.com/jay-kumogata/InfoNES)
 ベースのエミュレータのようです。ROM 毎に UF2 を作成する方式なので、遊ぶには自前でビルドする必要があります。
 
@@ -282,8 +282,7 @@ WSL2 でビルドできました。
 4. 同じディレクトリに `nes_rom` という名前のディレクトリを作成し、
     その配下に NES ファイルをまとめて配置します。
 5. `./build_nes.sh` を実行します。
-
-`nes_uf2` というディレクトリ配下に ROM と同じ名前で UF2 が作成されます。
+6. `nes_uf2/` というディレクトリ配下に ROM と同じ名前で UF2 が作成されます。
 
 ```sh:build_nes.sh
 #!/bin/bash
