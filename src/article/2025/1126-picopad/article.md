@@ -255,9 +255,13 @@ Flash からアプリを起動する動きになります。
 
 ## NES エミュレータのビルド (Linux/WSL2)
 
+![](./infones.jpg)
+
 PicoLibSDK にはファミコン (NES) エミュレータ含まれています。
 特に説明が見当たりませんが [InfoNES](https://github.com/jay-kumogata/InfoNES)
 ベースのエミュレータのようです。ROM 毎に UF2 を作成する方式なので、遊ぶには自前でビルドする必要があります。
+
+タイトルにもよるかもしれませんが、フレームレートはあまり高くないようです (体感 20 FPS くらい？)。
 
 ### Windows
 
