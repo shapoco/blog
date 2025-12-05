@@ -94,8 +94,8 @@
         <h3>リセットパルスの生成</h3>
         <p>以下のような仕様でリセットパルスを生成します。</p>
         <ul>
-          <li>BOOTSEL の 100ms 未満のパルスは無視</li>
-          <li>BOOTSEL の 100ms～t<sub>HOLD</sub> のパルスでは立ち上がりでリセットパルスを生成</li>
+          <li>BOOTSEL の t<sub>CLICK</sub> 未満のパルスは無視</li>
+          <li>BOOTSEL の t<sub>CLICK</sub>～t<sub>HOLD</sub> のパルスでは立ち上がりでリセットパルスを生成</li>
           <li>BOOTSEL の立ち下がりから t<sub>HOLD</sub> 経過したらリセットパルスを生成</li>
         </ul>
         <p>
@@ -118,10 +118,24 @@
           ツールは avrdude を使用しました。
         </p>
         <h4>設定ピン</h4>
-        <p>
-          長押しのホールド時間 (t<sub>HOLD</sub>) はデフォルトでは 4 秒ですが、
-          TIMESEL ピンを GND に接続することで 500ms に変更できるようにしました。
-        </p>
+        <p>押す時間は TIMESEL ピンで選択できます。</p>
+        <table>
+          <tr>
+            <th class="nowrap">TIMESEL</th>
+            <th class="nowrap">クリック</th>
+            <th>長押し (t<sub>HOLD</sub>)</th>
+          </tr>
+          <tr>
+            <td class="nowrap">オープン</td>
+            <td class="nowrap">1000 ms</td>
+            <td>5000 ms (4900 ms)</td>
+          </tr>
+          <tr>
+            <td class="nowrap">GND に接続</td>
+            <td class="nowrap">100 ms</td>
+            <td>500 ms (400 ms)</td>
+          </tr>
+        </table>
         <p>一部の特殊なアプリケーション (PicoPad のブートローダ) で QSPI_SS が数百 ms の間 Low にドライブされることがあり、クリックと誤認されてリセットが実行されてしまうので、クリックについては NOCLICK ピンを GND に接続することで無効化できるようにしています。</p>
         <h3>ラズピコへの取り付け</h3>
         <p>
