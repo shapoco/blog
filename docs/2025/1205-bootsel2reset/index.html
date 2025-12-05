@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+  <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+  <meta name="description" content="Raspberry Pi Pico に搭載されている BOOTSEL スイッチを使って リセットを行えるようにする MOD チップ的なものを作ってみました。">
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@shapoco" />
+  <meta property="og:url" content="https://blog.shapoco.net/2025/1205-bootsel2reset/" />
+  <meta property="og:title" content="BootSel2Reset: ラズピコの BOOTSEL をリセットと兼用にする | シャポログ" />
+  <meta property="og:description" content="Raspberry Pi Pico に搭載されている BOOTSEL スイッチを使って リセットを行えるようにする MOD チップ的なものを作ってみました。" />
+  <meta property="og:image" content="https://blog.shapoco.net/2025/1205-bootsel2reset/cover.png" />
+
+  <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+  <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KJ53WNQ22G"></script>
+  <script>
+    var remoteHost = window.location.hostname;
+    if (remoteHost == "localhost") {
+      console.log(`Google Analytics disabled on: '${remoteHost}'`);
+    }
+    else {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-KJ53WNQ22G');
+    }
+  </script>
+
+  <link href="/style.css?0ec49c72" rel="stylesheet" type="text/css">
+  <script src="/style.js?0fd56873"></script>
+
+  <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+  <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+  <title>BootSel2Reset: ラズピコの BOOTSEL をリセットと兼用にする | シャポログ</title>
+</head>
+
+<body>
+  <div id="container">
+    <div id="root_navi"></div>
+
+    <header class="article_header">
+      <h1><a href="/">シャポログ</a></h1>
+    </header>
+    <main>
+      <h2>BootSel2Reset: ラズピコの BOOTSEL をリセットと兼用にする</h2>
+
+      <div class="article_info_wrap">
+        <div class="article_info">
+          2025/12/05 |
+          <a href="https://github.com/shapoco/blog/tree/main/src/article/2025/1205-bootsel2reset/" target="_blank">記事のソース</a>
+        </div>
+
+        <div id="shpcstamp_wrap"></div>
+        <script async src="/stamp/v1/widget.js?4fe6d3e3"></script>
+      </div>
+
+              <p>
+          Raspberry Pi Pico に搭載されている BOOTSEL スイッチを使って
+          リセットを行えるようにする MOD チップ的なものを作ってみました。
+        </p>
+        <p><img src="./picture.jpg" alt=""></p>
+        <h3>動機</h3>
+        <p>
+          <a href="../../2023/1017-raspico-longpush-button/">「長押しで書き込みボタン」</a>
+          を作って以降、ラズピコを購入したらまずこのボタンを追加するのが
+          個人的にルーチンワークになっています。
+        </p>
+        <p>
+          長押し書き込みボタンは便利なんですが、複数の部品を取り付ける作業がめんどいので
+          既存の BOOTSEL スイッチを使って同様の機能を実現する MOD チップ的なものを
+          作ってみることにしました。
+        </p>
+        <h3>BOOTSEL スイッチ</h3>
+        <p>
+          BOOTSEL スイッチは QSPI Flash の CS 信号に接続されています。
+          リセット解除時にこのピンが Low にドライブされている場合、
+          ラズピコは USB マスストレージモードで起動するようになっています。
+        </p>
+        <p><img src="./schematic_bootsel.png" alt=""></p>
+        <p>
+          この信号は RP2040/RP2350 が Flash にアクセス時にも
+          Low にドライブされるので、BOOTSEL スイッチの押下と区別するには
+          パルス幅で判別する必要があります。
+        </p>
+        <h3>リセットパルスの生成</h3>
+        <p>以下のような仕様でリセットパルスを生成します。</p>
+        <ul>
+          <li>BOOTSEL の 100ms 未満のパルスは無視</li>
+          <li>BOOTSEL の 100ms～t<sub>HOLD</sub> のパルスでは立ち上がりでリセットパルスを生成</li>
+          <li>BOOTSEL の立ち下がりから t<sub>HOLD</sub> 経過したらリセットパルスを生成</li>
+        </ul>
+        <p>
+          これにより長押し書き込みボタンと同様に
+          「クリックでリセット」と「長押しで書き込みモード」を実現します。
+        </p>
+        <p><img src="./waveform.png" alt=""></p>
+        <h3>MOD チップの実装</h3>
+        <p>使い慣れた AVR に実装することにしました。</p>
+        <p>コードは <a href="https://github.com/shapoco/pico-bootsel2reset" target="_blank">pico-bootsel2reset</a> に公開しています。ATtiny10、ATtiny85、ATtiny402 に対応しています。</p>
+        <h4>AVR へ書き込み</h4>
+        <p>MCU に合ったプログラマとツールを使って書き込みます。</p>
+        <ul>
+          <li>ATtiny10, ATtiny85: AVRasp, AVRISP mkII, Arduino など</li>
+          <li>ATtiny402: UPDI 対応のプログラマ</li>
+        </ul>
+        <blockquote class="note">ATtiny10 へ書き込むにはプログラマのファームウェアの更新が必要な場合があります。</blockquote>
+        <p>
+          筆者は AVRISP mkII と CH340E を使った自作の UPDI プログラマを使い、
+          ツールは avrdude を使用しました。
+        </p>
+        <h4>設定ピン</h4>
+        <p>
+          長押しのホールド時間 (t<sub>HOLD</sub>) はデフォルトでは 4 秒ですが、
+          TIMESEL ピンを GND に接続することで 500ms に変更できるようにしました。
+        </p>
+        <p>一部の特殊なアプリケーション (PicoPad のブートローダ) で QSPI_SS が数百 ms の間 Low にドライブされることがあり、クリックと誤認されてリセットが実行されてしまうので、クリックについては NOCLICK ピンを GND に接続することで無効化できるようにしています。</p>
+        <h3>ラズピコへの取り付け</h3>
+        <p>
+          裏面に実装する場合は BOOTSEL は TP6 に繋ぐのが簡単です。
+          表面に実装する場合はちょっと狭いですが BOOTSEL スイッチの端子に直結します。
+        </p>
+        <p><img src="./connection.png" alt=""></p>
+        <h3>動作の様子</h3>
+        <p><video controls><source src="https://www.shapoco.net/media/2025/20251202_pico_bootsel_mod.mp4" type="video/mp4" /></video></p>
+
+    </main>
+    <footer>
+      <span class="nowrap">
+        Copyright &copy; <a href="https://x.com/shapoco/" target="_blank">Shapoco</a>,
+      </span>
+      <span class="nowrap">
+        Powered by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
+      </span>
+    </footer>
+  </div>
+</body>
+
+</html>

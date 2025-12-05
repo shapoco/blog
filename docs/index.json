@@ -423,6 +423,14 @@
       "url": "/2025/1126-picopad",
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2025/1126-picopad/cover.jpg"
+    },
+    {
+      "title": "BootSel2Reset: ラズピコの BOOTSEL をリセットと兼用にする",
+      "description": "Raspberry Pi Pico に搭載されている BOOTSEL スイッチを使って リセットを行えるようにする MOD チップ的なものを作ってみました。",
+      "date": "2025/12/05",
+      "url": "/2025/1205-bootsel2reset",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2025/1205-bootsel2reset/cover.png"
     }
   ]
 }

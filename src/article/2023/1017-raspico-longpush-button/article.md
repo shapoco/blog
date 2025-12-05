@@ -21,6 +21,10 @@ RUNピンにリセットスイッチを追加し、BOOTSELボタンと同時押�
 入るようになります。押しやすい大きなボタンを乗せれば指一本で操作できて
 ちょっとした作業効率化になります。
 
+## 関連記事
+
+- [BootSel2Reset: ラズピコの BOOTSEL をリセットと兼用にする](../../2025/1205-bootsel2reset/)
+
 ## 動作の様子
 
 ![](https://www.shapoco.net/media/2024/20240915-pico2-longpush-button.mp4)
