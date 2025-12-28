@@ -362,6 +362,10 @@ popd
 
 ROM ファイルはご自身で、合法的に用意してくださいね。
 
+## 関連記事
+
+- [PicoPad 用のアプリを WSL2 + VSCode で作ってみる](../1228-picolibsdk-vscode/)
+
 ## SNS 投稿
 
 - [X (Twitter)](https://x.com/shapoco/status/1994717881997955230)

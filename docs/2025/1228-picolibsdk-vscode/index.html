@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+  <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+  <meta name="description" content="PicoPad 用のアプリを WSL2 と VSCode で作ってみました。">
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@shapoco" />
+  <meta property="og:url" content="https://blog.shapoco.net/2025/1228-picolibsdk-vscode/" />
+  <meta property="og:title" content="PicoPad 用のアプリを WSL2 + VSCode で作ってみる | シャポログ" />
+  <meta property="og:description" content="PicoPad 用のアプリを WSL2 と VSCode で作ってみました。" />
+  <meta property="og:image" content="https://blog.shapoco.net/2025/1228-picolibsdk-vscode/cover.jpg" />
+
+  <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+  <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KJ53WNQ22G"></script>
+  <script>
+    var remoteHost = window.location.hostname;
+    if (remoteHost == "localhost") {
+      console.log(`Google Analytics disabled on: '${remoteHost}'`);
+    }
+    else {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-KJ53WNQ22G');
+    }
+  </script>
+
+  <link href="/style.css?0ec49c72" rel="stylesheet" type="text/css">
+  <script src="/style.js?0fd56873"></script>
+
+  <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+  <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+  <title>PicoPad 用のアプリを WSL2 + VSCode で作ってみる | シャポログ</title>
+</head>
+
+<body>
+  <div id="container">
+    <div id="root_navi"></div>
+
+    <header class="article_header">
+      <h1><a href="/">シャポログ</a></h1>
+    </header>
+    <main>
+      <h2>PicoPad 用のアプリを WSL2 + VSCode で作ってみる</h2>
+
+      <div class="article_info_wrap">
+        <div class="article_info">
+          2025/12/28 |
+          <a href="https://github.com/shapoco/blog/tree/main/src/article/2025/1228-picolibsdk-vscode/" target="_blank">記事のソース</a>
+        </div>
+
+        <div id="shpcstamp_wrap"></div>
+        <script async src="/stamp/v1/widget.js?4fe6d3e3"></script>
+      </div>
+
+              <p>PicoPad 用のアプリを WSL2 と VSCode で作ってみました。</p>
+        <h3>関連記事</h3>
+        <ul>
+          <li><a href="../1126-picopad/">通販で部品を集めて「PicoPad」の互換機を作る</a></li>
+        </ul>
+        <h3>作ったアプリ</h3>
+        <p>今回作成したマンデルブロ集合ビューア「<a href="https://github.com/shapoco/fixbrot" target="_blank">FixBrot</a>」です (PicoPad 以外にも対応しています)。</p>
+        <p><iframe width="560" height="315" src="https://www.youtube.com/embed/vfgkUTCUK6k?si=giB6phdIJJTBplKt" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></p>
+        <h3>PicoLibSDK</h3>
+        <p>
+          C/C++ での PicoPad 向けのアプリ開発では
+          <a href="https://github.com/Panda381/PicoLibSDK/" target="_blank">PicoLibSDK</a>
+          の使用が想定されています。
+        </p>
+        <p>
+          PicoLibSDK は Miroslav Nemecek 氏による RP2040/RP2350 向けの SDK で、
+          Raspberry Pi 公式の
+          <a href="https://github.com/raspberrypi/pico-sdk" target="_blank">Pico SDK</a>
+          とは独立に開発されています。
+        </p>
+        <p>
+          PicoLibSDK には PicoPad 用のブートローダーの実装も含まれており、
+          この SDK を使ってアプリケーションをビルドすればブートローダーも
+          一緒に組み込まれます。
+        </p>
+        <p>
+          ゲーム等の開発に必要な一通りの API とビルドツールが揃っていますが、
+          いくつか注意点があります。
+        </p>
+        <h4>開発環境のメインターゲットは Windows</h4>
+        <p>
+          基本的に Makefile とバッチファイルによるビルドシステムとなっていますが、
+          Linux 環境向けのシェルスクリプトも含まれていますので、今回はそれを使用します。
+        </p>
+        <h4>C の標準ライブラリとの衝突を避ける</h4>
+        <p>
+          <code>int32_t</code> 等の基本的な型や数学、文字列、メモリ操作系の標準ライブラリ関数と
+          互換性のある関数が使用できますが、これらの宣言は PicoLibSDK の独自の
+          ヘッダファイルに含まれており、C 標準の <code>stdint.h</code> や <code>string.h</code> 等を
+          インクルードしようとすると衝突する場合があります。
+        </p>
+        <p>
+          他のプラットフォームとコードを共通化させたい場合は PicoPad のときだけ
+          標準ライブラリヘッダのインクルードを行わないように <code>#ifdef</code> で
+          切るなどの工夫が必要そうです。
+        </p>
+        <h4>グローバルに定義されたマクロとの衝突を避ける</h4>
+        <p>
+          <code>WIDTH</code>、<code>HEIGHT</code>、<code>MIN</code>、<code>MAX</code> といったよく使われる識別子が PicoLibSDK 側で
+          マクロとして使用されているので、衝突しないように注意する必要があります。
+        </p>
+        <h3>公式ドキュメント</h3>
+        <p>
+          各種ツールと API の説明は PDF にまとめられていますので、
+          個々の詳細についてはそちらを参照してください。
+        </p>
+        <ul>
+          <li><a href="https://www.breatharian.eu/hw/picolibsdk/dwn/PicoLibSDK.pdf" target="_blank">PicoLibSDK.pdf</a></li>
+        </ul>
+        <h3>WSL2 + VSCode での開発環境を構築してみる</h3>
+        <h4>PicoLibSDK のセットアップ</h4>
+        <p>
+          PicoLibSDK のリポジトリにはビルド済みのバイナリ等も含まれておりストレージを
+          2 GB くらい消費するので、容量が気になる場合はどこか共通のディレクトリに
+          チェックアウトするのがいいと思います。
+        </p>
+        <p>
+          筆者の環境では <code>${HOME}/pico/</code> の配下に Pico SDK をインストールしてあるので、
+          そこに PicoLibSDK も置き、そのパスを環境変数 <code>PICOLIBSDK_PATH</code> に
+          設定することにしました。
+        </p>
+        <p>
+          アプリケーションのビルドには <code>elf2uf2</code> と <code>LoaderCrc</code> が必要なので、
+          ソースからビルドしておきます。
+        </p>
+        <pre class="lang_sh">mkdir -p ${HOME}/pico
+cd ${HOME}/pico/
+git clone https://github.com/Panda381/PicoLibSDK
+
+# 以下の行を .bashrc にも書いておく
+export PICOLIBSDK_PATH=${HOME}/pico/PicoLibSDK
+
+pushd ${PICOLIBSDK_PATH}/_tools/elf2uf2
+  g++ -o elf2uf2 main.cpp
+popd
+pushd ${PICOLIBSDK_PATH}/_tools/PicoPadLoaderCrc
+  g++ -o LoaderCrc LoaderCrc.cpp
+popd</pre>
+        <h4>アプリケーションプロジェクトのディレクトリ構成を検討</h4>
+        <p>
+          PicoLibSDK では、SDK 内のサブディレクトリにアプリケーションの
+          ソースコードを格納して、そこでビルドコマンドを叩くフローになっています。
+          ただ、オリジナルのアプリケーションを独立したリポジトリで
+          バージョン管理する場合は SDK のディレクトリとは別階層に
+          アプリケーションコードを置いておきたくなります。
+        </p>
+        <p>
+          そこで今回は、アプリケーション用のサブディレクトリ構造を
+          自分のリポジトリに切り出し、ビルド時は毎回 SDK 内へコピーして
+          ビルドを実行し、できたバイナリを抽出するフローを組むことにしました。
+        </p>
+        <p>
+          PicoPad 用のアプリケーションコードは
+          <code>PicoLibSDK/PicoPad/グループ名/アプリ名/</code>
+          に格納することになっています。
+          元々 PicoLibSDK には <code>PROG</code> グループにマンデルブロ集合の
+          サンプル <code>MANDEL</code> が含まれているので、今回はそれを参考にして、
+          グループ名を <code>PROG</code> 、アプリ名を <code>FIXBROT</code> としました。
+        </p>
+        <p>
+          自分のリポジトリでは PicoLibSDK に依存する PicoPad 専用コードは
+          <code>fixbrot/app/picopad/PROG/FIXBROT/</code> に配置し、
+          プラットフォームに依存しないコードは
+          <code>fixbrot/lib/include/</code> 配下に配置しました。
+          また、今回のアプリでは Adafruit-GFX-Library のフォント構造体定義を含む
+          <code>gfxfont.h</code> も使用します。
+        </p>
+        <p><img src="./dir-struct.png" alt=""></p>
+        <p>
+          スクリプト類が少々とっちらかっている印象がありますが、
+          一応 PicoLibSDK の構成を踏襲することにしました。
+          Windows 用のバッチファイルは使用しないので除外しました。
+        </p>
+        <h4>ビルドフロー</h4>
+        <ol>
+          <li>
+            前記のアプリケーションコードをまとめて PicoLibSDK の
+            アプリケーション用ディレクトリにコピーします。
+          </li>
+          <li><code>c.sh</code> でコンパイルを実行します。</li>
+          <li>
+            コンパイルが成功すると UF2 が生成されるので、
+            それを自分のリポジトリに書き戻します (バージョン管理からは除外)。
+          </li>
+        </ol>
+        <p>上記のようなフローを <a href="https://github.com/shapoco/fixbrot/blob/main/app/picopad/build.sh" target="_blank">build.sh</a> と <a href="https://github.com/shapoco/fixbrot/blob/main/app/picopad/Makefile" target="_blank">Makefile</a> にまとめました。</p>
+        <p>
+          <code>fixbrot/app/picopad/</code> で <code>make</code> を叩くと、
+          <code>fixbrot/bin/picopad20/</code> に UF2 が生成されます。
+        </p>
+        <h4>ソースファイル</h4>
+        <h5>PicoLibSDK 依存コード</h5>
+        <ul>
+          <li>
+            <a href="https://github.com/shapoco/fixbrot/blob/main/app/picopad/PROG/FIXBROT/src/main.cpp" target="_blank">main.cpp</a>:<br>
+            PicoLibSDK に依存するコードを集約しました。
+            今回のアプリでは SDK 依存部分を極力減らしたのであまり物量はありません。
+          </li>
+          <li>
+            <p>
+              <a href="https://github.com/shapoco/fixbrot/blob/main/app/picopad/PROG/FIXBROT/config.h" target="_blank">config.h</a>:<br>
+              アプリケーション全体のコンフィグを行います。
+              ほとんど PicoLibSDK のサンプルのままですが、
+              以下のマクロ定義を追加しています。
+            </p>
+            <ul>
+              <li>
+                <code>#define USE_FRAMEBUF 0</code>:<br>
+                今回のアプリでは大きめの作業用配列が必要で、
+                RAM を広く使えるように PicoLibSDK のフレームバッファを無効化します。
+              </li>
+              <li>
+                <code>#define DISP_SPI_BAUD 50000000</code>:<br>
+                ディスプレイ更新速度を稼ぐために SPI 周波数を高めに設定しました。
+              </li>
+              <li>
+                <code>#define FIXBROT_NO_STDLIB</code>, <code>#define SHAPOFONT_NO_STDLIB</code>:<br>
+                PicoPad 向けの場合のみ C 標準ライブラリを
+                インクルードしないようにするためのスイッチです。
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <h5>プラットフォーム非依存コード</h5>
+        <p>
+          アプリケーションロジックの大半は
+          <a href="https://github.com/shapoco/fixbrot/tree/main/lib/include/fixbrot" target="_blank">fixbrot/lib/include/fixbrot</a>
+          の配下のソースに記述しました。
+        </p>
+        <p>
+          これらのコードは PicoLibSDK 以外でも使用できますが、
+          前述の通り PicoLibSDK は C 標準ライブラリと競合するので
+          PicoPad 向けコードの場合は C 標準ライブラリを
+          インクルードしないようになっています。
+        </p>
+        <h4>VSCode の設定</h4>
+        <p>
+          C++ 用拡張機能を入れた上で、
+          <a href="https://github.com/shapoco/fixbrot/blob/main/.vscode/c_cpp_properties.json" target="_blank">c_cpp_properties.json</a>
+          にインクルードパスとマクロを正しく設定すると、
+          Intellisense で PicoLibSDK の API やマクロの補完が効くようになります。
+        </p>
+        <pre class="lang_json">{
+    &quot;configurations&quot;: [
+        {
+            &quot;name&quot;: &quot;PicoPad&quot;,
+            &quot;includePath&quot;: [
+                &quot;${PICOLIBSDK_PATH}&quot;,
+                &quot;${PICOLIBSDK_PATH}/_display&quot;,
+                &quot;${PICOLIBSDK_PATH}/_display/st7789&quot;,
+                &quot;${PICOLIBSDK_PATH}/_devices/picopad&quot;,
+                &quot;${PICOLIBSDK_PATH}/_sdk/inc&quot;,
+                &quot;${workspaceFolder}/lib/include&quot;,
+                &quot;${workspaceFolder}/app/picopad/PROG/FIXBROT&quot;,
+                &quot;${workspaceFolder}/app/picopad/PROG/FIXBROT/src&quot;,
+                &quot;${workspaceFolder}/submodules/Adafruit-GFX-Library&quot;
+            ],
+            &quot;defines&quot;: [
+                &quot;USE_PICOPAD=1&quot;,
+                &quot;PICO_ROOT_PATH=\&quot;${PICOLIBSDK_PATH}\&quot;&quot;,
+                &quot;PICOLIBSDK_DISPLAY_DIR=\&quot;${PICOLIBSDK_DISPLAY_DIR}\&quot;&quot;,
+                &quot;PICOLIBSDK_FONT_DIR=\&quot;${PICOLIBSDK_FONT_DIR}\&quot;&quot;,
+                &quot;PICOLIBSDK_LIB_DIR=\&quot;${PICOLIBSDK_LIB_DIR}\&quot;&quot;,
+                &quot;PICOLIBSDK_SDK_DIR=\&quot;${PICOLIBSDK_SDK_DIR}\&quot;&quot;,
+                &quot;INCLUDES_H=\&quot;${PICOLIBSDK_PATH}/includes.h\&quot;&quot;,
+                &quot;CONFIG_DEF_H=\&quot;${PICOLIBSDK_PATH}/config_def.h\&quot;&quot;,
+                &quot;SHAPOFONT_INCLUDE_GFXFONT&quot;
+            ],
+            &quot;compilerPath&quot;: &quot;/usr/bin/gcc&quot;,
+            &quot;cStandard&quot;: &quot;c17&quot;,
+            &quot;cppStandard&quot;: &quot;gnu++17&quot;,
+            &quot;intelliSenseMode&quot;: &quot;linux-gcc-x64&quot;
+        },
+        {
+            &quot;name&quot;: &quot;PicoSystem&quot;,
+            // (PicoSystem 向けの設定。省略)
+        }
+    ],
+    &quot;version&quot;: 4
+}</pre>
+        <h3>使用した API とポイント</h3>
+        <h4>アプリケーションコードの基本構造</h4>
+        <p><code>main.cpp</code> の <code>main()</code> 関数がアプリのエントリポイントとなります。</p>
+        <p>
+          ディスプレイや GPIO 等の初期化は既に終わった状態で起動するようなので、
+          複雑な初期化処理はなくいきなり描画やキーの取得を行うことができます。
+        </p>
+        <h4>キー入力</h4>
+        <p>キーの押下状態は <code>KeyPressed()</code> または <code>KeyPressedFast()</code> が使用できます。</p>
+        <p>
+          引数に <code>KEY_LEFT</code>、<code>KEY_RIGHT</code>、<code>KEY_UP</code>、<code>KEY_DOWN</code>、
+          <code>KEY_A</code>、<code>KEY_B</code>、<code>KEY_X</code>、<code>KEY_Y</code> を指定すると、
+          そのキーの押下状態が返されます。
+        </p>
+        <h4>画面描画 (フレームバッファ無し)</h4>
+        <p>
+          今回はマンデルブロ集合演算のための作業用配列を多きくとるために
+          フレームバッファは無効化し、ディスプレイに直接表示内容を転送する
+          方式にしました。
+        </p>
+        <p>描画は以下の手順で行います。</p>
+        <ol>
+          <li><code>DispStartImg()</code> でディスプレイのどの領域を更新するかを指定します。</li>
+          <li>
+            ビットマップデータを <code>DispSendImg2()</code> で 1 ピクセルずつ転送します。
+            ピクセルフォーマットは RGB565 です。
+          </li>
+          <li><code>DispStopImg()</code> で転送を終了します。</li>
+        </ol>
+        <p>画面のサイズは <code>WIDTH</code>、<code>HEIGHT</code> にマクロ定義されています。</p>
+        <p>フレームバッファありの場合の使用方法は他のアプリを参考にしてください。</p>
+        <h4>LED 制御</h4>
+        <p>
+          <code>LedOn()</code> と <code>LedOff()</code> で LED を制御できます。
+          引数には <code>LED1</code> を与えます。
+        </p>
+        <h4>オーバークロック</h4>
+        <p>
+          PicoPad ではデフォルトでは 125 MHz で動作するようですが、
+          Pico SDK と同名のクロック設定 API があり、
+          Pico SDK での開発時と同様に <code>vreg_set_voltage()</code> と
+          <code>set_sys_clock_khz()</code> でクロックを設定できます。
+        </p>
+        <p>FixBrot では 250 MHz に設定しました。</p>
+        <h4>ブートメニューに戻る</h4>
+        <p>
+          <code>ResetToBootLoader()</code> を呼び出すと直ちにアプリケーションが終了し
+          ブートメニューに戻ります。
+        </p>
+        <h3>PicoPad での実行</h3>
+        <p>
+          PicoPad にケーブルを接続してブートメニューを起動し、
+          X → B の順で押すと USB マスストレージモードになるので、
+          その状態でファイラを使って UF2 を書き込みます。
+        </p>
+        <p>
+          ※ <a href="../../2023/1017-raspico-longpush-button/">長押し書き込みボタン</a>
+          を使う方法もあります。
+        </p>
+
+    </main>
+    <footer>
+      <span class="nowrap">
+        Copyright &copy; <a href="https://x.com/shapoco/" target="_blank">Shapoco</a>,
+      </span>
+      <span class="nowrap">
+        Powered by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
+      </span>
+    </footer>
+  </div>
+</body>
+
+</html>

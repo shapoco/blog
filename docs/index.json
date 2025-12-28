@@ -431,6 +431,14 @@
       "url": "/2025/1205-bootsel2reset",
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2025/1205-bootsel2reset/cover.png"
+    },
+    {
+      "title": "PicoPad 用のアプリを WSL2 + VSCode で作ってみる",
+      "description": "PicoPad 用のアプリを WSL2 と VSCode で作ってみました。",
+      "date": "2025/12/28",
+      "url": "/2025/1228-picolibsdk-vscode",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2025/1228-picolibsdk-vscode/cover.jpg"
     }
   ]
 }
