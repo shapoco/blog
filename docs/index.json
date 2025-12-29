@@ -439,6 +439,14 @@
       "url": "/2025/1228-picolibsdk-vscode",
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2025/1228-picolibsdk-vscode/cover.jpg"
+    },
+    {
+      "title": "Waveshare の LCD モジュールから面実装ピンソケットをムリヤリ除去して薄くする",
+      "description": "Waveshare の LCD モジュールは入手しやすくて良いですが、 ピンソケットの高さの分厚くなるので除去して薄くしてみました。",
+      "date": "2025/12/29",
+      "url": "/2025/1229-pin-socket-removal",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2025/1229-pin-socket-removal/cover.png"
     }
   ]
 }

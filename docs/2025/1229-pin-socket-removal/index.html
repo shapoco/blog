@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+  <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+  <meta name="description" content="Waveshare の LCD モジュールは入手しやすくて良いですが、 ピンソケットの高さの分厚くなるので除去して薄くしてみました。">
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@shapoco" />
+  <meta property="og:url" content="https://blog.shapoco.net/2025/1229-pin-socket-removal/" />
+  <meta property="og:title" content="Waveshare の LCD モジュールから面実装ピンソケットをムリヤリ除去して薄くする | シャポログ" />
+  <meta property="og:description" content="Waveshare の LCD モジュールは入手しやすくて良いですが、 ピンソケットの高さの分厚くなるので除去して薄くしてみました。" />
+  <meta property="og:image" content="https://blog.shapoco.net/2025/1229-pin-socket-removal/cover.png" />
+
+  <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+  <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KJ53WNQ22G"></script>
+  <script>
+    var remoteHost = window.location.hostname;
+    if (remoteHost == "localhost") {
+      console.log(`Google Analytics disabled on: '${remoteHost}'`);
+    }
+    else {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-KJ53WNQ22G');
+    }
+  </script>
+
+  <link href="/style.css?0ec49c72" rel="stylesheet" type="text/css">
+  <script src="/style.js?0fd56873"></script>
+
+  <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+  <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+  <title>Waveshare の LCD モジュールから面実装ピンソケットをムリヤリ除去して薄くする | シャポログ</title>
+</head>
+
+<body>
+  <div id="container">
+    <div id="root_navi"></div>
+
+    <header class="article_header">
+      <h1><a href="/">シャポログ</a></h1>
+    </header>
+    <main>
+      <h2>Waveshare の LCD モジュールから面実装ピンソケットをムリヤリ除去して薄くする</h2>
+
+      <div class="article_info_wrap">
+        <div class="article_info">
+          2025/12/29 |
+          <a href="https://github.com/shapoco/blog/tree/main/src/article/2025/1229-pin-socket-removal/" target="_blank">記事のソース</a>
+        </div>
+
+        <div id="shpcstamp_wrap"></div>
+        <script async src="/stamp/v1/widget.js?4fe6d3e3"></script>
+      </div>
+
+              <p>
+          Waveshare の LCD モジュールは入手しやすくて良いですが、
+          ピンソケットの高さの分厚くなるので除去して薄くしてみました。
+        </p>
+        <p>
+          スルーホールタイプのピンソケットであれば樹脂部分に
+          ニッパーやドライバーを差し込んでこじれば樹脂部分だけ除去してから
+          ピンを除去することができますが、面実装だとランドが剥がれてしまいます。
+        </p>
+        <p>
+          Waveshare のモジュールに使用されているピンソケットは樹脂が結構脆く、
+          ニッパー等で簡単に割ることができるので、1 ピンずつ破壊していけば
+          除去することができました。
+        </p>
+        <p><img src="./cover.png" alt=""></p>
+        <p>
+          ピンソケットの間が平らなモジュールであれば、Raspberry Pico を
+          直接実装することができます。
+        </p>
+        <p><img src="./pin-socket-removal-pic-3.jpg" alt=""></p>
+        <p><img src="./pin-socket-removal-pic-4.jpg" alt=""></p>
+        <p><img src="./pin-socket-removal-pic-0.jpg" alt=""></p>
+        <p><img src="./pin-socket-removal-pic-1.jpg" alt=""></p>
+        <p><img src="./pin-socket-removal-pic-2.jpg" alt=""></p>
+
+    </main>
+    <footer>
+      <span class="nowrap">
+        Copyright &copy; <a href="https://x.com/shapoco/" target="_blank">Shapoco</a>,
+      </span>
+      <span class="nowrap">
+        Powered by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
+      </span>
+    </footer>
+  </div>
+</body>
+
+</html>
