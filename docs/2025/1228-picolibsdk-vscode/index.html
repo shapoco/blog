@@ -344,8 +344,12 @@ popd</pre>
         <h3>PicoPad での実行</h3>
         <p>
           PicoPad にケーブルを接続してブートメニューを起動し、
-          X → B の順で押すと USB マスストレージモードになるので、
-          その状態でファイラを使って UF2 を書き込みます。
+          X → B の順で押すと USB マスストレージモードになります。
+        </p>
+        <p>
+          ファイラを使って UF2 を書き込むこともできますが、
+          FixBrot の Makefile では <code>make PICO_DRIVE=ドライブ文字 flash</code> で
+          ターミナルから書き込みできるようになっています。
         </p>
         <p>
           ※ <a href="../../2023/1017-raspico-longpush-button/">長押し書き込みボタン</a>
