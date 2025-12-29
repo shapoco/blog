@@ -265,10 +265,9 @@ popd</pre>
                 &quot;${PICOLIBSDK_PATH}/_display/st7789&quot;,
                 &quot;${PICOLIBSDK_PATH}/_devices/picopad&quot;,
                 &quot;${PICOLIBSDK_PATH}/_sdk/inc&quot;,
-                &quot;${workspaceFolder}/lib/include&quot;,
-                &quot;${workspaceFolder}/app/picopad/PROG/FIXBROT&quot;,
-                &quot;${workspaceFolder}/app/picopad/PROG/FIXBROT/src&quot;,
-                &quot;${workspaceFolder}/submodules/Adafruit-GFX-Library&quot;
+                &quot;${workspaceFolder}/app/picopad/グループ名/アプリ名&quot;,
+                &quot;${workspaceFolder}/app/picopad/グループ名/アプリ名/src&quot;,
+                // (その他アプリ固有のインクルードパス ... )
             ],
             &quot;defines&quot;: [
                 &quot;USE_PICOPAD=1&quot;,
@@ -278,22 +277,17 @@ popd</pre>
                 &quot;PICOLIBSDK_LIB_DIR=\&quot;${PICOLIBSDK_LIB_DIR}\&quot;&quot;,
                 &quot;PICOLIBSDK_SDK_DIR=\&quot;${PICOLIBSDK_SDK_DIR}\&quot;&quot;,
                 &quot;INCLUDES_H=\&quot;${PICOLIBSDK_PATH}/includes.h\&quot;&quot;,
-                &quot;CONFIG_DEF_H=\&quot;${PICOLIBSDK_PATH}/config_def.h\&quot;&quot;,
-                &quot;SHAPOFONT_INCLUDE_GFXFONT&quot;
+                &quot;CONFIG_DEF_H=\&quot;${PICOLIBSDK_PATH}/config_def.h\&quot;&quot;
             ],
             &quot;compilerPath&quot;: &quot;/usr/bin/gcc&quot;,
             &quot;cStandard&quot;: &quot;c17&quot;,
             &quot;cppStandard&quot;: &quot;gnu++17&quot;,
             &quot;intelliSenseMode&quot;: &quot;linux-gcc-x64&quot;
-        },
-        {
-            &quot;name&quot;: &quot;PicoSystem&quot;,
-            // (PicoSystem 向けの設定。省略)
         }
     ],
     &quot;version&quot;: 4
 }</pre>
-        <h3>使用した API とポイント</h3>
+        <h3>使用した API と Tips</h3>
         <h4>アプリケーションコードの基本構造</h4>
         <p><code>main.cpp</code> の <code>main()</code> 関数がアプリのエントリポイントとなります。</p>
         <p>
@@ -328,6 +322,11 @@ popd</pre>
         <p>
           <code>LedOn()</code> と <code>LedOff()</code> で LED を制御できます。
           引数には <code>LED1</code> を与えます。
+        </p>
+        <h4>マルチコア</h4>
+        <p>
+          <code>Core1Exec()</code> の引数に関数名を与えます。
+          Pico SDK の <code>multicore_launch_core1()</code> と同等です。
         </p>
         <h4>オーバークロック</h4>
         <p>

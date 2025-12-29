@@ -184,10 +184,9 @@ Intellisense で PicoLibSDK の API やマクロの補完が効くようにな�
                 "${PICOLIBSDK_PATH}/_display/st7789",
                 "${PICOLIBSDK_PATH}/_devices/picopad",
                 "${PICOLIBSDK_PATH}/_sdk/inc",
-                "${workspaceFolder}/lib/include",
-                "${workspaceFolder}/app/picopad/PROG/FIXBROT",
-                "${workspaceFolder}/app/picopad/PROG/FIXBROT/src",
-                "${workspaceFolder}/submodules/Adafruit-GFX-Library"
+                "${workspaceFolder}/app/picopad/グループ名/アプリ名",
+                "${workspaceFolder}/app/picopad/グループ名/アプリ名/src",
+                // (その他アプリ固有のインクルードパス ... )
             ],
             "defines": [
                 "USE_PICOPAD=1",
@@ -197,24 +196,19 @@ Intellisense で PicoLibSDK の API やマクロの補完が効くようにな�
                 "PICOLIBSDK_LIB_DIR=\"${PICOLIBSDK_LIB_DIR}\"",
                 "PICOLIBSDK_SDK_DIR=\"${PICOLIBSDK_SDK_DIR}\"",
                 "INCLUDES_H=\"${PICOLIBSDK_PATH}/includes.h\"",
-                "CONFIG_DEF_H=\"${PICOLIBSDK_PATH}/config_def.h\"",
-                "SHAPOFONT_INCLUDE_GFXFONT"
+                "CONFIG_DEF_H=\"${PICOLIBSDK_PATH}/config_def.h\""
             ],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "c17",
             "cppStandard": "gnu++17",
             "intelliSenseMode": "linux-gcc-x64"
-        },
-        {
-            "name": "PicoSystem",
-            // (PicoSystem 向けの設定。省略)
         }
     ],
     "version": 4
 }
 ```
 
-## 使用した API とポイント
+## 使用した API と Tips
 
 ### アプリケーションコードの基本構造
 
@@ -252,6 +246,11 @@ Intellisense で PicoLibSDK の API やマクロの補完が効くようにな�
 
 `LedOn()` と `LedOff()` で LED を制御できます。
 引数には `LED1` を与えます。
+
+### マルチコア
+
+`Core1Exec()` の引数に関数名を与えます。
+Pico SDK の `multicore_launch_core1()` と同等です。
 
 ### オーバークロック
 
