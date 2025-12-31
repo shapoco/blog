@@ -25,3 +25,9 @@ Waveshare のモジュールに使用されているピンソケットは樹脂�
 ![](./pin-socket-removal-pic-1.jpg)
 
 ![](./pin-socket-removal-pic-2.jpg)
+
+## SNS 投稿
+
+- X (Twitter): [図です。](https://x.com/shapoco/status/2005582997207355863)
+- Bluesky: [図です。](https://bsky.app/profile/shapoco.net/post/3mb4m67pyxk2z)
+- Misskey.io: [図です。](https://misskey.io/notes/agukj1hu4ree08rx)
