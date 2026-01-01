@@ -143,3 +143,9 @@ X (Twitter) では節電効果に言及する人もいましたが、
 - サーキュレーターは窓際に置くのが良く、
     窓から離すとコールドドラフトの改善効果は低くなるようです。
 - 節電効果があるかどうかは状況によりそうです。
+
+## SNS 投稿
+
+- X (Twitter): [ブログ書いた](https://x.com/shapoco/status/2006558896182407661)
+- Bluesky: [ブログ書いた](https://bsky.app/profile/shapoco.net/post/3mbdeu77h6s2g)
+- Misskey.io: [ブログ書いた](https://misskey.io/notes/agyf09gwgkp70alv)
