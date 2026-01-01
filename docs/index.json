@@ -447,6 +447,14 @@
       "url": "/2025/1229-pin-socket-removal",
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2025/1229-pin-socket-removal/cover.png"
+    },
+    {
+      "title": "冬の足元の冷え (コールドドラフト) に対するサーキュレーターの効果を確認してみる",
+      "description": "冬に窓際で冷やされた空気が床付近に溜まることで形成される 冷気の層「コールドドラフト」に対して、サーキュレーターの効果を 実際に温度をロギングして確認してみました。",
+      "date": "2026/01/01",
+      "url": "/2026/0101-cold-draft-vs-fan",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2026/0101-cold-draft-vs-fan/cover.png"
     }
   ]
 }
