@@ -359,6 +359,7 @@
       }
 
       this.sendButton.addEventListener('click', async (evt) => this.onSend());
+      this.commentBoxCtrl.container.addEventListener('change', evt => this.validate());
     }
 
     onShow() {
@@ -400,25 +401,17 @@
         this.commentListDiv.style.display = 'none';
       }
 
-      const numStampSent = Object.values(stamps).filter(item => item.sent).length;
-      const full = numStampSent >= maxStampCount;
       if (sent) {
         this.stampTitleBar.innerHTML = `スタンプの解除`;
         this.stampDescDiv.textContent = '解除するとコメントも削除されます。';
       }
       else {
         this.stampTitleBar.innerHTML = `スタンプの送信`;
-        if (full) {
-          this.stampDescDiv.textContent = `スタンプは ${maxStampCount} 個までです。`;
-        }
-        else {
-          this.stampDescDiv.textContent = getStampSendDescription();
-        }
+        this.stampDescDiv.textContent = getStampSendDescription();
       }
-      this.sendButton.disabled = !sent && full;
-      this.commentBoxCtrl.setDisabled(!sent && full);
 
       this.commentBoxCtrl.container.style.display = sent ? 'none' : 'block';
+      this.validate();
     }
 
     checkSentThisStamp() {
@@ -427,6 +420,8 @@
     }
 
     async onSend() {
+      this.sendButton.disabled = true;
+      this.sendButton.innerHTML = '送信中...';
       const remove = this.checkSentThisStamp();
       const emoji = this.ownerButton.dataset.emoji;
       try {
@@ -438,6 +433,14 @@
         showMessage(false, '通信エラー');
       }
       this.hide();
+    }
+
+    validate() {
+      const sent = this.checkSentThisStamp();
+      const numStampSent = Object.values(stamps).filter(item => item.sent).length;
+      const full = numStampSent >= maxStampCount;
+      this.sendButton.disabled = !sent && full || !this.commentBoxCtrl.validate();
+      this.commentBoxCtrl.setDisabled(!sent && full);
     }
 
   } // class StampViewer
@@ -496,8 +499,6 @@
         cancelButton.textContent = 'キャンセル';
 
         this.sendButton.type = 'button';
-        this.sendButton.innerHTML = '<span class="shpcstamp_emoji">➕</span>スタンプ送信';
-        this.sendButton.disabled = true;
 
         const div = document.createElement('div');
         div.style.textAlign = 'right';
@@ -573,6 +574,7 @@
       }
 
       this.stampDescDiv.textContent = getStampSendDescription();
+      this.sendButton.innerHTML = '<span class="shpcstamp_emoji">➕</span>スタンプ送信';
 
       // カテゴリの選択肢を生成
       this.categoryList.innerHTML = '';
@@ -615,10 +617,14 @@
       const validComment = this.commentBoxCtrl.isValid;
 
       this.emojiBox.style.background = (!this.emojiBox.value || validEmoji) ? null : '#fcc';
-      this.sendButton.disabled = !(validEmoji && validComment);
+      const numStampSent = Object.values(stamps).filter(item => item.sent).length;
+      const full = numStampSent >= maxStampCount;
+      this.sendButton.disabled = !validEmoji || !validComment || full;
     }
 
     async send() {
+      this.sendButton.disabled = true;
+      this.sendButton.innerHTML = '送信中...';
       try {
         await updateStamp(this.emojiBox.value, false, this.commentBoxCtrl.getText());
         this.emojiBox.value = '';
