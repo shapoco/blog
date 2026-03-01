@@ -455,6 +455,14 @@
       "url": "/2026/0101-cold-draft-vs-fan",
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2026/0101-cold-draft-vs-fan/cover.png"
+    },
+    {
+      "title": "[メモ] PCB/PCBA 備忘録",
+      "description": "PCB/PCBA 関連のメモ。随時追加する。",
+      "date": "2026/03/01",
+      "url": "/2026/0301-pcb-tips",
+      "twitter_card_size": "summary",
+      "card_image_url": "/image/default_card_summary.png"
     }
   ]
 }

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+  <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+  <meta name="description" content="PCB/PCBA 関連のメモ。随時追加する。">
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@shapoco" />
+  <meta property="og:url" content="https://blog.shapoco.net/2026/0301-pcb-tips/" />
+  <meta property="og:title" content="[メモ] PCB/PCBA 備忘録 | シャポログ" />
+  <meta property="og:description" content="PCB/PCBA 関連のメモ。随時追加する。" />
+  <meta property="og:image" content="https://blog.shapoco.net/image/default_card_summary.png" />
+
+  <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+  <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KJ53WNQ22G"></script>
+  <script>
+    var remoteHost = window.location.hostname;
+    if (remoteHost == "localhost") {
+      console.log(`Google Analytics disabled on: '${remoteHost}'`);
+    }
+    else {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-KJ53WNQ22G');
+    }
+  </script>
+
+  <link href="/style.css?0ec49c72" rel="stylesheet" type="text/css">
+  <script src="/style.js?0fd56873"></script>
+
+  <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+  <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+  <title>[メモ] PCB/PCBA 備忘録 | シャポログ</title>
+</head>
+
+<body>
+  <div id="container">
+    <div id="root_navi"></div>
+
+    <header class="article_header">
+      <h1><a href="/">シャポログ</a></h1>
+    </header>
+    <main>
+      <h2>[メモ] PCB/PCBA 備忘録</h2>
+
+      <div class="article_info_wrap">
+        <div class="article_info">
+          2026/03/01 |
+          <a href="https://github.com/shapoco/blog/tree/main/src/article/2026/0301-pcb-tips/" target="_blank">記事のソース</a>
+        </div>
+
+        <div id="shpcstamp_wrap"></div>
+        <script async src="/stamp/v1/widget.js?ce7d3635"></script>
+      </div>
+
+              <p>PCB/PCBA 関連のメモ。随時追加する。</p>
+        <h3>V-Cut の距離は短くした方がよい</h3>
+        <p>V-Cut の箇所を折るときに結構無理な力がかかるので、V-Cut に沿って長穴をあけて折る長さを短くするか、V-Cut はやめて mouse-bite にした方がよい (V-Cut は JLCPCB で追加料金がかかる)。</p>
+        <blockquote>
+          <a href="https://x.com/hanai_y/status/2025478306683126047" target="_blank">@hanai_y</a>:
+          C1のところ応力掛かりそうだしもっとガバット抜いてしまってもいいかも。Vカット意外と力要るから四隅と真ん中6点で保持する位まで抜いても良さそう。
+        </blockquote>
+        <p>(2026/02/22)</p>
+        <h3>ピン間に入り込んだ櫛の歯状のベタをどうするか？</h3>
+        <p>先端にビアを打つべきという場合と、Keep-out にすべき場合がある。スレッド参照:</p>
+        <blockquote>
+          <a href="https://x.com/shapoco/status/2025848803706982646" target="_blank">@shapoco</a>:
+          こういうピン間に入り込んだ櫛の歯状のベタって無い方がいいんだろうけど、塗りつぶし禁止領域にすればいいのかな
+        </blockquote>
+        <p>(2026/02/23)</p>
+        <h3>KiCad で LCSC 部品番号を半自動で設定する</h3>
+        <p>回路図で設定された定数を元に、流れ作業で LCSC 部品番号を設定することができる。</p>
+        <p>
+          <a href="https://github.com/necobit/lcsc-linker/" target="_blank">LCSC Linker for KiCad</a>
+          by <a href="https://x.com/necobut/status/2014900245050892371" target="_blank">@necobut</a>
+        </p>
+        <p>(2026/01/24)</p>
+        <h3>フットプリントの中心座標をどこにすべきか？</h3>
+        <blockquote>
+          <a href="https://x.com/yuna_digick/status/1071299305372176385" target="_blank">@yuna_digick</a>:
+          電子部品のフットプリント作るとき、座標の中心をどこに置くかは実装する側にとってかなり重要なパラメータで、訳分からんところを基準にした座標渡されると多分殺意が湧く。点対称の部品は必ず中央を基準点にしましょう。点対称な部品じゃない場合はなるべく中央にしましょう。
+        </blockquote>
+        <blockquote>
+          <a href="https://x.com/yuna_digick/status/1071296172017381377" target="_blank">@yuna_digick</a>:
+          実装機は部品中央を認識して基板CADが出した座標に置くから、フットプリントで1ピンを中心座標にすると、基板上の1ピンを中心にして部品が載る。直すには基板CADの座標データを部品中央に修正する必要があって、どのぐらいオフセットする必要があるかはフットプリントによるのでマジクソというわけ。
+        </blockquote>
+        <blockquote>
+          <a href="https://x.com/yuna_digick/status/1071299305372176385" target="_blank">@yuna_digick</a>:
+          点対称じゃない部品の場合のフットプリント中央座標。例えば片方向からピンが生えてるSHコネクタの場合は、ピンが並んでる方向の中心は全ピンの中心とする。ピンの並びと垂直の方向の中心は、ピンと樹脂を含めた全長の中央としましょう。後者はどうせ実装時に調整が必要だ。
+        </blockquote>
+        <p>(2018/12/08)</p>
+
+    </main>
+    <footer>
+      <span class="nowrap">
+        Copyright &copy; <a href="https://x.com/shapoco/" target="_blank">Shapoco</a>,
+      </span>
+      <span class="nowrap">
+        Powered by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
+      </span>
+    </footer>
+  </div>
+</body>
+
+</html>
