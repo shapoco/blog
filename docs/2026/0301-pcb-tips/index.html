@@ -64,6 +64,41 @@
       </div>
 
               <p>PCB/PCBA 関連のメモ。随時追加する。</p>
+        <h3>KiKit で面付けして JLCPCB に PCBA 発注するときのポイント</h3>
+        <ul>
+          <li>まず面付けは自分でやるより JLCPCB に丸投げする方が楽で間違いも起きにくいのでそれでいけないかを検討する。</li>
+          <li>
+            <p>
+              KiKit は CLI 版を使うのが間違いが起きにくい。<br>
+              コマンド例 (Windows バッチファイル):
+            </p>
+            <pre>kikit panelize ^
+    --layout &quot;grid; rows: 3; cols: 1; space: 2mm&quot; ^
+    --tabs &quot;fixed; width: 5mm; hcount: 2; vcount: 1;&quot; ^
+    --cuts &quot;mousebites; drill: 0.5mm; spacing: 1.0mm; offset: 0mm&quot; ^
+    --framing &quot;railslr; width: 5mm; space: 2mm;&quot; ^
+    --post &quot;millradius: 1mm&quot; ^
+    --tooling &quot;4hole; size: 2mm; hoffset: 2.5mm; voffset: 17mm;&quot; ^
+    --fiducials &quot;4fid; coppersize: 1mm; opening: 2mm; hoffset: 3.85mm; voffset: 10mm;&quot; ^
+    %PROJ_NAME%.kicad_pcb ^
+    %PROJ_NAME%_panelized.kicad_pcb</pre>
+            <p><img src="./xiamocon_panelized.png" alt=""></p>
+          </li>
+          <li>
+            ツーリングストリップを付ける場合は JLCPCB のルールに従う:<br>
+            <a href="https://jlcpcb.com/jp/help/article/specifications-for-adding-process-edges-and-positioning-holes" target="_blank">設計最適化：プロセスエッジ追加と穴配置の仕様</a>
+          </li>
+          <li>
+            PCBA 発注時、ツーリングホールは「JLCPCB に追加される」を選ぶ<br>
+            <img src="./tooling_hole_added_by_jlcpcb.png" alt=""><br>
+            このツーリングホールは直径 1.153mm の「<a href="https://jlcpcb.com/jp/help/article/How-to-add-tooling-holes-for-PCB-assembly-order" target="_blank">工具穴</a>」のことで、ツーリングストリップにあける 2mm の穴とは別。
+          </li>
+          <li>
+            部品表アップロード時、ファイル形式として「ファイルを完成させ、自分のファイルで進める」を選ぶ<br>
+            <img src="./bom_completed_self.png" alt="">
+          </li>
+        </ul>
+        <p>(2026/03/17)</p>
         <h3>V-Cut の距離は短くした方がよい</h3>
         <p>V-Cut の箇所を折るときに結構無理な力がかかるので、V-Cut に沿って長穴をあけて折る長さを短くするか、V-Cut はやめて mouse-bite にした方がよい (V-Cut は JLCPCB で追加料金がかかる)。</p>
         <blockquote>
