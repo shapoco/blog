@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+  <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+  <meta name="description" content="TinyJoyPad や Arduboy など、SSD1306 ディスプレイを使った小型ゲームを PC 用モニタやテレビなどの大画面で遊ぶ方法を紹介します。">
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@shapoco" />
+  <meta property="og:url" content="https://blog.shapoco.net/2026/0514-tinyjoypad-with-large-monitor/" />
+  <meta property="og:title" content="LcdTap: TinyJoyPad や Arduboy を大画面で遊ぶ | シャポログ" />
+  <meta property="og:description" content="TinyJoyPad や Arduboy など、SSD1306 ディスプレイを使った小型ゲームを PC 用モニタやテレビなどの大画面で遊ぶ方法を紹介します。" />
+  <meta property="og:image" content="https://blog.shapoco.net/2026/0514-tinyjoypad-with-large-monitor/cover.jpg" />
+
+  <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+  <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KJ53WNQ22G"></script>
+  <script>
+    var remoteHost = window.location.hostname;
+    if (remoteHost == "localhost") {
+      console.log(`Google Analytics disabled on: '${remoteHost}'`);
+    }
+    else {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-KJ53WNQ22G');
+    }
+  </script>
+
+  <link href="/style.css?0ec49c72" rel="stylesheet" type="text/css">
+  <script src="/style.js?0fd56873"></script>
+
+  <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+  <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+  <title>LcdTap: TinyJoyPad や Arduboy を大画面で遊ぶ | シャポログ</title>
+</head>
+
+<body>
+  <div id="container">
+    <div id="root_navi"></div>
+
+    <header class="article_header">
+      <h1><a href="/">シャポログ</a></h1>
+    </header>
+    <main>
+      <h2>LcdTap: TinyJoyPad や Arduboy を大画面で遊ぶ</h2>
+
+      <div class="article_info_wrap">
+        <div class="article_info">
+          2026/05/14 |
+          <a href="https://github.com/shapoco/blog/tree/main/src/article/2026/0514-tinyjoypad-with-large-monitor/" target="_blank">記事のソース</a>
+        </div>
+
+        <div id="shpcstamp_wrap"></div>
+        <script async src="/stamp/v1/widget.js?ce7d3635"></script>
+      </div>
+
+              <p>
+          TinyJoyPad や Arduboy など、SSD1306 ディスプレイを使った小型ゲームを
+          PC 用モニタやテレビなどの大画面で遊ぶ方法を紹介します。
+        </p>
+        <p><img src="./cover.jpg" alt=""></p>
+        <h3>TinyJoyPad</h3>
+        <p><a href="https://www.tinyjoypad.com/tinyjoypad_attiny85" target="_blank">TinyJoyPad</a> は、Daniel C 氏によって開発された携帯ゲーム機で、8 bit マイコンの ATtiny85 と SSD1306 OLED、5 つのスイッチ、スピーカーから構成されるシンプルな構成が特徴です。</p>
+        <h3>LcdTap</h3>
+        <p><a href="https://github.com/shapoco/lcdtap" target="_blank">LcdTap</a> は、Raspberry Pi Pico2 を使って、I2C 接続や SPI 接続の LCD モジュールの表示内容を DVI で出力して大きなディスプレイにミラー表示したりキャプチャしたりできるライブラリです。</p>
+        <h3>用意する物</h3>
+        <ul>
+          <li>
+            <p>TinyJoyPad</p>
+            <ul>
+              <li>スイッチサイエンスで <a href="https://www.switch-science.com/products/9824" target="_blank">キット</a> を購入できます。</li>
+              <li>簡単な回路なので <a href="https://www.google.com/search?q=tinyjoypad+%E8%87%AA%E4%BD%9C" target="_blank">自作</a> も可能です。</li>
+              <li>AVR にゲームを書き込むには ISP プログラマも必要です (これが一番の鬼門かも)。</li>
+            </ul>
+          </li>
+          <li><a href="https://www.switch-science.com/products/9809" target="_blank">Raspberry Pi Pico2</a></li>
+          <li><a href="https://www.switch-science.com/products/7431" target="_blank">Pico-DVI-Sock</a></li>
+          <li>
+            <p><a href="https://akizukidenshi.com/catalog/g/g102276/" target="_blank">16 ポジション バイナリーロータリースイッチ</a></p>
+            <ul>
+              <li>画面の回転方向を切り替えるために使用します。普通のスライドスイッチやジャンパピンで代用も可。</li>
+            </ul>
+          </li>
+          <li><a href="https://akizukidenshi.com/catalog/g/g116103/" target="_blank">抵抗 10kΩ</a> x2</li>
+          <li>TypeA-MicroB USB ケーブル</li>
+          <li>HDMI ケーブル</li>
+          <li>
+            <p>1280x720@30Hz または 640x480@60Hz の DVI-D 信号を入力可能なディスプレイ</p>
+            <ul>
+              <li>PC 用モニタなら少なくともどちらかは大丈夫じゃないかと思いますが、保証はできません。</li>
+            </ul>
+          </li>
+        </ul>
+        <h3>組み立て</h3>
+        <p>Pico-DVI-Sock を Pico2 にハンダ付けし、その他の部品を下図のように接続します。</p>
+        <ul>
+          <li>Pico2 と TinyJoyPad の間はできるだけ短距離で配線してください。</li>
+          <li>SDA/SCL は TinyJoyPad の OLED から引き出してもかまいません。</li>
+          <li>Pico2 には GND 端子がいっぱいありますが、どれに繋いでもかまいません。</li>
+          <li>Pico2 から出ている 3.3V で TinyJoyPad に給電することもできますが、その場合は TinyJoyPad の電源が Pico2 へ逆流しないよう、ショットキーバリアダイオード (例: <a href="https://akizukidenshi.com/catalog/g/g108997/" target="_blank">11EQS03L</a>) を挿入してください。</li>
+          <li>SDA/SCL を 10kΩ でプルアップすれば、TinyJoyPad 側の OLED を外しても動作します。</li>
+          <li>
+            <p>GP21 (CFG_DVI_RES) は DVI 映像出力の解像度 (アスペクト比) を指定します。もしモニタに映らない場合はここを切り替えて Pico2 をリセット (USB ケーブルを抜き差し) してみてください。</p>
+            <ul>
+              <li>接続時: 1280x720@30Hz (16:9)</li>
+              <li>切断時: 640x480@60Hz (4:3)</li>
+            </ul>
+          </li>
+        </ul>
+        <p><img src="./schematic.png" alt=""></p>
+        <h3>ブレッドボードに組み立てた例</h3>
+        <p><img src="./breadboard.jpg" alt=""></p>
+        <h3>Pico2 へのファームウェアの書き込み</h3>
+        <ol>
+          <li><a href="https://github.com/shapoco/lcdtap/releases/" target="_blank">リリースページ</a>からファームウェア (lcdtap_vYYYYMMDD.zip) をダウンロードします。</li>
+          <li>zip ファイルを展開して lcdtap_ssd1306.uf2 を取り出します。</li>
+          <li>Pico2 の BOOTSEL ボタンを押しながら USB ケーブルで PC に接続します (マスストレージデバイスとして認識されます)。</li>
+          <li>マスストレージデバイスに lcdtap_ssd1306.uf2 をコピーします。</li>
+        </ol>
+        <p>
+          書き込みが成功すると、Pico2 の LCD が 1 秒周期で点滅し、
+          コネクタから DVI-D 信号が出力されます。
+        </p>
+        <h3>使用方法</h3>
+        <ol>
+          <li>先に Pico2 の電源を入れる。</li>
+          <li>TinyJoyPad の電源を入れる。</li>
+          <li>モニタに画像が表示されたら、ロータリースイッチで画面の向きを合わせる。</li>
+        </ol>
+        <h3>動作の様子</h3>
+        <p><video controls><source src="https://www.shapoco.net/media/2026/20260514_lcdtap_tinytris.mp4" type="video/mp4" /></video></p>
+        <h3>関連リンク</h3>
+        <ul>
+          <li>
+            <p>SNS 投稿</p>
+            <ul>
+              <li><a href="https://x.com/shapoco/status/2054587734527037561" target="_blank">X (Twitter)</a></li>
+              <li><a href="https://bsky.app/profile/shapoco.net/post/3mlqnkefkxs2j" target="_blank">Bluesky</a></li>
+              <li><a href="https://misskey.io/notes/am7sr4tpwesl062s" target="_blank">Misskey.io</a></li>
+            </ul>
+          </li>
+        </ul>
+
+    </main>
+    <footer>
+      <span class="nowrap">
+        Copyright &copy; <a href="https://x.com/shapoco/" target="_blank">Shapoco</a>,
+      </span>
+      <span class="nowrap">
+        Powered by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
+      </span>
+    </footer>
+  </div>
+</body>
+
+</html>

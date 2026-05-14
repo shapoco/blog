@@ -463,6 +463,14 @@
       "url": "/2026/0301-pcb-tips",
       "twitter_card_size": "summary",
       "card_image_url": "/image/default_card_summary.png"
+    },
+    {
+      "title": "LcdTap: TinyJoyPad や Arduboy を大画面で遊ぶ",
+      "description": "TinyJoyPad や Arduboy など、SSD1306 ディスプレイを使った小型ゲームを PC 用モニタやテレビなどの大画面で遊ぶ方法を紹介します。",
+      "date": "2026/05/14",
+      "url": "/2026/0514-tinyjoypad-with-large-monitor",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2026/0514-tinyjoypad-with-large-monitor/cover.jpg"
     }
   ]
 }
