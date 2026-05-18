@@ -71,6 +71,8 @@
         <p><img src="./cover.jpg" alt=""></p>
         <h3>TinyJoyPad</h3>
         <p><a href="https://www.tinyjoypad.com/tinyjoypad_attiny85" target="_blank">TinyJoyPad</a> は Daniel C 氏によって開発された携帯ゲーム機で、8 bit マイコンの ATtiny85 と SSD1306 OLED、5 つのスイッチ、スピーカーから構成されるシンプルな構成が特徴です。</p>
+        <h3>Arduboy</h3>
+        <p><a href="https://www.arduboy.com/" target="_blank">Arduboy</a> は Kevin Bates 氏によって開発された携帯ゲーム機で、ATmega32u4 と SSD1306 OLED、6 つのスイッチ、スピーカーから構成されます。</p>
         <h3>LcdTap</h3>
         <p><a href="https://github.com/shapoco/lcdtap" target="_blank">LcdTap</a> は、Raspberry Pi Pico2 を使って、I2C 接続や SPI 接続の LCD モジュールの表示内容を DVI で出力して大きなディスプレイにミラー表示したりキャプチャしたりできるライブラリです。</p>
         <h3>用意する物</h3>
@@ -115,17 +117,19 @@
           <li>Pico2 には GND 端子がいっぱいありますが、どれに繋いでもかまいません。</li>
           <li>Pico2 から出ている 3.3V で TinyJoyPad に給電することもできますが、その場合は TinyJoyPad の電源が Pico2 へ逆流しないよう、ショットキーバリアダイオード (例: <a href="https://akizukidenshi.com/catalog/g/g108997/" target="_blank">11EQS03L</a>) を挿入してください。</li>
           <li>SDA/SCL を 10kΩ でプルアップすれば、TinyJoyPad 側の OLED を外しても動作します。</li>
-          <li>
-            <p>GP21 (CFG_DVI_RES) は DVI 映像出力の解像度 (アスペクト比) を指定します。もしモニタに映らない場合はここを切り替えて Pico2 をリセット (USB ケーブルを抜き差し) してみてください。</p>
-            <ul>
-              <li>接続時: 1280x720@30Hz (16:9)</li>
-              <li>切断時: 640x480@60Hz (4:3)</li>
-            </ul>
-          </li>
         </ul>
-        <p><img src="./schematic.png" alt=""></p>
+        <p><img src="./tinyjoypad_schematics.png" alt=""></p>
         <h3>組み立て (Arduboy)</h3>
-        <p>(執筆中)</p>
+        <p>Pico-DVI-Sock を Pico2 にハンダ付けし、その他の部品を下図のように接続します。</p>
+        <ul>
+          <li>Pico2 と Arduboy の間はできるだけ短距離で配線してください。</li>
+          <li>CS と DC は基板のレジストをカッターナイフなどで削って銅箔を露出させてハンダ付けします。</li>
+          <li>Pico2 には GND 端子がいっぱいありますが、どれに繋いでもかまいません。</li>
+          <li>RST は Open、CS は GND に接続することもできますが、この場合 Arduboy の電源 On/Off で画像が崩れることがあります。</li>
+        </ul>
+        <p><img src="./arduboy_conn_front.jpg" alt=""></p>
+        <p><img src="./arduboy_conn_back.jpg" alt=""></p>
+        <p><img src="./arduboy_schematics.png" alt=""></p>
         <h3>ブレッドボードに組み立てた例</h3>
         <p><img src="./breadboard.jpg" alt=""></p>
         <h3>Pico2 へのファームウェアの書き込み</h3>
@@ -135,16 +139,18 @@
           <li>Pico2 の BOOTSEL ボタンを押しながら USB ケーブルで PC に接続します (マスストレージデバイスとして認識されます)。</li>
           <li>マスストレージデバイスに lcdtap_pico2_ssd1306.uf2 をコピーします。</li>
         </ol>
-        <p>
-          書き込みが成功すると、Pico2 の LCD が 1 秒周期で点滅し、
-          コネクタから DVI-D 信号が出力されます。
-        </p>
+        <p>書き込みが成功すると、Pico2 の LCD が点滅し、コネクタから DVI-D 信号が出力されます。</p>
         <h3>使用方法</h3>
         <ol>
           <li>先に Pico2 の電源を入れる。</li>
-          <li>TinyJoyPad の電源を入れる。</li>
+          <li>次に TinyJoyPad / Arduboy の電源を入れる。</li>
           <li>モニタに画像が表示されたら、ロータリースイッチで画面の向きを合わせる。</li>
         </ol>
+        <p>GP20 (CFG_OUT_720P) は DVI 映像出力の解像度 (アスペクト比) を指定します。もしモニタに映らない場合はここを切り替えて Pico2 をリセット (USB ケーブルを抜き差し) してみてください。</p>
+        <ul>
+          <li>接続時: 1280x720@30Hz (16:9)</li>
+          <li>切断時: 640x480@60Hz (4:3)</li>
+        </ul>
         <h3>動作の様子</h3>
         <p><video controls><source src="https://www.shapoco.net/media/2026/20260514_lcdtap_tinytris.mp4" type="video/mp4" /></video></p>
         <h3>関連リンク</h3>
