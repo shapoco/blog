@@ -110,6 +110,8 @@ GP20 (CFG_OUT_720P) は DVI 映像出力の解像度 (アスペクト比) を指
 
 ![](https://www.shapoco.net/media/2026/20260514_lcdtap_tinytris.mp4)
 
+![](https://www.shapoco.net/media/2026/20260518_lcdtap_arduboy.mp4)
+
 ## 関連リンク
 
 - SNS 投稿
