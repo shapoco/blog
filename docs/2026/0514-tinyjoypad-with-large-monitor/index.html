@@ -69,6 +69,7 @@
         </p>
         <p>映像出力用にコネクタのハンダ付けが必要ですが、ファームウェアに関してはコンパイル済みバイナリをドラッグ＆ドロップするだけなのでプログラミング不要です。</p>
         <p><img src="./cover.jpg" alt=""></p>
+        <blockquote class="note">Arduboy の SPI 信号引き出しについて、当初基板のレジストを削って銅箔を露出させる手順を掲載していましたが、基板裏のバッテリーの下に TP があることを教えて頂きました (thx: <a href="https://x.com/chame/status/2056250472034627944" target="_blank">chamekan さん</a>)。</blockquote>
         <h3>TinyJoyPad</h3>
         <p><a href="https://www.tinyjoypad.com/tinyjoypad_attiny85" target="_blank">TinyJoyPad</a> は Daniel C 氏によって開発された携帯ゲーム機で、8 bit マイコンの ATtiny85 と SSD1306 OLED、5 つのスイッチ、スピーカーから構成されるシンプルな構成が特徴です。</p>
         <h3>Arduboy</h3>
@@ -100,6 +101,8 @@
             </ul>
           </li>
           <li><a href="https://akizukidenshi.com/catalog/g/g116103/" target="_blank">抵抗 10kΩ</a> x2</li>
+          <li>ポリウレタン線などの細い導線 (Arduboy 用)</li>
+          <li>ビニールテープやカプトンテープなどの絶縁用テープ (Arduboy 用)</li>
           <li>TypeA-MicroB USB ケーブル</li>
           <li>HDMI ケーブル</li>
           <li>
@@ -120,18 +123,21 @@
         </ul>
         <p><img src="./tinyjoypad_schematics.png" alt=""></p>
         <h3>組み立て (Arduboy)</h3>
+        <p>Pico-DVI-Sock を Pico2 にハンダ付けし、その他の部品を下図のように接続します。</p>
+        <ul>
+          <li>Pico2 と Arduboy の間はできるだけ短距離で配線してください。</li>
+          <li>各信号は Arduboy の基板裏のバッテリーを剥がしたところにあるテストポイントから引き出すことができます。</li>
+          <li>Pico2 には GND 端子がいっぱいありますが、どれに繋いでもかまいません。</li>
+          <li>RST は Open、CS は GND に接続することもできますが、この場合 Arduboy の電源 On/Off で画像が崩れることがあります。</li>
+        </ul>
         <blockquote class="caution">
           Arduboy の背面は Li-Po バッテリーの端子がむき出しになっているので、
           金属の上に置いたりしてショートしないように注意してください。
         </blockquote>
-        <p>Pico-DVI-Sock を Pico2 にハンダ付けし、その他の部品を下図のように接続します。</p>
-        <ul>
-          <li>Pico2 と Arduboy の間はできるだけ短距離で配線してください。</li>
-          <li>CS と DC は基板のレジストをカッターナイフなどで削って銅箔を露出させてハンダ付けします。</li>
-          <li>Pico2 には GND 端子がいっぱいありますが、どれに繋いでもかまいません。</li>
-          <li>RST は Open、CS は GND に接続することもできますが、この場合 Arduboy の電源 On/Off で画像が崩れることがあります。</li>
-        </ul>
-        <p><img src="./arduboy_conn_front.jpg" alt=""></p>
+        <blockquote class="caution">
+          追加した配線と Li-Po バッテリーの間がショートしないように
+          ビニールテープやカプトンテープ等で絶縁することをお勧めします。
+        </blockquote>
         <p><img src="./arduboy_conn_back.jpg" alt=""></p>
         <p><img src="./arduboy_schematics.png" alt=""></p>
         <h3>ブレッドボードに組み立てた例</h3>
