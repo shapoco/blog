@@ -158,6 +158,8 @@ CoreS3 の電源を入れる前に設定を行って下さい。設定は Pico2 
 セットアップ完了後、CoreS3 の電源を入れると CoreS3 の画面がモニターに表示されます。
 DVI-D 入力に対応した HDMI キャプチャを使用して録画することもできます。
 
+![](https://www.shapoco.net/media/2026/20260524_lcdtap_m5stack_cores3.mp4)
+
 ## ブラウザからの静止画キャプチャ
 
 LcdTap Monitor の Frame Buffer タブで Capture ボタンを押すことで、
