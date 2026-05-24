@@ -119,6 +119,9 @@ CoreS3 の電源を入れる前に設定を行って下さい。設定は Pico2 
 1. ファームウェアを書き込んだ Pico2 を PC に接続します (シリアルポートとして認識されます)。
 2. Web Serial API に対応したブラウザ (Chrome、Edge、Firefox 等) で [LcdTap Monitor](https://shapoco.github.io/lcdtap/monitor/) にアクセスします。
 3. Connect ボタンを押してシリアルポートを選択します。
+
+    ![](./webapp-01.png)
+
 4. Config タブで以下のように設定します。
 
     |Parameter|Value|
