@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+  <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+  <meta name="description" content="「LcdTap」を使用して M5Stack CoreS3 の画面をモニターにミラーリングしたり、キャプチャする方法を紹介します。">
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@shapoco" />
+  <meta property="og:url" content="https://blog.shapoco.net/2026/0520-m5stack-with-large-monitor/" />
+  <meta property="og:title" content="LcdTap: M5Stack CoreS3 の画面をミラーリング/キャプチャする | シャポログ" />
+  <meta property="og:description" content="「LcdTap」を使用して M5Stack CoreS3 の画面をモニターにミラーリングしたり、キャプチャする方法を紹介します。" />
+  <meta property="og:image" content="https://blog.shapoco.net/2026/0520-m5stack-with-large-monitor/cover.jpg" />
+
+  <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+  <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KJ53WNQ22G"></script>
+  <script>
+    var remoteHost = window.location.hostname;
+    if (remoteHost == "localhost") {
+      console.log(`Google Analytics disabled on: '${remoteHost}'`);
+    }
+    else {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-KJ53WNQ22G');
+    }
+  </script>
+
+  <link href="/style.css?0ec49c72" rel="stylesheet" type="text/css">
+  <script src="/style.js?0fd56873"></script>
+
+  <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+  <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+  <title>LcdTap: M5Stack CoreS3 の画面をミラーリング/キャプチャする | シャポログ</title>
+</head>
+
+<body>
+  <div id="container">
+    <div id="root_navi"></div>
+
+    <header class="article_header">
+      <h1><a href="/">シャポログ</a></h1>
+    </header>
+    <main>
+      <h2>LcdTap: M5Stack CoreS3 の画面をミラーリング/キャプチャする</h2>
+
+      <div class="article_info_wrap">
+        <div class="article_info">
+          2026/05/20 |
+          <a href="https://github.com/shapoco/blog/tree/main/src/article/2026/0520-m5stack-with-large-monitor/" target="_blank">記事のソース</a>
+        </div>
+
+        <div id="shpcstamp_wrap"></div>
+        <script async src="/stamp/v1/widget.js?ce7d3635"></script>
+      </div>
+
+              <p>「LcdTap」を使用して M5Stack CoreS3 の画面をモニターにミラーリングしたり、キャプチャする方法を紹介します。</p>
+        <p><img src="./cover.jpg" alt=""></p>
+        <h3>LcdTap</h3>
+        <p><a href="https://github.com/shapoco/lcdtap" target="_blank">LcdTap</a> は、Raspberry Pi Pico2 を使って、I2C 接続や SPI 接続の LCD モジュールの表示内容を DVI で出力して大きなディスプレイにミラー表示したりキャプチャしたりできるライブラリです。</p>
+        <h3>用意する物</h3>
+        <ul>
+          <li>M5Stack CoreS3</li>
+          <li><a href="https://www.switch-science.com/products/9809" target="_blank">Raspberry Pi Pico 2</a> (<a href="https://www.switch-science.com/products/10257" target="_blank">ピンヘッダ付き</a>)</li>
+          <li>USB ケーブル (TypeA-MicroB)</li>
+          <li>
+            <p>モニターへのミラーリングや動画キャプチャを行う場合</p>
+            <ul>
+              <li><a href="https://www.switch-science.com/products/7431" target="_blank">Pico-DVI-Sock</a></li>
+              <li>HDMI ケーブル</li>
+              <li>640x480@60Hz または 1280x720@30Hz の DVI-D 信号を入力可能なディスプレイ</li>
+            </ul>
+          </li>
+          <li>
+            <p>設定に OSD メニューを使用する場合</p>
+            <ul>
+              <li><a href="https://www.switch-science.com/products/38" target="_blank">タクトスイッチ</a> x5</li>
+            </ul>
+          </li>
+          <li>
+            <p>CoreS3 を改造して CS 信号を取り出す場合:</p>
+            <ul>
+              <li>六角ドライバー</li>
+              <li>導線 (ビーニル線等)</li>
+            </ul>
+          </li>
+          <li>
+            <p>480p / 720p 切り替え式にする場合:</p>
+            <ul>
+              <li>スライドスイッチ、DIP スイッチ等</li>
+            </ul>
+          </li>
+        </ul>
+        <h3>CS 信号の引き出し</h3>
+        <p>
+          LcdTap は SPI バスの信号を見て画面の内容を再構築します。
+          SPI バスのうち SCLK、MOSI、DC は CoreS3 の M-Bus コネクタから引き出すことができますが、
+          CS 信号は基板上にしか無いので、どうにかして引き出す必要があります。
+        </p>
+        <h4>方法1: M5GFX の改造 (ハンダ付け不要・再コンパイル必要)</h4>
+        <p>
+          M5GFX ライブラリに手を加えてディスプレイモジュールに繋がっている CS 信号と同じものを
+          M-Bus コネクタの GPIO 端子に出すことができます。
+        </p>
+        <p>Windows + Arduino IDE の場合、ソースコードは <code>D:\Users\(ユーザ名)\Documents\Arduino\libraries\M5GFX\src\M5GFX.cpp</code> にあります。</p>
+        <p>念のため M5GFX.cpp のバックアップを取った上で、<code>cs_control</code> 関数に以下の変更を加えてください。</p>
+        <pre class="lang_diff">void cs_control(bool flg) override
+  {
+    lgfx::Panel_ILI9342::cs_control(flg);
+
++   // GPIO5 を CS ピンに連動させる
++   lgfx::pinMode(GPIO_NUM_5, lgfx::pin_mode_t::output);
++   if (flg) {
++     lgfx::gpio_hi(GPIO_NUM_5);
++   } else {
++     lgfx::gpio_lo(GPIO_NUM_5);
++   }
+
+    // CS操作時にGPIO35の役割を切り替える (MISO or D/C);
+
+    // FSPIQ_IN_IDX==FSPI MISO / SIG_GPIO_OUT_IDX==GPIO OUT
+    // *(volatile uint32_t*)GPIO_FUNC35_OUT_SEL_CFG_REG = flg ? FSPIQ_OUT_IDX : SIG_GPIO_OUT_IDX;
+
+    // CS HIGHの場合はGPIO出力を無効化し、MISO入力として機能させる。
+    // CS LOW の場合はGPIO出力を有効化し、D/Cとして機能させる。
+    *(volatile uint32_t*)( flg
+                           ? GPIO_ENABLE1_W1TC_REG
+                           : GPIO_ENABLE1_W1TS_REG
+                         ) = 1u &lt;&lt; (GPIO_NUM_35 &amp; 31);
+  }</pre>
+        <h4>方法2: CoreS3 の基板から直接 CS 信号を引き出す (ハンダ付け必要・再コンパイル不要)</h4>
+        <blockquote class="warning">
+          今回引き出す信号はディスプレイの制御信号であり、CoreS3 の無線通信機能には何ら影響を与えませんが、
+          電波法上はこの状態で Wi-Fi や Bluetooth を使用することは厳密には違法と見なされる可能性があります。
+          この方法は無線機能を使用しないアプリケーションに限定することをお勧めします。
+        </blockquote>
+        <ol>
+          <li>
+            <p>CoreS3 の背面のスピーカーを取り外し、スピーカーがあったスペースへ向かって基板をスライドさせて持ち上げると、基板を外すことができます。</p>
+            <ul>
+              <li>基板とディスプレイモジュールがフレキシブルケーブルで繋がっているので、傷つけないようにご注意ください。</li>
+            </ul>
+          </li>
+          <li>
+            <p>M-Bus コネクタの近くに CS 信号をプルアップしている抵抗があるので、そこに導線をハンダ付けします。ブラブラしないように接着剤等で固定することをお勧めします。</p>
+            <p><img src="./m5cores3_cs.jpg" alt=""></p>
+          </li>
+          <li>導線を基板と筐体の隙間から外へ引き出します。</li>
+        </ol>
+        <h3>CoreS3 と Pico2 の接続</h3>
+        <p>図のように接続してください。CoreS3 ではディスプレイ制御時は MISO が DC として使用されますので、CoreS3 の MISO を Pico2 の DC に接続します。</p>
+        <ul>
+          <li>ミラーリングや動画キャプチャを行う場合は Pico-DVI-Sock をハンダ付けします。</li>
+          <li>CS ピンは M5GFX を改造した場合は GPIO5 に、基板から引き出した場合はそれを接続します。</li>
+          <li>OSD メニューを使用して設定を行う場合は Pico2 の GPIO21～28 にタクトスイッチを接続します。</li>
+          <li>480p@60Hz / 720p@30Hz 切り替え式にする場合は GPIO20 に DIP スイッチやスライドスイッチを接続します (接続しない場合は 480p@60Hz になります)。</li>
+        </ul>
+        <p><img src="./connection.png" alt=""></p>
+        <h3>Pico2 へのファームウェアの書き込み</h3>
+        <ol>
+          <li><a href="https://github.com/shapoco/lcdtap/releases" target="_blank">LcdTap のリリースページ</a> から zip ファイルをダウンロードし、展開して <code>lcdtap_pico2_universal.uf2</code> を取り出します。</li>
+          <li>Pico2 の BOOTSEL ボタンを押しながら USB ケーブルで PC に接続します (マスストレージデバイスとして認識されます)。</li>
+          <li>マスストレージデバイスに <code>lcdtap_pico2_universal.uf2</code> をコピーします。</li>
+        </ol>
+        <p>書き込みが成功すると、Pico2 の LCD が点滅します。</p>
+        <h3>設定</h3>
+        <p>CoreS3 の電源を入れる前に設定を行って下さい。設定は Pico2 のオンボード Flash ROM に保存されるので、初回だけで OK です。</p>
+        <h4>ブラウザを使用する場合 (PC 必要、タクトスイッチ不要)</h4>
+        <ol>
+          <li>ファームウェアを書き込んだ Pico2 を PC に接続します (シリアルポートとして認識されます)。</li>
+          <li>Web Serial API に対応したブラウザ (Chrome、Edge、Firefox 等) で <a href="https://shapoco.github.io/lcdtap/monitor/" target="_blank">LcdTap Monitor</a> にアクセスします。</li>
+          <li>Connect ボタンを押してシリアルポートを選択します。</li>
+          <li>
+            <p>Config タブで以下のように設定します。</p>
+            <table>
+              <tr>
+                <th>Parameter</th>
+                <th class="nowrap">Value</th>
+              </tr>
+              <tr>
+                <td>Controller Type</td>
+                <td class="nowrap">ST7789</td>
+              </tr>
+              <tr>
+                <td>Interface Type</td>
+                <td class="nowrap">4-Line SPI</td>
+              </tr>
+              <tr>
+                <td>LCD Width</td>
+                <td class="nowrap">320 px</td>
+              </tr>
+              <tr>
+                <td>LCD Height</td>
+                <td class="nowrap">240 px</td>
+              </tr>
+              <tr>
+                <td>Inverted</td>
+                <td class="nowrap">On</td>
+              </tr>
+              <tr>
+                <td>Swap R/B</td>
+                <td class="nowrap">On</td>
+              </tr>
+              <tr>
+                <td>Output Rotation</td>
+                <td class="nowrap">0 deg</td>
+              </tr>
+              <tr>
+                <td>Force Power On</td>
+                <td class="nowrap">Off</td>
+              </tr>
+            </table>
+          </li>
+          <li>Apply を押します。</li>
+        </ol>
+        <h4>OSD メニューを使用する場合 (PC 不要、タクトスイッチ必要)</h4>
+        <ol>
+          <li>Pico2 を USB ケーブルで充電器や PC に接続します。</li>
+          <li>Pico-DVI-Sock とモニターを HDMI ケーブルで接続します。</li>
+          <li>
+            <p>Enter キーを押すと OSD メニューが表示されるので、左右上下キーを使って以下のように設定してください。</p>
+            <table>
+              <tr>
+                <th>Parameter</th>
+                <th class="nowrap">Value</th>
+              </tr>
+              <tr>
+                <td>Interface</td>
+                <td class="nowrap">4Line SPI</td>
+              </tr>
+              <tr>
+                <td>Controller Type</td>
+                <td class="nowrap">ST7789</td>
+              </tr>
+              <tr>
+                <td>LCD Width</td>
+                <td class="nowrap">320 px</td>
+              </tr>
+              <tr>
+                <td>LCD Height</td>
+                <td class="nowrap">240 px</td>
+              </tr>
+              <tr>
+                <td>Inversion</td>
+                <td class="nowrap">On</td>
+              </tr>
+              <tr>
+                <td>Swap Red/Blue</td>
+                <td class="nowrap">On</td>
+              </tr>
+              <tr>
+                <td>Output Rotation</td>
+                <td class="nowrap">0 deg</td>
+              </tr>
+              <tr>
+                <td>Force Power On</td>
+                <td class="nowrap">Off</td>
+              </tr>
+            </table>
+          </li>
+          <li>Apply を選択して Enter キーを押します。</li>
+        </ol>
+        <h3>モニターへのミラーリングや動画キャプチャ</h3>
+        <p>
+          セットアップ完了後、CoreS3 の電源を入れると CoreS3 の画面がモニターに表示されます。
+          DVI-D 入力に対応した HDMI キャプチャを使用して録画することもできます。
+        </p>
+        <h3>ブラウザからの静止画キャプチャ</h3>
+        <p>
+          LcdTap Monitor の Frame Buffer タブで Capture ボタンを押すことで、
+          フレームバッファの内容を読み出すことができます。
+          画像が崩れる場合は「Write Protected」スイッチを切り替えてみてください。
+        </p>
+        <p><img src="./webapp-02.png" alt=""></p>
+
+    </main>
+    <footer>
+      <span class="nowrap">
+        Copyright &copy; <a href="https://x.com/shapoco/" target="_blank">Shapoco</a>,
+      </span>
+      <span class="nowrap">
+        Powered by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
+      </span>
+    </footer>
+  </div>
+</body>
+
+</html>
