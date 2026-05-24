@@ -173,6 +173,10 @@ LcdTap Monitor の Frame Buffer タブで Capture ボタンを押すことで、
 
 ## 関連リンク
 
+- 関連記事
+
+    - [LcdTap: TinyJoyPad や Arduboy を大画面で遊ぶ](../0514-tinyjoypad-with-large-monitor/article.md)
+
 - SNS 投稿
 
     - [X (Twitter)](https://x.com/shapoco/status/2058483284070592621)

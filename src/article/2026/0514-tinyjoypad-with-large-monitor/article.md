@@ -114,6 +114,10 @@ GP20 (CFG_OUT_720P) は DVI 映像出力の解像度 (アスペクト比) を指
 
 ## 関連リンク
 
+- 関連記事
+
+    - [LcdTap: M5Stack CoreS3 の画面をミラーリング/キャプチャする](../0520-m5stack-with-large-monitor/article.md)
+
 - SNS 投稿
 
     - [X (Twitter)](https://x.com/shapoco/status/2054587734527037561)
