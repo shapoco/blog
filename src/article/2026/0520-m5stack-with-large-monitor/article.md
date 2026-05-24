@@ -167,3 +167,11 @@ LcdTap Monitor の Frame Buffer タブで Capture ボタンを押すことで、
 画像が崩れる場合は「Write Protected」スイッチを切り替えてみてください。
 
 ![](./webapp-02.png)
+
+## 関連リンク
+
+- SNS 投稿
+
+    - [X (Twitter)](https://x.com/shapoco/status/2058483284070592621)
+    - [Bluesky](https://bsky.app/profile/shapoco.net/post/3mmlopjnyp22q)
+    - [Misskey.io](https://misskey.io/notes/amn5rqn77flm08gy)
