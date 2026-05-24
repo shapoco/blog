@@ -10,7 +10,7 @@
 
 ## 用意する物
 
-- M5Stack CoreS3
+- M5Stack CoreS3 (SE)
 - [Raspberry Pi Pico 2](https://www.switch-science.com/products/9809) ([ピンヘッダ付き](https://www.switch-science.com/products/10257))
 - USB ケーブル (TypeA-MicroB)
 - モニターへのミラーリングや動画キャプチャを行う場合
