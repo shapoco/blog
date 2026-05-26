@@ -125,6 +125,27 @@
         <h3>組み立て (Arduboy)</h3>
         <p>Pico-DVI-Sock を Pico2 にハンダ付けし、その他の部品を下図のように接続します。</p>
         <ul>
+          <li>
+            <p>レベルシフト用の抵抗値 R は Arduboy の電源電圧に応じて決めます。</p>
+            <table>
+              <tr>
+                <th class="nowrap">Arduboy 電源</th>
+                <th class="nowrap">抵抗値</th>
+              </tr>
+              <tr>
+                <td class="nowrap">Li-Po 電池</td>
+                <td class="nowrap">100 Ω</td>
+              </tr>
+              <tr>
+                <td class="nowrap">5 V</td>
+                <td class="nowrap">470 Ω</td>
+              </tr>
+              <tr>
+                <td class="nowrap">3.3 V</td>
+                <td class="nowrap">(レベルシフト不要)</td>
+              </tr>
+            </table>
+          </li>
           <li>Pico2 と Arduboy の間はできるだけ短距離で配線してください。</li>
           <li>各信号は Arduboy の基板裏のバッテリーを剥がしたところにあるテストポイントから引き出すことができます。</li>
           <li>Pico2 には GND 端子がいっぱいありますが、どれに繋いでもかまいません。</li>
