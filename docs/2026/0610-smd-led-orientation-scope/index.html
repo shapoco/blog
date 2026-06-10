@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+  <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+  <meta name="description" content="極性マークが底面にしかついていないチップ LED を上から見下ろしながら正しい向きでつまめるようにするツールを作りました。">
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@shapoco" />
+  <meta property="og:url" content="https://blog.shapoco.net/2026/0610-smd-led-orientation-scope/" />
+  <meta property="og:title" content="チップ LED 手ハンダ用極性スコープ | シャポログ" />
+  <meta property="og:description" content="極性マークが底面にしかついていないチップ LED を上から見下ろしながら正しい向きでつまめるようにするツールを作りました。" />
+  <meta property="og:image" content="https://blog.shapoco.net/2026/0610-smd-led-orientation-scope/cover.jpg" />
+
+  <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+  <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KJ53WNQ22G"></script>
+  <script>
+    var remoteHost = window.location.hostname;
+    if (remoteHost == "localhost") {
+      console.log(`Google Analytics disabled on: '${remoteHost}'`);
+    }
+    else {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-KJ53WNQ22G');
+    }
+  </script>
+
+  <link href="/style.css?0ec49c72" rel="stylesheet" type="text/css">
+  <script src="/style.js?0fd56873"></script>
+
+  <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+  <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+  <title>チップ LED 手ハンダ用極性スコープ | シャポログ</title>
+</head>
+
+<body>
+  <div id="container">
+    <div id="root_navi"></div>
+
+    <header class="article_header">
+      <h1><a href="/">シャポログ</a></h1>
+    </header>
+    <main>
+      <h2>チップ LED 手ハンダ用極性スコープ</h2>
+
+      <div class="article_info_wrap">
+        <div class="article_info">
+          2026/06/10 |
+          <a href="https://github.com/shapoco/blog/tree/main/src/article/2026/0610-smd-led-orientation-scope/" target="_blank">記事のソース</a>
+        </div>
+
+        <div id="shpcstamp_wrap"></div>
+        <script async src="/stamp/v1/widget.js?ce7d3635"></script>
+      </div>
+
+              <p>極性マークが底面にしかついていないチップ LED を上から見下ろしながら正しい向きでつまめるようにするツールを作りました。</p>
+        <p><img src="./cover.jpg" alt=""></p>
+        <h3>構造</h3>
+        <p>アクリルのステージの上にチップ LED を置くと底面の極性マークが照明用 LED によって照らされ、上からステージを覗き込むと底部の凹面鏡に極性マークが反射して大きく見えるようになっています。</p>
+        <p><img src="./figure.png" alt=""></p>
+        <p>ステージは凹面鏡の焦点距離より低い高さに設置されているので、像の向きは普通の鏡と同じです (左右が逆に見えたりはしません)。</p>
+        <p>照明用の LED は無くても一応見えはしますが、照らした方が圧倒的に見やすいです。</p>
+        <h3>部品</h3>
+        <p><img src="./parts.jpg" alt=""></p>
+        <ul>
+          <li>
+            <p><a href="https://github.com/shapoco/jigs/tree/main/electronics/smd-led-orientation-scope" target="_blank">3D プリントされたボディ</a></p>
+            <ul>
+              <li>モデルは CadQuery で作成しており、寸法はパラメタライズされているので、使用するステージや鏡に合わせて調整することができます。</li>
+            </ul>
+          </li>
+          <li>ステージ: <a href="https://www.amazon.co.jp/dp/B00E84KOKU/" target="_blank">光(Hikari) アクリル板 50丸×2mm KA-500 透明</a></li>
+          <li>
+            <p>凹面鏡: <a href="https://www.amazon.co.jp/dp/B0CPPS94G9/" target="_blank">PATIKIL 光学レンズ1セット 5個 両凸レンズ 両凹レンズ プリズムレンズ 凸面鏡 凹面鏡 物理実験教育用 クリア</a></p>
+            <ul>
+              <li>今回はこのセットに入っていた凹面鏡を使用しました。今回の用途では特に問題になりませんが、鏡のあまり品質は良くないようです (汚れていたり、外周部の歪みが大きかったり)。</li>
+            </ul>
+          </li>
+          <li>照明用 LED: <a href="https://akizukidenshi.com/catalog/g/g106410/" target="_blank">OSW54K3131A</a></li>
+          <li>抵抗: <a href="https://akizukidenshi.com/catalog/g/g116101/" target="_blank">1/6W100Ω</a></li>
+          <li>電池ボックス: <a href="https://akizukidenshi.com/catalog/g/g100348/" target="_blank">電池ボックス 単4×2本 リード線・フタ・スイッチ付</a></li>
+          <li>熱収縮チューブ</li>
+        </ul>
+        <h3>組み立て</h3>
+        <ol>
+          <li>
+            <p>LED と抵抗を直列に接続したものを並列接続して電池ボックスに接続します。接続部は熱収縮チューブで絶縁します。</p>
+            <p><img src="./led-and-resistor.jpg" alt=""></p>
+            <p><img src="./battery-and-leds.jpg" alt=""></p>
+          </li>
+          <li>
+            <p>鏡の表面をよく清掃し、ボディの底部から挿入して接着剤で固定します。</p>
+            <p><img src="./insert-mirror.jpg" alt=""></p>
+          </li>
+          <li>
+            <p>LED をボディの側面の穴に挿入して接着剤で固定します。</p>
+            <p><img src="./insert-led.jpg" alt=""></p>
+          </li>
+          <li>ボディの側面の平面部分に電池ボックスを両面テープ等で固定します。</li>
+          <li>ステージの汚れを拭き取り、ホコリ等が入らないように注意しながらボディの上部にセットします。緩ければ接着剤で固定してください。</li>
+        </ol>
+        <h3>動画</h3>
+        <p><video controls><source src="https://www.shapoco.net/media/2026/20260609_led_marker_scope.mp4" type="video/mp4" /></video></p>
+        <h3>関連リンク</h3>
+        <ul>
+          <li>
+            <p>SNS 投稿</p>
+            <ul>
+              <li><a href="https://x.com/shapoco/status/2064319720736895288" target="_blank">X (Twitter)</a></li>
+              <li><a href="https://misskey.io/notes/ana64yjaxw39002e" target="_blank">Misskey.io</a></li>
+              <li><a href="https://bsky.app/profile/shapoco.net/post/3mnu6i3m4dc2u" target="_blank">Bluesky</a></li>
+            </ul>
+          </li>
+        </ul>
+
+    </main>
+    <footer>
+      <span class="nowrap">
+        Copyright &copy; <a href="https://x.com/shapoco/" target="_blank">Shapoco</a>,
+      </span>
+      <span class="nowrap">
+        Powered by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
+      </span>
+    </footer>
+  </div>
+</body>
+
+</html>
