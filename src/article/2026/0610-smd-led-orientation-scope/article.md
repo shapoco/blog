@@ -27,9 +27,10 @@
 
     - 今回はこのセットに入っていた凹面鏡を使用しました。今回の用途では特に問題になりませんが、鏡の品質はあまり良くないようです (汚れていたり、外周部の歪みが大きかったり)。
 
-- 照明用 LED: [OSW54K3131A](https://akizukidenshi.com/catalog/g/g106410/)
-- 抵抗: [1/6W100Ω](https://akizukidenshi.com/catalog/g/g116101/)
+- 照明用 LED: [OSW54K3131A](https://akizukidenshi.com/catalog/g/g106410/) x2 個
+- 抵抗: [1/6W100Ω](https://akizukidenshi.com/catalog/g/g116101/) x2 個
 - 電池ボックス: [電池ボックス 単4×2本 リード線・フタ・スイッチ付](https://akizukidenshi.com/catalog/g/g100348/)
+- 乾電池 単4 x2
 - 熱収縮チューブ
 
 ## 組み立て
