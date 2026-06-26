@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+  <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+  <meta name="description" content="「LcdTap」を使用して ESPboy の画面をモニターにミラーリングしたり、キャプチャする方法を紹介します。">
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@shapoco" />
+  <meta property="og:url" content="https://blog.shapoco.net/2026/0626-espboy-with-large-monitor/" />
+  <meta property="og:title" content="LcdTap: ESPboy を大きなモニターで遊ぶ | シャポログ" />
+  <meta property="og:description" content="「LcdTap」を使用して ESPboy の画面をモニターにミラーリングしたり、キャプチャする方法を紹介します。" />
+  <meta property="og:image" content="https://blog.shapoco.net/2026/0626-espboy-with-large-monitor/cover.jpg" />
+
+  <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+  <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KJ53WNQ22G"></script>
+  <script>
+    var remoteHost = window.location.hostname;
+    if (remoteHost == "localhost") {
+      console.log(`Google Analytics disabled on: '${remoteHost}'`);
+    }
+    else {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-KJ53WNQ22G');
+    }
+  </script>
+
+  <link href="/style.css?0ec49c72" rel="stylesheet" type="text/css">
+  <script src="/style.js?0fd56873"></script>
+
+  <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+  <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+  <title>LcdTap: ESPboy を大きなモニターで遊ぶ | シャポログ</title>
+</head>
+
+<body>
+  <div id="container">
+    <div id="root_navi"></div>
+
+    <header class="article_header">
+      <h1><a href="/">シャポログ</a></h1>
+    </header>
+    <main>
+      <h2>LcdTap: ESPboy を大きなモニターで遊ぶ</h2>
+
+      <div class="article_info_wrap">
+        <div class="article_info">
+          2026/06/26 |
+          <a href="https://github.com/shapoco/blog/tree/main/src/article/2026/0626-espboy-with-large-monitor/" target="_blank">記事のソース</a>
+        </div>
+
+        <div id="shpcstamp_wrap"></div>
+        <script async src="/stamp/v1/widget.js?3d92a021"></script>
+      </div>
+
+              <p>「LcdTap」を使用して ESPboy の画面をモニターにミラーリングしたり、キャプチャする方法を紹介します。</p>
+        <p><img src="./cover.jpg" alt=""></p>
+        <h3>ESPboy とは</h3>
+        <p>
+          <a href="https://www.espboy.com/" target="_blank">ESPboy</a> は ESP8266 をコアとしたオープンソースの携帯ゲーム機です。
+          128x128 ピクセルのカラー液晶、8 つの入力ボタン、スピーカー、RGB LED を備えています。
+          WiFi 機能を利用してインターネット経由でゲームをダウンロードすることもできます。
+        </p>
+        <h3>LcdTap とは</h3>
+        <p><a href="https://shapoco.github.io/lcdtap/" target="_blank">LcdTap</a> は、Raspberry Pi Pico2 を使って、I2C 接続や SPI 接続の LCD モジュールの表示内容を DVI で出力して大きなディスプレイにミラー表示したりキャプチャしたりできるツールです。</p>
+        <h3>ESPboy の製作</h3>
+        <p>今回はスイッチサイエンスのボードをコアとして、ESPboy を製作しました。</p>
+        <blockquote class="caution">
+          <p>
+            ESPboy には本来 4MB 以上の Flash ROM を搭載した ESP8266 ボードが必要です。
+            今回使用した ESP-WROOM-02 は 4MB 品と 2MB 品が混在しているそうです (ほとんどは 2MB 品？)。
+            2MB 品の場合、恐らく ESPboy 公式の書き込みツールは使用できません。
+          </p>
+          <p>
+            4MB 品の ESP8266 ボードも流通していますが、そのほとんど (全部？) は技適がありません。
+            それらを日本国内で使用することには法的な問題が伴います。
+          </p>
+          <p>
+            今回は LcdTap を使用したミラーリング/キャプチャを実現することが目的なので、
+            とりあえず Espressif の
+            <a href="https://docs.espressif.com/projects/esp-test-tools/en/latest/esp32/production_stage/tools/flash_download_tool.html" target="_blank">Flash Download Tool</a>
+            を使用して 2MB 品の ESP-WROOM-02 に無理矢理書き込むことで動作させています。
+          </p>
+        </blockquote>
+        <h4>部品</h4>
+        <p>
+          <a href="https://www.espboy.com/" target="_blank">公式サイト</a> の「Breadboard DIY」のところに回路図があります。
+          圧電スピーカーと RGB LED は無くても動きます。今回は LED は省略しました。
+        </p>
+        <ul>
+          <li><a href="https://www.switch-science.com/products/2500" target="_blank">ESPr Developer (ESP-WROOM-02開発ボード)</a></li>
+          <li><a href="https://www.amazon.co.jp/dp/B07QC62SJX/" target="_blank">1.44インチTFT LCD 65Kカラー128×128</a></li>
+          <li><a href="https://akizukidenshi.com/catalog/g/g109486/" target="_blank">16bit I2C I/Oエキスパンダー MCP23017</a></li>
+          <li><a href="https://www.switch-science.com/products/2834" target="_blank">タクトスイッチ</a> x6</li>
+          <li>レバー付きマイクロスイッチ x2 (今回は近所の部品屋で買った <a href="https://www.monotaro.com/p/3903/6304/" target="_blank">D2F-L-D</a> を使用)</li>
+          <li><a href="https://akizukidenshi.com/catalog/c/cpiezospe/" target="_blank">圧電スピーカー</a></li>
+          <li>他、ユニバーサル基板、線材等</li>
+        </ul>
+        <h4>配線</h4>
+        <p>以下のように配線します。</p>
+        <p><img src="./wiring.png" alt=""></p>
+        <h4>ゲームの書き込み (2MB 品の ESP-WROOM-02 の場合)</h4>
+        <p>
+          既に ESPboy をお持ちの方や 4MB 品の ESP-WROOM-02 を使用する場合は、
+          通常通り <a href="https://espboy.m1cr0lab.com/demo/appstore/" target="_blank">WebAppStore</a> や WiFiAppStore で
+          ゲームを書き込んでください。
+        </p>
+        <p>
+          2MB 品の ESP-WROOM-02 の場合、ESPboy 公式の書き込みツールは使用できませんので、
+          Espressif の Flash Download Tool を使用してゲームを書き込みます。
+        </p>
+        <ol>
+          <li><a href="https://docs.espressif.com/projects/esp-test-tools/en/latest/esp32/production_stage/tools/flash_download_tool.html" target="_blank">Flash Download Tool</a> をダウンロードしてインストールします。</li>
+          <li><a href="https://espboy-edu.github.io/WiFiAppStore_Navigator/" target="_blank">WiFi App Navigator</a> からゲームのバイナリ (*.bin) をダウンロードしておきます。</li>
+          <li>ESPboy を USB ケーブルで PC に接続します (COM ポートとして認識されます)。</li>
+          <li>
+            <p>Flash Download Tool を起動し、ChipType に ESP8266 を選択して OK をクリックします。</p>
+            <p><img src="./ss-fdt-01.png" alt=""></p>
+          </li>
+          <li>下部のプルダウンメニューで ESPboy の COM ポート番号を指定します。</li>
+          <li>上部のバイナリファイルのリストの「…」をクリックしてゲームのバイナリを選択し、チェックボックスにチェックします。</li>
+          <li>同じ行の @ の右に書き込み先のアドレスとして「0x0000」と入力します。</li>
+          <li>
+            <p>「START」をクリックして書き込みを開始します。</p>
+            <p><img src="./ss-fdt-02.png" alt=""></p>
+          </li>
+        </ol>
+        <p>書き込み完了後に ESPboy をリセットすると、ゲームが起動するはずです。</p>
+        <h3>LcdTap でミラーリング/キャプチャする</h3>
+        <p>
+          LcdTap を使用すると、ESPboy を PC 用の大きなモニターにミラーリングして遊んだり、
+          HDMI キャプチャを使用してキャプチャしたりできます。
+        </p>
+        <h4>LcdTap-Pico2 Universal の部品</h4>
+        <ul>
+          <li><a href="https://www.switch-science.com/products/9809" target="_blank">Raspberry Pi Pico2</a></li>
+          <li><a href="https://www.switch-science.com/products/7431" target="_blank">Pico-DVI-Sock</a></li>
+          <li><a href="https://www.switch-science.com/products/2834" target="_blank">タクトスイッチ</a> x5</li>
+          <li>スライドスイッチ、DIPスイッチ等 x1</li>
+          <li>他、ユニバーサル基板、線材等</li>
+        </ul>
+        <h4>LcdTap-Pico2 Universal の製作</h4>
+        <p>
+          詳細は <a href="https://shapoco.github.io/lcdtap/" target="_blank">公式サイト</a> をご覧下さい。
+          今回使用するインタフェースは SPI Mode の部分だけです。
+        </p>
+        <p><img src="./lcdtap-wiring.png" alt=""></p>
+        <h4>ESPboy との接続</h4>
+        <p>ESPboy の LCD 制御信号と LcdTap の SPI インタフェースを次のような対応で接続します。</p>
+        <table>
+          <tr>
+            <th class="nowrap">ESPboy</th>
+            <th class="nowrap">LcdTap</th>
+          </tr>
+          <tr>
+            <td class="nowrap">GND</td>
+            <td class="nowrap">GND, CS</td>
+          </tr>
+          <tr>
+            <td class="nowrap">RESET</td>
+            <td class="nowrap">RST</td>
+          </tr>
+          <tr>
+            <td class="nowrap">SCLK (14)</td>
+            <td class="nowrap">SCLK</td>
+          </tr>
+          <tr>
+            <td class="nowrap">MOSI (13)</td>
+            <td class="nowrap">MOSI</td>
+          </tr>
+          <tr>
+            <td class="nowrap">DC (16)</td>
+            <td class="nowrap">DC</td>
+          </tr>
+        </table>
+        <h4>コンフィグレーション</h4>
+        <p>ESPboy で使用される LCD は 128x128 ピクセルですが、その左上の論理的な座標は (X, Y) = (0, 0) ではなく (6, 5) のオフセットを持ちます。そして画面は 180° 回転しており、赤と青の色が入れ替わっています。</p>
+        <p>
+          LcdTap-Pico2 Universal のファームウェア v202606261033 以降には ESPboy 用のプリセットが
+          用意されていますのでそれを使用します。
+        </p>
+        <ol>
+          <li>ESPboy、LcdTap、モニターを接続した状態で LcdTap を起動します。</li>
+          <li>Enter キーを押して OSD メニューを開き、Load Preset を選んで Enter キーを押します。</li>
+          <li>上下キーで ESPboy を選択して Enter キーを押します。</li>
+          <li>Enter キーを押して設定を適用 (Apply) します。</li>
+          <li>ESPboy を起動 (リセット) します。</li>
+        </ol>
+        <p>
+          私の環境だけかもしれませんが、LcdTap を接続した状態で ESPboy を起動すると
+          画面が正しく初期化されないことが多々ありました。
+          その場合は ESPboy をリセットしてみてください。
+        </p>
+        <h3>動作の様子</h3>
+        <p><video controls><source src="https://www.shapoco.net/media/2026/20260625_lcdtap_espboy.mp4" type="video/mp4" /></video></p>
+        <h3>関連リンク</h3>
+        <ul>
+          <li>
+            <p>関連記事</p>
+            <ul>
+              <li><a href="../0514-tinyjoypad-with-large-monitor/">LcdTap: TinyJoyPad や Arduboy を大画面で遊ぶ</a></li>
+              <li><a href="../0520-m5stack-with-large-monitor/">LcdTap: M5Stack CoreS3 の画面をミラーリング/キャプチャする</a></li>
+            </ul>
+          </li>
+          <li>
+            <p>SNS 投稿</p>
+            <ul>
+              <li><a href="https://x.com/shapoco/status/2070037620688900595" target="_blank">X (Twitter)</a></li>
+              <li><a href="https://bsky.app/profile/shapoco.net/post/3mp3ugygr4k2k" target="_blank">Bluesky</a></li>
+              <li><a href="https://misskey.io/notes/anwpz6v8wmrv05ka" target="_blank">Misskey.io</a></li>
+            </ul>
+          </li>
+        </ul>
+
+    </main>
+    <footer>
+      <span class="nowrap">
+        Copyright &copy; <a href="https://x.com/shapoco/" target="_blank">Shapoco</a>,
+      </span>
+      <span class="nowrap">
+        Powered by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
+      </span>
+    </footer>
+  </div>
+</body>
+
+</html>

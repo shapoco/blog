@@ -487,6 +487,14 @@
       "url": "/2026/0610-smd-led-orientation-scope",
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2026/0610-smd-led-orientation-scope/cover.jpg"
+    },
+    {
+      "title": "LcdTap: ESPboy を大きなモニターで遊ぶ",
+      "description": "「LcdTap」を使用して ESPboy の画面をモニターにミラーリングしたり、キャプチャする方法を紹介します。",
+      "date": "2026/06/26",
+      "url": "/2026/0626-espboy-with-large-monitor",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2026/0626-espboy-with-large-monitor/cover.jpg"
     }
   ]
 }

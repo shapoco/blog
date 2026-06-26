@@ -4,7 +4,7 @@
 
 ![](./cover.jpg)
 
-## LcdTap
+## LcdTap とは
 
 [LcdTap](https://shapoco.github.io/lcdtap/) は、Raspberry Pi Pico2 を使って、I2C 接続や SPI 接続の LCD モジュールの表示内容を DVI で出力して大きなディスプレイにミラー表示したりキャプチャしたりできるツールです。
 
@@ -176,6 +176,7 @@ LcdTap Monitor の Frame Buffer タブで Capture ボタンを押すことで、
 - 関連記事
 
     - [LcdTap: TinyJoyPad や Arduboy を大画面で遊ぶ](../0514-tinyjoypad-with-large-monitor/article.md)
+    - [LcdTap: ESPboy を大きなモニターで遊ぶ](../0626-espboy-with-large-monitor/article.md)
 
 - SNS 投稿
 
