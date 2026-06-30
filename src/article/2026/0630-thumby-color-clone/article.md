@@ -15,7 +15,7 @@ USPS による日本への配送はかなり時間がかかるようです。
 [LcdTap](https://shapoco.github.io/lcdtap/) が使えるかどうか確認するために
 1 ヶ月くらい前に注文したのですが、6/30 現在まだ輸送中になっています。
 
-大きさと搭載デバイスからしてそんなに大した回路ではなかろいうということで、
+大きさと搭載デバイスからしてそんなに複雑な回路ではなかろいうということで、
 クローンを作ってみることにしました。
 
 ## 検討
@@ -111,7 +111,7 @@ Raspberry Pi Pico 2 は 4 MB しか搭載していないので使用できませ
 [Waveshare RP2350-Plus](https://www.switch-science.com/products/10130)
 を使うことにします。
 
-### 液晶
+### LCD
 
 液晶は GC9107 なので
 [スイッチサイエンスにある液晶](https://www.switch-science.com/products/9438)
