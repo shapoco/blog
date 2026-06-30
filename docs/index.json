@@ -495,6 +495,14 @@
       "url": "/2026/0626-espboy-with-large-monitor",
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2026/0626-espboy-with-large-monitor/cover.jpg"
+    },
+    {
+      "title": "Thumby Color のクローンを Waveshare RP2350-Plus で作る",
+      "description": "Waveshare RP2350-Plus と ST7735 液晶を使って Thumby Color のクローンを作ってみました。",
+      "date": "2026/06/30",
+      "url": "/2026/0630-thumby-color-clone",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2026/0630-thumby-color-clone/cover.jpg"
     }
   ]
 }

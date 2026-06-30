@@ -231,7 +231,7 @@ function arrangeArticleHtml(parent) {
       if (!lang.rangeRules) lang.rangeRules = [];
       if (!lang.regExpRules) lang.regExpRules = [];
       // 強調表示
-      pre.innerHTML = applyRangeRules(lang, pre.textContent);
+      pre.innerHTML = applyRangeRules(lang, pre.textContent + '\n');
     }
 
     const wrap = document.createElement('div');
