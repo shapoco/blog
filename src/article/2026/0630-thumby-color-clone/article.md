@@ -32,33 +32,33 @@ USPS による配送はかなり時間がかかるようです。
 
 |RP2350|接続先|負論理|Pico2 との衝突|
 |:--:|:--|:--:|:--:|
-|GP0|←|v||
-|GP1|↑|v||
-|GP2|→|v||
-|GP3|↓|v||
-|GP4|LCD RST|v||
+|GP0|←|yes||
+|GP1|↑|yes||
+|GP2|→|yes||
+|GP3|↓|yes||
+|GP4|LCD RST|yes||
 |GP5|振動モーター (PWM2 B)|||
-|GP6|左バンパー|v||
+|GP6|左バンパー|yes||
 |GP7|LCD バックライト (PIO)|||
 |GP8|RTC SDA|||
 |GP9|RTC SCL|||
-|GP10|RGB LED 緑 (PWM5 A)|v||
-|GP11|RGB LED 赤 (PWM5 B)|v||
-|GP12|RGB LED 青 (PWM6 A)|v||
+|GP10|RGB LED 緑 (PWM5 A)|yes||
+|GP11|RGB LED 赤 (PWM5 B)|yes||
+|GP12|RGB LED 青 (PWM6 A)|yes||
 |GP13|(未使用)|||
 |GP14|(未使用)|||
 |GP15|(未使用)|||
 |GP16|LCD DC|||
-|GP17|LCD CS|v||
+|GP17|LCD CS|yes||
 |GP18|LCD SCK|||
 |GP19|LCD MOSI|||
 |GP20|オーディオイネーブル|||
-|GP21|A ボタン|v||
-|GP22|右バンパー|v||
-|GP23|オーディオ PWM (PWM3 B)||v|
-|GP24|充電ステータス|?|v|
-|GP25|B ボタン|v|v|
-|GP26|メニューボタン|v||
+|GP21|A ボタン|yes||
+|GP22|右バンパー|yes||
+|GP23|オーディオ PWM (PWM3 B)||yes|
+|GP24|充電ステータス|?|yes|
+|GP25|B ボタン|yes|yes|
+|GP26|メニューボタン|yes||
 |GP27|(未使用)|||
 |GP28|(未使用)|||
 |GP29|バッテリーモニタリング ADC||?|
@@ -234,6 +234,11 @@ pushd mp-thumby
     python3 build_and_upload.py no_upload
   popd
 popd
+
+cp -f mp-thumby/ports/rp2/build-THUMBY_COLOR/firmware_*.uf2 ./firmware_st7735.uf2
+
+rm -rf ./filesystem
+cp -r mp-thumby/TinyCircuits-Tiny-Game-Engine/filesystem .
 ```
 
 実行すると、カレントディレクトリに以下のファイルが作成されます。

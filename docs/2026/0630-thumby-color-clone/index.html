@@ -100,31 +100,31 @@
           <tr>
             <td class="nowrap" style="text-align: center;">GP0</td>
             <td>←</td>
-            <td class="nowrap" style="text-align: center;">v</td>
+            <td class="nowrap" style="text-align: center;">yes</td>
             <td class="nowrap" style="text-align: center;"></td>
           </tr>
           <tr>
             <td class="nowrap" style="text-align: center;">GP1</td>
             <td>↑</td>
-            <td class="nowrap" style="text-align: center;">v</td>
+            <td class="nowrap" style="text-align: center;">yes</td>
             <td class="nowrap" style="text-align: center;"></td>
           </tr>
           <tr>
             <td class="nowrap" style="text-align: center;">GP2</td>
             <td>→</td>
-            <td class="nowrap" style="text-align: center;">v</td>
+            <td class="nowrap" style="text-align: center;">yes</td>
             <td class="nowrap" style="text-align: center;"></td>
           </tr>
           <tr>
             <td class="nowrap" style="text-align: center;">GP3</td>
             <td>↓</td>
-            <td class="nowrap" style="text-align: center;">v</td>
+            <td class="nowrap" style="text-align: center;">yes</td>
             <td class="nowrap" style="text-align: center;"></td>
           </tr>
           <tr>
             <td class="nowrap" style="text-align: center;">GP4</td>
             <td>LCD RST</td>
-            <td class="nowrap" style="text-align: center;">v</td>
+            <td class="nowrap" style="text-align: center;">yes</td>
             <td class="nowrap" style="text-align: center;"></td>
           </tr>
           <tr>
@@ -136,7 +136,7 @@
           <tr>
             <td class="nowrap" style="text-align: center;">GP6</td>
             <td>左バンパー</td>
-            <td class="nowrap" style="text-align: center;">v</td>
+            <td class="nowrap" style="text-align: center;">yes</td>
             <td class="nowrap" style="text-align: center;"></td>
           </tr>
           <tr>
@@ -160,19 +160,19 @@
           <tr>
             <td class="nowrap" style="text-align: center;">GP10</td>
             <td>RGB LED 緑 (PWM5 A)</td>
-            <td class="nowrap" style="text-align: center;">v</td>
+            <td class="nowrap" style="text-align: center;">yes</td>
             <td class="nowrap" style="text-align: center;"></td>
           </tr>
           <tr>
             <td class="nowrap" style="text-align: center;">GP11</td>
             <td>RGB LED 赤 (PWM5 B)</td>
-            <td class="nowrap" style="text-align: center;">v</td>
+            <td class="nowrap" style="text-align: center;">yes</td>
             <td class="nowrap" style="text-align: center;"></td>
           </tr>
           <tr>
             <td class="nowrap" style="text-align: center;">GP12</td>
             <td>RGB LED 青 (PWM6 A)</td>
-            <td class="nowrap" style="text-align: center;">v</td>
+            <td class="nowrap" style="text-align: center;">yes</td>
             <td class="nowrap" style="text-align: center;"></td>
           </tr>
           <tr>
@@ -202,7 +202,7 @@
           <tr>
             <td class="nowrap" style="text-align: center;">GP17</td>
             <td>LCD CS</td>
-            <td class="nowrap" style="text-align: center;">v</td>
+            <td class="nowrap" style="text-align: center;">yes</td>
             <td class="nowrap" style="text-align: center;"></td>
           </tr>
           <tr>
@@ -226,37 +226,37 @@
           <tr>
             <td class="nowrap" style="text-align: center;">GP21</td>
             <td>A ボタン</td>
-            <td class="nowrap" style="text-align: center;">v</td>
+            <td class="nowrap" style="text-align: center;">yes</td>
             <td class="nowrap" style="text-align: center;"></td>
           </tr>
           <tr>
             <td class="nowrap" style="text-align: center;">GP22</td>
             <td>右バンパー</td>
-            <td class="nowrap" style="text-align: center;">v</td>
+            <td class="nowrap" style="text-align: center;">yes</td>
             <td class="nowrap" style="text-align: center;"></td>
           </tr>
           <tr>
             <td class="nowrap" style="text-align: center;">GP23</td>
             <td>オーディオ PWM (PWM3 B)</td>
             <td class="nowrap" style="text-align: center;"></td>
-            <td class="nowrap" style="text-align: center;">v</td>
+            <td class="nowrap" style="text-align: center;">yes</td>
           </tr>
           <tr>
             <td class="nowrap" style="text-align: center;">GP24</td>
             <td>充電ステータス</td>
             <td class="nowrap" style="text-align: center;">?</td>
-            <td class="nowrap" style="text-align: center;">v</td>
+            <td class="nowrap" style="text-align: center;">yes</td>
           </tr>
           <tr>
             <td class="nowrap" style="text-align: center;">GP25</td>
             <td>B ボタン</td>
-            <td class="nowrap" style="text-align: center;">v</td>
-            <td class="nowrap" style="text-align: center;">v</td>
+            <td class="nowrap" style="text-align: center;">yes</td>
+            <td class="nowrap" style="text-align: center;">yes</td>
           </tr>
           <tr>
             <td class="nowrap" style="text-align: center;">GP26</td>
             <td>メニューボタン</td>
-            <td class="nowrap" style="text-align: center;">v</td>
+            <td class="nowrap" style="text-align: center;">yes</td>
             <td class="nowrap" style="text-align: center;"></td>
           </tr>
           <tr>
@@ -453,7 +453,12 @@ pushd mp-thumby
     sed -i &#39;s/#define\s*PWM_BATTERY_MONITOR_TIMER_SLICE_NUM\s*7/#define PWM_BATTERY_MONITOR_TIMER_SLICE_NUM 1/g&#39; ${SRC_FILE}
     python3 build_and_upload.py no_upload
   popd
-popd</pre>
+popd
+
+cp -f mp-thumby/ports/rp2/build-THUMBY_COLOR/firmware_*.uf2 ./firmware_st7735.uf2
+
+rm -rf ./filesystem
+cp -r mp-thumby/TinyCircuits-Tiny-Game-Engine/filesystem .</pre>
         <p>実行すると、カレントディレクトリに以下のファイルが作成されます。</p>
         <ul>
           <li><code>firmware_st7735.uf2</code>: ファームウェア</li>
