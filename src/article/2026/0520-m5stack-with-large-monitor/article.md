@@ -1,6 +1,7 @@
 # LcdTap: M5Stack CoreS3 の画面をミラーリング/キャプチャする
 
 「LcdTap」を使用して M5Stack CoreS3 の画面をモニターにミラーリングしたり、キャプチャする方法を紹介します。
+静止画キャプチャだけであれば、最低限 M5Stack CoreS3 と Raspberry Pi Pico2 を用意するだけで可能です。
 
 ![](./cover.jpg)
 
@@ -10,9 +11,14 @@
 
 ## 用意する物
 
+### 最低限必要なもの
+
 - M5Stack CoreS3 (SE)
 - [Raspberry Pi Pico 2](https://www.switch-science.com/products/9809) ([ピンヘッダ付き](https://www.switch-science.com/products/10257))
 - USB ケーブル (TypeA-MicroB)
+
+### 必要に応じて追加するもの
+
 - モニターへのミラーリングや動画キャプチャを行う場合
 
     - [Pico-DVI-Sock](https://www.switch-science.com/products/7431)
@@ -122,39 +128,16 @@ CoreS3 の電源を入れる前に設定を行って下さい。設定は Pico2 
 
     ![](./webapp-01.png)
 
-4. Config タブで以下のように設定します。
-
-    |Parameter|Value|
-    |:---------|:-----|
-    |Controller Type|ST7789|
-    |Interface Type|4-Line SPI|
-    |LCD Width|320 px|
-    |LCD Height|240 px|
-    |Inverted|On|
-    |Swap R/B|On|
-    |Output Rotation|0 deg|
-    |Force Power On|Off|
-
+4. Config タブで Presets から `M5Stack CoreS3` を選択して Apply ボタンを押します。
 5. Apply を押します。
 
 ### OSD メニューを使用する場合 (PC 不要、タクトスイッチ必要)
 
 1. Pico2 を USB ケーブルで充電器や PC に接続します。
 2. Pico-DVI-Sock とモニターを HDMI ケーブルで接続します。
-3. Enter キーを押すと OSD メニューが表示されるので、左右上下キーを使って以下のように設定してください。
-
-    |Parameter|Value|
-    |:---------|:-----|
-    |Interface|4Line SPI|
-    |Controller Type|ST7789|
-    |LCD Width|320 px|
-    |LCD Height|240 px|
-    |Inversion|On|
-    |Swap Red/Blue|On|
-    |Output Rotation|0 deg|
-    |Force Power On|Off|
-
-4. Apply を選択して Enter キーを押します。
+3. Enter キーを押すと OSD メニューが表示されます。
+4. Presets メニューを開き、`M5Stack CoreS3` を選択して Enter キーを押します。
+5. Apply を選択して Enter キーを押します。
 
 ## モニターへのミラーリングや動画キャプチャ
 

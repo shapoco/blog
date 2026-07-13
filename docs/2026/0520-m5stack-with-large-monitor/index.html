@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
   <meta name="keywords" content="シャポログ ${blog.article_keywords}">
-  <meta name="description" content="「LcdTap」を使用して M5Stack CoreS3 の画面をモニターにミラーリングしたり、キャプチャする方法を紹介します。">
+  <meta name="description" content="「LcdTap」を使用して M5Stack CoreS3 の画面をモニターにミラーリングしたり、キャプチャする方法を紹介します。 静止画キャプチャだけであれば、最低限 M5Stack CoreS3 と Raspberry Pi Pico2 を用意するだけで可能です。">
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@shapoco" />
   <meta property="og:url" content="https://blog.shapoco.net/2026/0520-m5stack-with-large-monitor/" />
   <meta property="og:title" content="LcdTap: M5Stack CoreS3 の画面をミラーリング/キャプチャする | シャポログ" />
-  <meta property="og:description" content="「LcdTap」を使用して M5Stack CoreS3 の画面をモニターにミラーリングしたり、キャプチャする方法を紹介します。" />
+  <meta property="og:description" content="「LcdTap」を使用して M5Stack CoreS3 の画面をモニターにミラーリングしたり、キャプチャする方法を紹介します。 静止画キャプチャだけであれば、最低限 M5Stack CoreS3 と Raspberry Pi Pico2 を用意するだけで可能です。" />
   <meta property="og:image" content="https://blog.shapoco.net/2026/0520-m5stack-with-large-monitor/cover.jpg" />
 
   <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
@@ -63,15 +63,22 @@
         <script async src="/stamp/v1/widget.js?3d92a021"></script>
       </div>
 
-              <p>「LcdTap」を使用して M5Stack CoreS3 の画面をモニターにミラーリングしたり、キャプチャする方法を紹介します。</p>
+              <p>
+          「LcdTap」を使用して M5Stack CoreS3 の画面をモニターにミラーリングしたり、キャプチャする方法を紹介します。
+          静止画キャプチャだけであれば、最低限 M5Stack CoreS3 と Raspberry Pi Pico2 を用意するだけで可能です。
+        </p>
         <p><img src="./cover.jpg" alt=""></p>
         <h3>LcdTap とは</h3>
         <p><a href="https://shapoco.github.io/lcdtap/" target="_blank">LcdTap</a> は、Raspberry Pi Pico2 を使って、I2C 接続や SPI 接続の LCD モジュールの表示内容を DVI で出力して大きなディスプレイにミラー表示したりキャプチャしたりできるツールです。</p>
         <h3>用意する物</h3>
+        <h4>最低限必要なもの</h4>
         <ul>
           <li>M5Stack CoreS3 (SE)</li>
           <li><a href="https://www.switch-science.com/products/9809" target="_blank">Raspberry Pi Pico 2</a> (<a href="https://www.switch-science.com/products/10257" target="_blank">ピンヘッダ付き</a>)</li>
           <li>USB ケーブル (TypeA-MicroB)</li>
+        </ul>
+        <h4>必要に応じて追加するもの</h4>
+        <ul>
           <li>
             <p>モニターへのミラーリングや動画キャプチャを行う場合</p>
             <ul>
@@ -182,94 +189,15 @@
             <p>Connect ボタンを押してシリアルポートを選択します。</p>
             <p><img src="./webapp-01.png" alt=""></p>
           </li>
-          <li>
-            <p>Config タブで以下のように設定します。</p>
-            <table>
-              <tr>
-                <th>Parameter</th>
-                <th class="nowrap">Value</th>
-              </tr>
-              <tr>
-                <td>Controller Type</td>
-                <td class="nowrap">ST7789</td>
-              </tr>
-              <tr>
-                <td>Interface Type</td>
-                <td class="nowrap">4-Line SPI</td>
-              </tr>
-              <tr>
-                <td>LCD Width</td>
-                <td class="nowrap">320 px</td>
-              </tr>
-              <tr>
-                <td>LCD Height</td>
-                <td class="nowrap">240 px</td>
-              </tr>
-              <tr>
-                <td>Inverted</td>
-                <td class="nowrap">On</td>
-              </tr>
-              <tr>
-                <td>Swap R/B</td>
-                <td class="nowrap">On</td>
-              </tr>
-              <tr>
-                <td>Output Rotation</td>
-                <td class="nowrap">0 deg</td>
-              </tr>
-              <tr>
-                <td>Force Power On</td>
-                <td class="nowrap">Off</td>
-              </tr>
-            </table>
-          </li>
+          <li>Config タブで Presets から <code>M5Stack CoreS3</code> を選択して Apply ボタンを押します。</li>
           <li>Apply を押します。</li>
         </ol>
         <h4>OSD メニューを使用する場合 (PC 不要、タクトスイッチ必要)</h4>
         <ol>
           <li>Pico2 を USB ケーブルで充電器や PC に接続します。</li>
           <li>Pico-DVI-Sock とモニターを HDMI ケーブルで接続します。</li>
-          <li>
-            <p>Enter キーを押すと OSD メニューが表示されるので、左右上下キーを使って以下のように設定してください。</p>
-            <table>
-              <tr>
-                <th>Parameter</th>
-                <th class="nowrap">Value</th>
-              </tr>
-              <tr>
-                <td>Interface</td>
-                <td class="nowrap">4Line SPI</td>
-              </tr>
-              <tr>
-                <td>Controller Type</td>
-                <td class="nowrap">ST7789</td>
-              </tr>
-              <tr>
-                <td>LCD Width</td>
-                <td class="nowrap">320 px</td>
-              </tr>
-              <tr>
-                <td>LCD Height</td>
-                <td class="nowrap">240 px</td>
-              </tr>
-              <tr>
-                <td>Inversion</td>
-                <td class="nowrap">On</td>
-              </tr>
-              <tr>
-                <td>Swap Red/Blue</td>
-                <td class="nowrap">On</td>
-              </tr>
-              <tr>
-                <td>Output Rotation</td>
-                <td class="nowrap">0 deg</td>
-              </tr>
-              <tr>
-                <td>Force Power On</td>
-                <td class="nowrap">Off</td>
-              </tr>
-            </table>
-          </li>
+          <li>Enter キーを押すと OSD メニューが表示されます。</li>
+          <li>Presets メニューを開き、<code>M5Stack CoreS3</code> を選択して Enter キーを押します。</li>
           <li>Apply を選択して Enter キーを押します。</li>
         </ol>
         <h3>モニターへのミラーリングや動画キャプチャ</h3>

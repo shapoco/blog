@@ -474,7 +474,7 @@
     },
     {
       "title": "LcdTap: M5Stack CoreS3 の画面をミラーリング/キャプチャする",
-      "description": "「LcdTap」を使用して M5Stack CoreS3 の画面をモニターにミラーリングしたり、キャプチャする方法を紹介します。",
+      "description": "「LcdTap」を使用して M5Stack CoreS3 の画面をモニターにミラーリングしたり、キャプチャする方法を紹介します。 静止画キャプチャだけであれば、最低限 M5Stack CoreS3 と Raspberry Pi Pico2 を用意するだけで可能です。",
       "date": "2026/05/20",
       "url": "/2026/0520-m5stack-with-large-monitor",
       "twitter_card_size": "summary_large_image",
