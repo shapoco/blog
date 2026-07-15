@@ -128,7 +128,7 @@ CoreS3 の電源を入れる前に設定を行って下さい。設定は Pico2 
 
     ![](./webapp-01.png)
 
-4. Config タブで Presets から `M5Stack CoreS3` を選択して Apply ボタンを押します。
+4. Config タブで Presets から `M5Stack CoreS3` を選択して Load ボタンを押します。
 5. Apply を押します。
 
 ### OSD メニューを使用する場合 (PC 不要、タクトスイッチ必要)
