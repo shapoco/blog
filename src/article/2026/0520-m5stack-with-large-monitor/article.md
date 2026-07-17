@@ -160,6 +160,7 @@ LcdTap Monitor の Frame Buffer タブで Capture ボタンを押すことで、
 
     - [LcdTap: TinyJoyPad や Arduboy を大画面で遊ぶ](../0514-tinyjoypad-with-large-monitor/article.md)
     - [LcdTap: ESPboy を大きなモニターで遊ぶ](../0626-espboy-with-large-monitor/article.md)
+    - [LcdTap: Tab5 をでっかい SSD1306 として使う](../0717-tab5-as-ssd1306/article.md)
 
 - SNS 投稿
 

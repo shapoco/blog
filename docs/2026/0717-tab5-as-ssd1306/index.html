@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+  <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+  <meta name="description" content="LcdTap を M5 Tab5 に組み込んで Tab5 を巨大な SSD1306 として使えるようにしてみました。">
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@shapoco" />
+  <meta property="og:url" content="https://blog.shapoco.net/2026/0717-tab5-as-ssd1306/" />
+  <meta property="og:title" content="LcdTap: Tab5 をでっかい SSD1306 として使う | シャポログ" />
+  <meta property="og:description" content="LcdTap を M5 Tab5 に組み込んで Tab5 を巨大な SSD1306 として使えるようにしてみました。" />
+  <meta property="og:image" content="https://blog.shapoco.net/2026/0717-tab5-as-ssd1306/cover.jpg" />
+
+  <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+  <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KJ53WNQ22G"></script>
+  <script>
+    var remoteHost = window.location.hostname;
+    if (remoteHost == "localhost") {
+      console.log(`Google Analytics disabled on: '${remoteHost}'`);
+    }
+    else {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-KJ53WNQ22G');
+    }
+  </script>
+
+  <link href="/style.css?0ec49c72" rel="stylesheet" type="text/css">
+  <script src="/style.js?14382bba"></script>
+
+  <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+  <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+  <title>LcdTap: Tab5 をでっかい SSD1306 として使う | シャポログ</title>
+</head>
+
+<body>
+  <div id="container">
+    <div id="root_navi"></div>
+
+    <header class="article_header">
+      <h1><a href="/">シャポログ</a></h1>
+    </header>
+    <main>
+      <h2>LcdTap: Tab5 をでっかい SSD1306 として使う</h2>
+
+      <div class="article_info_wrap">
+        <div class="article_info">
+          2026/07/17 |
+          <a href="https://github.com/shapoco/blog/tree/main/src/article/2026/0717-tab5-as-ssd1306/" target="_blank">記事のソース</a>
+        </div>
+
+        <div id="shpcstamp_wrap"></div>
+        <script async src="/stamp/v1/widget.js?3d92a021"></script>
+      </div>
+
+              <p>
+          <a href="https://shapoco.github.io/lcdtap/" target="_blank">LcdTap</a> を M5 Tab5 に組み込んで
+          Tab5 を巨大な SSD1306 として使えるようにしてみました。
+        </p>
+        <p><img src="./cover.jpg" alt=""></p>
+        <h3>LcdTap とは</h3>
+        <p>
+          <a href="https://shapoco.github.io/lcdtap/" target="_blank">LcdTap</a> は、
+          SSD1306、ST7789、ILI9342 などの LCD コントローラや OLED コントローラの動作を
+          エミュレーションして、大きなディスプレイにミラーリングしたり、
+          キャプチャしたりできるようにするライブラリです。
+        </p>
+        <h3>ファームウェア</h3>
+        <p>
+          ファームウェアは <a href="https://docs.m5stack.com/ja/uiflow/m5burner/intro" target="_blank">M5Burner</a>
+          でダウンロード・書き込みできます。
+        </p>
+        <p><img src="./m5burner.png" alt=""></p>
+        <p>
+          ソースコードは
+          <a href="https://github.com/shapoco/lcdtap/tree/main/example/m5tab5" target="_blank">GitHub リポジトリ</a>
+          にあります。
+        </p>
+        <h3>ピンアサイン</h3>
+        <p>I2C インタフェースと 4-Line SPI に対応しています。</p>
+        <table>
+          <tr>
+            <th class="nowrap"> Signal </th>
+            <th class="nowrap" style="text-align: center;"> GPIO </th>
+            <th class="nowrap" style="text-align: center;"> コネクタ </th>
+            <th> 備考 </th>
+          </tr>
+          <tr>
+            <td class="nowrap"> SPI SCK </td>
+            <td class="nowrap" style="text-align: center;"> G17 </td>
+            <td class="nowrap" style="text-align: center;"> M-Bus </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="nowrap"> SPI MOSI </td>
+            <td class="nowrap" style="text-align: center;"> G16 </td>
+            <td class="nowrap" style="text-align: center;"> M-Bus </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td class="nowrap"> SPI D/C </td>
+            <td class="nowrap" style="text-align: center;"> G18 </td>
+            <td class="nowrap" style="text-align: center;"> M-Bus </td>
+            <td> </td>
+          </tr>
+          <tr>
+            <td class="nowrap"> SPI CS </td>
+            <td class="nowrap" style="text-align: center;"> G45 </td>
+            <td class="nowrap" style="text-align: center;"> M-Bus </td>
+            <td> 負論理・内部プルアップ </td>
+          </tr>
+          <tr>
+            <td class="nowrap"> RST </td>
+            <td class="nowrap" style="text-align: center;"> G19 </td>
+            <td class="nowrap" style="text-align: center;"> M-Bus </td>
+            <td> 負論理・内部プルアップ・SPI/I2C 共用 </td>
+          </tr>
+          <tr>
+            <td class="nowrap"> (reserved) </td>
+            <td class="nowrap" style="text-align: center;"> G52 </td>
+            <td class="nowrap" style="text-align: center;"> M-Bus </td>
+            <td> 接続禁止 </td>
+          </tr>
+          <tr>
+            <td class="nowrap"> (reserved) </td>
+            <td class="nowrap" style="text-align: center;"> G51 </td>
+            <td class="nowrap" style="text-align: center;"> M-Bus </td>
+            <td> 接続禁止 </td>
+          </tr>
+          <tr>
+            <td class="nowrap"> I2C SDA </td>
+            <td class="nowrap" style="text-align: center;"> G53 </td>
+            <td class="nowrap" style="text-align: center;"> Grove </td>
+            <td> 外部プルアップ推奨 </td>
+          </tr>
+          <tr>
+            <td class="nowrap"> I2C SCL </td>
+            <td class="nowrap" style="text-align: center;"> G54 </td>
+            <td class="nowrap" style="text-align: center;"> Grove </td>
+            <td> 外部プルアップ推奨 </td>
+          </tr>
+        </table>
+        <p><img src="./assign.jpg" alt=""></p>
+        <h3>インタフェースの切り替え</h3>
+        <p>初回起動時は I2C インタフェースが選択されています。インタフェースを切り替えるには次のようにします。</p>
+        <ol>
+          <li>Tab5 の画面をタップしてキーパッドを表示します。</li>
+          <li>Enter キーのアイコン (↵) をタップして OSD メニューを表示します。</li>
+          <li>上下キーで「Interface」を選択して「I2C」または「4-Line SPI」を選択します (8bit-Parallel と 3-Line SPI は未対応です)。</li>
+          <li>「Apply」を選択して Enter キーをタップします。</li>
+        </ol>
+        <p>設定は Tab5 本体に保存されます。</p>
+        <h3>SSD1306 以外のエミュレーション</h3>
+        <p>
+          OSD メニューの「Presets」から SSD1306 以外のコントローラも選択できますが、
+          Tab5 での動作は不安定なものが多かったです。
+        </p>
+        <h3>関連リンク</h3>
+        <ul>
+          <li>
+            <p>関連記事</p>
+            <ul>
+              <li><a href="../0514-tinyjoypad-with-large-monitor/">LcdTap: TinyJoyPad や Arduboy を大画面で遊ぶ</a></li>
+              <li><a href="../0520-m5stack-with-large-monitor/">LcdTap: M5Stack CoreS3 の画面をミラーリング/キャプチャする</a></li>
+              <li><a href="../0626-espboy-with-large-monitor/">LcdTap: ESPboy を大きなモニターで遊ぶ</a></li>
+            </ul>
+          </li>
+          <li>
+            <p>SNS 投稿</p>
+            <ul>
+              <li><a href="https://x.com/shapoco/status/2076136259114950895" target="_blank">X (Twitter)</a></li>
+              <li><a href="https://bsky.app/profile/shapoco.net/post/3mqgftz22a22z" target="_blank">Bluesky</a></li>
+              <li><a href="https://misskey.io/notes/aokwbpupez0204yc" target="_blank">Misskey.io</a></li>
+            </ul>
+          </li>
+        </ul>
+
+    </main>
+    <footer>
+      <span class="nowrap">
+        Copyright &copy; <a href="https://x.com/shapoco/" target="_blank">Shapoco</a>,
+      </span>
+      <span class="nowrap">
+        Powered by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
+      </span>
+    </footer>
+  </div>
+</body>
+
+</html>

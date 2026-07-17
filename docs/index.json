@@ -503,6 +503,14 @@
       "url": "/2026/0630-thumby-color-clone",
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2026/0630-thumby-color-clone/cover.jpg"
+    },
+    {
+      "title": "LcdTap: Tab5 をでっかい SSD1306 として使う",
+      "description": "LcdTap を M5 Tab5 に組み込んで Tab5 を巨大な SSD1306 として使えるようにしてみました。",
+      "date": "2026/07/17",
+      "url": "/2026/0717-tab5-as-ssd1306",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2026/0717-tab5-as-ssd1306/cover.jpg"
     }
   ]
 }
