@@ -67,6 +67,6 @@ Tab5 での動作は不安定なものが多かったです。
     
 - SNS 投稿
 
-    - [X (Twitter)](https://x.com/shapoco/status/2076136259114950895)
-    - [Bluesky](https://bsky.app/profile/shapoco.net/post/3mqgftz22a22z)
-    - [Misskey.io](https://misskey.io/notes/aokwbpupez0204yc)
+    - [X (Twitter)](https://x.com/shapoco/status/2078098084610109602)
+    - [Bluesky](https://bsky.app/profile/shapoco.net/post/3mqtroporkk2f)
+    - [Misskey.io](https://misskey.io/notes/aoshu5rkc1te08a7)
