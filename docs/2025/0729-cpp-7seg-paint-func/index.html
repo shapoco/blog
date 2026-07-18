@@ -420,7 +420,7 @@ SEG7_FUNC_MOD void seg7::fillRect(seg7::pos_t x, seg7::pos_t y, uint8_t w,
       <script>
         const my_tags = "LED, AVR, プリント".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?c442dc77')
+        fetch('/index.json?014c677a')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();
@@ -435,7 +435,7 @@ SEG7_FUNC_MOD void seg7::fillRect(seg7::pos_t x, seg7::pos_t y, uint8_t w,
                 const t = my_tags[my_pos];
                 const other_pos = a.tags.indexOf(t);
                 if (other_pos >= 0) {
-                  score += Math.ceil(100 / (my_pos + other_pos + 1));
+                  score += Math.ceil(10000 / (my_pos * other_pos + 1));
                   tags.push(t);
                   console.log(`related: ${a.title} (score=${score}) [${tags.join(', ')}]`);
                 }

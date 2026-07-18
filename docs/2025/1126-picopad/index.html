@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-  <meta name="keywords" content="シャポログ, PicoPad, Raspberry, RP2350, ST7789, SPI, LED, プリント, Twitter, Misskey, Bluesky">
+  <meta name="keywords" content="シャポログ, PicoPad, Raspberry, RP2350, LCD, ST7789, SPI, LED, プリント, Twitter, Misskey, Bluesky">
   <meta name="description" content="オープンソースのゲーミングコンソール「PicoPad」の互換機を 通販で手に入る部品で作ってみました。">
 
   <meta name="twitter:card" content="summary_large_image" />
@@ -419,9 +419,9 @@ popd</pre>
         <li>関連記事を読み込んでいます...</li>
       </ul>
       <script>
-        const my_tags = "PicoPad, Raspberry, RP2350, ST7789, SPI, LED, プリント, Twitter, Misskey, Bluesky".split(',').map(s => s.trim()).filter(s => s != '');
+        const my_tags = "PicoPad, Raspberry, RP2350, LCD, ST7789, SPI, LED, プリント, Twitter, Misskey, Bluesky".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?c442dc77')
+        fetch('/index.json?014c677a')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();
@@ -436,7 +436,7 @@ popd</pre>
                 const t = my_tags[my_pos];
                 const other_pos = a.tags.indexOf(t);
                 if (other_pos >= 0) {
-                  score += Math.ceil(100 / (my_pos + other_pos + 1));
+                  score += Math.ceil(10000 / (my_pos * other_pos + 1));
                   tags.push(t);
                   console.log(`related: ${a.title} (score=${score}) [${tags.join(', ')}]`);
                 }

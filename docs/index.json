@@ -109,7 +109,8 @@
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2021/0321-paper-tape-i2c/cover.jpg",
       "tags": [
-        "I2C"
+        "I2C",
+        "LCD"
       ]
     },
     {
@@ -199,6 +200,7 @@
       "card_image_url": "/2023/0813-fdm-3d-printed-hv-trans/cover.jpg",
       "tags": [
         "プリンタ",
+        "備忘録",
         "プリント"
       ]
     },
@@ -398,6 +400,7 @@
       "twitter_card_size": "summary",
       "card_image_url": "/2025/0129-fusion360-tips/thumbnail.png",
       "tags": [
+        "備忘録",
         "プリンタ"
       ]
     },
@@ -408,7 +411,9 @@
       "url": "/2025/0204-rust-tips",
       "twitter_card_size": "summary",
       "card_image_url": "/2025/0204-rust-tips/thumbnail.png",
-      "tags": []
+      "tags": [
+        "備忘録"
+      ]
     },
     {
       "title": "[メモ] X (旧Twitter) 備忘録",
@@ -418,7 +423,8 @@
       "twitter_card_size": "summary",
       "card_image_url": "/2025/0209-x-tips/thumbnail.png",
       "tags": [
-        "Twitter"
+        "Twitter",
+        "備忘録"
       ]
     },
     {
@@ -441,6 +447,7 @@
       "twitter_card_size": "summary",
       "card_image_url": "/2025/0323-js-tips/thumbnail.png",
       "tags": [
+        "備忘録",
         "Twitter"
       ]
     },
@@ -452,6 +459,7 @@
       "twitter_card_size": "summary",
       "card_image_url": "/2025/0405-avr-gcc-asm-tips/thumbnail.png",
       "tags": [
+        "備忘録",
         "AVR"
       ]
     },
@@ -517,6 +525,7 @@
         "静電気",
         "高電圧",
         "LED",
+        "LCD",
         "I2C",
         "Twitter",
         "Bluesky",
@@ -533,6 +542,7 @@
       "tags": [
         "SSD1306",
         "LED",
+        "LCD",
         "Twitter",
         "Bluesky",
         "Misskey"
@@ -546,6 +556,7 @@
       "twitter_card_size": "summary",
       "card_image_url": "/2025/0901-ili9488-8color-wired-behavior/thumbnail.jpg",
       "tags": [
+        "LCD",
         "SPI",
         "ST7789"
       ]
@@ -603,6 +614,7 @@
         "PicoPad",
         "Raspberry",
         "RP2350",
+        "LCD",
         "ST7789",
         "SPI",
         "LED",
@@ -653,6 +665,7 @@
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2025/1229-pin-socket-removal/cover.png",
       "tags": [
+        "LCD",
         "Raspberry",
         "Twitter",
         "Bluesky",
@@ -681,6 +694,7 @@
       "card_image_url": "/image/default_card_summary.png",
       "tags": [
         "PCB",
+        "備忘録",
         "プリント"
       ]
     },
@@ -699,6 +713,7 @@
         "LED",
         "Raspberry",
         "I2C",
+        "LCD",
         "AVR",
         "Twitter",
         "Bluesky",
@@ -717,6 +732,7 @@
         "Raspberry",
         "I2C",
         "SPI",
+        "LCD",
         "ハンダ",
         "Twitter",
         "Bluesky",
@@ -752,6 +768,7 @@
         "Raspberry",
         "I2C",
         "SPI",
+        "LCD",
         "Twitter",
         "Bluesky",
         "Misskey"
@@ -769,6 +786,7 @@
         "LED",
         "LcdTap",
         "Raspberry",
+        "LCD",
         "Twitter",
         "Bluesky",
         "Misskey"
@@ -787,6 +805,7 @@
         "SSD1306",
         "ST7789",
         "LED",
+        "LCD",
         "I2C",
         "SPI",
         "Twitter",
@@ -799,6 +818,10 @@
     {
       "name": "I2C",
       "count": 7
+    },
+    {
+      "name": "LCD",
+      "count": 11
     },
     {
       "name": "LED",
@@ -843,6 +866,10 @@
     {
       "name": "PCB",
       "count": 2
+    },
+    {
+      "name": "備忘録",
+      "count": 7
     },
     {
       "name": "プリント",

@@ -24,3 +24,5 @@ LED
 I2C
 SPI
 放電
+備忘録
+LCD

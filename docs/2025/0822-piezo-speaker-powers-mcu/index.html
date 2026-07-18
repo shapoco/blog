@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-  <meta name="keywords" content="シャポログ, 静電気, 高電圧, LED, I2C, Twitter, Bluesky, Misskey">
+  <meta name="keywords" content="シャポログ, 静電気, 高電圧, LED, LCD, I2C, Twitter, Bluesky, Misskey">
   <meta name="description" content="MCU の GPIO に付属する ESD 保護ダイオードは、トポロジ的にはダイオードブリッジを形成しているため、2 つの GPIO に交流信号が入力されると整流作用とパスコンによる平滑により電源ラインに電圧が供給され、意図せず MCU が起動する可能性があります。">
 
   <meta name="twitter:card" content="summary" />
@@ -156,9 +156,9 @@
         <li>関連記事を読み込んでいます...</li>
       </ul>
       <script>
-        const my_tags = "静電気, 高電圧, LED, I2C, Twitter, Bluesky, Misskey".split(',').map(s => s.trim()).filter(s => s != '');
+        const my_tags = "静電気, 高電圧, LED, LCD, I2C, Twitter, Bluesky, Misskey".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?c442dc77')
+        fetch('/index.json?014c677a')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();
@@ -173,7 +173,7 @@
                 const t = my_tags[my_pos];
                 const other_pos = a.tags.indexOf(t);
                 if (other_pos >= 0) {
-                  score += Math.ceil(100 / (my_pos + other_pos + 1));
+                  score += Math.ceil(10000 / (my_pos * other_pos + 1));
                   tags.push(t);
                   console.log(`related: ${a.title} (score=${score}) [${tags.join(', ')}]`);
                 }
