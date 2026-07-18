@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-  <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+  <meta name="keywords" content="シャポログ, ">
   <meta name="description" content="ボリュームを狭い空間に押し込むために端子をこのように内側に曲げたところ、真ん中の端子が接触不良を起こして壊れてしまった。2個試したが、全く同じ壊れ方をした。端子の根元に力がかからないように、端子だけをつまんで曲げてみたつもりだったがダメだった。全てのボリュームに該当するのかは分からないが、端子は曲げてはいけないようなので注意されたい。">
 
   <meta name="twitter:card" content="summary_large_image" />
@@ -66,6 +66,58 @@
               <p><img src="./cover.jpg" alt=""></p>
         <p>ボリュームを狭い空間に押し込むために端子をこのように内側に曲げたところ、真ん中の端子が接触不良を起こして壊れてしまった。2個試したが、全く同じ壊れ方をした。端子の根元に力がかからないように、端子だけをつまんで曲げてみたつもりだったがダメだった。全てのボリュームに該当するのかは分からないが、端子は曲げてはいけないようなので注意されたい。</p>
         <p>曲げて壊してからこの記事を読むことになる人のほうが多そうな気がするが…。</p>
+
+
+      <h3>関連記事</h3>
+      <ul id="related_articles">
+        <li>関連記事を読み込んでいます...</li>
+      </ul>
+      <script>
+        const my_tags = "".split(',').map(s => s.trim()).filter(s => s != '');
+        const ul = document.querySelector('#related_articles');
+        fetch('/index.json?c442dc77')
+          .then(response => response.json())
+          .then(json_obj => {
+            const articles = json_obj.articles.reverse();
+            var related_articles = [];
+            for (const a of articles) {
+              if (a.title == "[メモ] ボリュームの端子を曲げてはならない") {
+                continue;
+              }
+              let score = 0;
+              let tags = [];
+              for (let my_pos = 0; my_pos < my_tags.length; my_pos++) {
+                const t = my_tags[my_pos];
+                const other_pos = a.tags.indexOf(t);
+                if (other_pos >= 0) {
+                  score += Math.ceil(100 / (my_pos + other_pos + 1));
+                  tags.push(t);
+                  console.log(`related: ${a.title} (score=${score}) [${tags.join(', ')}]`);
+                }
+              }
+              if (score > 0) {
+                related_articles.push({ article: a, score: score, tags: tags });
+              }
+            }
+            related_articles.sort((a, b) => b.score - a.score);
+
+            if (related_articles.length > 0) {
+              ul.innerHTML = '';
+              for (const a of related_articles.slice(0, 5)) {
+                const li = document.createElement('li');
+                const a_tag = document.createElement('a');
+                a_tag.href = a.article.url;
+                a_tag.textContent = a.article.title;
+                a_tag.title = `共通タグ: ${a.tags.join(', ')}`;
+                li.appendChild(a_tag);
+                ul.appendChild(li);
+              }
+            }
+            else {
+              ul.innerHTML = '<li>関連記事はありません。</li>';
+            }
+          });
+      </script>
 
     </main>
     <footer>

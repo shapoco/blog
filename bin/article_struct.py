@@ -132,6 +132,7 @@ class TaggedElement(Element):
 class ArticleBody(TaggedElement):
     def __init__(self):
         super().__init__('')
+        self.mentioned_tags = []
         
     def to_html(self, depth: int = 0) -> str:
         ret = ''

@@ -11,11 +11,16 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-i', '--input', required=True)
 parser.add_argument('-o', '--output', required=True)
 parser.add_argument('-t', '--template', required=True)
+parser.add_argument('-d', '--defined-tags', required=True)
 args = parser.parse_args()
 
 def main() -> None:
+    # 用語の読み込み
+    with open(args.defined_tags) as f:
+        defined_tags = [line.strip() for line in f.readlines() if line.strip()]
+    
     # 記事(Markdown)の読み込み
-    article = Article(args.input)
+    article = Article(args.input, defined_tags)
 
     # テンプレートの読み込み
     with open(args.template) as f:
@@ -23,8 +28,9 @@ def main() -> None:
 
     # 変数の値の設定
     vars = shapolog.get_vars(args.output)
-    vars['aricle_title'] = article.title
+    vars['article_title'] = article.title
     vars['article_description'] = article.description
+    vars['article_keywords'] = ', '.join(article.body.mentioned_tags)
     vars['date'] = article.date
     vars['article_body'] = article.body.to_html(depth=4)    
     article_abs_url = f'{vars['site_url_absolute']}{article.url}'

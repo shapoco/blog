@@ -20,7 +20,8 @@ HTMLS = $(patsubst $(DIR_ARTICLE)/%,$(DIR_OUT)/%,$(patsubst %/$(ARTICLE_MD),%/in
 
 COMMON_EXTRA_DEPENDENCIES = \
 	$(wildcard $(DIR_BIN)/*.py) \
-	Makefile
+	Makefile \
+	$(DIR_SRC)/tags.txt
 
 INDEX_EXTRA_DEPENDENCIES = \
 	$(COMMON_EXTRA_DEPENDENCIES)
@@ -46,7 +47,9 @@ index: $(INDEX_JSON) $(INDEX_HTML)
 
 $(INDEX_JSON): $(MDS) $(INDEX_EXTRA_DEPENDENCIES)
 	@echo "Updating: $@"
-	@$(DIR_BIN)/gen_index.py -o $@.tmp
+	@$(DIR_BIN)/gen_index.py \
+		-o $@.tmp \
+		-d $(DIR_SRC)/tags.txt
 	@if diff $@ $@.tmp > /dev/null ; then \
 		echo "*INFO: Index not changed." ; \
 	else \
@@ -65,7 +68,8 @@ $(DIR_OUT)/%/index.html: $(DIR_ARTICLE)/%/* $(ARTICLE_EXTRA_DEPENDENCIES)
 	@$(DIR_BIN)/build_article.py \
 		-i $(shell dirname $<) \
 		-o $(shell dirname $@) \
-		-t $(TEMPLATE_HTML)
+		-t $(TEMPLATE_HTML) \
+		-d $(DIR_SRC)/tags.txt
 	@$(DIR_BIN)/update_url_postfix.py -d "docs/" -f $@
 
 $(TEMPLATE_HTML): $(TEMPLATE_DEPENDENCIES)

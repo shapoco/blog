@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-  <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+  <meta name="keywords" content="シャポログ, LED">
   <meta name="description" content="サラダ油や廃油を使ってキャンドルを作れると聞いてラー油でもいけるのではないかと思ったら、できた。">
 
   <meta name="twitter:card" content="summary_large_image" />
@@ -73,6 +73,58 @@
           <li><a href="https://x.com/shapoco/status/1428367992031612935" target="_blank">ふとラー油ってキャンドルになるのではと思って試したら、なった。</a></li>
           <li><a href="https://x.com/shapoco/status/1424005735881449478" target="_blank">これ非常時の明かり取りとして紹介されることがあるけど、ススが出るし焼き肉みたいな臭いがするし火災の原因になるので普通にLEDランタンとか買っておこうね</a></li>
         </ul>
+
+
+      <h3>関連記事</h3>
+      <ul id="related_articles">
+        <li>関連記事を読み込んでいます...</li>
+      </ul>
+      <script>
+        const my_tags = "LED".split(',').map(s => s.trim()).filter(s => s != '');
+        const ul = document.querySelector('#related_articles');
+        fetch('/index.json?c442dc77')
+          .then(response => response.json())
+          .then(json_obj => {
+            const articles = json_obj.articles.reverse();
+            var related_articles = [];
+            for (const a of articles) {
+              if (a.title == "ラー油キャンドル") {
+                continue;
+              }
+              let score = 0;
+              let tags = [];
+              for (let my_pos = 0; my_pos < my_tags.length; my_pos++) {
+                const t = my_tags[my_pos];
+                const other_pos = a.tags.indexOf(t);
+                if (other_pos >= 0) {
+                  score += Math.ceil(100 / (my_pos + other_pos + 1));
+                  tags.push(t);
+                  console.log(`related: ${a.title} (score=${score}) [${tags.join(', ')}]`);
+                }
+              }
+              if (score > 0) {
+                related_articles.push({ article: a, score: score, tags: tags });
+              }
+            }
+            related_articles.sort((a, b) => b.score - a.score);
+
+            if (related_articles.length > 0) {
+              ul.innerHTML = '';
+              for (const a of related_articles.slice(0, 5)) {
+                const li = document.createElement('li');
+                const a_tag = document.createElement('a');
+                a_tag.href = a.article.url;
+                a_tag.textContent = a.article.title;
+                a_tag.title = `共通タグ: ${a.tags.join(', ')}`;
+                li.appendChild(a_tag);
+                ul.appendChild(li);
+              }
+            }
+            else {
+              ul.innerHTML = '<li>関連記事はありません。</li>';
+            }
+          });
+      </script>
 
     </main>
     <footer>

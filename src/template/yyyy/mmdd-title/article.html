@@ -5,13 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-  <meta name="keywords" content="${blog.site_keywords} ${blog.article_keywords}">
+  <meta name="keywords" content="${blog.site_keywords}, ${blog.article_keywords}">
   <meta name="description" content="${blog.article_description}">
 
   <meta name="twitter:card" content="${blog.twitter_card_size}" />
   <meta name="twitter:site" content="@shapoco" />
   <meta property="og:url" content="${blog.article_url_absolute}/" />
-  <meta property="og:title" content="${blog.aricle_title} | ${blog.site_title}" />
+  <meta property="og:title" content="${blog.article_title} | ${blog.site_title}" />
   <meta property="og:description" content="${blog.article_description}" />
   <meta property="og:image" content="${blog.card_image_url}" />
 
@@ -40,7 +40,7 @@
   <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
   <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
 
-  <title>${blog.aricle_title} | ${blog.site_title}</title>
+  <title>${blog.article_title} | ${blog.site_title}</title>
 </head>
 
 <body>
@@ -51,7 +51,7 @@
       <h1><a href="/">${blog.site_title}</a></h1>
     </header>
     <main>
-      <h2>${blog.aricle_title}</h2>
+      <h2>${blog.article_title}</h2>
 
       <div class="article_info_wrap">
         <div class="article_info">
@@ -64,6 +64,58 @@
       </div>
 
       ${blog.article_body}
+
+      <h3>関連記事</h3>
+      <ul id="related_articles">
+        <li>関連記事を読み込んでいます...</li>
+      </ul>
+      <script>
+        const my_tags = "${blog.article_keywords}".split(',').map(s => s.trim()).filter(s => s != '');
+        const ul = document.querySelector('#related_articles');
+        fetch('/index.json?c442dc77')
+          .then(response => response.json())
+          .then(json_obj => {
+            const articles = json_obj.articles.reverse();
+            var related_articles = [];
+            for (const a of articles) {
+              if (a.title == "${blog.article_title}") {
+                continue;
+              }
+              let score = 0;
+              let tags = [];
+              for (let my_pos = 0; my_pos < my_tags.length; my_pos++) {
+                const t = my_tags[my_pos];
+                const other_pos = a.tags.indexOf(t);
+                if (other_pos >= 0) {
+                  score += Math.ceil(100 / (my_pos + other_pos + 1));
+                  tags.push(t);
+                  console.log(`related: ${a.title} (score=${score}) [${tags.join(', ')}]`);
+                }
+              }
+              if (score > 0) {
+                related_articles.push({ article: a, score: score, tags: tags });
+              }
+            }
+            related_articles.sort((a, b) => b.score - a.score);
+
+            if (related_articles.length > 0) {
+              ul.innerHTML = '';
+              for (const a of related_articles.slice(0, 5)) {
+                const li = document.createElement('li');
+                const a_tag = document.createElement('a');
+                a_tag.href = a.article.url;
+                a_tag.textContent = a.article.title;
+                a_tag.title = `共通タグ: ${a.tags.join(', ')}`;
+                li.appendChild(a_tag);
+                ul.appendChild(li);
+              }
+            }
+            else {
+              ul.innerHTML = '<li>関連記事はありません。</li>';
+            }
+          });
+      </script>
+
     </main>
     <footer>
       <span class="nowrap">

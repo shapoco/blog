@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-  <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+  <meta name="keywords" content="シャポログ, LcdTap, Tab5, SSD1306, ST7789, LED, I2C, SPI, Twitter, Bluesky, Misskey">
   <meta name="description" content="LcdTap を M5 Tab5 に組み込んで Tab5 を巨大な SSD1306 として使えるようにしてみました。">
 
   <meta name="twitter:card" content="summary_large_image" />
@@ -168,14 +168,6 @@
         <h3>関連リンク</h3>
         <ul>
           <li>
-            <p>関連記事</p>
-            <ul>
-              <li><a href="../0514-tinyjoypad-with-large-monitor/">LcdTap: TinyJoyPad や Arduboy を大画面で遊ぶ</a></li>
-              <li><a href="../0520-m5stack-with-large-monitor/">LcdTap: M5Stack CoreS3 の画面をミラーリング/キャプチャする</a></li>
-              <li><a href="../0626-espboy-with-large-monitor/">LcdTap: ESPboy を大きなモニターで遊ぶ</a></li>
-            </ul>
-          </li>
-          <li>
             <p>SNS 投稿</p>
             <ul>
               <li><a href="https://x.com/shapoco/status/2078098084610109602" target="_blank">X (Twitter)</a></li>
@@ -184,6 +176,58 @@
             </ul>
           </li>
         </ul>
+
+
+      <h3>関連記事</h3>
+      <ul id="related_articles">
+        <li>関連記事を読み込んでいます...</li>
+      </ul>
+      <script>
+        const my_tags = "LcdTap, Tab5, SSD1306, ST7789, LED, I2C, SPI, Twitter, Bluesky, Misskey".split(',').map(s => s.trim()).filter(s => s != '');
+        const ul = document.querySelector('#related_articles');
+        fetch('/index.json?c442dc77')
+          .then(response => response.json())
+          .then(json_obj => {
+            const articles = json_obj.articles.reverse();
+            var related_articles = [];
+            for (const a of articles) {
+              if (a.title == "LcdTap: Tab5 をでっかい SSD1306 として使う") {
+                continue;
+              }
+              let score = 0;
+              let tags = [];
+              for (let my_pos = 0; my_pos < my_tags.length; my_pos++) {
+                const t = my_tags[my_pos];
+                const other_pos = a.tags.indexOf(t);
+                if (other_pos >= 0) {
+                  score += Math.ceil(100 / (my_pos + other_pos + 1));
+                  tags.push(t);
+                  console.log(`related: ${a.title} (score=${score}) [${tags.join(', ')}]`);
+                }
+              }
+              if (score > 0) {
+                related_articles.push({ article: a, score: score, tags: tags });
+              }
+            }
+            related_articles.sort((a, b) => b.score - a.score);
+
+            if (related_articles.length > 0) {
+              ul.innerHTML = '';
+              for (const a of related_articles.slice(0, 5)) {
+                const li = document.createElement('li');
+                const a_tag = document.createElement('a');
+                a_tag.href = a.article.url;
+                a_tag.textContent = a.article.title;
+                a_tag.title = `共通タグ: ${a.tags.join(', ')}`;
+                li.appendChild(a_tag);
+                ul.appendChild(li);
+              }
+            }
+            else {
+              ul.innerHTML = '<li>関連記事はありません。</li>';
+            }
+          });
+      </script>
 
     </main>
     <footer>

@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-  <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+  <meta name="keywords" content="シャポログ, ">
   <meta name="description" content="The 𝐪𝐮𝐢𝐜𝐤 𝑏𝑟𝑜𝑤𝑛 𝒇𝒐𝒙 𝒿𝓊𝓂𝓅𝓈 ℴ𝓋ℯ𝓇 𝓽𝓱𝓮 𝔩𝔞𝔷𝔶 𝕕𝕠𝕘👆 のようなテキストを作成できるページ作った (試作)https://t.co/lF2aHKtZOl&amp;mdash; シャポコ🌵 (@shapoco) December 1, 2017">
 
   <meta name="twitter:card" content="summary" />
@@ -68,6 +68,58 @@
           <a href="https://www.shapoco.net/plainstyle/" target="_blank">PlainStyle (プレーンスタイル) | シャポ庫</a>
         </blockquote>
         <p><blockquote class="twitter-tweet"><p lang="ja" dir="ltr">The 𝐪𝐮𝐢𝐜𝐤 𝑏𝑟𝑜𝑤𝑛 𝒇𝒐𝒙 𝒿𝓊𝓂𝓅𝓈 ℴ𝓋ℯ𝓇 𝓽𝓱𝓮 𝔩𝔞𝔷𝔶 𝕕𝕠𝕘<br>👆 のようなテキストを作成できるページ作った (試作)<a href="https://t.co/lF2aHKtZOl">https://t.co/lF2aHKtZOl</a></p>&mdash; シャポコ🌵 (@shapoco) <a href="https://twitter.com/shapoco/status/936435710692794368?ref_src=twsrc%5Etfw">December 1, 2017</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+
+      <h3>関連記事</h3>
+      <ul id="related_articles">
+        <li>関連記事を読み込んでいます...</li>
+      </ul>
+      <script>
+        const my_tags = "".split(',').map(s => s.trim()).filter(s => s != '');
+        const ul = document.querySelector('#related_articles');
+        fetch('/index.json?c442dc77')
+          .then(response => response.json())
+          .then(json_obj => {
+            const articles = json_obj.articles.reverse();
+            var related_articles = [];
+            for (const a of articles) {
+              if (a.title == "PlainStyle: Unicode の学術用の文字を使って擬似的にフォントを付けられるサイト") {
+                continue;
+              }
+              let score = 0;
+              let tags = [];
+              for (let my_pos = 0; my_pos < my_tags.length; my_pos++) {
+                const t = my_tags[my_pos];
+                const other_pos = a.tags.indexOf(t);
+                if (other_pos >= 0) {
+                  score += Math.ceil(100 / (my_pos + other_pos + 1));
+                  tags.push(t);
+                  console.log(`related: ${a.title} (score=${score}) [${tags.join(', ')}]`);
+                }
+              }
+              if (score > 0) {
+                related_articles.push({ article: a, score: score, tags: tags });
+              }
+            }
+            related_articles.sort((a, b) => b.score - a.score);
+
+            if (related_articles.length > 0) {
+              ul.innerHTML = '';
+              for (const a of related_articles.slice(0, 5)) {
+                const li = document.createElement('li');
+                const a_tag = document.createElement('a');
+                a_tag.href = a.article.url;
+                a_tag.textContent = a.article.title;
+                a_tag.title = `共通タグ: ${a.tags.join(', ')}`;
+                li.appendChild(a_tag);
+                ul.appendChild(li);
+              }
+            }
+            else {
+              ul.innerHTML = '<li>関連記事はありません。</li>';
+            }
+          });
+      </script>
 
     </main>
     <footer>

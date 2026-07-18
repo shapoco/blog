@@ -4,7 +4,7 @@ import shapolog
 from md_parser import *
 
 class Article:
-    def __init__(self, dir_path: str):
+    def __init__(self, dir_path: str, defined_tags: list[str]):
         self.title = 'Untitled'
         self.description = ''
         self.date = ''
@@ -22,7 +22,7 @@ class Article:
         
         # Markdown の解析
         with open(f'{dir_path}/article.md') as f:
-            self.body = MdParser(f.readlines()).body()
+            self.body = MdParser(f.readlines(), defined_tags).body()
         
         # 最初のヘッダ要素の内容を記事タイトルとする
         h = self.body.get_1st_element_by_class(Hx, 1)

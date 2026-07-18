@@ -59,12 +59,6 @@ Tab5 での動作は不安定なものが多かったです。
 
 ## 関連リンク
 
-- 関連記事
-
-    - [LcdTap: TinyJoyPad や Arduboy を大画面で遊ぶ](../0514-tinyjoypad-with-large-monitor/article.md)
-    - [LcdTap: M5Stack CoreS3 の画面をミラーリング/キャプチャする](../0520-m5stack-with-large-monitor/article.md)
-    - [LcdTap: ESPboy を大きなモニターで遊ぶ](../0626-espboy-with-large-monitor/article.md)
-    
 - SNS 投稿
 
     - [X (Twitter)](https://x.com/shapoco/status/2078098084610109602)

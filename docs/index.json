@@ -6,7 +6,8 @@
       "date": "2017/12/01",
       "url": "/2017/1201-plainstyle",
       "twitter_card_size": "summary",
-      "card_image_url": "/image/default_card_summary.png"
+      "card_image_url": "/image/default_card_summary.png",
+      "tags": []
     },
     {
       "title": "[メモ] ボリュームの端子を曲げてはならない",
@@ -14,7 +15,8 @@
       "date": "2018/02/14",
       "url": "/2018/0214-dont-bend-volume-pin",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2018/0214-dont-bend-volume-pin/cover.jpg"
+      "card_image_url": "/2018/0214-dont-bend-volume-pin/cover.jpg",
+      "tags": []
     },
     {
       "title": "WindowsのIMEの状態をLEDで表示するガジェット",
@@ -22,7 +24,10 @@
       "date": "2018/02/17",
       "url": "/2018/0217-ime-status-to-led",
       "twitter_card_size": "summary",
-      "card_image_url": "/image/default_card_summary.png"
+      "card_image_url": "/image/default_card_summary.png",
+      "tags": [
+        "LED"
+      ]
     },
     {
       "title": "006P 電池短絡防止キャップ",
@@ -30,7 +35,8 @@
       "date": "2020/05/22",
       "url": "/2020/0522-006p-battery-cap",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2020/0522-006p-battery-cap/cover.jpg"
+      "card_image_url": "/2020/0522-006p-battery-cap/cover.jpg",
+      "tags": []
     },
     {
       "title": "スマホでポップコーン作った",
@@ -38,7 +44,10 @@
       "date": "2020/05/25",
       "url": "/2020/0525-smart-popcorn",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2020/0525-smart-popcorn/cover.jpg"
+      "card_image_url": "/2020/0525-smart-popcorn/cover.jpg",
+      "tags": [
+        "スマホ"
+      ]
     },
     {
       "title": "さわれる いのちの輝きくん",
@@ -46,7 +55,11 @@
       "date": "2020/08/26",
       "url": "/2020/0826-inochi-no-kagayaki-kun",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2020/0826-inochi-no-kagayaki-kun/cover.png"
+      "card_image_url": "/2020/0826-inochi-no-kagayaki-kun/cover.png",
+      "tags": [
+        "Misskey",
+        "Bluesky"
+      ]
     },
     {
       "title": "ちょっと治安の悪い呼び込みくん",
@@ -54,7 +67,10 @@
       "date": "2020/10/10",
       "url": "/2020/1010-hv-yobikomi-kun",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2020/1010-hv-yobikomi-kun/cover.jpg"
+      "card_image_url": "/2020/1010-hv-yobikomi-kun/cover.jpg",
+      "tags": [
+        "放電"
+      ]
     },
     {
       "title": "Quotgle",
@@ -62,7 +78,8 @@
       "date": "2020/12/03",
       "url": "/2020/1203-quotgle",
       "twitter_card_size": "summary",
-      "card_image_url": "/2020/1203-quotgle/thumbnail.png"
+      "card_image_url": "/2020/1203-quotgle/thumbnail.png",
+      "tags": []
     },
     {
       "title": "メタルラック用ケーブル固定器具",
@@ -70,7 +87,8 @@
       "date": "2021/02/22",
       "url": "/2021/0222-cable-holder-for-metal-rack",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2021/0222-cable-holder-for-metal-rack/cover.jpg"
+      "card_image_url": "/2021/0222-cable-holder-for-metal-rack/cover.jpg",
+      "tags": []
     },
     {
       "title": "ブラウザから画面の点滅で無理矢理 I2C してみた",
@@ -78,7 +96,10 @@
       "date": "2021/03/17",
       "url": "/2021/0317-optical-i2c",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2021/0317-optical-i2c/cover.jpg"
+      "card_image_url": "/2021/0317-optical-i2c/cover.jpg",
+      "tags": [
+        "I2C"
+      ]
     },
     {
       "title": "紙テープで I2C してみた",
@@ -86,7 +107,10 @@
       "date": "2021/03/21",
       "url": "/2021/0321-paper-tape-i2c",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2021/0321-paper-tape-i2c/cover.jpg"
+      "card_image_url": "/2021/0321-paper-tape-i2c/cover.jpg",
+      "tags": [
+        "I2C"
+      ]
     },
     {
       "title": "[メモ] 人類の英智を描いた",
@@ -94,7 +118,8 @@
       "date": "2021/05/24",
       "url": "/2021/0524-how-to-open-soup-sachet",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2021/0524-how-to-open-soup-sachet/cover.jpg"
+      "card_image_url": "/2021/0524-how-to-open-soup-sachet/cover.jpg",
+      "tags": []
     },
     {
       "title": "ラー油キャンドル",
@@ -102,7 +127,10 @@
       "date": "2021/08/19",
       "url": "/2021/0819-ra-yu-candle",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2021/0819-ra-yu-candle/cover.jpg"
+      "card_image_url": "/2021/0819-ra-yu-candle/cover.jpg",
+      "tags": [
+        "LED"
+      ]
     },
     {
       "title": "いらない CD とアルミテープと3Dプリンタでウィムズハースト起電機作ってみた",
@@ -110,7 +138,11 @@
       "date": "2022/05/22",
       "url": "/2022/0522-wimshurst-machine",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2022/0522-wimshurst-machine/cover.jpg"
+      "card_image_url": "/2022/0522-wimshurst-machine/cover.jpg",
+      "tags": [
+        "プリンタ",
+        "放電"
+      ]
     },
     {
       "title": "作業自撮り用スマホスタンド",
@@ -118,7 +150,10 @@
       "date": "2022/07/02",
       "url": "/2022/0702-smartphone-stand",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2022/0702-smartphone-stand/cover.jpg"
+      "card_image_url": "/2022/0702-smartphone-stand/cover.jpg",
+      "tags": [
+        "スマホ"
+      ]
     },
     {
       "title": "[メモ] ディストピア飯",
@@ -126,7 +161,8 @@
       "date": "2023/01/11",
       "url": "/2023/0111-dystopian-meal",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2023/0111-dystopian-meal/cover.png"
+      "card_image_url": "/2023/0111-dystopian-meal/cover.png",
+      "tags": []
     },
     {
       "title": "簡易静電気メーター",
@@ -134,7 +170,14 @@
       "date": "2023/02/23",
       "url": "/2023/0223-electrostatic-meter",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2023/0223-electrostatic-meter/cover.jpg"
+      "card_image_url": "/2023/0223-electrostatic-meter/cover.jpg",
+      "tags": [
+        "静電気",
+        "LED",
+        "放電",
+        "PCB",
+        "プリント"
+      ]
     },
     {
       "title": "眩しすぎるX看板のLEDランタンを作った",
@@ -142,7 +185,10 @@
       "date": "2023/08/05",
       "url": "/2023/0805-x-sign-lantern",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2023/0805-x-sign-lantern/cover.jpg"
+      "card_image_url": "/2023/0805-x-sign-lantern/cover.jpg",
+      "tags": [
+        "LED"
+      ]
     },
     {
       "title": "FDM式3Dプリンタで高圧トランスのボビンを作る",
@@ -150,7 +196,11 @@
       "date": "2023/08/13",
       "url": "/2023/0813-fdm-3d-printed-hv-trans",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2023/0813-fdm-3d-printed-hv-trans/cover.jpg"
+      "card_image_url": "/2023/0813-fdm-3d-printed-hv-trans/cover.jpg",
+      "tags": [
+        "プリンタ",
+        "プリント"
+      ]
     },
     {
       "title": "18650 2セル駆動の LEDランタンを作った",
@@ -158,7 +208,12 @@
       "date": "2023/08/17",
       "url": "/2023/0817-led-lantern",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2023/0817-led-lantern/cover.jpg"
+      "card_image_url": "/2023/0817-led-lantern/cover.jpg",
+      "tags": [
+        "LED",
+        "プリンタ",
+        "プリント"
+      ]
     },
     {
       "title": "スマホの充電端子で火起こしできるプラズマアークライター",
@@ -166,7 +221,12 @@
       "date": "2023/08/24",
       "url": "/2023/0824-usb-arc-lighter",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2023/0824-usb-arc-lighter/cover.jpg"
+      "card_image_url": "/2023/0824-usb-arc-lighter/cover.jpg",
+      "tags": [
+        "スマホ",
+        "高電圧",
+        "放電"
+      ]
     },
     {
       "title": "ラズピコに「長押し書き込みボタン」を追加する (pico2対応)",
@@ -174,7 +234,11 @@
       "date": "2023/10/17",
       "url": "/2023/1017-raspico-longpush-button",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2023/1017-raspico-longpush-button/cover.jpg"
+      "card_image_url": "/2023/1017-raspico-longpush-button/cover.jpg",
+      "tags": [
+        "Raspberry",
+        "RP2350"
+      ]
     },
     {
       "title": "スマホの USB でウズラのゆで卵をつくる",
@@ -182,7 +246,10 @@
       "date": "2023/10/18",
       "url": "/2023/1018-smart-boiled-egg",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2023/1018-smart-boiled-egg/cover.jpg"
+      "card_image_url": "/2023/1018-smart-boiled-egg/cover.jpg",
+      "tags": [
+        "スマホ"
+      ]
     },
     {
       "title": "マルクスジェネレータ",
@@ -190,7 +257,11 @@
       "date": "2023/12/31",
       "url": "/2023/1231-marx-generator",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2023/1231-marx-generator/cover.jpg"
+      "card_image_url": "/2023/1231-marx-generator/cover.jpg",
+      "tags": [
+        "高電圧",
+        "放電"
+      ]
     },
     {
       "title": "SkyFeed を使って Bluesky で自作品のフィードを公開する",
@@ -198,7 +269,10 @@
       "date": "2024/02/06",
       "url": "/2024/0206-bskycustomfeed",
       "twitter_card_size": "summary",
-      "card_image_url": "/2024/0206-bskycustomfeed/thumbnail.png"
+      "card_image_url": "/2024/0206-bskycustomfeed/thumbnail.png",
+      "tags": [
+        "Bluesky"
+      ]
     },
     {
       "title": "[メモ] インターネットをいつも綺麗に使っていただきありがとうございます。",
@@ -206,7 +280,8 @@
       "date": "2024/02/17",
       "url": "/2024/0217-thx-4-using-the-internet-cleanly",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2024/0217-thx-4-using-the-internet-cleanly/cover.jpg"
+      "card_image_url": "/2024/0217-thx-4-using-the-internet-cleanly/cover.jpg",
+      "tags": []
     },
     {
       "title": "X Pro（旧 TweetDeck）でプロフィールなどがポップアップされたまま消えない問題の応急処置 (追記あり)",
@@ -214,7 +289,8 @@
       "date": "2024/05/26",
       "url": "/2024/0526-xpro-stop-popup",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2024/0526-xpro-stop-popup/cover.png"
+      "card_image_url": "/2024/0526-xpro-stop-popup/cover.png",
+      "tags": []
     },
     {
       "title": "[メモ] 桃太郎",
@@ -222,7 +298,11 @@
       "date": "2024/06/14",
       "url": "/2024/0614-momo-tar",
       "twitter_card_size": "summary",
-      "card_image_url": "/image/default_card_summary.png"
+      "card_image_url": "/image/default_card_summary.png",
+      "tags": [
+        "Misskey",
+        "Bluesky"
+      ]
     },
     {
       "title": "Mac mini 2024 の底面電源スイッチを上から押すやつ",
@@ -230,7 +310,10 @@
       "date": "2024/10/31",
       "url": "/2024/1031-macmini-pwsw-lever",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2024/1031-macmini-pwsw-lever/cover.jpg"
+      "card_image_url": "/2024/1031-macmini-pwsw-lever/cover.jpg",
+      "tags": [
+        "プリンタ"
+      ]
     },
     {
       "title": "𝕏: フォロワー欄でスパムを強調表示する Violentmonkey 用スクリプト",
@@ -238,7 +321,8 @@
       "date": "2024/11/19",
       "url": "/2024/1119-x-spam-highlighter",
       "twitter_card_size": "summary",
-      "card_image_url": "/2024/1119-x-spam-highlighter/thumbnail.png"
+      "card_image_url": "/2024/1119-x-spam-highlighter/thumbnail.png",
+      "tags": []
     },
     {
       "title": "静電気検知瓶",
@@ -246,7 +330,13 @@
       "date": "2024/11/30",
       "url": "/2024/1130-electrostatic-detector-bottle",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2024/1130-electrostatic-detector-bottle/cover.jpg"
+      "card_image_url": "/2024/1130-electrostatic-detector-bottle/cover.jpg",
+      "tags": [
+        "静電気",
+        "LED",
+        "高電圧",
+        "放電"
+      ]
     },
     {
       "title": "[メモ] ハッシュタグ集",
@@ -254,7 +344,8 @@
       "date": "2024/12/04",
       "url": "/2024/1204-various-hashtags",
       "twitter_card_size": "summary",
-      "card_image_url": "/2024/1204-various-hashtags/thumbnail.png"
+      "card_image_url": "/2024/1204-various-hashtags/thumbnail.png",
+      "tags": []
     },
     {
       "title": "[メモ] 16 ビット固定小数版二進対数関数",
@@ -262,7 +353,8 @@
       "date": "2024/12/05",
       "url": "/2024/1205-log2-u16",
       "twitter_card_size": "summary",
-      "card_image_url": "/image/default_card_summary.png"
+      "card_image_url": "/image/default_card_summary.png",
+      "tags": []
     },
     {
       "title": "[メモ] RCサーボSG-90のホーンを3Dプリンタで自作する",
@@ -270,7 +362,13 @@
       "date": "2024/12/08",
       "url": "/2024/1208-sg90-shaft-dimension",
       "twitter_card_size": "summary",
-      "card_image_url": "/2024/1208-sg90-shaft-dimension/thumbnail.jpg"
+      "card_image_url": "/2024/1208-sg90-shaft-dimension/thumbnail.jpg",
+      "tags": [
+        "プリンタ",
+        "プリント",
+        "Misskey",
+        "Bluesky"
+      ]
     },
     {
       "title": "XProAutoTop: XPro の「新しいポストを表示」を自動的にクリックする UserScript",
@@ -278,7 +376,8 @@
       "date": "2024/12/29",
       "url": "/2024/1229-xpro-auto-top",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2024/1229-xpro-auto-top/cover.png"
+      "card_image_url": "/2024/1229-xpro-auto-top/cover.png",
+      "tags": []
     },
     {
       "title": "マンデルブロ集合描画時の border tracing アルゴリズムの効果",
@@ -286,7 +385,10 @@
       "date": "2025/01/03",
       "url": "/2025/0103-mandelbrot-border-tracing",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2025/0103-mandelbrot-border-tracing/cover.png"
+      "card_image_url": "/2025/0103-mandelbrot-border-tracing/cover.png",
+      "tags": [
+        "マンデルブロ集合"
+      ]
     },
     {
       "title": "[メモ] Fusion360 備忘録",
@@ -294,7 +396,10 @@
       "date": "2025/01/29",
       "url": "/2025/0129-fusion360-tips",
       "twitter_card_size": "summary",
-      "card_image_url": "/2025/0129-fusion360-tips/thumbnail.png"
+      "card_image_url": "/2025/0129-fusion360-tips/thumbnail.png",
+      "tags": [
+        "プリンタ"
+      ]
     },
     {
       "title": "[メモ] Rust 備忘録",
@@ -302,7 +407,8 @@
       "date": "2025/02/04",
       "url": "/2025/0204-rust-tips",
       "twitter_card_size": "summary",
-      "card_image_url": "/2025/0204-rust-tips/thumbnail.png"
+      "card_image_url": "/2025/0204-rust-tips/thumbnail.png",
+      "tags": []
     },
     {
       "title": "[メモ] X (旧Twitter) 備忘録",
@@ -310,7 +416,10 @@
       "date": "2025/02/09",
       "url": "/2025/0209-x-tips",
       "twitter_card_size": "summary",
-      "card_image_url": "/2025/0209-x-tips/thumbnail.png"
+      "card_image_url": "/2025/0209-x-tips/thumbnail.png",
+      "tags": [
+        "Twitter"
+      ]
     },
     {
       "title": "UPDI HVP のための 12V を得る方法の試行",
@@ -318,7 +427,11 @@
       "date": "2025/03/08",
       "url": "/2025/0308-updi-hvp-with-ae-ch340e",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2025/0308-updi-hvp-with-ae-ch340e/cover.jpg"
+      "card_image_url": "/2025/0308-updi-hvp-with-ae-ch340e/cover.jpg",
+      "tags": [
+        "高電圧",
+        "AVR"
+      ]
     },
     {
       "title": "[メモ] JavaScript 備忘録",
@@ -326,7 +439,10 @@
       "date": "2025/03/23",
       "url": "/2025/0323-js-tips",
       "twitter_card_size": "summary",
-      "card_image_url": "/2025/0323-js-tips/thumbnail.png"
+      "card_image_url": "/2025/0323-js-tips/thumbnail.png",
+      "tags": [
+        "Twitter"
+      ]
     },
     {
       "title": "[メモ] avr-gcc アセンブラ / ABI 備忘録",
@@ -334,7 +450,10 @@
       "date": "2025/04/05",
       "url": "/2025/0405-avr-gcc-asm-tips",
       "twitter_card_size": "summary",
-      "card_image_url": "/2025/0405-avr-gcc-asm-tips/thumbnail.png"
+      "card_image_url": "/2025/0405-avr-gcc-asm-tips/thumbnail.png",
+      "tags": [
+        "AVR"
+      ]
     },
     {
       "title": "[メモ] MFM集",
@@ -342,7 +461,10 @@
       "date": "2025/04/12",
       "url": "/2025/0412-mfm",
       "twitter_card_size": "summary",
-      "card_image_url": "/2025/0412-mfm/thumbnail.png"
+      "card_image_url": "/2025/0412-mfm/thumbnail.png",
+      "tags": [
+        "Misskey"
+      ]
     },
     {
       "title": "[執筆中] GPIO に繋がった LED に爆光を浴びせると MCU が起動することがある",
@@ -350,7 +472,15 @@
       "date": "2025/06/07",
       "url": "/2025/0607-can-leds-photovoltaic-power-mcus",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2025/0607-can-leds-photovoltaic-power-mcus/cover.jpg"
+      "card_image_url": "/2025/0607-can-leds-photovoltaic-power-mcus/cover.jpg",
+      "tags": [
+        "LED",
+        "静電気",
+        "高電圧",
+        "放電",
+        "プリント",
+        "Raspberry"
+      ]
     },
     {
       "title": "秋月で売ってる3WパワーLEDドライバモジュールは調光ができる",
@@ -358,7 +488,10 @@
       "date": "2025/07/10",
       "url": "/2025/0710-osmr16-w1213-dim",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2025/0710-osmr16-w1213-dim/cover.jpg"
+      "card_image_url": "/2025/0710-osmr16-w1213-dim/cover.jpg",
+      "tags": [
+        "LED"
+      ]
     },
     {
       "title": "[C++] デバッグ用 7 セグ描画関数",
@@ -366,7 +499,12 @@
       "date": "2025/07/29",
       "url": "/2025/0729-cpp-7seg-paint-func",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2025/0729-cpp-7seg-paint-func/cover.jpg"
+      "card_image_url": "/2025/0729-cpp-7seg-paint-func/cover.jpg",
+      "tags": [
+        "LED",
+        "AVR",
+        "プリント"
+      ]
     },
     {
       "title": "GPIO に繋がった圧電スピーカーに強い振動を与えると MCU が起動することがある",
@@ -374,7 +512,16 @@
       "date": "2025/08/22",
       "url": "/2025/0822-piezo-speaker-powers-mcu",
       "twitter_card_size": "summary",
-      "card_image_url": "/2025/0822-piezo-speaker-powers-mcu/thumbnail.jpg"
+      "card_image_url": "/2025/0822-piezo-speaker-powers-mcu/thumbnail.jpg",
+      "tags": [
+        "静電気",
+        "高電圧",
+        "LED",
+        "I2C",
+        "Twitter",
+        "Bluesky",
+        "Misskey"
+      ]
     },
     {
       "title": "画像を配列に変換君 (Arrayfy)",
@@ -382,7 +529,14 @@
       "date": "2025/08/24",
       "url": "/2025/0824-image2array",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2025/0824-image2array/cover.png"
+      "card_image_url": "/2025/0824-image2array/cover.png",
+      "tags": [
+        "SSD1306",
+        "LED",
+        "Twitter",
+        "Bluesky",
+        "Misskey"
+      ]
     },
     {
       "title": "ILI9488 LCDモジュールの8色モードの謎挙動",
@@ -390,7 +544,11 @@
       "date": "2025/09/01",
       "url": "/2025/0901-ili9488-8color-wired-behavior",
       "twitter_card_size": "summary",
-      "card_image_url": "/2025/0901-ili9488-8color-wired-behavior/thumbnail.jpg"
+      "card_image_url": "/2025/0901-ili9488-8color-wired-behavior/thumbnail.jpg",
+      "tags": [
+        "SPI",
+        "ST7789"
+      ]
     },
     {
       "title": "白光「ハックルー」の使用動画",
@@ -398,7 +556,12 @@
       "date": "2025/10/05",
       "url": "/2025/1005-hakkuroo",
       "twitter_card_size": "summary",
-      "card_image_url": "/2025/1005-hakkuroo/thumbnail.jpg"
+      "card_image_url": "/2025/1005-hakkuroo/thumbnail.jpg",
+      "tags": [
+        "ハンダ",
+        "Misskey",
+        "Bluesky"
+      ]
     },
     {
       "title": "VLConfig: ディスプレイの点滅でデバイスに設定を書き込む",
@@ -406,7 +569,14 @@
       "date": "2025/10/10",
       "url": "/2025/1010-vlconfig",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2025/1010-vlconfig/cover.png"
+      "card_image_url": "/2025/1010-vlconfig/cover.png",
+      "tags": [
+        "スマホ",
+        "Raspberry",
+        "Twitter",
+        "Misskey",
+        "Bluesky"
+      ]
     },
     {
       "title": "RC Combinator: 合成抵抗探索ツール",
@@ -414,7 +584,13 @@
       "date": "2025/10/17",
       "url": "/2025/1017-rc-comb",
       "twitter_card_size": "summary",
-      "card_image_url": "/2025/1017-rc-comb/thumbnail.png"
+      "card_image_url": "/2025/1017-rc-comb/thumbnail.png",
+      "tags": [
+        "LED",
+        "Twitter",
+        "Misskey",
+        "Bluesky"
+      ]
     },
     {
       "title": "通販で部品を集めて「PicoPad」の互換機を作る",
@@ -422,7 +598,19 @@
       "date": "2025/11/26",
       "url": "/2025/1126-picopad",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2025/1126-picopad/cover.jpg"
+      "card_image_url": "/2025/1126-picopad/cover.jpg",
+      "tags": [
+        "PicoPad",
+        "Raspberry",
+        "RP2350",
+        "ST7789",
+        "SPI",
+        "LED",
+        "プリント",
+        "Twitter",
+        "Misskey",
+        "Bluesky"
+      ]
     },
     {
       "title": "BootSel2Reset: ラズピコの BOOTSEL をリセットと兼用にする",
@@ -430,7 +618,15 @@
       "date": "2025/12/05",
       "url": "/2025/1205-bootsel2reset",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2025/1205-bootsel2reset/cover.png"
+      "card_image_url": "/2025/1205-bootsel2reset/cover.png",
+      "tags": [
+        "Raspberry",
+        "SPI",
+        "RP2040",
+        "RP2350",
+        "AVR",
+        "PicoPad"
+      ]
     },
     {
       "title": "PicoPad 用のアプリを WSL2 + VSCode で作ってみる",
@@ -438,7 +634,16 @@
       "date": "2025/12/28",
       "url": "/2025/1228-picolibsdk-vscode",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2025/1228-picolibsdk-vscode/cover.jpg"
+      "card_image_url": "/2025/1228-picolibsdk-vscode/cover.jpg",
+      "tags": [
+        "PicoPad",
+        "マンデルブロ集合",
+        "Raspberry",
+        "RP2040",
+        "RP2350",
+        "SPI",
+        "LED"
+      ]
     },
     {
       "title": "Waveshare の LCD モジュールから表面実装ピンソケットをムリヤリ除去して薄くする",
@@ -446,7 +651,13 @@
       "date": "2025/12/29",
       "url": "/2025/1229-pin-socket-removal",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2025/1229-pin-socket-removal/cover.png"
+      "card_image_url": "/2025/1229-pin-socket-removal/cover.png",
+      "tags": [
+        "Raspberry",
+        "Twitter",
+        "Bluesky",
+        "Misskey"
+      ]
     },
     {
       "title": "冬の足元の冷え (コールドドラフト) に対するサーキュレーターの効果を確認してみる",
@@ -454,7 +665,12 @@
       "date": "2026/01/01",
       "url": "/2026/0101-cold-draft-vs-fan",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2026/0101-cold-draft-vs-fan/cover.png"
+      "card_image_url": "/2026/0101-cold-draft-vs-fan/cover.png",
+      "tags": [
+        "Twitter",
+        "Bluesky",
+        "Misskey"
+      ]
     },
     {
       "title": "[メモ] PCB/PCBA 備忘録",
@@ -462,7 +678,11 @@
       "date": "2026/03/01",
       "url": "/2026/0301-pcb-tips",
       "twitter_card_size": "summary",
-      "card_image_url": "/image/default_card_summary.png"
+      "card_image_url": "/image/default_card_summary.png",
+      "tags": [
+        "PCB",
+        "プリント"
+      ]
     },
     {
       "title": "LcdTap: TinyJoyPad や Arduboy を大画面で遊ぶ",
@@ -470,7 +690,20 @@
       "date": "2026/05/14",
       "url": "/2026/0514-tinyjoypad-with-large-monitor",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2026/0514-tinyjoypad-with-large-monitor/cover.jpg"
+      "card_image_url": "/2026/0514-tinyjoypad-with-large-monitor/cover.jpg",
+      "tags": [
+        "LcdTap",
+        "SSD1306",
+        "ハンダ",
+        "SPI",
+        "LED",
+        "Raspberry",
+        "I2C",
+        "AVR",
+        "Twitter",
+        "Bluesky",
+        "Misskey"
+      ]
     },
     {
       "title": "LcdTap: M5Stack CoreS3 の画面をミラーリング/キャプチャする",
@@ -478,7 +711,17 @@
       "date": "2026/05/20",
       "url": "/2026/0520-m5stack-with-large-monitor",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2026/0520-m5stack-with-large-monitor/cover.jpg"
+      "card_image_url": "/2026/0520-m5stack-with-large-monitor/cover.jpg",
+      "tags": [
+        "LcdTap",
+        "Raspberry",
+        "I2C",
+        "SPI",
+        "ハンダ",
+        "Twitter",
+        "Bluesky",
+        "Misskey"
+      ]
     },
     {
       "title": "チップ LED 手ハンダ用極性スコープ",
@@ -486,7 +729,15 @@
       "date": "2026/06/10",
       "url": "/2026/0610-smd-led-orientation-scope",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2026/0610-smd-led-orientation-scope/cover.jpg"
+      "card_image_url": "/2026/0610-smd-led-orientation-scope/cover.jpg",
+      "tags": [
+        "ハンダ",
+        "LED",
+        "プリント",
+        "Twitter",
+        "Misskey",
+        "Bluesky"
+      ]
     },
     {
       "title": "LcdTap: ESPboy を大きなモニターで遊ぶ",
@@ -494,7 +745,17 @@
       "date": "2026/06/26",
       "url": "/2026/0626-espboy-with-large-monitor",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2026/0626-espboy-with-large-monitor/cover.jpg"
+      "card_image_url": "/2026/0626-espboy-with-large-monitor/cover.jpg",
+      "tags": [
+        "LcdTap",
+        "LED",
+        "Raspberry",
+        "I2C",
+        "SPI",
+        "Twitter",
+        "Bluesky",
+        "Misskey"
+      ]
     },
     {
       "title": "Thumby Color のクローンを Waveshare RP2350-Plus で作る",
@@ -502,7 +763,16 @@
       "date": "2026/06/30",
       "url": "/2026/0630-thumby-color-clone",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2026/0630-thumby-color-clone/cover.jpg"
+      "card_image_url": "/2026/0630-thumby-color-clone/cover.jpg",
+      "tags": [
+        "RP2350",
+        "LED",
+        "LcdTap",
+        "Raspberry",
+        "Twitter",
+        "Bluesky",
+        "Misskey"
+      ]
     },
     {
       "title": "LcdTap: Tab5 をでっかい SSD1306 として使う",
@@ -510,7 +780,117 @@
       "date": "2026/07/17",
       "url": "/2026/0717-tab5-as-ssd1306",
       "twitter_card_size": "summary_large_image",
-      "card_image_url": "/2026/0717-tab5-as-ssd1306/cover.jpg"
+      "card_image_url": "/2026/0717-tab5-as-ssd1306/cover.jpg",
+      "tags": [
+        "LcdTap",
+        "Tab5",
+        "SSD1306",
+        "ST7789",
+        "LED",
+        "I2C",
+        "SPI",
+        "Twitter",
+        "Bluesky",
+        "Misskey"
+      ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "I2C",
+      "count": 7
+    },
+    {
+      "name": "LED",
+      "count": 19
+    },
+    {
+      "name": "Twitter",
+      "count": 15
+    },
+    {
+      "name": "Bluesky",
+      "count": 18
+    },
+    {
+      "name": "Misskey",
+      "count": 18
+    },
+    {
+      "name": "LcdTap",
+      "count": 5
+    },
+    {
+      "name": "SSD1306",
+      "count": 3
+    },
+    {
+      "name": "ハンダ",
+      "count": 4
+    },
+    {
+      "name": "SPI",
+      "count": 8
+    },
+    {
+      "name": "Raspberry",
+      "count": 11
+    },
+    {
+      "name": "AVR",
+      "count": 5
+    },
+    {
+      "name": "PCB",
+      "count": 2
+    },
+    {
+      "name": "プリント",
+      "count": 9
+    },
+    {
+      "name": "RP2350",
+      "count": 5
+    },
+    {
+      "name": "Tab5",
+      "count": 1
+    },
+    {
+      "name": "ST7789",
+      "count": 3
+    },
+    {
+      "name": "スマホ",
+      "count": 5
+    },
+    {
+      "name": "PicoPad",
+      "count": 3
+    },
+    {
+      "name": "マンデルブロ集合",
+      "count": 2
+    },
+    {
+      "name": "RP2040",
+      "count": 2
+    },
+    {
+      "name": "静電気",
+      "count": 4
+    },
+    {
+      "name": "高電圧",
+      "count": 6
+    },
+    {
+      "name": "放電",
+      "count": 7
+    },
+    {
+      "name": "プリンタ",
+      "count": 6
     }
   ]
 }

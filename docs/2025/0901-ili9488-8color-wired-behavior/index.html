@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-  <meta name="keywords" content="シャポログ ${blog.article_keywords}">
+  <meta name="keywords" content="シャポログ, SPI, ST7789">
   <meta name="description" content="AliExpress と Amazon で 480x320px の LCD モジュールを買ったのですが、ILI9488 の 8 色モードを試そうとしたところ謎の挙動に悩まされたので記録として残しておきます。">
 
   <meta name="twitter:card" content="summary" />
@@ -114,6 +114,58 @@
         <h3>製品依存かもしれないし、使い方の問題かもしれない</h3>
         <p>今回、似た見た目のモジュールを AliExpress で 2 つ、Amazon で 1 つ購入しましたが、どれも同じ挙動でした。ただ、他の製品ではどうだか分かりません。データシートを隅々まで読んだわけではないので、私の使い方が間違っているだけかもしれません (LLM に PDF を投げて質問してみましたがよく分かりませんでした)。</p>
         <p>ILI9488 の 8 色モードを使用する場合はご注意ください。</p>
+
+
+      <h3>関連記事</h3>
+      <ul id="related_articles">
+        <li>関連記事を読み込んでいます...</li>
+      </ul>
+      <script>
+        const my_tags = "SPI, ST7789".split(',').map(s => s.trim()).filter(s => s != '');
+        const ul = document.querySelector('#related_articles');
+        fetch('/index.json?c442dc77')
+          .then(response => response.json())
+          .then(json_obj => {
+            const articles = json_obj.articles.reverse();
+            var related_articles = [];
+            for (const a of articles) {
+              if (a.title == "ILI9488 LCDモジュールの8色モードの謎挙動") {
+                continue;
+              }
+              let score = 0;
+              let tags = [];
+              for (let my_pos = 0; my_pos < my_tags.length; my_pos++) {
+                const t = my_tags[my_pos];
+                const other_pos = a.tags.indexOf(t);
+                if (other_pos >= 0) {
+                  score += Math.ceil(100 / (my_pos + other_pos + 1));
+                  tags.push(t);
+                  console.log(`related: ${a.title} (score=${score}) [${tags.join(', ')}]`);
+                }
+              }
+              if (score > 0) {
+                related_articles.push({ article: a, score: score, tags: tags });
+              }
+            }
+            related_articles.sort((a, b) => b.score - a.score);
+
+            if (related_articles.length > 0) {
+              ul.innerHTML = '';
+              for (const a of related_articles.slice(0, 5)) {
+                const li = document.createElement('li');
+                const a_tag = document.createElement('a');
+                a_tag.href = a.article.url;
+                a_tag.textContent = a.article.title;
+                a_tag.title = `共通タグ: ${a.tags.join(', ')}`;
+                li.appendChild(a_tag);
+                ul.appendChild(li);
+              }
+            }
+            else {
+              ul.innerHTML = '<li>関連記事はありません。</li>';
+            }
+          });
+      </script>
 
     </main>
     <footer>

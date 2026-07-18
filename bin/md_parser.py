@@ -14,7 +14,7 @@ class MdParser:
     RE_PRE = r'^```([^:]+)?(:.+)?$'
     RE_HR = r'^---+$'
     
-    def __init__(self, lines: list[str]):
+    def __init__(self, lines: list[str], defined_tags: list[str]):
         # 行末の空白を除去
         for i in range(len(lines)):
             lines[i] = lines[i].rstrip(' 　\t\r\n')
@@ -22,6 +22,8 @@ class MdParser:
         self.lines = lines
         self.indent_stack: list[str] = []
         self.tab_size = 4
+        self.defined_tags = defined_tags
+        self.mentioned_tags = {}
     
     def joined_indent(self) -> str:
         return ''.join(self.indent_stack)
@@ -111,6 +113,7 @@ class MdParser:
         self.info(f'--> body()')
         ret = ArticleBody()
         ret.children = self.block_children(first_line='', text_as_paragraph=True)
+        ret.mentioned_tags = sorted(self.mentioned_tags.keys(), key=lambda k: self.mentioned_tags[k], reverse=True)
         if not self.eof():
             raise Exception(f'Input not finished (next="{self.lines[0]}")')
         self.info(f'<-- body()')
@@ -303,6 +306,9 @@ class MdParser:
                 elif lex.peek(len(term)) == term:
                     return ret
             elif lex.eos():
+                for t in self.defined_tags:
+                    if t in ret:
+                        self.mentioned_tags[t] = True
                 return ret
             
             if lex.try_eat('!['):
@@ -328,7 +334,7 @@ class MdParser:
             while not lex.try_eat(')'):
                 url += lex.eat()
             if start_key == '![':
-                if url.endswith('mp4'):
+                if url.endswith('.mp4'):
                     self.info(f'video: src="{url}", alt="{link_text}"')
                     return \
                         f'<video controls>' + \

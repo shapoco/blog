@@ -130,12 +130,6 @@ LcdTap-Pico2 Universal のファームウェア v202606261033 以降には ESPbo
 
 ## 関連リンク
 
-- 関連記事
-
-    - [LcdTap: TinyJoyPad や Arduboy を大画面で遊ぶ](../0514-tinyjoypad-with-large-monitor/article.md)
-    - [LcdTap: M5Stack CoreS3 の画面をミラーリング/キャプチャする](../0520-m5stack-with-large-monitor/article.md)
-    - [LcdTap: Tab5 をでっかい SSD1306 として使う](../0717-tab5-as-ssd1306/article.md)
-
 - SNS 投稿
 
     - [X (Twitter)](https://x.com/shapoco/status/2070037620688900595)
