@@ -158,7 +158,7 @@
       <script>
         const my_tags = "静電気, 高電圧, LED, LCD, I2C, Twitter, Bluesky, Misskey".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?b112991e')
+        fetch('/index.json?905c0008')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();

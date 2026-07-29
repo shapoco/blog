@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-  <meta name="keywords" content="シャポログ, LcdTap, I2C, SPI, NTSC, ST7789, SSD1306, LED, LCD, ブラウン管, PicoPad">
+  <meta name="keywords" content="シャポログ, LcdTap, I2C, SPI, NTSC, ST7789, SSD1306, LED, LCD, ブラウン管, PicoPad, Twitter, Misskey, Bluesky">
   <meta name="description" content="LcdTap のファームウェアを更新し、空き端子を使って NTSC/PAL 信号を出力できるようにしました。アナログテレビを I2C/SPI ディスプレイとして使うことができます。">
 
   <meta name="twitter:card" content="summary_large_image" />
@@ -124,6 +124,12 @@
         <h3>動作の様子</h3>
         <p>PWM モードでの動作の様子です (Arduboy、Xiamocon、PicoPad、M5Stack CoreS3)。</p>
         <p><video controls><source src="https://www.shapoco.net/media/2026/20260729_lcdtap_composite_out.mp4" type="video/mp4" /></video></p>
+        <h3>SNS 投稿</h3>
+        <ul>
+          <li><a href="https://x.com/shapoco/status/2082291134982951305" target="_blank">X (Twitter)</a></li>
+          <li><a href="https://misskey.io/notes/ap910ahrpwwg099s" target="_blank">Misskey.io</a></li>
+          <li><a href="https://bsky.app/profile/shapoco.net/post/3mrquoqoxos26" target="_blank">Bluesky</a></li>
+        </ul>
 
 
       <h3>関連記事</h3>
@@ -131,9 +137,9 @@
         <li>関連記事を読み込んでいます...</li>
       </ul>
       <script>
-        const my_tags = "LcdTap, I2C, SPI, NTSC, ST7789, SSD1306, LED, LCD, ブラウン管, PicoPad".split(',').map(s => s.trim()).filter(s => s != '');
+        const my_tags = "LcdTap, I2C, SPI, NTSC, ST7789, SSD1306, LED, LCD, ブラウン管, PicoPad, Twitter, Misskey, Bluesky".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?b112991e')
+        fetch('/index.json?905c0008')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();

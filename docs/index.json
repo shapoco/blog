@@ -830,7 +830,10 @@
         "LED",
         "LCD",
         "ブラウン管",
-        "PicoPad"
+        "PicoPad",
+        "Twitter",
+        "Misskey",
+        "Bluesky"
       ]
     }
   ],
@@ -877,15 +880,15 @@
     },
     {
       "name": "Twitter",
-      "count": 15
-    },
-    {
-      "name": "Bluesky",
-      "count": 18
+      "count": 16
     },
     {
       "name": "Misskey",
-      "count": 18
+      "count": 19
+    },
+    {
+      "name": "Bluesky",
+      "count": 19
     },
     {
       "name": "ハンダ",

@@ -68,5 +68,9 @@ PWM モードでの動作の様子です (Arduboy、Xiamocon、PicoPad、M5Stack
 
 ![](https://www.shapoco.net/media/2026/20260729_lcdtap_composite_out.mp4)
 
+## SNS 投稿
 
+- [X (Twitter)](https://x.com/shapoco/status/2082291134982951305)
+- [Misskey.io](https://misskey.io/notes/ap910ahrpwwg099s)
+- [Bluesky](https://bsky.app/profile/shapoco.net/post/3mrquoqoxos26)
 
