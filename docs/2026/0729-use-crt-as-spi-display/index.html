@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+  <meta name="keywords" content="シャポログ, LcdTap, I2C, SPI, NTSC, ST7789, SSD1306, LED, LCD, ブラウン管, PicoPad">
+  <meta name="description" content="LcdTap のファームウェアを更新し、空き端子を使って NTSC/PAL 信号を出力できるようにしました。アナログテレビを I2C/SPI ディスプレイとして使うことができます。">
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@shapoco" />
+  <meta property="og:url" content="https://blog.shapoco.net/2026/0729-use-crt-as-spi-display/" />
+  <meta property="og:title" content="LcdTap: アナログテレビを I2C/SPI ディスプレイとして使う | シャポログ" />
+  <meta property="og:description" content="LcdTap のファームウェアを更新し、空き端子を使って NTSC/PAL 信号を出力できるようにしました。アナログテレビを I2C/SPI ディスプレイとして使うことができます。" />
+  <meta property="og:image" content="https://blog.shapoco.net/2026/0729-use-crt-as-spi-display/cover.jpg" />
+
+  <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+  <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KJ53WNQ22G"></script>
+  <script>
+    var remoteHost = window.location.hostname;
+    if (remoteHost == "localhost") {
+      console.log(`Google Analytics disabled on: '${remoteHost}'`);
+    }
+    else {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-KJ53WNQ22G');
+    }
+  </script>
+
+  <link href="/style.css?0ec49c72" rel="stylesheet" type="text/css">
+  <script src="/style.js?14382bba"></script>
+
+  <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+  <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+  <title>LcdTap: アナログテレビを I2C/SPI ディスプレイとして使う | シャポログ</title>
+</head>
+
+<body>
+  <div id="container">
+    <div id="root_navi"></div>
+
+    <header class="article_header">
+      <h1><a href="/">シャポログ</a></h1>
+    </header>
+    <main>
+      <h2>LcdTap: アナログテレビを I2C/SPI ディスプレイとして使う</h2>
+
+      <div class="article_info_wrap">
+        <div class="article_info">
+          2026/07/29 |
+          <a href="https://github.com/shapoco/blog/tree/main/src/article/2026/0729-use-crt-as-spi-display/" target="_blank">記事のソース</a>
+        </div>
+
+        <div id="shpcstamp_wrap"></div>
+        <script async src="/stamp/v1/widget.js?3d92a021"></script>
+      </div>
+
+              <p>LcdTap のファームウェアを更新し、空き端子を使って NTSC/PAL 信号を出力できるようにしました。アナログテレビを I2C/SPI ディスプレイとして使うことができます。</p>
+        <p><img src="./cover.jpg" alt=""></p>
+        <h3>LcdTap とは</h3>
+        <p>
+          <a href="https://shapoco.github.io/lcdtap/" target="_blank">LcdTap</a> は、
+          SSD1306、ST7789、ILI9342 などの LCD コントローラや OLED コントローラの動作を
+          エミュレーションして、大きなディスプレイにミラーリングしたり、
+          キャプチャしたりできるようにするライブラリです。
+        </p>
+        <h3>コンポジットビデオ出力機能の追加</h3>
+        <p>
+          LcdTap のユースケースとしてレトロ (っぽい) デバイスのディスプレイを
+          大きなモニタにミラーリングするというのがあるので、
+          ブラウン管テレビのようなアナログディスプレイに出力するニーズもあるかも
+          ということで、コンポジットビデオ出力機能を追加しました。
+        </p>
+        <p>v202607270853 以降のファームウェアで利用可能です。</p>
+        <p><a href="https://github.com/shapoco/lcdtap/releases" target="_blank">リリースページ</a></p>
+        <h3>接続</h3>
+        <p>
+          LcdTap には 12 本の入力端子がありますが、SPI/I2C モードで使用されない
+          残りの端子にコンポジットビデオ出力端子を割り当てました。
+          2 つのモードがありますが、いずれもモニタ側に 75Ω の終端抵抗を期待します。
+        </p>
+        <h4>PWM モード</h4>
+        <p>
+          <a href="https://gist.github.com/lovyan03/b50333fa917371bd92b4b5f2e7a67e89" target="_blank">らびやん氏の rp2040_pwm_ntsc.ino</a> を
+          ベースにした PWM 出力モードは、後述の R-2R モードと比べるとやや低品質ですが、
+          抵抗とコンデンサを 1 つずつ追加するだけで NTSC/PAL 信号を出力できます。
+        </p>
+        <p>
+          BOOTH で販売中の基板を用いる場合は、各 GPIO に直列に挿入されている
+          ダンピング抵抗 47Ω の分を差し引いて 150Ω → 100Ω にします。
+        </p>
+        <p><img src="./pwm-schematics.png" alt=""></p>
+        <h4>R-2R モード</h4>
+        <p>
+          R-2R モードはより多くのピンと部品を使用しますが、PWM モードよりも
+          高品質で安定した映像を得られます。
+          R-2R モードは I2C モードと同時に使用することはできません (端子が重複するため)。
+        </p>
+        <p>
+          BOOTH で販売中の基板を用いる場合は、各 GPIO に直列に挿入されている
+          ダンピング抵抗 47Ω の分を差し引いて 200Ω → 150Ω にします。
+        </p>
+        <p><img src="./r2r-schematics.png" alt=""></p>
+        <h3>コンポジット出力への切り替え</h3>
+        <p>
+          コンフィグレーションで Output Interface を NTSC に切り替えます。
+          Video DAC Type は外部回路に応じて PWM または R-2R を選択します。
+        </p>
+        <p>
+          OSD でも切り替え可能ですが、出力がうまくいかないと画面が見えず
+          操作できなくなってしまうので、
+          <a href="https://shapoco.github.io/lcdtap/monitor/" target="_blank">ブラウザからの切り替え</a>を
+          お勧めします。
+        </p>
+        <p><img src="./configuration.png" alt=""></p>
+        <h3>動作の様子</h3>
+        <p>PWM モードでの動作の様子です (Arduboy、Xiamocon、PicoPad、M5Stack CoreS3)。</p>
+        <p><video controls><source src="https://www.shapoco.net/media/2026/20260729_lcdtap_composite_out.mp4" type="video/mp4" /></video></p>
+
+
+      <h3>関連記事</h3>
+      <ul id="related_articles">
+        <li>関連記事を読み込んでいます...</li>
+      </ul>
+      <script>
+        const my_tags = "LcdTap, I2C, SPI, NTSC, ST7789, SSD1306, LED, LCD, ブラウン管, PicoPad".split(',').map(s => s.trim()).filter(s => s != '');
+        const ul = document.querySelector('#related_articles');
+        fetch('/index.json?b112991e')
+          .then(response => response.json())
+          .then(json_obj => {
+            const articles = json_obj.articles.reverse();
+            var related_articles = [];
+            for (const a of articles) {
+              if (a.title == "LcdTap: アナログテレビを I2C/SPI ディスプレイとして使う") {
+                continue;
+              }
+              let score = 0;
+              let tags = [];
+              for (let my_pos = 0; my_pos < my_tags.length; my_pos++) {
+                const t = my_tags[my_pos];
+                const other_pos = a.tags.indexOf(t);
+                if (other_pos >= 0) {
+                  score += Math.ceil(10000 / (my_pos * other_pos + 1));
+                  tags.push(t);
+                  console.log(`related: ${a.title} (score=${score}) [${tags.join(', ')}]`);
+                }
+              }
+              if (score > 0) {
+                related_articles.push({ article: a, score: score, tags: tags });
+              }
+            }
+            related_articles.sort((a, b) => b.score - a.score);
+
+            if (related_articles.length > 0) {
+              ul.innerHTML = '';
+              for (const a of related_articles.slice(0, 5)) {
+                const li = document.createElement('li');
+                const a_tag = document.createElement('a');
+                a_tag.href = a.article.url;
+                a_tag.textContent = a.article.title;
+                a_tag.title = `共通タグ: ${a.tags.join(', ')}`;
+                li.appendChild(a_tag);
+                ul.appendChild(li);
+              }
+            }
+            else {
+              ul.innerHTML = '<li>関連記事はありません。</li>';
+            }
+          });
+      </script>
+
+    </main>
+    <footer>
+      <span class="nowrap">
+        Copyright &copy; <a href="https://x.com/shapoco/" target="_blank">Shapoco</a>,
+      </span>
+      <span class="nowrap">
+        Powered by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
+      </span>
+    </footer>
+  </div>
+</body>
+
+</html>

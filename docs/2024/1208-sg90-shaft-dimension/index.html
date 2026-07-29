@@ -110,7 +110,7 @@
       <script>
         const my_tags = "プリンタ, プリント, Misskey, Bluesky".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?014c677a')
+        fetch('/index.json?b112991e')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();

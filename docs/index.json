@@ -812,20 +812,68 @@
         "Bluesky",
         "Misskey"
       ]
+    },
+    {
+      "title": "LcdTap: アナログテレビを I2C/SPI ディスプレイとして使う",
+      "description": "LcdTap のファームウェアを更新し、空き端子を使って NTSC/PAL 信号を出力できるようにしました。アナログテレビを I2C/SPI ディスプレイとして使うことができます。",
+      "date": "2026/07/29",
+      "url": "/2026/0729-use-crt-as-spi-display",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2026/0729-use-crt-as-spi-display/cover.jpg",
+      "tags": [
+        "LcdTap",
+        "I2C",
+        "SPI",
+        "NTSC",
+        "ST7789",
+        "SSD1306",
+        "LED",
+        "LCD",
+        "ブラウン管",
+        "PicoPad"
+      ]
     }
   ],
   "tags": [
     {
       "name": "I2C",
-      "count": 7
+      "count": 8
     },
     {
       "name": "LCD",
-      "count": 11
+      "count": 12
     },
     {
       "name": "LED",
-      "count": 19
+      "count": 20
+    },
+    {
+      "name": "LcdTap",
+      "count": 6
+    },
+    {
+      "name": "SPI",
+      "count": 9
+    },
+    {
+      "name": "NTSC",
+      "count": 1
+    },
+    {
+      "name": "ST7789",
+      "count": 4
+    },
+    {
+      "name": "SSD1306",
+      "count": 4
+    },
+    {
+      "name": "ブラウン管",
+      "count": 1
+    },
+    {
+      "name": "PicoPad",
+      "count": 4
     },
     {
       "name": "Twitter",
@@ -840,20 +888,8 @@
       "count": 18
     },
     {
-      "name": "LcdTap",
-      "count": 5
-    },
-    {
-      "name": "SSD1306",
-      "count": 3
-    },
-    {
       "name": "ハンダ",
       "count": 4
-    },
-    {
-      "name": "SPI",
-      "count": 8
     },
     {
       "name": "Raspberry",
@@ -884,16 +920,8 @@
       "count": 1
     },
     {
-      "name": "ST7789",
-      "count": 3
-    },
-    {
       "name": "スマホ",
       "count": 5
-    },
-    {
-      "name": "PicoPad",
-      "count": 3
     },
     {
       "name": "マンデルブロ集合",
