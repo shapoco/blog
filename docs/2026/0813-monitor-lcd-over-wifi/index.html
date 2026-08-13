@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+  <meta name="keywords" content="シャポログ, LcdTap, Raspberry, ST7789, SSD1306, LED, LCD, スマホ">
+  <meta name="description" content="Raspberry Pi Pico 2 W を使って、通信機能の無い機器の液晶画面を WiFi 経由で監視できるようにする方法を紹介します。">
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@shapoco" />
+  <meta property="og:url" content="https://blog.shapoco.net/2026/0813-monitor-lcd-over-wifi/" />
+  <meta property="og:title" content="LcdTap: キャラクタ液晶やグラフィック液晶の表示内容を WiFi 経由でモニターする | シャポログ" />
+  <meta property="og:description" content="Raspberry Pi Pico 2 W を使って、通信機能の無い機器の液晶画面を WiFi 経由で監視できるようにする方法を紹介します。" />
+  <meta property="og:image" content="https://blog.shapoco.net/2026/0813-monitor-lcd-over-wifi/cover.jpg" />
+
+  <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+  <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KJ53WNQ22G"></script>
+  <script>
+    var remoteHost = window.location.hostname;
+    if (remoteHost == "localhost") {
+      console.log(`Google Analytics disabled on: '${remoteHost}'`);
+    }
+    else {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-KJ53WNQ22G');
+    }
+  </script>
+
+  <link href="/style.css?0ec49c72" rel="stylesheet" type="text/css">
+  <script src="/style.js?14382bba"></script>
+
+  <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+  <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+  <title>LcdTap: キャラクタ液晶やグラフィック液晶の表示内容を WiFi 経由でモニターする | シャポログ</title>
+</head>
+
+<body>
+  <div id="container">
+    <div id="root_navi"></div>
+
+    <header class="article_header">
+      <h1><a href="/">シャポログ</a></h1>
+    </header>
+    <main>
+      <h2>LcdTap: キャラクタ液晶やグラフィック液晶の表示内容を WiFi 経由でモニターする</h2>
+
+      <div class="article_info_wrap">
+        <div class="article_info">
+          2026/08/13 |
+          <a href="https://github.com/shapoco/blog/tree/main/src/article/2026/0813-monitor-lcd-over-wifi/" target="_blank">記事のソース</a>
+        </div>
+
+        <div id="shpcstamp_wrap"></div>
+        <script async src="/stamp/v1/widget.js?3d92a021"></script>
+      </div>
+
+              <p>
+          Raspberry Pi Pico 2 W を使って、通信機能の無い機器の液晶画面を
+          WiFi 経由で監視できるようにする方法を紹介します。
+        </p>
+        <p><img src="./cover.jpg" alt=""></p>
+        <h3>LcdTap とは</h3>
+        <p>
+          <a href="https://shapoco.github.io/lcdtap/" target="_blank">LcdTap</a> は、
+          SSD1306、ST7789、HD44780、KS0108 などの LCD コントローラや OLED コントローラの動作を
+          エミュレーションして、大きなディスプレイにミラーリングしたり、
+          キャプチャしたりできるようにするライブラリおよびアプリケーションです。
+        </p>
+        <p>
+          ラズピコ 2 で自作することも、
+          <a href="https://booth.pm/ja/search/LcdTap" target="_blank">BOOTH</a> で基板を購入することもできます。
+        </p>
+        <h3>LcdTap Pico2W-Remote</h3>
+        <p>
+          <a href="https://github.com/shapoco/lcdtap/tree/main/example/pico2w_remote" target="_blank">LcdTap Pico2W-Remote</a> は
+          従来の LcdTap Pico2-Universal から映像主力機能を削除する代わりに通信機能を追加したもので、
+          LCD の表示内容をスマホや PC のブラウザから WiFi 経由で監視できるようになります。
+          対象の装置自体の回路やソフトウェアを変更する必要がありません。
+        </p>
+        <p>
+          Pico2W-Remote は映像出力やスイッチ類を持たないので、最低限必要なのは Pico2W の基板だけです
+          (場合によってはレベルシフタやロジック IC が必要なことがあります)。
+        </p>
+        <h4>接続</h4>
+        <p>
+          ディスプレイ I/F のピンアサイン Pico2-Universal と同じです。
+          具体的な接続例は <a href="https://shapoco.github.io/lcdtap/#cases" target="_blank">LcdTap のイントロダクションページ</a> に掲載しています。
+        </p>
+        <p><img src="./pin-assign.png" alt=""></p>
+        <h4>レガシーな LCD との接続</h4>
+        <p>
+          HD44780 互換デバイス (SC1608、SC2004 など) や、KS0108 互換デバイス (SG12864 など) のような
+          レガシーな LCD については、以下のように接続します。
+          LCD 側が 5V I/F の場合はレベルシフタを挿入する必要があります。
+        </p>
+        <p><strong>SC1608 系のデバイスは、モノによって電源ピンのアサインが逆のことがあるので注意して下さい。</strong></p>
+        <p><img src="./conn-hd44780-ks0108.png" alt=""></p>
+        <p>
+          HD44780 互換デバイスの場合は、R/W 信号を CS 信号として使用することにより、
+          書き込みアクセスのみを LcdTap に認識させ、読み出しアクセスは無視します。
+        </p>
+        <p>
+          KS0108 互換デバイスの場合は、CS1 信号を GPIO0 (RST)、CS2 信号を GPIO1 (CS) に接続し、
+          R/W 信号の反転と E 信号の AND をとって GPIO2 (WR) に接続します。
+          R/W 信号が Low 固定 (読み出しアクセスが無い) の場合は
+          単に E 信号を WR に接続するだけで OK です。
+          実装面積を減らしたい場合は PNP トランジスタを使うこともできます。
+          抵抗値は適当に決めて下さい。1k ～ 4.7kΩ くらいにすれば動く気がします。
+        </p>
+        <p><img src="./rw-e-to-wr.png" alt=""></p>
+        <h4>ファームウェアの書き込みと WiFi 接続設定</h4>
+        <p>ファームウェアはビルド済みのものをファイラを使ってドラッグ＆ドロップするだけで書き込めます。</p>
+        <ol>
+          <li><a href="https://github.com/shapoco/lcdtap/releases" target="_blank">リリースページ</a> から v202608130949 以降の zip をダウンロードして展開します。</li>
+          <li>Pico2W の BOOTSEL ボタンを押しながら USB ケーブルで PC に接続します。</li>
+          <li>USB ドライブとして認識されるので、展開された <code>lcdtap_pico2w_remote.uf2</code> をドラッグ＆ドロップします。</li>
+          <li>書き込みが完了すると Pico2W がシリアルポートとして認識されます。</li>
+          <li><a href="https://shapoco.github.io/lcdtap/remote/" target="_blank">LcdTap Remote Setup</a> にアクセスして、SSID と Passphrase (パスワード) を入力し、「Apply & Reboot」をクリックします。</li>
+        </ol>
+        <p>
+          Pico2W の LED が点滅から点灯に変われば WiFi 設定は完了です。
+          設定はボード上の Flash ROM に保存されます。
+        </p>
+        <h4>使用方法</h4>
+        <p>ターゲットの装置を起動する前に設定を済ませて下さい。</p>
+        <ol>
+          <li>同じネットワーク内の端末から <code>http://lcdtap.local/</code> にアクセスすると、Pico2W-Remote の Web I/F が表示されます。</li>
+          <li>Config タブを開き、Presets からモニタする LCD の種類に近いものを選択して「Load」をクリックします。</li>
+          <li>Bus Interface のほか、必要に応じてパラメータをカスタマイズします。</li>
+          <li>「Apply」をクリックして設定が成功すると、Frame Buffer タブに移動します。</li>
+          <li>ターゲットの装置を起動し、「Capture」をクリックして画像を取得できることを確認します。</li>
+        </ol>
+        <p><img src="./ss.png" alt=""></p>
+        <p>Auto Reload を有効にすると、定期的に画像が更新されます。</p>
+
+
+      <h3>関連記事</h3>
+      <ul id="related_articles">
+        <li>関連記事を読み込んでいます...</li>
+      </ul>
+      <script>
+        const my_tags = "LcdTap, Raspberry, ST7789, SSD1306, LED, LCD, スマホ".split(',').map(s => s.trim()).filter(s => s != '');
+        const ul = document.querySelector('#related_articles');
+        fetch('/index.json?fe9b6aaa')
+          .then(response => response.json())
+          .then(json_obj => {
+            const articles = json_obj.articles.reverse();
+            var related_articles = [];
+            for (const a of articles) {
+              if (a.title == "LcdTap: キャラクタ液晶やグラフィック液晶の表示内容を WiFi 経由でモニターする") {
+                continue;
+              }
+              let score = 0;
+              let tags = [];
+              for (let my_pos = 0; my_pos < my_tags.length; my_pos++) {
+                const t = my_tags[my_pos];
+                const other_pos = a.tags.indexOf(t);
+                if (other_pos >= 0) {
+                  score += Math.ceil(10000 / (my_pos * other_pos + 1));
+                  tags.push(t);
+                  console.log(`related: ${a.title} (score=${score}) [${tags.join(', ')}]`);
+                }
+              }
+              if (score > 0) {
+                related_articles.push({ article: a, score: score, tags: tags });
+              }
+            }
+            related_articles.sort((a, b) => b.score - a.score);
+
+            if (related_articles.length > 0) {
+              ul.innerHTML = '';
+              for (const a of related_articles.slice(0, 5)) {
+                const li = document.createElement('li');
+                const a_tag = document.createElement('a');
+                a_tag.href = a.article.url;
+                a_tag.textContent = a.article.title;
+                a_tag.title = `共通タグ: ${a.tags.join(', ')}`;
+                li.appendChild(a_tag);
+                ul.appendChild(li);
+              }
+            }
+            else {
+              ul.innerHTML = '<li>関連記事はありません。</li>';
+            }
+          });
+      </script>
+
+    </main>
+    <footer>
+      <span class="nowrap">
+        Copyright &copy; <a href="https://x.com/shapoco/" target="_blank">Shapoco</a>,
+      </span>
+      <span class="nowrap">
+        Powered by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
+      </span>
+    </footer>
+  </div>
+</body>
+
+</html>

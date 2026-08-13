@@ -185,7 +185,7 @@
       <script>
         const my_tags = "LcdTap, Tab5, SSD1306, ST7789, LED, LCD, I2C, SPI, Twitter, Bluesky, Misskey".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?905c0008')
+        fetch('/index.json?fe9b6aaa')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();

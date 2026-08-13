@@ -835,6 +835,23 @@
         "Misskey",
         "Bluesky"
       ]
+    },
+    {
+      "title": "LcdTap: キャラクタ液晶やグラフィック液晶の表示内容を WiFi 経由でモニターする",
+      "description": "Raspberry Pi Pico 2 W を使って、通信機能の無い機器の液晶画面を WiFi 経由で監視できるようにする方法を紹介します。",
+      "date": "2026/08/13",
+      "url": "/2026/0813-monitor-lcd-over-wifi",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2026/0813-monitor-lcd-over-wifi/cover.jpg",
+      "tags": [
+        "LcdTap",
+        "Raspberry",
+        "ST7789",
+        "SSD1306",
+        "LED",
+        "LCD",
+        "スマホ"
+      ]
     }
   ],
   "tags": [
@@ -844,15 +861,15 @@
     },
     {
       "name": "LCD",
-      "count": 12
+      "count": 13
     },
     {
       "name": "LED",
-      "count": 20
+      "count": 21
     },
     {
       "name": "LcdTap",
-      "count": 6
+      "count": 7
     },
     {
       "name": "SPI",
@@ -864,11 +881,11 @@
     },
     {
       "name": "ST7789",
-      "count": 4
+      "count": 5
     },
     {
       "name": "SSD1306",
-      "count": 4
+      "count": 5
     },
     {
       "name": "ブラウン管",
@@ -896,7 +913,7 @@
     },
     {
       "name": "Raspberry",
-      "count": 11
+      "count": 12
     },
     {
       "name": "AVR",
@@ -924,7 +941,7 @@
     },
     {
       "name": "スマホ",
-      "count": 5
+      "count": 6
     },
     {
       "name": "マンデルブロ集合",
