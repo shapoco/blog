@@ -83,7 +83,7 @@
       <script>
         const my_tags = "備忘録".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?fe9b6aaa')
+        fetch('/index.json?34210c08')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();

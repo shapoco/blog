@@ -850,7 +850,10 @@
         "SSD1306",
         "LED",
         "LCD",
-        "スマホ"
+        "スマホ",
+        "Twitter",
+        "Misskey",
+        "Bluesky"
       ]
     }
   ],
@@ -897,15 +900,15 @@
     },
     {
       "name": "Twitter",
-      "count": 16
+      "count": 17
     },
     {
       "name": "Misskey",
-      "count": 19
+      "count": 20
     },
     {
       "name": "Bluesky",
-      "count": 19
+      "count": 20
     },
     {
       "name": "ハンダ",

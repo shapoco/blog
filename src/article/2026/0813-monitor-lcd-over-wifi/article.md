@@ -80,3 +80,10 @@ Pico2W の LED が点滅から点灯に変われば WiFi 設定は完了です�
 ![](./ss.png)
 
 Auto Reload を有効にすると、定期的に画像が更新されます。
+
+## SNS 投稿
+
+- [X (Twitter)](https://x.com/shapoco/status/2087805538977652856)
+- [Misskey.io](https://misskey.io/notes/apurrlnqy53t08kp)
+- [Bluesky](https://bsky.app/profile/shapoco.net/post/3msx54roxik2u)
+- [mixi2](https://mixi.social/@shapoco/posts/246c4e92-f4c2-41b4-b554-fcf8648aa0f2)

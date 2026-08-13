@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-  <meta name="keywords" content="シャポログ, LcdTap, Raspberry, ST7789, SSD1306, LED, LCD, スマホ">
+  <meta name="keywords" content="シャポログ, LcdTap, Raspberry, ST7789, SSD1306, LED, LCD, スマホ, Twitter, Misskey, Bluesky">
   <meta name="description" content="Raspberry Pi Pico 2 W を使って、通信機能の無い機器の液晶画面を WiFi 経由で監視できるようにする方法を紹介します。">
 
   <meta name="twitter:card" content="summary_large_image" />
@@ -141,6 +141,13 @@
         </ol>
         <p><img src="./ss.png" alt=""></p>
         <p>Auto Reload を有効にすると、定期的に画像が更新されます。</p>
+        <h3>SNS 投稿</h3>
+        <ul>
+          <li><a href="https://x.com/shapoco/status/2087805538977652856" target="_blank">X (Twitter)</a></li>
+          <li><a href="https://misskey.io/notes/apurrlnqy53t08kp" target="_blank">Misskey.io</a></li>
+          <li><a href="https://bsky.app/profile/shapoco.net/post/3msx54roxik2u" target="_blank">Bluesky</a></li>
+          <li><a href="https://mixi.social/@shapoco/posts/246c4e92-f4c2-41b4-b554-fcf8648aa0f2" target="_blank">mixi2</a></li>
+        </ul>
 
 
       <h3>関連記事</h3>
@@ -148,9 +155,9 @@
         <li>関連記事を読み込んでいます...</li>
       </ul>
       <script>
-        const my_tags = "LcdTap, Raspberry, ST7789, SSD1306, LED, LCD, スマホ".split(',').map(s => s.trim()).filter(s => s != '');
+        const my_tags = "LcdTap, Raspberry, ST7789, SSD1306, LED, LCD, スマホ, Twitter, Misskey, Bluesky".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?fe9b6aaa')
+        fetch('/index.json?34210c08')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();
