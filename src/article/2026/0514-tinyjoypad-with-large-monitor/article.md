@@ -8,6 +8,9 @@ PC 用モニタやテレビなどの大画面で遊ぶ方法を紹介します�
 ![](./cover.jpg)
 
 > [!NOTE]
+> SSD1306 専用のファームウェアは廃止されたので、ユニバーサル版 (Pico2-Universal) 用の手順に修正しました。
+
+> [!NOTE]
 > Arduboy の SPI 信号引き出しについて、当初基板のレジストを削って銅箔を露出させる手順を掲載していましたが、基板裏のバッテリーの下に TP があることを教えて頂きました (thx: [chamekan さん](https://x.com/chame/status/2056250472034627944))。
 
 ## TinyJoyPad とは
@@ -22,6 +25,9 @@ PC 用モニタやテレビなどの大画面で遊ぶ方法を紹介します�
 
 [LcdTap](https://shapoco.github.io/lcdtap/) は、Raspberry Pi Pico2 を使って、I2C 接続や SPI 接続の LCD モジュールの表示内容を DVI で出力して大きなディスプレイにミラー表示したりキャプチャしたりできるツールです。
 
+ラズピコ 2 で自作することも、
+[BOOTH](https://booth.pm/ja/search/LcdTap) で基板を購入することもできます。
+
 ## 用意する物
 
 - TinyJoyPad
@@ -34,15 +40,15 @@ PC 用モニタやテレビなどの大画面で遊ぶ方法を紹介します�
 
     - 公式版の価格は高騰していますが、クローンが Amazon や AliExpress で手に入ります。
 
-- [Raspberry Pi Pico2](https://www.switch-science.com/products/9809)
-- [Pico-DVI-Sock](https://www.switch-science.com/products/7431)
-- [16 ポジション バイナリーロータリースイッチ](https://akizukidenshi.com/catalog/g/g102276/)
+- LcdTap (自作する場合)
 
-    - 画面の回転方向を切り替えるために使用します。普通のスライドスイッチやジャンパピンで代用も可。
+    - [Raspberry Pi Pico2](https://www.switch-science.com/products/9809)
+    - [Pico-DVI-Sock](https://www.switch-science.com/products/7431)
+    - ~~16 ポジション バイナリーロータリースイッチ~~
+    - タクトスイッチ x5
+    - スライドスイッチ x1
+    - [抵抗 10kΩ](https://akizukidenshi.com/catalog/g/g116103/) x2
 
-- [抵抗 10kΩ](https://akizukidenshi.com/catalog/g/g116103/) x2
-- ポリウレタン線などの細い導線 (Arduboy 用)
-- ビニールテープやカプトンテープなどの絶縁用テープ (Arduboy 用)
 - TypeA-MicroB USB ケーブル
 - HDMI ケーブル
 - 1280x720@30Hz または 640x480@60Hz の DVI-D 信号を入力可能なディスプレイ
@@ -54,7 +60,7 @@ PC 用モニタやテレビなどの大画面で遊ぶ方法を紹介します�
 Pico-DVI-Sock を Pico2 にハンダ付けし、その他の部品を下図のように接続します。
 
 - Pico2 と TinyJoyPad の間はできるだけ短距離で配線してください。
-- SDA/SCL は TinyJoyPad の OLED から引き出してもかまいません。
+- SDA/SCL は TinyJoyPad の OLED の端子から引き出してもかまいません。
 - Pico2 には GND 端子がいっぱいありますが、どれに繋いでもかまいません。
 - Pico2 から出ている 3.3V で TinyJoyPad に給電することもできますが、その場合は TinyJoyPad の電源が Pico2 へ逆流しないよう、ショットキーバリアダイオード (例: [11EQS03L](https://akizukidenshi.com/catalog/g/g108997/)) を挿入してください。
 - SDA/SCL を 10kΩ でプルアップすれば、TinyJoyPad 側の OLED を外しても動作します。
@@ -90,29 +96,26 @@ Pico-DVI-Sock を Pico2 にハンダ付けし、その他の部品を下図の�
 
 ![](./arduboy_schematics.png)
 
-## ブレッドボードに組み立てた例
-
-![](./breadboard.jpg)
-
 ## Pico2 へのファームウェアの書き込み
 
 1. [リリースページ](https://github.com/shapoco/lcdtap/releases/)からファームウェア (lcdtap_vYYYYMMDD.zip) をダウンロードします。
-2. zip ファイルを展開して lcdtap_pico2_ssd1306.uf2 を取り出します。
+2. zip ファイルを展開して lcdtap_pico2_universal.uf2 を取り出します。
 3. Pico2 の BOOTSEL ボタンを押しながら USB ケーブルで PC に接続します (マスストレージデバイスとして認識されます)。
-4. マスストレージデバイスに lcdtap_pico2_ssd1306.uf2 をコピーします。
+4. マスストレージデバイスに lcdtap_pico2_universal.uf2 をコピーします。
 
 書き込みが成功すると、Pico2 の LCD が点滅し、コネクタから DVI-D 信号が出力されます。
 
 ## 使用方法
 
 1. 先に Pico2 の電源を入れる。
-2. 次に TinyJoyPad / Arduboy の電源を入れる。
-3. モニタに画像が表示されたら、ロータリースイッチで画面の向きを合わせる。
+2. ↵ キーを押すと OSD メニューが表示されるので、Presets から「TinyJoyPad」または「Arduboy」を選択する。
+3. TinyJoyPad / Arduboy の設定がロードされた状態になるので、↓ キーで一番下の「Apply」を選択して ↵ キーを押す。
+4. 次に TinyJoyPad / Arduboy の電源を入れる。
 
-GP20 (CFG_OUT_720P) は DVI 映像出力の解像度 (アスペクト比) を指定します。もしモニタに映らない場合はここを切り替えて Pico2 をリセット (USB ケーブルを抜き差し) してみてください。
+GP20 (CFG_OUT_RESO_SEL) は DVI 映像出力の解像度 (アスペクト比) を指定します。もしモニタに映らない場合はここを切り替えて Pico2 をリセット (USB ケーブルを抜き差し) してみてください。
 
-- 接続時: 1280x720@30Hz (16:9)
-- 切断時: 640x480@60Hz (4:3)
+- スイッチ OFF: 640x480@60Hz (4:3)
+- スイッチ ON: 1280x720@30Hz (16:9)
 
 ## 動作の様子
 
