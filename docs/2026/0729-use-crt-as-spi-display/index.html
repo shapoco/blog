@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-  <meta name="keywords" content="シャポログ, LcdTap, I2C, SPI, NTSC, ST7789, SSD1306, LED, LCD, ブラウン管, PicoPad, Twitter, Misskey, Bluesky">
+  <meta name="keywords" content="シャポログ, I2C, LcdTap, SPI, NTSC, LCD, LED, SSD1306, ST7789, ブラウン管, PicoPad, Twitter, Misskey, Bluesky">
   <meta name="description" content="LcdTap のファームウェアを更新し、空き端子を使って NTSC/PAL 信号を出力できるようにしました。アナログテレビを I2C/SPI ディスプレイとして使うことができます。">
 
   <meta name="twitter:card" content="summary_large_image" />
@@ -141,9 +141,9 @@
         <li>関連記事を読み込んでいます...</li>
       </ul>
       <script>
-        const my_tags = "LcdTap, I2C, SPI, NTSC, ST7789, SSD1306, LED, LCD, ブラウン管, PicoPad, Twitter, Misskey, Bluesky".split(',').map(s => s.trim()).filter(s => s != '');
+        const my_tags = "I2C, LcdTap, SPI, NTSC, LCD, LED, SSD1306, ST7789, ブラウン管, PicoPad, Twitter, Misskey, Bluesky".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?34210c08')
+        fetch('/index.json?4a81c541')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();

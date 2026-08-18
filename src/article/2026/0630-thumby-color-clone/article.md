@@ -1,4 +1,4 @@
-# Thumby Color のクローンを Waveshare RP2350-Plus で作る
+# Thumby Color のクローンを Waveshare RP2350-Plus で自作する
 
 Waveshare RP2350-Plus と ST7735 液晶を使って Thumby Color のクローンを作ってみました。
 

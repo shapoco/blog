@@ -524,12 +524,12 @@
       "tags": [
         "静電気",
         "高電圧",
-        "LED",
         "LCD",
+        "LED",
         "I2C",
-        "Twitter",
         "Bluesky",
-        "Misskey"
+        "Misskey",
+        "Twitter"
       ]
     },
     {
@@ -540,12 +540,12 @@
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2025/0824-image2array/cover.png",
       "tags": [
-        "SSD1306",
-        "LED",
         "LCD",
-        "Twitter",
+        "LED",
+        "SSD1306",
         "Bluesky",
-        "Misskey"
+        "Misskey",
+        "Twitter"
       ]
     },
     {
@@ -650,9 +650,9 @@
       "tags": [
         "PicoPad",
         "マンデルブロ集合",
-        "Raspberry",
         "RP2040",
         "RP2350",
+        "Raspberry",
         "SPI",
         "LED"
       ]
@@ -711,9 +711,9 @@
         "ハンダ",
         "SPI",
         "LED",
-        "Raspberry",
         "I2C",
         "LCD",
+        "Raspberry",
         "AVR",
         "Twitter",
         "Bluesky",
@@ -731,8 +731,8 @@
         "LcdTap",
         "Raspberry",
         "I2C",
-        "SPI",
         "LCD",
+        "SPI",
         "ハンダ",
         "Twitter",
         "Bluesky",
@@ -747,8 +747,8 @@
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2026/0610-smd-led-orientation-scope/cover.jpg",
       "tags": [
-        "ハンダ",
         "LED",
+        "ハンダ",
         "プリント",
         "Twitter",
         "Misskey",
@@ -765,17 +765,17 @@
       "tags": [
         "LcdTap",
         "LED",
-        "Raspberry",
         "I2C",
-        "SPI",
         "LCD",
+        "Raspberry",
+        "SPI",
         "Twitter",
         "Bluesky",
         "Misskey"
       ]
     },
     {
-      "title": "Thumby Color のクローンを Waveshare RP2350-Plus で作る",
+      "title": "Thumby Color のクローンを Waveshare RP2350-Plus で自作する",
       "description": "Waveshare RP2350-Plus と ST7735 液晶を使って Thumby Color のクローンを作ってみました。",
       "date": "2026/06/30",
       "url": "/2026/0630-thumby-color-clone",
@@ -783,6 +783,7 @@
       "card_image_url": "/2026/0630-thumby-color-clone/cover.jpg",
       "tags": [
         "RP2350",
+        "Thumby",
         "LED",
         "LcdTap",
         "Raspberry",
@@ -801,11 +802,11 @@
       "card_image_url": "/2026/0717-tab5-as-ssd1306/cover.jpg",
       "tags": [
         "LcdTap",
-        "Tab5",
         "SSD1306",
-        "ST7789",
-        "LED",
+        "Tab5",
         "LCD",
+        "LED",
+        "ST7789",
         "I2C",
         "SPI",
         "Twitter",
@@ -821,14 +822,14 @@
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2026/0729-use-crt-as-spi-display/cover.jpg",
       "tags": [
-        "LcdTap",
         "I2C",
+        "LcdTap",
         "SPI",
         "NTSC",
-        "ST7789",
-        "SSD1306",
-        "LED",
         "LCD",
+        "LED",
+        "SSD1306",
+        "ST7789",
         "ブラウン管",
         "PicoPad",
         "Twitter",
@@ -846,10 +847,10 @@
       "tags": [
         "LcdTap",
         "Raspberry",
-        "ST7789",
-        "SSD1306",
-        "LED",
         "LCD",
+        "LED",
+        "SSD1306",
+        "ST7789",
         "スマホ",
         "Twitter",
         "Misskey",
@@ -883,11 +884,11 @@
       "count": 1
     },
     {
-      "name": "ST7789",
+      "name": "SSD1306",
       "count": 5
     },
     {
-      "name": "SSD1306",
+      "name": "ST7789",
       "count": 5
     },
     {
@@ -937,6 +938,10 @@
     {
       "name": "RP2350",
       "count": 5
+    },
+    {
+      "name": "Thumby",
+      "count": 1
     },
     {
       "name": "Tab5",

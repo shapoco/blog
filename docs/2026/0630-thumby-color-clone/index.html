@@ -5,13 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-  <meta name="keywords" content="シャポログ, RP2350, LED, LcdTap, Raspberry, LCD, Twitter, Bluesky, Misskey">
+  <meta name="keywords" content="シャポログ, RP2350, Thumby, LED, LcdTap, Raspberry, LCD, Twitter, Bluesky, Misskey">
   <meta name="description" content="Waveshare RP2350-Plus と ST7735 液晶を使って Thumby Color のクローンを作ってみました。">
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@shapoco" />
   <meta property="og:url" content="https://blog.shapoco.net/2026/0630-thumby-color-clone/" />
-  <meta property="og:title" content="Thumby Color のクローンを Waveshare RP2350-Plus で作る | シャポログ" />
+  <meta property="og:title" content="Thumby Color のクローンを Waveshare RP2350-Plus で自作する | シャポログ" />
   <meta property="og:description" content="Waveshare RP2350-Plus と ST7735 液晶を使って Thumby Color のクローンを作ってみました。" />
   <meta property="og:image" content="https://blog.shapoco.net/2026/0630-thumby-color-clone/cover.jpg" />
 
@@ -40,7 +40,7 @@
   <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
   <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
 
-  <title>Thumby Color のクローンを Waveshare RP2350-Plus で作る | シャポログ</title>
+  <title>Thumby Color のクローンを Waveshare RP2350-Plus で自作する | シャポログ</title>
 </head>
 
 <body>
@@ -51,7 +51,7 @@
       <h1><a href="/">シャポログ</a></h1>
     </header>
     <main>
-      <h2>Thumby Color のクローンを Waveshare RP2350-Plus で作る</h2>
+      <h2>Thumby Color のクローンを Waveshare RP2350-Plus で自作する</h2>
 
       <div class="article_info_wrap">
         <div class="article_info">
@@ -515,15 +515,15 @@ cp -r mp-thumby/TinyCircuits-Tiny-Game-Engine/filesystem .</pre>
         <li>関連記事を読み込んでいます...</li>
       </ul>
       <script>
-        const my_tags = "RP2350, LED, LcdTap, Raspberry, LCD, Twitter, Bluesky, Misskey".split(',').map(s => s.trim()).filter(s => s != '');
+        const my_tags = "RP2350, Thumby, LED, LcdTap, Raspberry, LCD, Twitter, Bluesky, Misskey".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?34210c08')
+        fetch('/index.json?4a81c541')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();
             var related_articles = [];
             for (const a of articles) {
-              if (a.title == "Thumby Color のクローンを Waveshare RP2350-Plus で作る") {
+              if (a.title == "Thumby Color のクローンを Waveshare RP2350-Plus で自作する") {
                 continue;
               }
               let score = 0;
