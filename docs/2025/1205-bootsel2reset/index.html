@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-  <meta name="keywords" content="シャポログ, Raspberry, SPI, RP2040, RP2350, AVR, PicoPad">
+  <meta name="keywords" content="シャポログ, Raspberry, SPI, RP2040, RP2350, AVR, 自作, PicoPad">
   <meta name="description" content="Raspberry Pi Pico に搭載されている BOOTSEL スイッチを使って リセットを行えるようにする MOD チップ的なものを作ってみました。">
 
   <meta name="twitter:card" content="summary_large_image" />
@@ -152,9 +152,9 @@
         <li>関連記事を読み込んでいます...</li>
       </ul>
       <script>
-        const my_tags = "Raspberry, SPI, RP2040, RP2350, AVR, PicoPad".split(',').map(s => s.trim()).filter(s => s != '');
+        const my_tags = "Raspberry, SPI, RP2040, RP2350, AVR, 自作, PicoPad".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?4a81c541')
+        fetch('/index.json?4c342271')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();

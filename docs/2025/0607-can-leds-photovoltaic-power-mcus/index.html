@@ -410,7 +410,7 @@ int main() {
       <script>
         const my_tags = "LED, 静電気, 高電圧, 放電, プリント, Raspberry".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?4a81c541')
+        fetch('/index.json?4c342271')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();

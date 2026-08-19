@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-  <meta name="keywords" content="シャポログ, RP2350, Thumby, LED, LcdTap, Raspberry, LCD, Twitter, Bluesky, Misskey">
+  <meta name="keywords" content="シャポログ, RP2350, Thumby, Waveshare, 自作, ST7735, LED, LcdTap, Raspberry, LCD, Twitter, Bluesky, Misskey">
   <meta name="description" content="Waveshare RP2350-Plus と ST7735 液晶を使って Thumby Color のクローンを作ってみました。">
 
   <meta name="twitter:card" content="summary_large_image" />
@@ -64,6 +64,7 @@
       </div>
 
               <p>Waveshare RP2350-Plus と ST7735 液晶を使って Thumby Color のクローンを作ってみました。</p>
+        <blockquote class="note">2026/08/19: Waveshare RP2350-Plus のリンク先が 4MB 版になっていたのを修正しました。</blockquote>
         <h3>Thumby Color とは</h3>
         <p>
           <a href="https://color.thumby.us/" target="_blank">Thumby Color</a> は、TinyCircuits 社が販売している小型ゲーム機です。
@@ -337,8 +338,8 @@
         <p>
           Raspberry Pi Pico 2 は 4 MB しか搭載していないので使用できません。
           16 MB の Flash ROM を搭載した
-          <a href="https://www.switch-science.com/products/10130" target="_blank">Waveshare RP2350-Plus</a>
-          を使うことにします。
+          <a href="https://www.switch-science.com/products/10221" target="_blank">Waveshare RP2350-Plus (16MB 版)</a>
+          を使うことにします (4MB 版と間違えないように注意してください)。
         </p>
         <h4>LCD</h4>
         <p>
@@ -371,7 +372,7 @@
         <h3>組み立て</h3>
         <h4>部品</h4>
         <ul>
-          <li><a href="https://www.switch-science.com/products/10130" target="_blank">Waveshare RP2350-Plus</a></li>
+          <li><a href="https://www.switch-science.com/products/10221" target="_blank">Waveshare RP2350-Plus (16MB 版)</a></li>
           <li><a href="https://www.amazon.co.jp/dp/B07QC62SJX/" target="_blank">1.44 インチ ST7735 液晶</a></li>
           <li>RTC BM8563: 今回は使用しませんでした。<a href="https://www.switch-science.com/products/7170" target="_blank">スイッチサイエンスにあるモジュール</a> などが使えそうです。</li>
           <li>7x <a href="https://akizukidenshi.com/catalog/goods/search.aspx?search=x&keyword=%E3%82%BF%E3%82%AF%E3%83%88%E3%82%B9%E3%82%A4%E3%83%83%E3%83%81&search=search" target="_blank">適当なタクトスイッチ</a></li>
@@ -515,9 +516,9 @@ cp -r mp-thumby/TinyCircuits-Tiny-Game-Engine/filesystem .</pre>
         <li>関連記事を読み込んでいます...</li>
       </ul>
       <script>
-        const my_tags = "RP2350, Thumby, LED, LcdTap, Raspberry, LCD, Twitter, Bluesky, Misskey".split(',').map(s => s.trim()).filter(s => s != '');
+        const my_tags = "RP2350, Thumby, Waveshare, 自作, ST7735, LED, LcdTap, Raspberry, LCD, Twitter, Bluesky, Misskey".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?4a81c541')
+        fetch('/index.json?4c342271')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();

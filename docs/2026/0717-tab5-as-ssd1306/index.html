@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-  <meta name="keywords" content="シャポログ, LcdTap, SSD1306, Tab5, LCD, LED, ST7789, I2C, SPI, Twitter, Bluesky, Misskey">
+  <meta name="keywords" content="シャポログ, LcdTap, SSD1306, Tab5, ILI9342, LCD, LED, ST7789, I2C, SPI, Twitter, Bluesky, Misskey">
   <meta name="description" content="LcdTap を M5 Tab5 に組み込んで Tab5 を巨大な SSD1306 として使えるようにしてみました。">
 
   <meta name="twitter:card" content="summary_large_image" />
@@ -183,9 +183,9 @@
         <li>関連記事を読み込んでいます...</li>
       </ul>
       <script>
-        const my_tags = "LcdTap, SSD1306, Tab5, LCD, LED, ST7789, I2C, SPI, Twitter, Bluesky, Misskey".split(',').map(s => s.trim()).filter(s => s != '');
+        const my_tags = "LcdTap, SSD1306, Tab5, ILI9342, LCD, LED, ST7789, I2C, SPI, Twitter, Bluesky, Misskey".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?4a81c541')
+        fetch('/index.json?4c342271')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();

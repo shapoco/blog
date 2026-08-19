@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-  <meta name="keywords" content="シャポログ, 放電">
+  <meta name="keywords" content="シャポログ, 自作, 放電">
   <meta name="description" content="以前自作した ZVS インバータに放電制御用の外部入力端子を追加し、そこにマイコンから矩形波を入力して音楽を演奏してみました。">
 
   <meta name="twitter:card" content="summary_large_image" />
@@ -76,9 +76,9 @@
         <li>関連記事を読み込んでいます...</li>
       </ul>
       <script>
-        const my_tags = "放電".split(',').map(s => s.trim()).filter(s => s != '');
+        const my_tags = "自作, 放電".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?4a81c541')
+        fetch('/index.json?4c342271')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();

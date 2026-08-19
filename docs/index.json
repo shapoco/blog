@@ -69,6 +69,7 @@
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2020/1010-hv-yobikomi-kun/cover.jpg",
       "tags": [
+        "自作",
         "放電"
       ]
     },
@@ -200,6 +201,7 @@
       "card_image_url": "/2023/0813-fdm-3d-printed-hv-trans/cover.jpg",
       "tags": [
         "プリンタ",
+        "自作",
         "備忘録",
         "プリント"
       ]
@@ -227,6 +229,7 @@
       "tags": [
         "スマホ",
         "高電圧",
+        "自作",
         "放電"
       ]
     },
@@ -273,7 +276,8 @@
       "twitter_card_size": "summary",
       "card_image_url": "/2024/0206-bskycustomfeed/thumbnail.png",
       "tags": [
-        "Bluesky"
+        "Bluesky",
+        "自作"
       ]
     },
     {
@@ -366,6 +370,7 @@
       "twitter_card_size": "summary",
       "card_image_url": "/2024/1208-sg90-shaft-dimension/thumbnail.jpg",
       "tags": [
+        "自作",
         "プリンタ",
         "プリント",
         "Misskey",
@@ -556,6 +561,7 @@
       "twitter_card_size": "summary",
       "card_image_url": "/2025/0901-ili9488-8color-wired-behavior/thumbnail.jpg",
       "tags": [
+        "ILI9488",
         "LCD",
         "SPI",
         "ST7789"
@@ -604,7 +610,7 @@
       ]
     },
     {
-      "title": "通販で部品を集めて「PicoPad」の互換機を作る",
+      "title": "通販で部品を集めて「PicoPad」の互換機を自作する",
       "description": "オープンソースのゲーミングコンソール「PicoPad」の互換機を 通販で手に入る部品で作ってみました。",
       "date": "2025/11/26",
       "url": "/2025/1126-picopad",
@@ -612,10 +618,12 @@
       "card_image_url": "/2025/1126-picopad/cover.jpg",
       "tags": [
         "PicoPad",
+        "自作",
         "Raspberry",
         "RP2350",
         "LCD",
         "ST7789",
+        "Waveshare",
         "SPI",
         "LED",
         "プリント",
@@ -637,6 +645,7 @@
         "RP2040",
         "RP2350",
         "AVR",
+        "自作",
         "PicoPad"
       ]
     },
@@ -666,6 +675,7 @@
       "card_image_url": "/2025/1229-pin-socket-removal/cover.png",
       "tags": [
         "LCD",
+        "Waveshare",
         "Raspberry",
         "Twitter",
         "Bluesky",
@@ -714,6 +724,7 @@
         "I2C",
         "LCD",
         "Raspberry",
+        "自作",
         "AVR",
         "Twitter",
         "Bluesky",
@@ -784,6 +795,9 @@
       "tags": [
         "RP2350",
         "Thumby",
+        "Waveshare",
+        "自作",
+        "ST7735",
         "LED",
         "LcdTap",
         "Raspberry",
@@ -804,6 +818,7 @@
         "LcdTap",
         "SSD1306",
         "Tab5",
+        "ILI9342",
         "LCD",
         "LED",
         "ST7789",
@@ -826,10 +841,12 @@
         "LcdTap",
         "SPI",
         "NTSC",
+        "ILI9342",
         "LCD",
         "LED",
         "SSD1306",
         "ST7789",
+        "自作",
         "ブラウン管",
         "PicoPad",
         "Twitter",
@@ -851,6 +868,7 @@
         "LED",
         "SSD1306",
         "ST7789",
+        "自作",
         "スマホ",
         "Twitter",
         "Misskey",
@@ -884,12 +902,20 @@
       "count": 1
     },
     {
+      "name": "ILI9342",
+      "count": 2
+    },
+    {
       "name": "SSD1306",
       "count": 5
     },
     {
       "name": "ST7789",
       "count": 5
+    },
+    {
+      "name": "自作",
+      "count": 11
     },
     {
       "name": "ブラウン管",
@@ -944,12 +970,24 @@
       "count": 1
     },
     {
+      "name": "Waveshare",
+      "count": 3
+    },
+    {
+      "name": "ST7735",
+      "count": 1
+    },
+    {
       "name": "Tab5",
       "count": 1
     },
     {
       "name": "スマホ",
       "count": 6
+    },
+    {
+      "name": "ILI9488",
+      "count": 1
     },
     {
       "name": "マンデルブロ集合",

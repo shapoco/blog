@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-  <meta name="keywords" content="シャポログ, Bluesky">
+  <meta name="keywords" content="シャポログ, Bluesky, 自作">
   <meta name="description" content="イラストや写真等を公開するアカウントの場合、それしか投稿してなければ 「メディア欄を見て」でいいかと思いますが、それ以外の日常の写真や ゲームのスクリーンショットなども投稿する場合、自作品だけを まとめたページが欲しくなります。Bluesky にはいわゆるハッシュタグは ありませんが(※1)、「カスタムフィード」を使えば、特定のキーワードを 含むポストをまとめることができます。">
 
   <meta name="twitter:card" content="summary" />
@@ -239,9 +239,9 @@
         <li>関連記事を読み込んでいます...</li>
       </ul>
       <script>
-        const my_tags = "Bluesky".split(',').map(s => s.trim()).filter(s => s != '');
+        const my_tags = "Bluesky, 自作".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?4a81c541')
+        fetch('/index.json?4c342271')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();

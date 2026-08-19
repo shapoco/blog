@@ -2,6 +2,9 @@ AVR
 Bluesky
 ESP32
 I2C
+ILI9488
+ILI9341
+ILI9342
 LCD
 LED
 LcdTap
@@ -14,12 +17,15 @@ RP2350
 Raspberry
 SPI
 SSD1306
+ST7735
 ST7789
 Tab5
 Thumby
 Twitter
+Waveshare
 コイル
 高電圧
+自作
 スマホ
 静電気
 ハンダ

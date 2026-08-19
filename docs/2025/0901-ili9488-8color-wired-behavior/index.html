@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-  <meta name="keywords" content="シャポログ, LCD, SPI, ST7789">
+  <meta name="keywords" content="シャポログ, ILI9488, LCD, SPI, ST7789">
   <meta name="description" content="AliExpress と Amazon で 480x320px の LCD モジュールを買ったのですが、ILI9488 の 8 色モードを試そうとしたところ謎の挙動に悩まされたので記録として残しておきます。">
 
   <meta name="twitter:card" content="summary" />
@@ -121,9 +121,9 @@
         <li>関連記事を読み込んでいます...</li>
       </ul>
       <script>
-        const my_tags = "LCD, SPI, ST7789".split(',').map(s => s.trim()).filter(s => s != '');
+        const my_tags = "ILI9488, LCD, SPI, ST7789".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?4a81c541')
+        fetch('/index.json?4c342271')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();

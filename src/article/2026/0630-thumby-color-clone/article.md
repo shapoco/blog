@@ -2,6 +2,9 @@
 
 Waveshare RP2350-Plus と ST7735 液晶を使って Thumby Color のクローンを作ってみました。
 
+> [!NOTE]
+> 2026/08/19: Waveshare RP2350-Plus のリンク先が 4MB 版になっていたのを修正しました。
+
 ## Thumby Color とは
 
 [Thumby Color](https://color.thumby.us/) は、TinyCircuits 社が販売している小型ゲーム機です。
@@ -108,8 +111,8 @@ Thumby Color は 16 MB の Flash ROM を搭載しています。
 
 Raspberry Pi Pico 2 は 4 MB しか搭載していないので使用できません。
 16 MB の Flash ROM を搭載した
-[Waveshare RP2350-Plus](https://www.switch-science.com/products/10130)
-を使うことにします。
+[Waveshare RP2350-Plus (16MB 版)](https://www.switch-science.com/products/10221)
+を使うことにします (4MB 版と間違えないように注意してください)。
 
 ### LCD
 
@@ -151,7 +154,7 @@ Thumby Color は RTC を搭載していますが、無くても動くような�
 
 ### 部品
 
-- [Waveshare RP2350-Plus](https://www.switch-science.com/products/10130)
+- [Waveshare RP2350-Plus (16MB 版)](https://www.switch-science.com/products/10221)
 - [1.44 インチ ST7735 液晶](https://www.amazon.co.jp/dp/B07QC62SJX/)
 - RTC BM8563: 今回は使用しませんでした。[スイッチサイエンスにあるモジュール](https://www.switch-science.com/products/7170) などが使えそうです。
 - 7x [適当なタクトスイッチ](https://akizukidenshi.com/catalog/goods/search.aspx?search=x&keyword=%E3%82%BF%E3%82%AF%E3%83%88%E3%82%B9%E3%82%A4%E3%83%83%E3%83%81&search=search)
