@@ -142,6 +142,7 @@
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2022/0522-wimshurst-machine/cover.jpg",
       "tags": [
+        "3Dプリンタ",
         "プリンタ",
         "放電"
       ]
@@ -200,6 +201,7 @@
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2023/0813-fdm-3d-printed-hv-trans/cover.jpg",
       "tags": [
+        "3Dプリンタ",
         "プリンタ",
         "自作",
         "備忘録",
@@ -215,6 +217,7 @@
       "card_image_url": "/2023/0817-led-lantern/cover.jpg",
       "tags": [
         "LED",
+        "3Dプリンタ",
         "プリンタ",
         "プリント"
       ]
@@ -318,6 +321,7 @@
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2024/1031-macmini-pwsw-lever/cover.jpg",
       "tags": [
+        "3Dプリンタ",
         "プリンタ"
       ]
     },
@@ -370,6 +374,7 @@
       "twitter_card_size": "summary",
       "card_image_url": "/2024/1208-sg90-shaft-dimension/thumbnail.jpg",
       "tags": [
+        "3Dプリンタ",
         "自作",
         "プリンタ",
         "プリント",
@@ -406,6 +411,7 @@
       "card_image_url": "/2025/0129-fusion360-tips/thumbnail.png",
       "tags": [
         "備忘録",
+        "3Dプリンタ",
         "プリンタ"
       ]
     },
@@ -531,6 +537,7 @@
         "高電圧",
         "LCD",
         "LED",
+        "アニメーション",
         "I2C",
         "Bluesky",
         "Misskey",
@@ -739,11 +746,14 @@
       "twitter_card_size": "summary_large_image",
       "card_image_url": "/2026/0520-m5stack-with-large-monitor/cover.jpg",
       "tags": [
+        "CoreS3",
         "LcdTap",
+        "M5Stack",
         "Raspberry",
         "I2C",
         "LCD",
         "SPI",
+        "M5GFX",
         "ハンダ",
         "Twitter",
         "Bluesky",
@@ -848,6 +858,8 @@
         "ST7789",
         "自作",
         "ブラウン管",
+        "CoreS3",
+        "M5Stack",
         "PicoPad",
         "Twitter",
         "Misskey",
@@ -874,6 +886,29 @@
         "Misskey",
         "Bluesky"
       ]
+    },
+    {
+      "title": "M5Stack CoreS3 で 2D リグアニメーション",
+      "description": "拙作の ShapoGFX を使い、DragonBones で作成した 2D リグアニメーションを M5Stack CoreS3 上で動かす手順を紹介します。",
+      "date": "2026/09/29",
+      "url": "/2026/0929-shapogfx-2d-rig-animation",
+      "twitter_card_size": "summary",
+      "card_image_url": "/image/default_card_summary.png",
+      "tags": [
+        "CoreS3",
+        "M5Stack",
+        "アニメーション",
+        "DragonBones",
+        "ShapoGFX",
+        "DMA",
+        "LovyanGFX",
+        "SPI",
+        "M5GFX",
+        "Photoshop",
+        "Animation",
+        "ESP32",
+        "M5Unified"
+      ]
     }
   ],
   "tags": [
@@ -895,7 +930,7 @@
     },
     {
       "name": "SPI",
-      "count": 9
+      "count": 10
     },
     {
       "name": "NTSC",
@@ -920,6 +955,14 @@
     {
       "name": "ブラウン管",
       "count": 1
+    },
+    {
+      "name": "CoreS3",
+      "count": 3
+    },
+    {
+      "name": "M5Stack",
+      "count": 3
     },
     {
       "name": "PicoPad",
@@ -960,6 +1003,46 @@
     {
       "name": "プリント",
       "count": 9
+    },
+    {
+      "name": "アニメーション",
+      "count": 2
+    },
+    {
+      "name": "DragonBones",
+      "count": 1
+    },
+    {
+      "name": "ShapoGFX",
+      "count": 1
+    },
+    {
+      "name": "DMA",
+      "count": 1
+    },
+    {
+      "name": "LovyanGFX",
+      "count": 1
+    },
+    {
+      "name": "M5GFX",
+      "count": 2
+    },
+    {
+      "name": "Photoshop",
+      "count": 1
+    },
+    {
+      "name": "Animation",
+      "count": 1
+    },
+    {
+      "name": "ESP32",
+      "count": 1
+    },
+    {
+      "name": "M5Unified",
+      "count": 1
     },
     {
       "name": "RP2350",
@@ -1008,6 +1091,10 @@
     {
       "name": "放電",
       "count": 7
+    },
+    {
+      "name": "3Dプリンタ",
+      "count": 6
     },
     {
       "name": "プリンタ",

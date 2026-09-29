@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-  <meta name="keywords" content="シャポログ, プリンタ, 放電">
+  <meta name="keywords" content="シャポログ, 3Dプリンタ, プリンタ, 放電">
   <meta name="description" content="回転する 2 枚の円盤と電極を使って、初期状態の僅かな電荷の偏りを静電誘導によって増幅し蓄積する装置です。乾燥する時期になるとよく放電します。">
 
   <meta name="twitter:card" content="summary_large_image" />
@@ -35,7 +35,7 @@
   </script>
 
   <link href="/style.css?0ec49c72" rel="stylesheet" type="text/css">
-  <script src="/style.js?14382bba"></script>
+  <script src="/style.js?2c1b6334"></script>
 
   <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
   <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
@@ -87,9 +87,9 @@
         <li>関連記事を読み込んでいます...</li>
       </ul>
       <script>
-        const my_tags = "プリンタ, 放電".split(',').map(s => s.trim()).filter(s => s != '');
+        const my_tags = "3Dプリンタ, プリンタ, 放電".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?4c342271')
+        fetch('/index.json?d80769ba')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();

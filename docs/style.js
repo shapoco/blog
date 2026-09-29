@@ -86,7 +86,7 @@ function arrangeArticleHtml(parent) {
       {
         style: STYLE_KEYWORD,
         pattern: new RegExp(
-          '\\b(asm|auto|bool|break|case|catch|char|class|const|constexpr|' +
+          '\\b(alignas|asm|auto|bool|break|case|catch|char|class|const|constexpr|' +
           'const_cast|continue|default|delete|do|double|dynamic_cast|else|' +
           'enum|explicit|export|extern|false|float|for|friend|goto|if|' +
           'inline|int|long|mutable|namespace|new|operator|private|' +
@@ -162,7 +162,33 @@ function arrangeArticleHtml(parent) {
         pattern: new RegExp(
           '\\b(case|cd|cp|do|done|echo|esac|export|exit|fi|find|for|grep|' +
           'if|mv|mkdir|' +
-          'pushd|popd|return|rm|set|then|unset)\\b')
+          'pushd|popd|return|rm|set|source|then|unset)\\b')
+      },
+      RULE_VARIABLE_SHELL,
+    ],
+  };
+
+  // CMake
+  const langCMake = {
+    rangeRules: [
+      { style: STYLE_COMMENT, start: '#', end: '\n', escapeChar: '\\' },
+      { style: STYLE_STRING, start: '"', end: '"', escapeChar: '\\' },
+    ],
+    regExpRules: [
+      {
+        style: STYLE_KEYWORD,
+        pattern: new RegExp(
+          '\\b(all|clean|help|install|test|RUN_TESTS|package|PACKAGE|' +
+          'PRIVATE|PUBLIC|INTERFACE|REQUIRED)\\b')
+      },
+      { style: STYLE_CONST, pattern: /\b(_?CMAKE|INTERFACE|IMPORTED|CONFIG)_[A-Z][A-Z0-9_]*\b/ },
+      {
+        style: STYLE_EMBEDDED, pattern: new RegExp(
+          '\\b(set|macro|function|if|elseif|else|endif|foreach|' +
+          'endforeach|while|endwhile|include|find_package|' +
+          'add_executable|add_library|target_link_libraries|' +
+          'target_include_directories|option|message|return|project|'+
+          'idf_component_register|target_compile_options)\\b')
       },
       RULE_VARIABLE_SHELL,
     ],
@@ -192,6 +218,7 @@ function arrangeArticleHtml(parent) {
     cxx: langCxx,
     cpp: langCxx,
     'c++': langCxx,
+    cmake: langCMake,
     js: langJavaScript,
     json: langJavaScript,
     sh: langShell,
@@ -202,6 +229,7 @@ function arrangeArticleHtml(parent) {
 
   const exts = {
     ino: langIno,
+    cmake: langCMake,
   };
 
   parent.querySelectorAll('pre').forEach(pre => {
