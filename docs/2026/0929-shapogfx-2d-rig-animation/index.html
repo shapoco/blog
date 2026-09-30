@@ -364,10 +364,13 @@
         <p>ESP-IDF に ESP32-S3 用のコンポーネントがインストールされていない場合はインストールしておきます。</p>
         <pre class="lang_bash">cd /path/to/esp-idf/
 ./install.sh esp32s3</pre>
-        <p>ESP-IDF の環境変数を設定します。</p>
+        <p>
+          ESP-IDF の環境変数を設定します。
+          ここから先の作業はこの環境変数を設定したシェル上で行います。
+        </p>
         <pre class="lang_bash">source /path/to/esp-idf/export.sh</pre>
         <p>
-          ここから先の作業は上記を実行したシェル上で行います。
+          新しいプロジェクトを作成して中に移動します。
           デフォルトで生成される meow.c は消しておきます。
         </p>
         <pre class="lang_bash">idf.py create-project meow
@@ -569,6 +572,15 @@ extern &quot;C&quot; void app_main(void) {
     M5.Display.endWrite();
   }
 }</pre>
+        <p>ポイントだけ書いておきます。</p>
+        <ul>
+          <li><strong>ピクセルフォーマットは RGB565_SWAPPED</strong>: 画像を SPI で転送する際は RGB565 の上位バイトから先に送信します。これをバイトスワップを伴うことなく DMA で転送するため、M5GFX では予めバイトスワップされた状態で画像をメモリ上に保持します。これに合わせて ShapoGFX でも RGB565_SWAPPED で画像を扱います。</li>
+          <li><strong>フレームバッファは SRAM に確保する</strong>: PSRAM は DMA 転送に使用できないため。</li>
+          <li><strong>アリーナ (arena)</strong>: ShapoGFX は内部でヒープを取得しません。その代わり必要な作業領域はユーザ側で確保して <code>init()</code> に渡します。詳細は <a href="https://shapoco.github.io/shapo-gfx/ref/gfx2d/graphics2d.html" target="_blank">Graphics2D の説明</a> を参照。</li>
+          <li><strong>リグのインスタンス</strong>: リグのデザイン情報は全て Flash に置いたままにできますが、姿勢の情報をキャッシュするためのメモリを確保して <code>init()</code> に渡す必要があります。必要なサイズは <code>Instance::bytes()</code> で取得できます。詳細な <a href="https://shapoco.github.io/shapo-gfx/ref/gfx2d/rig.html" target="_blank">2D リグアニメーションの説明</a> を参照。</li>
+          <li><strong>pose() で姿勢を決定、draw() で描画</strong>: <code>pose()</code> にアニメーションとフレーム番号を渡すことによってリグの各ボーンの姿勢が算出されてインスタンスにキャッシュされます。<code>draw()</code> を呼ぶことでその姿勢に基づいてリグが描画されます。</li>
+          <li><strong>pushState() / popState()</strong>: リグは ShapoGFX が保持しているアフィン変換行列に基づいて描画位置が決定されるので、<code>translate()</code> を使用して位置を指定していますが、これだけだとその後の描画にも影響を与えます。<code>pushState()</code>/<code>popState()</code> で囲むことで、<code>translate()</code> の効果をリグの描画だけに限定しています。</li>
+        </ul>
         <h4>4.3 ビルド</h4>
         <p>ターゲットを ESP32-S3 に設定し、ビルドを実行します。</p>
         <pre class="lang_bash">idf.py set-target esp32s3
@@ -583,7 +595,65 @@ idf.py build</pre>
         <pre class="lang_bash">idf.py flash</pre>
         <p>この記事冒頭の動画のように動作すれば成功です。</p>
         <h3>高速化のポイント</h3>
-        <p>(執筆中)</p>
+        <p>
+          前述の <code>main.cpp</code> は分かりやすさを優先して書かれているので
+          パフォーマンス観点では改善の余地があります。
+        </p>
+        <h4>dbones2cpp のオプション</h4>
+        <p>リグが複雑になるとそれだけ描画も重くなります。</p>
+        <ul>
+          <li>テクスチャサイズが大きくなることで Flash アクセスのペナルティがかさむ</li>
+          <li>描画する要素が多くなる</li>
+        </ul>
+        <p><code>dbones2cpp</code> のオプションで負荷をいくらか軽減することができます。</p>
+        <table>
+          <tr>
+            <th>オプション</th>
+            <th>説明</th>
+          </tr>
+          <tr>
+            <td><code>--scale &lt;factor&gt;</code></td>
+            <td>リグとテクスチャをスケーリングします。小さくすれば描画負荷を軽減できます</td>
+          </tr>
+          <tr>
+            <td><code>--atlas-width 0</code></td>
+            <td>テクスチャを 1 枚の画像に統合せず、バラバラなまま保持します。キャッシュが効きやすくなります</td>
+          </tr>
+          <tr>
+            <td><code>--fit-rotate</code></td>
+            <td>透明部分を切り捨ててテクスチャのサイズを最小化できるように予め画像を回転させます。描画負荷が軽減され、キャッシュも効きやすくなります</td>
+          </tr>
+          <tr>
+            <td><code>--hull 8</code></td>
+            <td>テクスチャの不透明部分を囲む多角形を事前に計算しておき、透過部分の処理を削減することで描画負荷を軽減します</td>
+          </tr>
+          <tr>
+            <td><code>--out-format rgb565_swapped</code></td>
+            <td>アルファチャンネルによる透過をカラーキーによる透過に変換して描画負荷を軽減します</td>
+          </tr>
+        </table>
+        <p>詳細は <a href="https://shapoco.github.io/shapo-gfx/ref/tools/dbones2cpp.html" target="_blank">dbones2cpp の説明</a> を参照してください。</p>
+        <h4>ダブルバッファリング</h4>
+        <p>前述の <code>main.cpp</code> では描画とディスプレイへの転送を直列に実施しています。</p>
+        <p>
+          描画用のバッファと DMA 転送用のバッファの 2 枚に分けて描画と転送を同時に行うことで
+          フレームレートを大幅に向上させることができます。
+        </p>
+        <p>
+          ただし ESP32-S3 では画面 2 面分のバッファは大きすぎて SRAM に確保することができません。
+          そこで画面を上下に 2 分割し、片方を描画に、片方を転送に使用することで、
+          1 面分のメモリ消費でダブルバッファリングを実現できます。
+        </p>
+        <h4>マルチコア描画</h4>
+        <p>
+          <code>Instance::draw()</code> は複数コアから同時に呼び出すことができます。
+          描画領域を複数の小領域に分けて、小領域毎に別々のコアから
+          <code>draw()</code> を実行することで複数コアで同時に描画を行うことができます。
+        </p>
+        <p>
+          この場合、<code>Graphics2D</code> のインスタンスとアリーナもコア毎に必要です。
+          また、描画処理通にインスタンスが変更されてはいけません。
+        </p>
 
 
       <h3>関連記事</h3>
