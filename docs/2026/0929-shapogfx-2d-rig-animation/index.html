@@ -8,12 +8,12 @@
   <meta name="keywords" content="シャポログ, CoreS3, M5Stack, アニメーション, DragonBones, ShapoGFX, DMA, LovyanGFX, SPI, M5GFX, Photoshop, Animation, ESP32, M5Unified">
   <meta name="description" content="拙作の ShapoGFX を使い、DragonBones で作成した 2D リグアニメーションを M5Stack CoreS3 上で動かす手順を紹介します。">
 
-  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@shapoco" />
   <meta property="og:url" content="https://blog.shapoco.net/2026/0929-shapogfx-2d-rig-animation/" />
   <meta property="og:title" content="M5Stack CoreS3 で 2D リグアニメーション | シャポログ" />
   <meta property="og:description" content="拙作の ShapoGFX を使い、DragonBones で作成した 2D リグアニメーションを M5Stack CoreS3 上で動かす手順を紹介します。" />
-  <meta property="og:image" content="https://blog.shapoco.net/image/default_card_summary.png" />
+  <meta property="og:image" content="https://blog.shapoco.net/2026/0929-shapogfx-2d-rig-animation/cover.jpg" />
 
   <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
   <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
@@ -617,11 +617,11 @@ idf.py build</pre>
           </tr>
           <tr>
             <td><code>--atlas-width 0</code></td>
-            <td>テクスチャを 1 枚の画像に統合せず、バラバラなまま保持します。キャッシュが効きやすくなります</td>
+            <td>テクスチャを 1 枚の画像 (アトラス) に統合せず、バラバラなまま保持します。キャッシュが効きやすくなります</td>
           </tr>
           <tr>
             <td><code>--fit-rotate</code></td>
-            <td>透明部分を切り捨ててテクスチャのサイズを最小化できるように予め画像を回転させます。描画負荷が軽減され、キャッシュも効きやすくなります</td>
+            <td>個々のテクスチャの透明部分を切り捨ててサイズを最小化できるように画像を回転させます。キャッシュが効きやすくなり、描画負荷も軽減されます</td>
           </tr>
           <tr>
             <td><code>--hull 8</code></td>
@@ -654,6 +654,13 @@ idf.py build</pre>
           この場合、<code>Graphics2D</code> のインスタンスとアリーナもコア毎に必要です。
           また、描画処理通にインスタンスが変更されてはいけません。
         </p>
+        <h3>頑張ればこれくらいできます</h3>
+        <p>
+          髪や布などの揺れものは苦手ではありますが、
+          頑張ってパーツを分割すればこれくらいはできます。
+          リグの作成は大変ですが、アプリでの描画方法は同じです。
+        </p>
+        <p><video controls><source src="https://www.shapoco.net/media/2026/20260927_dragonbones_demo.mp4" type="video/mp4" /></video></p>
 
 
       <h3>関連記事</h3>
@@ -663,7 +670,7 @@ idf.py build</pre>
       <script>
         const my_tags = "CoreS3, M5Stack, アニメーション, DragonBones, ShapoGFX, DMA, LovyanGFX, SPI, M5GFX, Photoshop, Animation, ESP32, M5Unified".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?d80769ba')
+        fetch('/index.json?ddb35d27')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();

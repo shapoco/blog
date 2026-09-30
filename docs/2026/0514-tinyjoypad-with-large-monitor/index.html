@@ -209,7 +209,7 @@
       <script>
         const my_tags = "LcdTap, SSD1306, ハンダ, SPI, LED, I2C, LCD, Raspberry, 自作, AVR, Twitter, Bluesky, Misskey".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?d80769ba')
+        fetch('/index.json?ddb35d27')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();

@@ -892,8 +892,8 @@
       "description": "拙作の ShapoGFX を使い、DragonBones で作成した 2D リグアニメーションを M5Stack CoreS3 上で動かす手順を紹介します。",
       "date": "2026/09/29",
       "url": "/2026/0929-shapogfx-2d-rig-animation",
-      "twitter_card_size": "summary",
-      "card_image_url": "/image/default_card_summary.png",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2026/0929-shapogfx-2d-rig-animation/cover.jpg",
       "tags": [
         "CoreS3",
         "M5Stack",
