@@ -480,15 +480,10 @@ cp path/to/kitty.hpp main/.
 #include <M5Unified.h>
 #include <esp_heap_caps.h>
 #include <esp_timer.h>
-#include <freertos/FreeRTOS.h>
-#include <freertos/task.h>
 
 #include "shapoco/gfx2d/graphics2d.hpp"
 #include "shapoco/gfx2d/fonts.hpp"
 #include "kitty.hpp"
-
-#include <cstdio>
-#include <cstring>
 
 namespace g2d = shapoco::gfx2d;
 namespace rig = shapoco::gfx2d::rig;

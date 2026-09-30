@@ -428,15 +428,10 @@ CONFIG_PARTITION_TABLE_SINGLE_APP_LARGE=y</pre>
         <pre class="lang_cpp">#include &lt;M5Unified.h&gt;
 #include &lt;esp_heap_caps.h&gt;
 #include &lt;esp_timer.h&gt;
-#include &lt;freertos/FreeRTOS.h&gt;
-#include &lt;freertos/task.h&gt;
 
 #include &quot;shapoco/gfx2d/graphics2d.hpp&quot;
 #include &quot;shapoco/gfx2d/fonts.hpp&quot;
 #include &quot;kitty.hpp&quot;
-
-#include &lt;cstdio&gt;
-#include &lt;cstring&gt;
 
 namespace g2d = shapoco::gfx2d;
 namespace rig = shapoco::gfx2d::rig;
