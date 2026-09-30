@@ -86,9 +86,14 @@
         <p>
           髪や布などの揺れものは苦手ではありますが、
           頑張ってパーツを分割すればこれくらいはできます。
-          リグの作成は大変ですが、アプリでの描画方法は同じです。
         </p>
         <p><video controls><source src="https://www.shapoco.net/media/2026/20260927_dragonbones_demo.mp4" type="video/mp4" /></video></p>
+        <h3>できないこと</h3>
+        <p>
+          ShapoGFX の 2D リグアニメーション機能は剛体アフィン変形のみをサポートします。
+          メッシュ変形やボーンのスキニングなどの高度な変形はサポートしていません。
+          柔らかくなびく長い髪やスカートのような表現は難しいのでご注意ください。
+        </p>
         <h3>今回作るもの</h3>
         <p>
           M5Stack CoreS3 の画面上で猫の 2D リグアニメーションを動かします。
@@ -97,12 +102,6 @@
         </p>
         <p>描画処理は全て ShapoGFX で行い、画面への転送には M5GFX を使用します。</p>
         <p><video controls><source src="https://www.shapoco.net/media/2026/20260929_kitty_on_m5stack.mp4" type="video/mp4" /></video></p>
-        <h3>できないこと</h3>
-        <p>
-          ShapoGFX の 2D リグアニメーション機能は剛体アフィン変形のみをサポートします。
-          メッシュ変形やボーンのスキニングなどの高度な変形はサポートしていません。
-          柔らかくなびく長い髪やスカートのような表現は難しいのでご注意ください。
-        </p>
         <h3>大まかな作業の流れ</h3>
         <ol>
           <li>ペイントツール等を使用して絵を用意する</li>
@@ -356,7 +355,7 @@
         <blockquote class="note">ここから先はコーディングエージェントに任せることも可能です。</blockquote>
         <h3>3. C++ コードの生成</h3>
         <p>
-          <code>dbone2cpp</code> は <code>Pillow</code> と <code>numpy</code> を必要とするので、入っていない場合は導入します。
+          <code>dbones2cpp</code> は <code>Pillow</code> と <code>numpy</code> を必要とするので、入っていない場合は導入します。
           システムを汚したくない場合は venv を使用するなどしてください。
         </p>
         <pre class="lang_bash">python3 -m pip install -r ${SHAPOGFX_PATH}/bin/requirements.txt</pre>
@@ -424,7 +423,7 @@ CONFIG_PARTITION_TABLE_SINGLE_APP_LARGE=y</pre>
         <h4>4.2 リグとアニメーションの取り込み</h4>
         <p><code>kitty.hpp</code> を <code>main/</code> 配下に配置します。</p>
         <pre class="lang_bash">cp path/to/kitty.hpp main/.</pre>
-        <h4>4.2 実装</h4>
+        <h4>4.3 実装</h4>
         <p><code>main/main.cpp</code> を次のように実装します。</p>
         <pre class="lang_cpp">#include &lt;M5Unified.h&gt;
 #include &lt;esp_heap_caps.h&gt;
@@ -584,15 +583,15 @@ extern &quot;C&quot; void app_main(void) {
           <li><strong>ピクセルフォーマットは RGB565_SWAPPED</strong>: 画像を SPI で転送する際は RGB565 の上位バイトから先に送信します。これをバイトスワップを伴うことなく DMA で転送するため、M5GFX では予めバイトスワップされた状態で画像をメモリ上に保持します。これに合わせて ShapoGFX でも RGB565_SWAPPED で画像を扱います。</li>
           <li><strong>フレームバッファは SRAM に確保する</strong>: PSRAM は DMA 転送に使用できないため。</li>
           <li><strong>アリーナ (arena)</strong>: ShapoGFX は内部でヒープを取得しません。その代わり必要な作業領域はユーザ側で確保して <code>init()</code> に渡します。詳細は <a href="https://shapoco.github.io/shapo-gfx/ref/gfx2d/graphics2d.html" target="_blank">Graphics2D の説明</a> を参照。</li>
-          <li><strong>リグのインスタンス</strong>: リグのデザイン情報は全て Flash に置いたままにできますが、姿勢の情報をキャッシュするためのメモリを確保して <code>init()</code> に渡す必要があります。必要なサイズは <code>Instance::bytes()</code> で取得できます。詳細な <a href="https://shapoco.github.io/shapo-gfx/ref/gfx2d/rig.html" target="_blank">2D リグアニメーションの説明</a> を参照。</li>
+          <li><strong>リグのインスタンス</strong>: リグのデザイン情報は全て Flash に置いたままにできますが、姿勢の情報をキャッシュするためのメモリを確保して <code>init()</code> に渡す必要があります。必要なサイズは <code>Instance::bytes()</code> で取得できます。詳細は <a href="https://shapoco.github.io/shapo-gfx/ref/gfx2d/rig.html" target="_blank">2D リグアニメーションの説明</a> を参照。</li>
           <li><strong>pose() で姿勢を決定、draw() で描画</strong>: <code>pose()</code> にアニメーションとフレーム番号を渡すことによってリグの各ボーンの姿勢が算出されてインスタンスにキャッシュされます。<code>draw()</code> を呼ぶことでその姿勢に基づいてリグが描画されます。</li>
           <li><strong>pushState() / popState()</strong>: リグは ShapoGFX が保持しているアフィン変換行列に基づいて描画位置が決定されるので、<code>translate()</code> を使用して位置を指定していますが、これだけだとその後の描画にも影響を与えます。<code>pushState()</code>/<code>popState()</code> で囲むことで、<code>translate()</code> の効果をリグの描画だけに限定しています。</li>
         </ul>
-        <h4>4.3 ビルド</h4>
+        <h4>4.4 ビルド</h4>
         <p>ターゲットを ESP32-S3 に設定し、ビルドを実行します。</p>
         <pre class="lang_bash">idf.py set-target esp32s3
 idf.py build</pre>
-        <h4>4.4 実行</h4>
+        <h4>4.5 実行</h4>
         <p>CoreS3 を USB で PC に接続します。</p>
         <p>
           WSL 上で実行する場合は USB デバイスを WSL にアタッチしてください。
@@ -624,15 +623,11 @@ idf.py build</pre>
           </tr>
           <tr>
             <td><code>--atlas-width 0</code></td>
-            <td>テクスチャを 1 枚の画像 (アトラス) に統合せず、バラバラなまま保持します。キャッシュが効きやすくなります</td>
+            <td>テクスチャを 1 枚の画像 (アトラス) に統合せず、バラバラなまま保持します。統合によって生じるテクスチャ間の隙間が無くなることでキャッシュに載せやすくなります</td>
           </tr>
           <tr>
             <td><code>--fit-rotate</code></td>
             <td>個々のテクスチャの透明部分を切り捨ててサイズを最小化できるように画像を回転させます。キャッシュが効きやすくなり、描画負荷も軽減されます</td>
-          </tr>
-          <tr>
-            <td><code>--hull 8</code></td>
-            <td>テクスチャの不透明部分を囲む多角形を事前に計算しておき、透過部分の処理を削減することで描画負荷を軽減します</td>
           </tr>
           <tr>
             <td><code>--out-format rgb565_swapped</code></td>
@@ -644,7 +639,7 @@ idf.py build</pre>
         <p>前述の <code>main.cpp</code> では描画とディスプレイへの転送を直列に実施しています。</p>
         <p>
           描画用のバッファと DMA 転送用のバッファの 2 枚に分けて描画と転送を同時に行うことで
-          フレームレートを大幅に向上させることができます。
+          フレームレートを大幅に向上させるのは、こうしたアプリケーションでは一般的なテクニックです。
         </p>
         <p>
           ただし ESP32-S3 では画面 2 面分のバッファは大きすぎて SRAM に確保することができません。
@@ -659,7 +654,7 @@ idf.py build</pre>
         </p>
         <p>
           この場合、<code>Graphics2D</code> のインスタンスとアリーナもコア毎に必要です。
-          また、描画処理通にインスタンスが変更されてはいけません。
+          また、<code>draw()</code> の実行中にインスタンスが変更されてはいけません。
         </p>
 
 
