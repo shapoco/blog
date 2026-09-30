@@ -26,6 +26,8 @@ ShapoGFX 自身はディスプレイドライバ機能は持たないため、
 
 ![](https://www.shapoco.net/media/2026/20260927_dragonbones_demo.mp4)
 
+[ブラウザ上で動作するデモ](https://shapoco.github.io/shapo-gfx/example/demorig/)
+
 ## できないこと
 
 ShapoGFX v1.5 の 2D リグアニメーション機能は剛体アフィン変形のみをサポートします。
