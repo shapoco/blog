@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
   <meta name="keywords" content="シャポログ, CoreS3, M5Stack, アニメーション, DragonBones, ShapoGFX, DMA, LovyanGFX, SPI, M5GFX, Photoshop, Animation, ESP32, M5Unified">
-  <meta name="description" content="拙作の ShapoGFX を使い、DragonBones で作成した 2D リグアニメーションを M5Stack CoreS3 上で動かす手順を紹介します。">
+  <meta name="description" content="「ShapoGFX」を使い、DragonBones で作成した 2D リグアニメーションを M5Stack CoreS3 上で動かす手順を紹介します。">
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@shapoco" />
   <meta property="og:url" content="https://blog.shapoco.net/2026/0929-shapogfx-2d-rig-animation/" />
   <meta property="og:title" content="M5Stack CoreS3 で 2D リグアニメーション | シャポログ" />
-  <meta property="og:description" content="拙作の ShapoGFX を使い、DragonBones で作成した 2D リグアニメーションを M5Stack CoreS3 上で動かす手順を紹介します。" />
+  <meta property="og:description" content="「ShapoGFX」を使い、DragonBones で作成した 2D リグアニメーションを M5Stack CoreS3 上で動かす手順を紹介します。" />
   <meta property="og:image" content="https://blog.shapoco.net/2026/0929-shapogfx-2d-rig-animation/cover.jpg" />
 
   <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
@@ -64,7 +64,7 @@
       </div>
 
               <p>
-          拙作の ShapoGFX を使い、DragonBones で作成した 2D リグアニメーションを
+          「ShapoGFX」を使い、DragonBones で作成した 2D リグアニメーションを
           M5Stack CoreS3 上で動かす手順を紹介します。
         </p>
         <h3>2D リグアニメーションとは</h3>
@@ -651,6 +651,8 @@ idf.py build</pre>
           この場合、<code>Graphics2D</code> のインスタンスとアリーナもコア毎に必要です。
           また、<code>draw()</code> の実行中にインスタンスが変更されてはいけません。
         </p>
+        <h3>本記事で使用した DragonBones プロジェクト</h3>
+        <p>ダウンロード: <a href="https://www.shapoco.net/media/2026/20260930-dbones-kitty.zip" target="_blank">20260930-dbones-kitty.zip</a></p>
 
 
       <h3>関連記事</h3>
@@ -660,7 +662,7 @@ idf.py build</pre>
       <script>
         const my_tags = "CoreS3, M5Stack, アニメーション, DragonBones, ShapoGFX, DMA, LovyanGFX, SPI, M5GFX, Photoshop, Animation, ESP32, M5Unified".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?ddb35d27')
+        fetch('/index.json?64e43d57')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();

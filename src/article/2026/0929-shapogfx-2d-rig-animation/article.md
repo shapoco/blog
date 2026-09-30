@@ -1,6 +1,6 @@
 # M5Stack CoreS3 で 2D リグアニメーション
 
-拙作の ShapoGFX を使い、DragonBones で作成した 2D リグアニメーションを
+「ShapoGFX」を使い、DragonBones で作成した 2D リグアニメーションを
 M5Stack CoreS3 上で動かす手順を紹介します。
 
 ## 2D リグアニメーションとは
@@ -702,3 +702,8 @@ idf.py flash
 
 この場合、`Graphics2D` のインスタンスとアリーナもコア毎に必要です。
 また、`draw()` の実行中にインスタンスが変更されてはいけません。
+
+## 本記事で使用した DragonBones プロジェクト
+
+ダウンロード: [20260930-dbones-kitty.zip](https://www.shapoco.net/media/2026/20260930-dbones-kitty.zip)
+

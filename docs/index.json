@@ -889,7 +889,7 @@
     },
     {
       "title": "M5Stack CoreS3 で 2D リグアニメーション",
-      "description": "拙作の ShapoGFX を使い、DragonBones で作成した 2D リグアニメーションを M5Stack CoreS3 上で動かす手順を紹介します。",
+      "description": "「ShapoGFX」を使い、DragonBones で作成した 2D リグアニメーションを M5Stack CoreS3 上で動かす手順を紹介します。",
       "date": "2026/09/29",
       "url": "/2026/0929-shapogfx-2d-rig-animation",
       "twitter_card_size": "summary_large_image",
