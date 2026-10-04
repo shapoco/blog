@@ -13,9 +13,9 @@
 
 ## 動作の様子
 
-ウィムズハースト起電機の近くに置いて動かした様子です。
+いっぱい並べれば静電界を可視化できたりします。
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/ZZIkuuMb_II?si=R-Kpk1I24lkyIgr1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+![](https://www.shapoco.net/media/2023/20230218_static_meter_960x720_800kbps.mp4)
 
 ## 回路
 
@@ -64,8 +64,6 @@
 プリント基板化したものを BOOTH で販売し、多くの方に購入頂きました。
 
 [shapoco/staticmeter: Electrostatic Level Meter](https://github.com/shapoco/staticmeter)
-
-![](https://www.shapoco.net/media/2023/20230218_static_meter_960x720_800kbps.mp4)
 
 ## 関連リンク
 
