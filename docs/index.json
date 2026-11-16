@@ -539,6 +539,7 @@
         "LED",
         "アニメーション",
         "I2C",
+        "液晶",
         "Bluesky",
         "Misskey",
         "Twitter"
@@ -631,6 +632,7 @@
         "LCD",
         "ST7789",
         "Waveshare",
+        "液晶",
         "SPI",
         "LED",
         "プリント",
@@ -786,6 +788,7 @@
       "tags": [
         "LcdTap",
         "LED",
+        "液晶",
         "I2C",
         "LCD",
         "Raspberry",
@@ -808,6 +811,7 @@
         "Waveshare",
         "自作",
         "ST7735",
+        "液晶",
         "LED",
         "LcdTap",
         "Raspberry",
@@ -875,6 +879,7 @@
       "card_image_url": "/2026/0813-monitor-lcd-over-wifi/cover.jpg",
       "tags": [
         "LcdTap",
+        "液晶",
         "Raspberry",
         "LCD",
         "LED",
@@ -908,6 +913,25 @@
         "Animation",
         "ESP32",
         "M5Unified"
+      ]
+    },
+    {
+      "title": "モノクロ液晶 TG12864B で色つき階調表示",
+      "description": "Raspberry Pi Pico (RP2040) でモノクロ STN 液晶 TG12864B を 256 階調の色つき階調画像を表示してみました。",
+      "date": "2026/11/16",
+      "url": "/2026/1116-grayscale-on-tg12864b",
+      "twitter_card_size": "summary_large_image",
+      "card_image_url": "/2026/1116-grayscale-on-tg12864b/cover.jpg",
+      "tags": [
+        "TG12864B",
+        "液晶",
+        "RP2040",
+        "Raspberry",
+        "FRC",
+        "PDM",
+        "DMA",
+        "アニメーション",
+        "ShapoGFX"
       ]
     }
   ],
@@ -986,11 +1010,15 @@
     },
     {
       "name": "Raspberry",
-      "count": 12
+      "count": 13
     },
     {
       "name": "AVR",
       "count": 5
+    },
+    {
+      "name": "液晶",
+      "count": 6
     },
     {
       "name": "PCB",
@@ -1005,19 +1033,35 @@
       "count": 9
     },
     {
-      "name": "アニメーション",
-      "count": 2
-    },
-    {
-      "name": "DragonBones",
+      "name": "TG12864B",
       "count": 1
     },
     {
-      "name": "ShapoGFX",
+      "name": "RP2040",
+      "count": 3
+    },
+    {
+      "name": "FRC",
+      "count": 1
+    },
+    {
+      "name": "PDM",
       "count": 1
     },
     {
       "name": "DMA",
+      "count": 2
+    },
+    {
+      "name": "アニメーション",
+      "count": 3
+    },
+    {
+      "name": "ShapoGFX",
+      "count": 2
+    },
+    {
+      "name": "DragonBones",
       "count": 1
     },
     {
@@ -1074,10 +1118,6 @@
     },
     {
       "name": "マンデルブロ集合",
-      "count": 2
-    },
-    {
-      "name": "RP2040",
       "count": 2
     },
     {

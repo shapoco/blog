@@ -7,6 +7,7 @@ CoreS3
 DMA
 DragonBones
 ESP32
+FRC
 I2C
 ILI9488
 ILI9341
@@ -22,6 +23,7 @@ M5Unified
 Misskey
 NTSC
 PCB
+PDM
 Photoshop
 PicoPad
 RP2040
@@ -33,10 +35,12 @@ SSD1306
 ST7735
 ST7789
 Tab5
+TG12864B
 Thumby
 Twitter
 Waveshare
 アニメーション
+液晶
 コイル
 高電圧
 自作

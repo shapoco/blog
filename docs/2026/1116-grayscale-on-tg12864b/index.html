@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+  <meta name="keywords" content="シャポログ, TG12864B, 液晶, RP2040, Raspberry, FRC, PDM, DMA, アニメーション, ShapoGFX">
+  <meta name="description" content="Raspberry Pi Pico (RP2040) でモノクロ STN 液晶 TG12864B を 256 階調の色つき階調画像を表示してみました。">
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@shapoco" />
+  <meta property="og:url" content="https://blog.shapoco.net/2026/1116-grayscale-on-tg12864b/" />
+  <meta property="og:title" content="モノクロ液晶 TG12864B で色つき階調表示 | シャポログ" />
+  <meta property="og:description" content="Raspberry Pi Pico (RP2040) でモノクロ STN 液晶 TG12864B を 256 階調の色つき階調画像を表示してみました。" />
+  <meta property="og:image" content="https://blog.shapoco.net/2026/1116-grayscale-on-tg12864b/cover.jpg" />
+
+  <link rel="icon" href="https://blog.shapoco.net/favicon192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="https://blog.shapoco.net/apple-touch-icon180.png" sizes="180x180">
+  <link rel="shortcut icon" href="https://blog.shapoco.net/favicon48.ico">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KJ53WNQ22G"></script>
+  <script>
+    var remoteHost = window.location.hostname;
+    if (remoteHost == "localhost") {
+      console.log(`Google Analytics disabled on: '${remoteHost}'`);
+    }
+    else {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-KJ53WNQ22G');
+    }
+  </script>
+
+  <link href="/style.css?0ec49c72" rel="stylesheet" type="text/css">
+  <script src="/style.js?2c1b6334"></script>
+
+  <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
+  <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
+
+  <title>モノクロ液晶 TG12864B で色つき階調表示 | シャポログ</title>
+</head>
+
+<body>
+  <div id="container">
+    <div id="root_navi"></div>
+
+    <header class="article_header">
+      <h1><a href="/">シャポログ</a></h1>
+    </header>
+    <main>
+      <h2>モノクロ液晶 TG12864B で色つき階調表示</h2>
+
+      <div class="article_info_wrap">
+        <div class="article_info">
+          2026/11/16 |
+          <a href="https://github.com/shapoco/blog/tree/main/src/article/2026/1116-grayscale-on-tg12864b/" target="_blank">記事のソース</a>
+        </div>
+
+        <div id="shpcstamp_wrap"></div>
+        <script async src="/stamp/v1/widget.js?3d92a021"></script>
+      </div>
+
+              <p>Raspberry Pi Pico (RP2040) でモノクロ STN 液晶 TG12864B を 256 階調の色つき階調画像を表示してみました。</p>
+        <p><img src="./cover.jpg" alt=""></p>
+        <h3>モノクロ液晶 TG12864B</h3>
+        <p>
+          <a href="https://akizukidenshi.com/catalog/g/g104167/" target="_blank">TG12864B</a> は
+          秋月通販で 2010 年から売られている 128x64px のバックライト付きモノクロ液晶です。
+          青背景に白抜きで表示されますが、STN 液晶の特性上応答速度が遅く、紫や黄色の残像が出ます。
+        </p>
+        <p>
+          この残像を利用すれば、擬似的に 青-紫-黄-白 のトーンから成る画像表示が可能なのでは
+          ないかということで試してみました。
+        </p>
+        <h3>Frame Rate Control (Temporal Dithering)</h3>
+        <p>
+          デバイスの本来の階調を超えて中間の階調を表現する手法として
+          Frame Rate Control (FRC) あるいは Temporal Dithering という手法が知られています。
+          これは明るい色と暗い色を高速に切り替えることで中間の階調を表現する手法です。
+          物理的には 8 bit の階調しか対応していないパネルで 10bit の階調を表現するような機能が
+          モニタや GPU カードなどで利用されています。
+        </p>
+        <p>今回はこれを応用し、2 階調しか持たない TG12864B で 256 階調の色つき表示を実現します。</p>
+        <h3>ΔΣ変調 とパルス密度変調 (PDM)</h3>
+        <p>
+          明暗の 2 階調 (ON/OFF) で中間色を表現する手法としてよく用いられるものに PWM がありますが、
+          PWM で 256 階調を表現しようとすると点滅の周期が 255 フレームになります。
+          TG12864B がどこまで高いフレームレートで更新できるか分かりませんが、
+          せいぜい数百フレーム程度でしょうから、255 フレーム周期だと点滅が
+          はっきりと見えてしまいます。
+        </p>
+        <p>
+          そこで今回は ΔΣ変調 によるパルス密度変調 (PDM) を用いることにしました。
+          これなら明暗の周期は液晶の残像で平滑化されて目立たなくなります。
+        </p>
+        <h3>ディスプレイの発色と最適なフレームレートの確認</h3>
+        <p>
+          パルス密度と発色の対応を確認するため、まず単純なグラデーション画像を表示する
+          プログラムを作成して動かしてみました。
+          明暗の周期を目立たなくするには数百 FPS が必要なのではないかと思っていたのですが、
+          フレームレートを細かく変えながら試したところ、102～103 FPS の間で顕著に
+          点滅が目立たなくなることに気付きました。
+        </p>
+        <p><video controls><source src="https://www.shapoco.net/media/2026/20261116_pdmfrc_various_fps.mp4" type="video/mp4" /></video></p>
+        <p>
+          理由は分かりませんが、液晶モジュール内部の何らかの周期的な動作と同期するのではないでしょうか。
+          102～103 FPS という数字がこの個体だけに当てはまるのか、他の個体でも同様なのかも分かっていませんが、とりあえずこのフレームレートで駆動することにしました。
+        </p>
+        <p>画面をカメラで撮影し、階調値と見た目の色を対応づけるためのパレットを作成しました。</p>
+        <p><img src="./palette.png" alt=""></p>
+        <h3>静止画の表示</h3>
+        <p>必要な材料が揃ったので、静止画を表示するプログラムを Raspberry Pi Pico 用に作成しました。</p>
+        <p><img src="./mechanism.png" alt=""></p>
+        <ol>
+          <li>パレットを使用して、表示したい色 (RGB565) から階調値を引くための LUT を生成します。</li>
+          <li>LUT を使用して、元画像の色を階調値に変換します。</li>
+          <li>変換後の階調値をピクセル毎に ΔΣ変調 にかけ、パルス密度に変換し、モノクロ画像を生成します。</li>
+          <li>生成したモノクロ画像を DMA + PIO で TG12864B に表示します。</li>
+        </ol>
+        <p>
+          3 と 4 を 103 Hz で反復します。
+          この周波数にジッタが乗ると画面にもノイズが出るので、正確に 103 Hz を維持するようにします。
+        </p>
+        <h3>LUT の有効性</h3>
+        <p>元画像と、単純にグレースケール化したものを階調値として使った場合と、LUT を使用した画像の比較です。</p>
+        <p><img src="./static_image_result.png" alt=""></p>
+        <p>正直見比べないと分からないくらいの差しか出ませんでした。</p>
+        <p>
+          LUT なしの場合は肌色が白飛びしてしまいますが、LUT を使った場合は黄色みが強調されます。
+          輪郭線などは LUT なしの方がジャギが目立たなく見えます。
+          この傾向は液晶の V0 電圧に関係無く見られました。
+        </p>
+        <p>TG12864B の場合は LUT の効果は限定的のようです。</p>
+        <h3>アニメーションの表示</h3>
+        <p>
+          <a href="https://github.com/shapoco/shapo-gfx" target="_blank">ShapoGFX</a> を使って簡単な 3D シーンをレンダリングして
+          アニメーション表示するプログラムも作ってみました。
+        </p>
+        <p><video controls><source src="https://www.shapoco.net/media/2026/20261116_pdmfrc_3d_scene.mp4" type="video/mp4" /></video></p>
+        <p>
+          64x128px という低解像度ではありますが、レンダリングで 2 倍のオーバーサンプリングしたことと、
+          発色と残像、PDM によるノイズが相まって何だか「エモい」感じになりました。
+        </p>
+        <p>
+          もはや保守部品以外の用途の無さそうな古い液晶モジュールですが、
+          時刻をオーバーレイして時計にしたり、温湿度センサを繋いで値を表示したり、
+          AI エージェントのステータスを表示したりして、
+          ちょっとレトロな雰囲気のデスクトップアクセサリとして活用できるかもしれません。
+        </p>
+        <h3>GitHub リポジトリ</h3>
+        <p>
+          プログラム等は <a href="https://github.com/shapoco/pdmfrc" target="_blank">GitHub リポジトリ</a> に公開しています。
+          回路図やビルド済みファームウェアも掲載してますので、部品があればすぐに試すことができます。
+        </p>
+
+
+      <h3>関連記事</h3>
+      <ul id="related_articles">
+        <li>関連記事を読み込んでいます...</li>
+      </ul>
+      <script>
+        const my_tags = "TG12864B, 液晶, RP2040, Raspberry, FRC, PDM, DMA, アニメーション, ShapoGFX".split(',').map(s => s.trim()).filter(s => s != '');
+        const ul = document.querySelector('#related_articles');
+        fetch('/index.json?7614cf3d')
+          .then(response => response.json())
+          .then(json_obj => {
+            const articles = json_obj.articles.reverse();
+            var related_articles = [];
+            for (const a of articles) {
+              if (a.title == "モノクロ液晶 TG12864B で色つき階調表示") {
+                continue;
+              }
+              let score = 0;
+              let tags = [];
+              for (let my_pos = 0; my_pos < my_tags.length; my_pos++) {
+                const t = my_tags[my_pos];
+                const other_pos = a.tags.indexOf(t);
+                if (other_pos >= 0) {
+                  score += Math.ceil(10000 / (my_pos * other_pos + 1));
+                  tags.push(t);
+                  console.log(`related: ${a.title} (score=${score}) [${tags.join(', ')}]`);
+                }
+              }
+              if (score > 0) {
+                related_articles.push({ article: a, score: score, tags: tags });
+              }
+            }
+            related_articles.sort((a, b) => b.score - a.score);
+
+            if (related_articles.length > 0) {
+              ul.innerHTML = '';
+              for (const a of related_articles.slice(0, 5)) {
+                const li = document.createElement('li');
+                const a_tag = document.createElement('a');
+                a_tag.href = a.article.url;
+                a_tag.textContent = a.article.title;
+                a_tag.title = `共通タグ: ${a.tags.join(', ')}`;
+                li.appendChild(a_tag);
+                ul.appendChild(li);
+              }
+            }
+            else {
+              ul.innerHTML = '<li>関連記事はありません。</li>';
+            }
+          });
+      </script>
+
+    </main>
+    <footer>
+      <span class="nowrap">
+        Copyright &copy; <a href="https://x.com/shapoco/" target="_blank">Shapoco</a>,
+      </span>
+      <span class="nowrap">
+        Powered by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
+      </span>
+    </footer>
+  </div>
+</body>
+
+</html>
