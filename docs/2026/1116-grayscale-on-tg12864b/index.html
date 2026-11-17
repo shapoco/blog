@@ -5,13 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-  <meta name="keywords" content="シャポログ, TG12864B, 液晶, RP2040, Raspberry, FRC, PDM, DMA, アニメーション, ShapoGFX">
+  <meta name="keywords" content="シャポログ, FRC, PDM, TG12864B, 液晶, RP2040, Raspberry, DMA, アニメーション, ShapoGFX">
   <meta name="description" content="Raspberry Pi Pico (RP2040) でモノクロ STN 液晶 TG12864B を 256 階調の色つき階調画像を表示してみました。">
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@shapoco" />
   <meta property="og:url" content="https://blog.shapoco.net/2026/1116-grayscale-on-tg12864b/" />
-  <meta property="og:title" content="モノクロ液晶 TG12864B で色つき階調表示 | シャポログ" />
+  <meta property="og:title" content="PDM-FRC: モノクロ液晶 TG12864B で色つき階調表示 | シャポログ" />
   <meta property="og:description" content="Raspberry Pi Pico (RP2040) でモノクロ STN 液晶 TG12864B を 256 階調の色つき階調画像を表示してみました。" />
   <meta property="og:image" content="https://blog.shapoco.net/2026/1116-grayscale-on-tg12864b/cover.jpg" />
 
@@ -40,7 +40,7 @@
   <link href="https://www.shapoco.net/navi/style.css?20241202163100" rel="stylesheet" type="text/css">
   <script src="https://www.shapoco.net/navi/navi.js?20241202163100"></script>
 
-  <title>モノクロ液晶 TG12864B で色つき階調表示 | シャポログ</title>
+  <title>PDM-FRC: モノクロ液晶 TG12864B で色つき階調表示 | シャポログ</title>
 </head>
 
 <body>
@@ -51,7 +51,7 @@
       <h1><a href="/">シャポログ</a></h1>
     </header>
     <main>
-      <h2>モノクロ液晶 TG12864B で色つき階調表示</h2>
+      <h2>PDM-FRC: モノクロ液晶 TG12864B で色つき階調表示</h2>
 
       <div class="article_info_wrap">
         <div class="article_info">
@@ -162,15 +162,15 @@
         <li>関連記事を読み込んでいます...</li>
       </ul>
       <script>
-        const my_tags = "TG12864B, 液晶, RP2040, Raspberry, FRC, PDM, DMA, アニメーション, ShapoGFX".split(',').map(s => s.trim()).filter(s => s != '');
+        const my_tags = "FRC, PDM, TG12864B, 液晶, RP2040, Raspberry, DMA, アニメーション, ShapoGFX".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?7614cf3d')
+        fetch('/index.json?7477359c')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();
             var related_articles = [];
             for (const a of articles) {
-              if (a.title == "モノクロ液晶 TG12864B で色つき階調表示") {
+              if (a.title == "PDM-FRC: モノクロ液晶 TG12864B で色つき階調表示") {
                 continue;
               }
               let score = 0;
