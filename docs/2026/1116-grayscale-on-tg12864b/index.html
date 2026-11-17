@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-  <meta name="keywords" content="シャポログ, FRC, PDM, TG12864B, 液晶, RP2040, Raspberry, DMA, アニメーション, ShapoGFX">
+  <meta name="keywords" content="シャポログ, FRC, PDM, TG12864B, 液晶, RP2040, Raspberry, パルス密度変調, ΔΣ, DMA, アニメーション, ShapoGFX, LCD, AQM1248A">
   <meta name="description" content="Raspberry Pi Pico (RP2040) でモノクロ STN 液晶 TG12864B を 256 階調の色つき階調画像を表示してみました。">
 
   <meta name="twitter:card" content="summary_large_image" />
@@ -150,6 +150,18 @@
           AI エージェントのステータスを表示したりして、
           ちょっとレトロな雰囲気のデスクトップアクセサリとして活用できるかもしれません。
         </p>
+        <h3>他の LCD への適用</h3>
+        <p>
+          今回作成したライブラリ自体は TG12864B 専用というわけではなく、
+          パラメータを変更することで他の LCD モジュールにも対応できます。
+        </p>
+        <p>AQM1248A に適用した様子です。</p>
+        <p><img src="./aqm1248a_static_image.jpg" alt=""></p>
+        <p>
+          AQM1248A では画面の短辺方向に黒いピクセルが集中するとその列全体が
+          濃くなる特性 (ゴースト) があるためゴーストを打ち消す補正機能を
+          追加する必要がありました。
+        </p>
         <h3>GitHub リポジトリ</h3>
         <p>
           プログラム等は <a href="https://github.com/shapoco/pdmfrc" target="_blank">GitHub リポジトリ</a> に公開しています。
@@ -162,9 +174,9 @@
         <li>関連記事を読み込んでいます...</li>
       </ul>
       <script>
-        const my_tags = "FRC, PDM, TG12864B, 液晶, RP2040, Raspberry, DMA, アニメーション, ShapoGFX".split(',').map(s => s.trim()).filter(s => s != '');
+        const my_tags = "FRC, PDM, TG12864B, 液晶, RP2040, Raspberry, パルス密度変調, ΔΣ, DMA, アニメーション, ShapoGFX, LCD, AQM1248A".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?7477359c')
+        fetch('/index.json?a264128e')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();

@@ -105,7 +105,7 @@
       <script>
         const my_tags = "LED, Twitter, Misskey, Bluesky".split(',').map(s => s.trim()).filter(s => s != '');
         const ul = document.querySelector('#related_articles');
-        fetch('/index.json?7477359c')
+        fetch('/index.json?a264128e')
           .then(response => response.json())
           .then(json_obj => {
             const articles = json_obj.articles.reverse();

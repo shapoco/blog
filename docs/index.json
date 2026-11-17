@@ -929,9 +929,13 @@
         "液晶",
         "RP2040",
         "Raspberry",
+        "パルス密度変調",
+        "ΔΣ",
         "DMA",
         "アニメーション",
-        "ShapoGFX"
+        "ShapoGFX",
+        "LCD",
+        "AQM1248A"
       ]
     }
   ],
@@ -942,7 +946,7 @@
     },
     {
       "name": "LCD",
-      "count": 13
+      "count": 14
     },
     {
       "name": "LED",
@@ -1049,6 +1053,14 @@
       "count": 3
     },
     {
+      "name": "パルス密度変調",
+      "count": 1
+    },
+    {
+      "name": "ΔΣ",
+      "count": 1
+    },
+    {
       "name": "DMA",
       "count": 2
     },
@@ -1059,6 +1071,10 @@
     {
       "name": "ShapoGFX",
       "count": 2
+    },
+    {
+      "name": "AQM1248A",
+      "count": 1
     },
     {
       "name": "DragonBones",
