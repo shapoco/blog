@@ -23,6 +23,9 @@ PCB/PCBA 関連のメモ。随時追加する。
 
     ![](./xiamocon_panelized.png)
 
+- タブの位置は元のデザインに専用のフットプリントを配置することで指定できる。
+    - その場合は `--tabs annotation` を指定する。
+    - フットプリントは公式ドキュメントの例にある [conn.kicad_pcb](https://github.com/yaqwsx/KiKit/blob/master/docs/resources/conn.kicad_pcb) からコピーすれば OK。
 - ツーリングストリップを付ける場合は JLCPCB のルールに従う:<br>
     [設計最適化：プロセスエッジ追加と穴配置の仕様](https://jlcpcb.com/jp/help/article/specifications-for-adding-process-edges-and-positioning-holes)
 - PCBA 発注時、ツーリングホールは「JLCPCB に追加される」を選ぶ<br>
